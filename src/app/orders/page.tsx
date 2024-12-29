@@ -1,5 +1,7 @@
+import MainLayout from '@/components/MainLayout'
+
 const OrderPage = () => {
-  return <div>OrderPage</div>
+  return <MainLayout>OrderPage</MainLayout>
 }
 
 export default OrderPage

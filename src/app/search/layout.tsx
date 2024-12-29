@@ -1,4 +1,4 @@
-import BottomNavigation from '@/components/BottomNavigation'
+import Navigation from '@/components/Navigation'
 import { ReactNode } from 'react'
 
 interface SearchLayoutProps {
@@ -8,8 +8,8 @@ interface SearchLayoutProps {
 export default function SearchLayout({ children }: SearchLayoutProps) {
   return (
     <>
+      <Navigation hasBackButton title="검색" />
       {children}
-      <BottomNavigation />
     </>
   )
 }

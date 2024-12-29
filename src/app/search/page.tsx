@@ -1,5 +1,7 @@
+import MainLayout from '@/components/MainLayout'
+
 const SearchPage = () => {
-  return <div>SearchPage</div>
+  return <MainLayout>SearchPage</MainLayout>
 }
 
 export default SearchPage

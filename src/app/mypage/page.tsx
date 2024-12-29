@@ -1,5 +1,11 @@
+import MainLayout from '@/components/MainLayout'
+
 const Mypage = () => {
-  return <div style={{ height: '2000px' }}>Mypage</div>
+  return (
+    <MainLayout>
+      <div style={{ height: '2000px' }}>Mypage</div>
+    </MainLayout>
+  )
 }
 
 export default Mypage

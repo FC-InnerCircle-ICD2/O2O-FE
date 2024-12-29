@@ -13,7 +13,7 @@ const Navigation = ({ hasBackButton, title, rightElement }: NavigationProps) => 
   const router = useRouter()
 
   return (
-    <nav className="top-navigation flex items-center h-10 border-b fixed top-0 left-0 right-0 bg-white z-10 pt-3 px-4">
+    <nav className="flex items-center h-10 border-b bg-white pt-3 px-4">
       <div className="flex-1 flex items-center">
         {hasBackButton && (
           <button onClick={() => router.back()}>
