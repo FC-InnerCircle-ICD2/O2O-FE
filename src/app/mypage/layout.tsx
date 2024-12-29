@@ -1,4 +1,5 @@
 import BottomNavigation from '@/components/BottomNavigation'
+import MainLayout from '@/components/MainLayout'
 import Navigation from '@/components/Navigation'
 import { ReactNode } from 'react'
 
@@ -10,7 +11,7 @@ export default function MypageLayout({ children }: MypageLayoutProps) {
   return (
     <>
       <Navigation hasBackButton={true} title="마이페이지" />
-      {children}
+      <MainLayout>{children}</MainLayout>
       <BottomNavigation />
     </>
   )

@@ -1,4 +1,5 @@
 import BottomNavigation from '@/components/BottomNavigation'
+import MainLayout from '@/components/MainLayout'
 import { ReactNode } from 'react'
 
 interface OrderLayoutProps {
@@ -8,7 +9,7 @@ interface OrderLayoutProps {
 export default function OrderLayout({ children }: OrderLayoutProps) {
   return (
     <>
-      {children}
+      <MainLayout>{children}</MainLayout>
       <BottomNavigation />
     </>
   )

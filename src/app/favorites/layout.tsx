@@ -1,4 +1,5 @@
 import BottomNavigation from '@/components/BottomNavigation'
+import MainLayout from '@/components/MainLayout'
 import { ReactNode } from 'react'
 
 interface FavoritesLayoutProps {
@@ -8,7 +9,7 @@ interface FavoritesLayoutProps {
 export default function FavoritesLayout({ children }: FavoritesLayoutProps) {
   return (
     <>
-      {children}
+      <MainLayout>{children}</MainLayout>
       <BottomNavigation />
     </>
   )

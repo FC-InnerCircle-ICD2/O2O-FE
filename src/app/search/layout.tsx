@@ -1,3 +1,4 @@
+import MainLayout from '@/components/MainLayout'
 import Navigation from '@/components/Navigation'
 import { ReactNode } from 'react'
 
@@ -9,7 +10,7 @@ export default function SearchLayout({ children }: SearchLayoutProps) {
   return (
     <>
       <Navigation hasBackButton title="검색" />
-      {children}
+      <MainLayout>{children}</MainLayout>
     </>
   )
 }
