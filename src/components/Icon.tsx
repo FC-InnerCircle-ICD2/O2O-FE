@@ -5,8 +5,13 @@ import { ComponentProps, FC } from 'react'
 
 type SVGProps = ComponentProps<'svg'>
 
-const ICONS = {
+export const ICONS = {
   heart: () => import('@/assets/icons/heart.svg'),
+  home: () => import('@/assets/icons/home.svg'),
+  search: () => import('@/assets/icons/search.svg'),
+  clipboard: () => import('@/assets/icons/clipboard.svg'),
+  user: () => import('@/assets/icons/user.svg'),
+  arrowLeft: () => import('@/assets/icons/arrow-left.svg'),
 }
 
 interface IconProps {
@@ -17,7 +22,7 @@ interface IconProps {
   className?: string
 }
 
-const Icon: FC<IconProps> = ({ variant, width = 24, height = 24, fill, className }) => {
+const Icon: FC<IconProps> = ({ variant, width = 24, height = 24, fill = '#000000', className }) => {
   // dynamic import를 컴포넌트 외부로 이동
   const DynamicIcon = dynamic<SVGProps>(() => ICONS[variant](), {
     ssr: true,
