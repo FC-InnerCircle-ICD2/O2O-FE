@@ -17,6 +17,19 @@ const nextConfig: NextConfig = {
     })
     return config
   },
+  devIndicators: {
+    buildActivity: false,
+    buildActivityPosition: 'bottom-right',
+  },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/home',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 export default nextConfig

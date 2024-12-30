@@ -1,12 +1,18 @@
-'use client'
+import heart from '@/assets/icons/heart.svg'
+import home from '@/assets/icons/home.svg'
+import search from '@/assets/icons/search.svg'
+import clipboard from '@/assets/icons/clipboard.svg'
+import user from '@/assets/icons/user.svg'
+import arrowLeft from '@/assets/icons/arrow-left.svg'
+import { ComponentProps, FC, useState } from 'react'
 
-import dynamic from 'next/dynamic'
-import { ComponentProps, FC } from 'react'
-
-type SVGProps = ComponentProps<'svg'>
-
-const ICONS = {
-  heart: () => import('@/assets/icons/heart.svg'),
+export const ICONS = {
+  heart,
+  home,
+  search,
+  clipboard,
+  user,
+  arrowLeft,
 }
 
 interface IconProps {
@@ -17,16 +23,12 @@ interface IconProps {
   className?: string
 }
 
-const Icon: FC<IconProps> = ({ variant, width = 24, height = 24, fill, className }) => {
-  // dynamic import를 컴포넌트 외부로 이동
-  const DynamicIcon = dynamic<SVGProps>(() => ICONS[variant](), {
-    ssr: true,
-    loading: () => <div style={{ width, height }} />,
-  })
+const Icon: FC<IconProps> = ({ variant, width = 24, height = 24, fill = '#000000', className }) => {
+  const Component = ICONS[variant]
 
   return (
     <div className={className} style={{ width, height }}>
-      <DynamicIcon width="100%" height="100%" color={fill} />
+      <Component width="100%" height="100%" color={fill} />
     </div>
   )
 }
