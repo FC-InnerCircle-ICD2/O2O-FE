@@ -10,7 +10,7 @@ interface MypageLayoutProps {
 export default function MypageLayout({ children }: MypageLayoutProps) {
   return (
     <>
-      <Navigation hasBackButton={true} title="마이페이지" />
+      <Navigation title="마이페이지" />
       <MainLayout>{children}</MainLayout>
       <BottomNavigation />
     </>
