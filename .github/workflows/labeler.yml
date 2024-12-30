@@ -1,6 +1,8 @@
 name: 'Auto Labeler'
 on:
   push:
+  issues:
+    types: [ opened, edited, milestoned ]
   pull_request_target:
     types: [ opened ]
 

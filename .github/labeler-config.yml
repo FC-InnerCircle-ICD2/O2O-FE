@@ -1,4 +1,3 @@
-# issue, pr 적용 여부
 enable:
   issues: false
   prs: true
