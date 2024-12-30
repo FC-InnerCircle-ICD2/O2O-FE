@@ -1,6 +1,7 @@
 name: notify pr review
 
 on:
+  push:
   pull_request:
     types: [review_requested]
 
