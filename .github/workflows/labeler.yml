@@ -1,9 +1,5 @@
 name: Community
-on:
-  issues:
-    types: [opened, edited, milestoned]
-  pull_request:
-    types: [opened]
+on: [pull_request]
 
 jobs:
 
