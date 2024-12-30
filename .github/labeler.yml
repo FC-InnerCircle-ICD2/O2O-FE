@@ -1,13 +1,14 @@
+# 라벨 설정
 labels:
   '🚀 Feat':
     include:
-      - 'Feat'
+      - '\bFeat\b'
   '🎨 Design':
     include:
-      - 'Design'
+      - '\bDesign\b'
   '✨ Fix':
     include:
-      - 'Fix'
+      - '\bFix\b'
   '♻️ Refactor':
     include:
-      - 'Refactor'
+      - '\b️Refactor\b'
