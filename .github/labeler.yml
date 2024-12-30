@@ -1,18 +1,19 @@
+# issue, pr 적용 여부
 enable:
   issues: false
   prs: true
 
 # 라벨 설정
 labels:
-  '🚀Feat':
+  '🚀 Feat':
     include:
       - '\bFeat\b'
-  '🎨Design':
+  '🎨 Design':
     include:
       - '\bDesign\b'
-  '✨Fix':
+  '✨ Fix':
     include:
       - '\bFix\b'
-  '♻️Refactor':
+  '♻️ Refactor':
     include:
       - '\b️Refactor\b'
