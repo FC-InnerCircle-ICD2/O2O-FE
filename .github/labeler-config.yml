@@ -1,0 +1,18 @@
+enable:
+  issues: false
+  prs: true
+
+# 라벨 설정
+labels:
+  '🚀Feat':
+    include:
+      - '\bFeat\b'
+  '🎨Design':
+    include:
+      - '\bDesign\b'
+  '✨Fix':
+    include:
+      - '\bFix\b'
+  '♻️Refactor':
+    include:
+      - '\b️Refactor\b'
