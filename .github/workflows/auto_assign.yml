@@ -1,6 +1,5 @@
 name: 'Auto Assign Reviewer'
 on:
-  push:
   pull_request:
     types: [opened, ready_for_review]
 
