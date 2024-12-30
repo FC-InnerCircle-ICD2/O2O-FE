@@ -1,3 +1,8 @@
+# issue, pr 적용 여부
+enable:
+  issues: false
+  prs: true
+
 # 라벨 설정
 labels:
   '🚀 Feat':
