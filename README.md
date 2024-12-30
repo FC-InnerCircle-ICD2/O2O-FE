@@ -15,4 +15,4 @@
    ```
 
 3. 접속하기<br/>
-   브라우저에서 <a href="http://localhost:3000">http://localhost:3001</a> 접속
+   브라우저에서 <a href="http://localhost:3000">http://localhost:3000</a> 접속
