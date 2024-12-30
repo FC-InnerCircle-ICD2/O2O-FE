@@ -15,6 +15,10 @@ export default {
       padding: {
         mobile_safe: '16px',
       },
+      height: {
+        navigation: '40px',
+        bottom_navigation: '56px',
+      },
     },
   },
   plugins: [],

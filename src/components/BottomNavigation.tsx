@@ -19,7 +19,7 @@ const BottomNavigation = () => {
 
   return (
     <nav className="border-t border-solid border-gray-400 bg-white p-4 pt-3 pb-[34px]">
-      <ul className="flex h-14 items-center justify-around max-w-[768px] mx-auto">
+      <ul className="flex h-bottom_navigation items-center justify-around max-w-[768px] mx-auto">
         {MENU_ITEMS.map(({ id, label, path, icon }) => {
           const isActive = pathname === ROUTE_PATHS[path]
 
