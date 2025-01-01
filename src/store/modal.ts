@@ -3,20 +3,21 @@ import { create } from 'zustand'
 interface Modal {
   type: 'modal'
   content: React.ReactNode
+  useAnimation?: boolean
 }
 
 interface ModalState {
   modals: Modal[]
-  showModal: (content: React.ReactNode) => void
+  showModal: (options: Pick<Modal, 'content' | 'useAnimation'>) => void
   hideModal: () => void
   allHideModal: () => void
 }
 
 export const modalStore = create<ModalState>((set) => ({
   modals: [],
-  showModal: (content: React.ReactNode) =>
+  showModal: (options: Pick<Modal, 'content' | 'useAnimation'>) =>
     set((state) => ({
-      modals: [...state.modals, { type: 'modal', content }],
+      modals: [...state.modals, { type: 'modal', ...options }],
     })),
   hideModal: () =>
     set((state) => ({
