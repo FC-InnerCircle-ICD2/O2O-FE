@@ -6,7 +6,7 @@ const MainLayout = ({
   style?: React.CSSProperties
 }) => {
   return (
-    <div className="flex-1 px-mobile_safe overflow-y-auto bg-red-500" style={style}>
+    <div className="flex-1 px-mobile_safe overflow-y-auto " style={style}>
       {children}
     </div>
   )
