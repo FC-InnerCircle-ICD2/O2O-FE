@@ -1,5 +1,6 @@
 import CalcGeolocation from '@/components/CalcGeolocation'
 import CommonLayout from '@/components/CommonLayout'
+import Modal from '@/components/Modal'
 import type { Metadata } from 'next'
 import './globals.css'
 
@@ -17,6 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <CommonLayout>{children}</CommonLayout>
+        <Modal />
       </body>
     </html>
   )
