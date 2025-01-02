@@ -1,7 +1,7 @@
 'use client'
 
+import FoodList from '@/app/home/_components/HomeFoodList'
 import Chip from '@/components/Chip'
-import FoodList from '@/components/home/FoodList'
 import Icon from '@/components/Icon'
 import Navigation from '@/components/Navigation'
 import useBottomSheet from '@/hooks/useBottomSheet'
