@@ -4,6 +4,7 @@ import search from '@/assets/icons/search.svg'
 import clipboard from '@/assets/icons/clipboard.svg'
 import user from '@/assets/icons/user.svg'
 import arrowLeft from '@/assets/icons/arrow-left.svg'
+import warning from '@/assets/icons/warning.svg'
 import { ComponentProps, FC, useState } from 'react'
 
 export const ICONS = {
@@ -13,6 +14,7 @@ export const ICONS = {
   clipboard,
   user,
   arrowLeft,
+  warning,
 }
 
 interface IconProps {
