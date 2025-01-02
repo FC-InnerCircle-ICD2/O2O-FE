@@ -1,7 +1,7 @@
 'use client'
 
 import { modalStore } from '@/store/modal'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'motion/react'
 
 const Modal = () => {
   const { modals } = modalStore()
