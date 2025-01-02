@@ -1,10 +1,12 @@
+import arrowDown from '@/assets/icons/arrow-down.svg'
+import arrowLeft from '@/assets/icons/arrow-left.svg'
+import clipboard from '@/assets/icons/clipboard.svg'
+import close from '@/assets/icons/close.svg'
 import heart from '@/assets/icons/heart.svg'
 import home from '@/assets/icons/home.svg'
 import search from '@/assets/icons/search.svg'
-import clipboard from '@/assets/icons/clipboard.svg'
 import user from '@/assets/icons/user.svg'
-import arrowLeft from '@/assets/icons/arrow-left.svg'
-import { ComponentProps, FC, useState } from 'react'
+import { FC } from 'react'
 
 export const ICONS = {
   heart,
@@ -13,6 +15,8 @@ export const ICONS = {
   clipboard,
   user,
   arrowLeft,
+  arrowDown,
+  close,
 }
 
 interface IconProps {
