@@ -4,9 +4,10 @@ import { cn } from '@/lib/utils'
 interface ChipProps extends React.HTMLAttributes<HTMLLabelElement> {
   text: string
   rightIcon?: React.ReactNode
+  onClick?: () => void
 }
 
-const Chip = ({ text, className, rightIcon, ...props }: ChipProps) => {
+const Chip = ({ text, className, rightIcon, onClick, ...props }: ChipProps) => {
   return (
     <ShadcnLabel
       className={cn(
@@ -14,6 +15,7 @@ const Chip = ({ text, className, rightIcon, ...props }: ChipProps) => {
         className,
       )}
       {...props}
+      onClick={onClick}
     >
       {text}
       {rightIcon && <>{rightIcon}</>}

@@ -9,8 +9,10 @@ interface SearchLayoutProps {
 export default function SearchLayout({ children }: SearchLayoutProps) {
   return (
     <>
-      <Navigation hasBackButton title="검색" />
-      <MainLayout>{children}</MainLayout>
+      <MainLayout>
+        <Navigation hasBackButton title="검색" />
+        {children}
+      </MainLayout>
     </>
   )
 }
