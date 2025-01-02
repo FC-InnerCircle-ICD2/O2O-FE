@@ -1,11 +1,7 @@
-import Test from './_template/Test'
+import Home from './_template/Home'
 
 const HomePage = () => {
-  return (
-    <>
-      <Test />
-    </>
-  )
+  return <Home />
 }
 
 export default HomePage

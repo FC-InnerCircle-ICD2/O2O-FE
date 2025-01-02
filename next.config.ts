@@ -30,6 +30,14 @@ const nextConfig: NextConfig = {
       },
     ]
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'flexible.img.hani.co.kr',
+      },
+    ],
+  },
 }
 
 export default nextConfig
