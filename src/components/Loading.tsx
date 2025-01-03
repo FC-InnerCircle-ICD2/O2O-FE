@@ -3,8 +3,9 @@ import LoadingImage from '@/assets/images/loading.gif'
 
 const Loading = () => {
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-white/80">
-      <Image src={LoadingImage} priority={true} alt="loading" width={60} height={60} />
+    <div className="fixed inset-0 flex flex-col items-center justify-center bg-white/80">
+      <Image src={LoadingImage} priority={true} alt="loading" width={100} height={100} />
+      <p className="text-lg font-semibold">Loading...</p>
     </div>
   )
 }
