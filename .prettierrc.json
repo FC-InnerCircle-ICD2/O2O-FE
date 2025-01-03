@@ -1,0 +1,13 @@
+{
+  "useTabs": false,
+  "printWidth": 100,
+  "tabWidth": 2,
+  "singleQuote": true,
+  "trailingComma": "all",
+  "endOfLine": "lf",
+  "semi": false,
+  "arrowParens": "always",
+  "plugins": [
+    ".yarn/unplugged/prettier-plugin-tailwindcss-virtual-9541c6ec39/node_modules/prettier-plugin-tailwindcss/dist/index.mjs"
+  ]
+}
