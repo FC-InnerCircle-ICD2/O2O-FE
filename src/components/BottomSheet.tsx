@@ -21,7 +21,9 @@ const BottomSheet = () => {
       <DrawerContent className="h-[60%] rounded-t-2xl">
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle className="py-3">배달 카테고리</DrawerTitle>
+            <DrawerTitle className={`py-3 ${bottomSheet.title ? '' : 'sr-only'}`}>
+              {bottomSheet.title}
+            </DrawerTitle>
           </DrawerHeader>
           <div className="px-4">
             <DrawerDescription asChild>

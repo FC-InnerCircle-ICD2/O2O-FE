@@ -2,6 +2,8 @@
 
 import { useGeoLocationStore } from '@/store/geoLocation'
 import { useEffect, useState } from 'react'
+import Loading from './Loading'
+import Error from './Error'
 
 declare global {
   interface Window {
@@ -37,7 +39,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   }, [])
 
   useEffect(() => {
-    return
+    // return
     if (!isLoaded) return
 
     const requestGeolocation = async () => {
@@ -107,10 +109,10 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
     requestGeolocation()
   }, [isLoaded])
 
-  //   if (error) return <Error message={error} />
-  //   if (!address) return <Loading />
+  if (error) return <Error message={error} />
+  if (!address) return <Loading />
 
-  return <div className="h-full flex flex-col overflow-hidden">{children}</div>
+  return <div className="h-full flex flex-col">{children}</div>
 }
 
 export default CommonLayout

@@ -6,10 +6,7 @@ const MainLayout = ({
   style?: React.CSSProperties
 }) => {
   return (
-    <div
-      className="flex-1 overflow-y-auto [&:has(~_.bottom-navigation)]:h-[calc(100dvh-103px)]"
-      style={style}
-    >
+    <div className="flex-1 overflow-y-auto" style={style}>
       {children}
     </div>
   )
