@@ -1,22 +1,31 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import js from '@eslint/js'
+import ts from 'typescript-eslint'
+import tailwind from 'eslint-plugin-tailwindcss'
+import pluginPrettier from 'eslint-plugin-prettier'
+import nextPlugin from '@next/eslint-plugin-next'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
+export default [
   {
+    ignores: ['**/node_modules/**', '**/dist/**'],
+  },
+  js.configs.recommended,
+  ...ts.configs.recommended,
+  ...tailwind.configs['flat/recommended'],
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      '@typescript-eslint': ts.plugin,
+      tailwindcss: tailwind,
+      prettier: pluginPrettier,
+      '@next/next': nextPlugin,
+    },
     rules: {
       'prettier/prettier': 'error',
+      'tailwindcss/no-custom-classname': 'off',
+      'tailwindcss/classnames-order': 'off',
+      'tailwindcss/enforces-negative-arbitrary-values': 'off',
+      ...nextPlugin.configs.recommended.rules,
+      ...nextPlugin.configs['core-web-vitals'].rules,
     },
-    plugins: ['prettier'],
-  }
-];
-
-export default eslintConfig;
+  },
+]
