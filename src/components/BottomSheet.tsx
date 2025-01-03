@@ -18,7 +18,7 @@ const BottomSheet = () => {
   // if (!bottomSheet.isOpen) return null
   return (
     <Drawer open={bottomSheet.isOpen} onOpenChange={hideBottomSheet}>
-      <DrawerContent className="h-[60%] rounded-t-2xl">
+      <DrawerContent className="h-3/5 rounded-t-2xl">
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
             <DrawerTitle className={`py-3 ${bottomSheet.title ? '' : 'sr-only'}`}>

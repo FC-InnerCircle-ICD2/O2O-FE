@@ -8,7 +8,7 @@ const FoodListItem = () => {
   return (
     <div className="flex items-center gap-[10px]">
       <Image
-        className="w-[100px] h-[100px] object-cover object-center rounded-xl"
+        className="size-[100px] object-cover object-center rounded-xl"
         src={
           'https://flexible.img.hani.co.kr/flexible/normal/970/647/imgdb/resize/2017/0709/149948783091_20170709.JPG'
         }
