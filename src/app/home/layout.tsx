@@ -10,7 +10,7 @@ interface HomeLayoutProps {
 export default function HomeLayout({ children }: HomeLayoutProps) {
   return (
     <>
-      <Navigation useAddress />
+      <Navigation useAddress title="홈" />
       <MainLayout>{children}</MainLayout>
       <BottomNavigation />
     </>

@@ -1,3 +1,5 @@
+'use client'
+
 import { Label as ShadcnLabel } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 

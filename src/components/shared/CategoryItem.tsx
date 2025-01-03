@@ -1,4 +1,3 @@
-import React from 'react'
 import { Category } from '@/models/category'
 import Image from 'next/image'
 
@@ -10,15 +9,19 @@ interface CategoryItemProps {
 
 const CategoryItem = ({ category, onClick, isActive = false }: CategoryItemProps) => {
   return (
-    <div
-      className={`relative flex flex-col items-center gap-2 min-w-[56px] ${
-        isActive
-          ? 'after:absolute after:w-[50px] after:h-[50px] after:bg-primary-foreground/10 after:rounded-full after:-z-10 after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2'
-          : ''
-      }`}
-      onClick={onClick}
-    >
-      <Image src={category.icon} alt={category.name} width={30} height={30} />
+    <div className="relative flex flex-col items-center min-w-[56px]" onClick={onClick}>
+      <div className={`relative p-2`}>
+        {isActive && (
+          <div className="absolute w-[42px] h-[42px] bg-primary-foreground/10 rounded-full -z-10 top-[2px] left-[2px] animate-[scaleIn_150ms_ease-out] active:scale-90 transition-transform duration-150" />
+        )}
+        <Image
+          src={category.icon}
+          alt={category.name}
+          width={30}
+          height={30}
+          className="active:scale-90 transition-transform duration-150"
+        />
+      </div>
       <p className={`text-xs ${isActive ? 'text-primary font-bold' : 'text-black'}`}>
         {category.name}
       </p>

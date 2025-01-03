@@ -1,12 +1,13 @@
 'use client'
 
+import { useGeoLocationStore } from '@/store/geoLocation'
 import { useRouter } from 'next/navigation'
 import Icon from './Icon'
-import { useGeoLocationStore } from '@/store/geoLocation'
 
 interface NavigationProps {
   hasBackButton?: boolean
   title?: string
+  centerElement?: React.ReactNode
   rightElement?: React.ReactNode
   useAddress?: boolean
 }
@@ -14,6 +15,7 @@ interface NavigationProps {
 const Navigation = ({
   hasBackButton,
   title,
+  centerElement,
   rightElement,
   useAddress = false,
 }: NavigationProps) => {
@@ -30,7 +32,13 @@ const Navigation = ({
         )}
       </div>
 
-      <h1 className="text-lg font-semibold">{useAddress ? address?.addressName : title}</h1>
+      {centerElement ? (
+        centerElement
+      ) : (
+        <h1 className="text-lg font-semibold">
+          {useAddress && address?.addressName ? address?.addressName : title}
+        </h1>
+      )}
 
       {rightElement && <div className="absolute right-[16px] flex">{rightElement}</div>}
     </nav>
