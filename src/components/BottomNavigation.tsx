@@ -21,7 +21,7 @@ const BottomNavigation = () => {
 
   return (
     <nav className="bottom-navigation border-t border-solid border-gray-400 bg-white p-4 pt-3">
-      <ul className="flex h-bottom_navigation items-center justify-around max-w-[768px] mx-auto">
+      <ul className="flex h-bottom_navigation items-center justify-around max-w-screen-md mx-auto">
         {MENU_ITEMS.map(({ id, label, path, icon }) => {
           const isActive = pathname.startsWith(ROUTE_PATHS[path])
 

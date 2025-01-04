@@ -2,6 +2,8 @@
 
 import { useGeoLocationStore } from '@/store/geoLocation'
 import { useEffect, useState } from 'react'
+import Error from './Error'
+import Loading from './Loading'
 
 declare global {
   interface Window {
@@ -14,11 +16,19 @@ interface CommonLayoutProps {
 }
 
 const CommonLayout = ({ children }: CommonLayoutProps) => {
+    // 클라이언트 사이드 렌더링 여부를 확인하는 상태 추가
+  const [isMounted, setIsMounted] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
   const { address, error, setCoordinates, setAddress, setError, setIsLoading } =
     useGeoLocationStore()
 
   useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isMounted) return;
+
     // 카카오맵 스크립트가 로드되었는지 확인
     const script = document.createElement('script')
     script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`
@@ -34,7 +44,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
     return () => {
       document.head.removeChild(script)
     }
-  }, [])
+  }, [isMounted])
 
   useEffect(() => {
     return
@@ -107,10 +117,12 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
     requestGeolocation()
   }, [isLoaded])
 
-  //   if (error) return <Error message={error} />
-  //   if (!address) return <Loading />
+  // 클라이언트 사이드 렌더링 전에는 로딩 상태 표시
+  if (!isMounted) return <Loading />
+  if (error) return <Error message={error} />
+  if (!address) return <Loading />
 
-  return <div className="h-full flex flex-col">{children}</div>
+  return <div className="h-full flex flex-col" >{children}</div>
 }
 
 export default CommonLayout

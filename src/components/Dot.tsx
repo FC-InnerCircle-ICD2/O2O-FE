@@ -4,8 +4,8 @@ import React from 'react'
 const dotVariants = cva('rounded-full', {
   variants: {
     size: {
-      3: 'w-[3px] h-[3px]',
-      4: 'w-[4px] h-[4px]',
+      3: 'size-[3px]',
+      4: 'size-[4px]',
     },
     color: {
       gray400: 'bg-gray-400',
