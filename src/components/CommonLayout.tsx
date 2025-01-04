@@ -122,7 +122,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   if (error) return <Error message={error} />
   if (!address) return <Loading />
 
-  return <div className="h-full flex flex-col">{children}</div>
+  return <div className="h-full flex flex-col" >{children}</div>
 }
 
 export default CommonLayout
