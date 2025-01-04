@@ -13,7 +13,7 @@ const CategoryItem = ({ category, onClick, isActive = false }: CategoryItemProps
     <div
       className={`relative flex flex-col items-center gap-2 min-w-[56px] ${
         isActive
-          ? 'after:absolute after:w-[50px] after:h-[50px] after:bg-primary-foreground/10 after:rounded-full after:-z-10 after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2'
+          ? 'after:absolute after:size-[50px] after:bg-primary-foreground/10 after:rounded-full after:-z-10 after:top-1/2 after:left-1/2 after:-translate-x-1/2 after:-translate-y-1/2'
           : ''
       }`}
       onClick={onClick}
