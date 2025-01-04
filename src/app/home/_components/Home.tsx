@@ -1,12 +1,6 @@
 'use client'
 
 import FoodList from '@/app/home/_components/HomeFoodList'
-import Chip from '@/components/Chip'
-import Icon from '@/components/Icon'
-import useBottomSheet from '@/hooks/useBottomSheet'
-import { useGeoLocationStore } from '@/store/geoLocation'
-import { COLORS } from '@/styles/color'
-import { useRouter } from 'next/navigation'
 import { Category } from '@/models/category'
 import CategoryDrawer from './CategoryDrawer'
 
@@ -32,7 +26,7 @@ export const CATEGORY_LIST: Category[] = [
 
 const Home = () => {
   return (
-    <div className="flex flex-col gap-2 h-full">
+    <div className="flex h-full flex-col gap-3">
       <CategoryDrawer />
       <FoodList />
     </div>

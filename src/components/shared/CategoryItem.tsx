@@ -9,7 +9,7 @@ interface CategoryItemProps {
 
 const CategoryItem = ({ category, onClick, isActive = false }: CategoryItemProps) => {
   return (
-    <div className="relative flex flex-col items-center min-w-[56px]" onClick={onClick}>
+    <div className="relative flex flex-col items-center min-w-[58px]" onClick={onClick} data-active={isActive}>
       <div className={`relative p-2`}>
         {isActive && (
           <div className="absolute w-[42px] h-[42px] bg-primary-foreground/10 rounded-full -z-10 top-[2px] left-[2px] animate-[scaleIn_150ms_ease-out] active:scale-90 transition-transform duration-150" />

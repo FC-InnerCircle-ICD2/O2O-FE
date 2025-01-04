@@ -1,16 +1,17 @@
 'use client'
 
-import { useHomeSearchFilterStore } from '@/store/homeSearchFilter'
-import { useEffect } from 'react'
+import FoodOrderFilter from '@/components/shared/FoodOrderFilter'
+import CategorySlide from './CategorySlide'
+import HomeFoodList from './HomeFoodList'
 
 const HomeSearch = () => {
-  const { category, keyword } = useHomeSearchFilterStore()
-
-  useEffect(() => {
-    console.log(category, keyword)
-  }, [])
-
-  return <div>HomeSearch</div>
+  return (
+    <div className="flex h-full flex-col">
+      <CategorySlide />
+      <FoodOrderFilter />
+      <HomeFoodList />
+    </div>
+  )
 }
 
 export default HomeSearch

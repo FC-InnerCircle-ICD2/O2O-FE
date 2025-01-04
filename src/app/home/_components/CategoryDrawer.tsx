@@ -2,36 +2,40 @@
 
 import CategoryItem from '@/components/shared/CategoryItem'
 import { Category } from '@/models/category'
+import { OrderType } from '@/models/orderType'
 import { useHomeSearchFilterStore } from '@/store/homeSearchFilter'
 import { ROUTE_PATHS } from '@/utils/routes'
 import { AnimatePresence, motion } from 'motion/react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { CATEGORY_LIST } from './Home'
 
 const CategoryDrawer = () => {
   const [more, setMore] = useState(false)
-  const [activeCategory, setActiveCategory] = useState<number>(0)
   const router = useRouter()
-  const { setCategory } = useHomeSearchFilterStore()
+  const { categoryId, setCategoryId, setOrder } = useHomeSearchFilterStore()
 
   const handleCategoryClick = (category: Category) => {
-    setActiveCategory(category.id - 1)
-    setCategory(category.name)
+    setCategoryId(category.id)
 
     setTimeout(() => {
       router.push(ROUTE_PATHS.HOME_SEARCH)
     }, 150)
   }
 
+  useEffect(() => {
+    setCategoryId(1)
+    setOrder(OrderType.RANKING)
+  }, [])
+
   return (
     <div className="pt-2">
-      <div className="grid grid-cols-5 gap-y-2 px-mobile_safe overflow-x-scroll">
-        {CATEGORY_LIST.slice(0, 9).map((category, index) => (
+      <div className="grid grid-cols-5 gap-y-2 overflow-x-scroll px-mobile_safe">
+        {CATEGORY_LIST.slice(0, 9).map((category) => (
           <CategoryItem
             key={category.id}
             category={category}
-            isActive={index === activeCategory}
+            isActive={category.id === categoryId}
             onClick={() => handleCategoryClick(category)}
           />
         ))}
@@ -43,7 +47,7 @@ const CategoryDrawer = () => {
         ) : (
           <CategoryItem
             category={CATEGORY_LIST[9]}
-            isActive={9 === activeCategory}
+            isActive={CATEGORY_LIST[9].id === categoryId}
             onClick={() => handleCategoryClick(CATEGORY_LIST[9])}
           />
         )}
@@ -58,11 +62,11 @@ const CategoryDrawer = () => {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="grid grid-cols-5 gap-y-2 overflow-x-scroll px-mobile_safe pt-2"
           >
-            {CATEGORY_LIST.slice(10).map((category, index) => (
+            {CATEGORY_LIST.slice(10).map((category) => (
               <CategoryItem
                 key={category.id}
                 category={category}
-                isActive={index + 10 === activeCategory}
+                isActive={category.id === categoryId}
                 onClick={() => handleCategoryClick(category)}
               />
             ))}

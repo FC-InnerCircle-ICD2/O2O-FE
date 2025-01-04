@@ -1,7 +1,7 @@
 'use client'
 
 import { useGeoLocationStore } from '@/store/geoLocation'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Icon from './Icon'
 
 interface NavigationProps {
@@ -13,7 +13,7 @@ interface NavigationProps {
 }
 
 const Navigation = ({
-  hasBackButton,
+    hasBackButton,
   title,
   centerElement,
   rightElement,
@@ -21,6 +21,7 @@ const Navigation = ({
 }: NavigationProps) => {
   const router = useRouter()
   const { address } = useGeoLocationStore()
+  const pathname = usePathname()
 
   return (
     <nav className="flex px-mobile_safe items-center justify-center h-navigation border-b bg-white">

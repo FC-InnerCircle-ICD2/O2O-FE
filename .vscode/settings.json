@@ -12,5 +12,11 @@
     "source.fixAll.eslint": "explicit"
   },
   "prettier.requireConfig": true,
-  "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs"
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs",
+  "tailwindCSS.validate": false,
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/build/**": true
+  }
 }

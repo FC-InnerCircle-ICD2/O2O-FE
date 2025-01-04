@@ -2,7 +2,6 @@
 
 import { useGeoLocationStore } from '@/store/geoLocation'
 import { useEffect, useState } from 'react'
-import Error from './Error'
 import Loading from './Loading'
 
 declare global {
@@ -119,8 +118,8 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
 
   // 클라이언트 사이드 렌더링 전에는 로딩 상태 표시
   if (!isMounted) return <Loading />
-  if (error) return <Error message={error} />
-  if (!address) return <Loading />
+//   if (error) return <Error message={error} />
+//   if (!address) return <Loading />
 
   return <div className="h-full flex flex-col" >{children}</div>
 }

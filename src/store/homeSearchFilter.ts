@@ -1,25 +1,26 @@
+import { OrderType } from '@/models/orderType'
 import { create } from 'zustand'
 
 interface HomeSearchFilterStore {
-  category?: string
+  categoryId: number
   keyword?: string
-  order?: string
-  setCategory: (category: string | undefined) => void
+  order: OrderType
+  setCategoryId: (category: number) => void
   setKeyword: (keyword: string | undefined) => void
-  setOrder: (order: string | undefined) => void
+  setOrder: (order: OrderType) => void
 }
 
 export const useHomeSearchFilterStore = create<HomeSearchFilterStore>((set) => ({
-  category: undefined,
+  categoryId: 1,
   keyword: undefined,
-  order: undefined,
-  setCategory: (category) =>
+  order: OrderType.RANKING,
+  setCategoryId: (categoryId: number) =>
     set((state) => {
-      return { ...state, category, keyword: undefined }
+      return { ...state, categoryId, keyword: undefined }
     }),
   setKeyword: (keyword) =>
-    set((state) => {
-      return { keyword, category: undefined, order: undefined }
+    set(() => {
+      return { keyword, categoryId: 1, order: OrderType.RANKING }
     }),
   setOrder: (order) => set((state) => ({ ...state, order })),
 }))

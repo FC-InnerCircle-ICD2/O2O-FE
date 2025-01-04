@@ -1,8 +1,7 @@
 'use client'
 
 import Icon from '@/components/Icon'
-import { BottomNavigationMenu } from '@/models/BottomNavigationMenu'
-
+import { BottomNavigationMenu } from '@/models/bottomNavigationMenu'
 import { COLORS } from '@/styles/color'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
