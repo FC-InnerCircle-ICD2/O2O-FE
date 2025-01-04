@@ -6,11 +6,12 @@
 
 2. **yarn 설정**
    ```bash
+   yarn unplug prettier-plugin-tailwindcss   
    yarn dlx @yarnpkg/sdks vscode
    ```
    💡 yarn 설정 후 prettier 적용이 안될 시에 에디터를 껐다가 다시 킨다.(선택)
 
-3. **실행**
+4. **실행**
    ```bash
    yarn dev
    ```
