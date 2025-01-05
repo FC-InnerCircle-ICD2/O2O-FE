@@ -3,7 +3,7 @@
 import CategoryItem from '@/components/shared/CategoryItem'
 import { Category } from '@/models/category'
 import { OrderType } from '@/models/orderType'
-import { useHomeSearchFilterStore } from '@/store/homeSearchFilter'
+import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { ROUTE_PATHS } from '@/utils/routes'
 import { AnimatePresence, motion } from 'motion/react'
 import { useRouter } from 'next/navigation'
@@ -13,7 +13,7 @@ import { CATEGORY_LIST } from './Home'
 const CategoryDrawer = () => {
   const [more, setMore] = useState(false)
   const router = useRouter()
-  const { categoryId, setCategoryId, setOrder } = useHomeSearchFilterStore()
+  const { categoryId, setCategoryId, setOrder } = useFoodSearchFilterStore()
 
   const handleCategoryClick = (category: Category) => {
     setCategoryId(category.id)

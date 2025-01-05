@@ -1,12 +1,12 @@
 import CategoryItem from '@/components/shared/CategoryItem'
 import CategoryListInBottomSheet from '@/components/shared/CategoryListInBottomSheet'
 import useBottomSheet from '@/hooks/useBottomSheet'
-import { useHomeSearchFilterStore } from '@/store/homeSearchFilter'
+import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { useCallback, useEffect, useRef } from 'react'
 import { CATEGORY_LIST } from './Home'
 
 const CategorySlide = () => {
-  const { categoryId, setCategoryId } = useHomeSearchFilterStore()
+  const { categoryId, setCategoryId } = useFoodSearchFilterStore()
   const { BottomSheet } = useBottomSheet()
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 

@@ -5,9 +5,9 @@ import close from '@/assets/icons/close.svg'
 import heart from '@/assets/icons/heart.svg'
 import home from '@/assets/icons/home.svg'
 import search from '@/assets/icons/search.svg'
+import star from '@/assets/icons/star.svg'
 import user from '@/assets/icons/user.svg'
 import warning from '@/assets/icons/warning.svg'
-import star from '@/assets/icons/star.svg'
 import { FC } from 'react'
 
 export const ICONS = {
@@ -29,7 +29,7 @@ interface IconProps {
   height?: number
   fill?: string
   className?: string
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent) => void
 }
 
 const Icon: FC<IconProps> = ({

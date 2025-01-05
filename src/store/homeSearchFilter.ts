@@ -1,7 +1,7 @@
 import { OrderType } from '@/models/orderType'
 import { create } from 'zustand'
 
-interface HomeSearchFilterStore {
+interface FoodSearchFilterStore {
   categoryId: number
   keyword?: string
   order: OrderType
@@ -10,7 +10,7 @@ interface HomeSearchFilterStore {
   setOrder: (order: OrderType) => void
 }
 
-export const useHomeSearchFilterStore = create<HomeSearchFilterStore>((set) => ({
+export const useFoodSearchFilterStore = create<FoodSearchFilterStore>((set) => ({
   categoryId: 1,
   keyword: undefined,
   order: OrderType.RANKING,

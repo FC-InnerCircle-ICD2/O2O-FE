@@ -10,7 +10,7 @@ interface SearchLayoutProps {
 export default function SearchLayout({ children }: SearchLayoutProps) {
   return (
     <>
-      <Navigation centerElement={<TestSearch />} />
+      <Navigation hasBackButton centerElement={<TestSearch />} />
       <MainLayout>{children}</MainLayout>
     </>
   )

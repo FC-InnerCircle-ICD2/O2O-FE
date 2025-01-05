@@ -1,14 +1,14 @@
 'use client'
 
 import useBottomSheet from '@/hooks/useBottomSheet'
-import { useHomeSearchFilterStore } from '@/store/homeSearchFilter'
+import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { COLORS } from '@/styles/color'
 import Chip from '../Chip'
 import Icon from '../Icon'
 import FoodOrderListInBottomSheet from './FoodOrderListInBottomSheet'
 
 const FoodOrderFilter = () => {
-  const { order } = useHomeSearchFilterStore()
+  const { order } = useFoodSearchFilterStore()
   const { BottomSheet } = useBottomSheet()
 
   return (

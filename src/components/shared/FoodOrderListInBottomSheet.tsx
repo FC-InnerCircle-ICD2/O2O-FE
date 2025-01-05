@@ -2,12 +2,12 @@
 
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { OrderType } from '@/models/orderType'
-import { useHomeSearchFilterStore } from '@/store/homeSearchFilter'
+import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { COLORS } from '@/styles/color'
 import Icon from '../Icon'
 
 const FoodOrderListInBottomSheet = () => {
-  const { order, setOrder } = useHomeSearchFilterStore()
+  const { order, setOrder } = useFoodSearchFilterStore()
   const { hide } = useBottomSheet()
 
   const handleOrder = (order: OrderType) => {

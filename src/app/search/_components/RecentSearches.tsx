@@ -3,12 +3,17 @@
 import Chip from '@/components/Chip'
 import Icon from '@/components/Icon'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
+import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { COLORS } from '@/styles/color'
+import { ROUTE_PATHS } from '@/utils/routes'
+import { useRouter } from 'next/navigation'
 
 const RecentSearches = () => {
   const { storedValue: recentSearches, setValue: setRecentSearches } = useLocalStorage<
     string[] | undefined
   >('recentSearches', [])
+  const router = useRouter()
+  const { keyword, setKeyword } = useFoodSearchFilterStore()
 
   const handleRemoveSearch = (item: string) => {
     if (recentSearches === undefined) return
@@ -21,16 +26,21 @@ const RecentSearches = () => {
     setRecentSearches([])
   }
 
+  const handleSearch = (word: string) => {
+    setKeyword(word)
+    router.push(ROUTE_PATHS.SEARCH_RESULT)
+  }
+
   return (
     <div className="px-mobile_safe py-3">
-      <div className="flex justify-between items-center">
+      <div className="flex items-center justify-between">
         <span className="text-lg font-bold">최근 검색어</span>
         <span className="text-xs text-gray-400" onClick={handleRemoveAllSearch}>
           전체삭제
         </span>
       </div>
       {recentSearches && (
-        <div className="flex gap-[6px] flex-wrap py-1">
+        <div className="flex flex-1 gap-[6px] overflow-x-auto py-3">
           {recentSearches.length > 0 ? (
             recentSearches.map((item, index) => (
               <Chip
@@ -42,13 +52,17 @@ const RecentSearches = () => {
                     width={14}
                     height={14}
                     fill={COLORS.gray400}
-                    onClick={() => handleRemoveSearch(item)}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleRemoveSearch(item)
+                    }}
                   />
                 }
+                onClick={() => handleSearch(item)}
               />
             ))
           ) : (
-            <div className="w-full text-xs text-center text-gray-400 py-2">
+            <div className="w-full py-2 text-center text-xs text-gray-400">
               최근 검색어가 없습니다.
             </div>
           )}

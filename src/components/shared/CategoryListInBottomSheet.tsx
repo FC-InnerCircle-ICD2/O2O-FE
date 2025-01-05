@@ -2,12 +2,12 @@
 
 import { CATEGORY_LIST } from '@/app/home/_components/Home'
 import useBottomSheet from '@/hooks/useBottomSheet'
-import { useHomeSearchFilterStore } from '@/store/homeSearchFilter'
+import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import CategoryItem from './CategoryItem'
 
 const CategoryListInBottomSheet = () => {
   const { hide } = useBottomSheet()
-  const { categoryId, setCategoryId } = useHomeSearchFilterStore()
+  const { categoryId, setCategoryId } = useFoodSearchFilterStore()
 
   const handleCategoryClick = (categoryId: number) => {
     setCategoryId(categoryId)
