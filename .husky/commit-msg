@@ -10,16 +10,19 @@ process_pr_merge() {
 
 # Gitmoji 매핑 처리 함수
 process_gitmoji() {
-  case "$1" in
-    Feat)    echo "✨ $COMMIT_MESSAGE" ;;
-    Design)  echo "🎨 $COMMIT_MESSAGE" ;;
-    Refactor) echo "♻️ $COMMIT_MESSAGE" ;;
-    Fix)     echo "🐛 $COMMIT_MESSAGE" ;;
-    *)       echo "❌ 커밋 메시지는 다음 형식을 따라야 합니다:" 
-             echo "   Feat: 기능"
-             echo "   Design: 디자인/문서 수정"
-             echo "   Refactor: 리팩토링"
-             echo "   Fix: 버그 수정"
+  # 입력 타입을 첫 글자만 대문자로, 나머지는 소문자로 변환
+  FORMATTED_TYPE=$(echo "$1" | awk '{print toupper(substr($0, 1, 1)) tolower(substr($0, 2))}')
+  
+  case "$FORMATTED_TYPE" in
+    Feat)    echo "✨ $FORMATTED_TYPE: $(echo "$COMMIT_MESSAGE" | cut -d':' -f2-)" ;;
+    Design)  echo "🎨 $FORMATTED_TYPE: $(echo "$COMMIT_MESSAGE" | cut -d':' -f2-)" ;;
+    Refactor) echo "♻️ $FORMATTED_TYPE: $(echo "$COMMIT_MESSAGE" | cut -d':' -f2-)" ;;
+    Fix)     echo "🐛 $FORMATTED_TYPE: $(echo "$COMMIT_MESSAGE" | cut -d':' -f2-)" ;;
+    *)       >&2 echo "❌ 커밋 메시지는 다음 형식을 따라야 합니다:"
+             >&2 echo "   Feat: 기능"
+             >&2 echo "   Design: 디자인/문서 수정"
+             >&2 echo "   Refactor: 리팩토링"
+             >&2 echo "   Fix: 버그 수정"
              exit 1 ;;
   esac
 }
