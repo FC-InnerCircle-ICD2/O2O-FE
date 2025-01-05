@@ -18,11 +18,11 @@ export const bottomSheetStore = create<BottomSheetState>((set) => ({
     content: null,
   },
   showBottomSheet: (options: Pick<BottomSheet, 'content' | 'title'>) =>
-    set((state) => ({
+    set(() => ({
       bottomSheet: { isOpen: true, ...options },
     })),
   hideBottomSheet: () =>
     set((state) => ({
-      bottomSheet: { isOpen: false, content: null, title: undefined },
+      bottomSheet: { ...state.bottomSheet, isOpen: false },
     })),
 }))

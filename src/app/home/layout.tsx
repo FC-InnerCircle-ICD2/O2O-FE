@@ -1,6 +1,4 @@
 import BottomNavigation from '@/components/BottomNavigation'
-import MainLayout from '@/components/MainLayout'
-import Navigation from '@/components/Navigation'
 import { ReactNode } from 'react'
 
 interface HomeLayoutProps {
@@ -10,8 +8,7 @@ interface HomeLayoutProps {
 export default function HomeLayout({ children }: HomeLayoutProps) {
   return (
     <>
-      <Navigation useAddress />
-      <MainLayout>{children}</MainLayout>
+      {children}
       <BottomNavigation />
     </>
   )

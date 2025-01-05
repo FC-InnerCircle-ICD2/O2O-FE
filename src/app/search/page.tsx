@@ -1,5 +1,7 @@
+import Search from './_components/Search'
+
 const SearchPage = () => {
-  return <>SearchPage</>
+  return <Search />
 }
 
 export default SearchPage
