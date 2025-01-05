@@ -20,6 +20,8 @@ export default [
       '@next/next': nextPlugin,
     },
     rules: {
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
       'prettier/prettier': 'error',
       'tailwindcss/no-custom-classname': 'off',
       'tailwindcss/classnames-order': 'off',
