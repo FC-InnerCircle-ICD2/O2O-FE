@@ -10,7 +10,8 @@
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
   },
   "prettier.requireConfig": true,
   "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs"
