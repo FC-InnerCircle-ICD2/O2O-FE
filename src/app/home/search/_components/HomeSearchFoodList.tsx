@@ -2,10 +2,10 @@
 
 import FoodListItem from '@/components/shared/FoodListItem'
 
-const HomeFoodList = () => {
+const HomeSearchFoodList = () => {
   return (
-    <div className="flex flex-col gap-4 px-mobile_safe">
-      <p className="text-xl font-bold">새로 오픈했어요!</p>
+    <div className="flex flex-col gap-4 overflow-y-auto px-mobile_safe pt-2">
+      <p className="text-lg font-bold">개발의 민족 등록 맛집</p>
       <div className="flex flex-col gap-3">
         <FoodListItem />
         <FoodListItem />
@@ -24,4 +24,4 @@ const HomeFoodList = () => {
   )
 }
 
-export default HomeFoodList
+export default HomeSearchFoodList

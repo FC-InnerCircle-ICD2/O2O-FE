@@ -48,8 +48,8 @@ const CategorySlide = () => {
   }, [categoryId])
 
   return (
-    <div className="flex gap-2 px-mobile_safe">
-      <div ref={scrollContainerRef} className="flex flex-1 gap-1 overflow-x-auto py-2">
+    <div className="flex px-mobile_safe">
+      <div ref={scrollContainerRef} className="flex flex-1 gap-1 overflow-x-auto">
         {CATEGORY_LIST.map((category) => (
           <CategoryItem
             key={category.id}

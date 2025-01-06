@@ -27,7 +27,7 @@ export const CATEGORY_LIST: Category[] = [
 
 const Home = () => {
   return (
-    <div className="flex h-full flex-col gap-[16px] pt-9">
+    <div className="flex flex-col gap-[26px] pb-4 pt-9">
       <CategoryDrawer />
       <BannerSlide />
       <FoodList />

@@ -30,7 +30,7 @@ const CategoryDrawer = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-5 gap-y-2 overflow-x-scroll px-mobile_safe">
+      <div className="grid grid-cols-5 gap-y-[10px] overflow-x-scroll px-mobile_safe">
         {CATEGORY_LIST.slice(0, 9).map((category) => (
           <CategoryItem
             key={category.id}

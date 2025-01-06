@@ -32,7 +32,7 @@ const CategoryItem = ({
           className={`${useAnimation ? 'transition-transform duration-150 active:scale-90' : ''}`}
         />
       </div>
-      <p className={`text-xs ${isActive ? 'font-bold text-primary' : 'text-black'}`}>
+      <p className={`text-xs ${isActive ? 'font-bold text-primary' : 'font-medium text-black'}`}>
         {category.name}
       </p>
     </div>

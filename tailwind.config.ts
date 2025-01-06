@@ -52,10 +52,10 @@ export default {
         },
       },
       padding: {
-        mobile_safe: '16px',
+        mobile_safe: '20px',
       },
       height: {
-        navigation: '40px',
+        navigation: '30px',
         bottom_navigation: '56px',
       },
       borderRadius: {

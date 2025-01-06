@@ -10,30 +10,32 @@ import 'swiper/css/pagination'
 
 const BannerSlide = () => {
   return (
-    <Swiper
-      modules={[Pagination]}
-      pagination={{ clickable: true }}
-      spaceBetween={20}
-      slidesPerView={1}
-      loop={true}
-      className="w-full"
-    >
-      <SwiperSlide className="px-mobile_safe">
-        <div className="relative aspect-[353/100] w-full">
-          <Image className="object-cover" src={'/images/banner/banner_1.png'} alt="banner" fill />
-        </div>
-      </SwiperSlide>
-      <SwiperSlide className="px-mobile_safe">
-        <div className="relative aspect-[353/100] w-full">
-          <Image className="object-cover" src={'/images/banner/banner_1.png'} alt="banner" fill />
-        </div>
-      </SwiperSlide>
-      <SwiperSlide className="px-mobile_safe">
-        <div className="relative aspect-[353/100] w-full">
-          <Image className="object-cover" src={'/images/banner/banner_1.png'} alt="banner" fill />
-        </div>
-      </SwiperSlide>
-    </Swiper>
+    <div className="px-mobile_safe py-4">
+      <Swiper
+        modules={[Pagination]}
+        pagination={{ clickable: true }}
+        spaceBetween={20}
+        slidesPerView={1}
+        loop={true}
+        className="w-full"
+      >
+        <SwiperSlide>
+          <div className="relative aspect-[353/100] w-full">
+            <Image className="object-cover" src={'/images/banner/banner_1.png'} alt="banner" fill />
+          </div>
+        </SwiperSlide>
+        <SwiperSlide>
+          <div className="relative aspect-[353/100] w-full">
+            <Image className="object-cover" src={'/images/banner/banner_1.png'} alt="banner" fill />
+          </div>
+        </SwiperSlide>
+        <SwiperSlide>
+          <div className="relative aspect-[353/100] w-full">
+            <Image className="object-cover" src={'/images/banner/banner_1.png'} alt="banner" fill />
+          </div>
+        </SwiperSlide>
+      </Swiper>
+    </div>
   )
 }
 

@@ -11,7 +11,7 @@ const BottomSheet = () => {
       <DrawerContent className="max-h-3/5 min-h-fit rounded-t-2xl">
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
-            <DrawerTitle className={`py-3 ${bottomSheet.title ? '' : 'sr-only'}`}>
+            <DrawerTitle className={`py-1 text-xl font-bold ${bottomSheet.title ? '' : 'sr-only'}`}>
               {bottomSheet.title}
             </DrawerTitle>
           </DrawerHeader>
