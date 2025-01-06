@@ -1,37 +1,49 @@
-import Chip from '@/components/Chip'
-import Image from 'next/image'
+'use client'
+
+import Icon from '@/components/Icon'
+import { useEffect, useRef, useState } from 'react'
+import OrderItem from './OrdeListItem'
 
 const OrderList = () => {
+  const [showScrollButton, setShowScrollButton] = useState(false)
+  const topRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // entry.isIntersecting이 false일 때는 요소가 화면에서 벗어났다는 의미
+        setShowScrollButton(!entry.isIntersecting)
+      },
+      { threshold: 1 }, // 요소가 완전히 보일 때만 감지
+    )
+
+    if (topRef.current) {
+      observer.observe(topRef.current)
+    }
+
+    return () => observer.disconnect()
+  }, [])
+
+  const scrollToTop = () => {
+    topRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
   return (
-    <div className="pt-10">
-      <div className="flex flex-row space-x-40">
-        <div className="text-gray-400">11월 1일(금) 배달완료</div>
-        <Chip text="주문 상세" />
-      </div>
-      <div className="flex flex-row items-center pt-5">
-        <Image
-          className="size-[100px] rounded-xl object-cover object-center"
-          src={
-            'https://flexible.img.hani.co.kr/flexible/normal/970/647/imgdb/resize/2017/0709/149948783091_20170709.JPG'
-          }
-          alt="음식점 대표 이미지"
-          width={100}
-          height={100}
-          loading="lazy"
-        />
-        <div className="flex flex-col gap-3 pl-3">
-          <div className="text-xl">빙동댕</div>
-          <div>새우 로제 파스타 외 2개 20,000원</div>
+    <div className="flex flex-1 flex-col gap-3 overflow-y-auto pb-3">
+      <div ref={topRef} className="h-px w-full" />
+      <OrderItem />
+      <OrderItem />
+      <OrderItem />
+      <OrderItem />
+      <OrderItem />
+      {showScrollButton && (
+        <div
+          className="fixed bottom-[6.5rem] right-5 rounded-full border border-solid border-gray-300 bg-white p-3"
+          onClick={scrollToTop}
+        >
+          <Icon className="rotate-180" variant="arrowDown" width={20} height={20} />
         </div>
-      </div>
-      <div className="flex flex-row justify-center gap-7 pt-5">
-        <button className="w-44 rounded-md border border-solid border-violet-500 p-3 text-violet-500">
-          같은 메뉴 담기
-        </button>
-        <button className="w-44 rounded-md border border-solid border-gray-400 p-3 text-gray-400">
-          리뷰 달기
-        </button>
-      </div>
+      )}
     </div>
   )
 }

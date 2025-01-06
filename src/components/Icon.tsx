@@ -1,5 +1,6 @@
 import arrowDown from '@/assets/icons/arrow-down.svg'
 import arrowLeft from '@/assets/icons/arrow-left.svg'
+import arrowRight from '@/assets/icons/arrow-right.svg'
 import clipboard from '@/assets/icons/clipboard.svg'
 import close from '@/assets/icons/close.svg'
 import heart from '@/assets/icons/heart.svg'
@@ -21,6 +22,7 @@ export const ICONS = {
   arrowDown,
   close,
   star,
+  arrowRight,
 }
 
 interface IconProps {
