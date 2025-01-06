@@ -12,8 +12,8 @@
 10% = 1A
 */
 export const COLORS = {
-  primary: '#8B5CF6',
-  primary_content: '#8B5CF633',
+  primary: '#7C43F6',
+  primary_content: '#7C43F633',
   secondary: '#F472B6',
   secondary_content: '#F472B633',
   black: '#000000',
