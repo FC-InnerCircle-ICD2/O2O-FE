@@ -43,6 +43,7 @@ const CategoryDrawer = () => {
           <CategoryItem
             category={{ id: 0, name: '더보기', icon: '/images/food-categories/more.png' }}
             onClick={() => setMore(true)}
+            useAnimation={false}
           />
         ) : (
           <CategoryItem

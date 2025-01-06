@@ -2,6 +2,7 @@ import arrowDown from '@/assets/icons/arrow-down.svg'
 import arrowLeft from '@/assets/icons/arrow-left.svg'
 import clipboard from '@/assets/icons/clipboard.svg'
 import close from '@/assets/icons/close.svg'
+import dotsHorizontal from '@/assets/icons/dots-horizontal.svg'
 import heart from '@/assets/icons/heart.svg'
 import home from '@/assets/icons/home.svg'
 import search from '@/assets/icons/search.svg'
@@ -21,6 +22,7 @@ export const ICONS = {
   arrowDown,
   close,
   star,
+  dotsHorizontal,
 }
 
 interface IconProps {

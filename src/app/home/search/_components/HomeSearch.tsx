@@ -1,8 +1,8 @@
 'use client'
 
 import FoodOrderFilter from '@/components/shared/FoodOrderFilter'
+import HomeFoodList from '../../_components/HomeFoodList'
 import CategorySlide from './CategorySlide'
-import HomeFoodList from './HomeFoodList'
 
 const HomeSearch = () => {
   return (

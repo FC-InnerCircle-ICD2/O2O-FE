@@ -4,7 +4,7 @@ import Navigation from '@/components/Navigation'
 import { COLORS } from '@/styles/color'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
-import HomeSearch from '../_components/HomeSearch'
+import HomeSearch from './_components/HomeSearch'
 
 const HomeSearchPage = () => {
   return (
