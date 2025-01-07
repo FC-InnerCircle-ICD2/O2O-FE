@@ -1,11 +1,70 @@
 import { Input as ShadcnInput } from '@/components/shadcn/input'
 import { Label as ShadcnLabel } from '@/components/shadcn/label'
 import { cn } from '@/lib/utils'
+import { cva, type VariantProps } from 'class-variance-authority'
 import { X } from 'lucide-react'
 import React from 'react'
 import type { ClassNameValue } from 'tailwind-merge'
 
-interface CommonInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'className'> {
+const inputVariants = cva('', {
+  variants: {
+    inputSize: {
+      default: 'py-6 text-base',
+      sm: 'py-3 text-sm',
+    },
+    offOutline: {
+      true: 'focus-visible:ring-0 focus-visible:ring-offset-0',
+      false: '',
+    },
+  },
+  defaultVariants: {
+    inputSize: 'default',
+    offOutline: false,
+  },
+})
+
+const labelVariants = cva('mb-1.5 block font-medium', {
+  variants: {
+    inputSize: {
+      default: 'text-base',
+      sm: 'text-sm',
+    },
+  },
+  defaultVariants: {
+    inputSize: 'default',
+  },
+})
+
+const resetButtonVariants = cva(
+  'absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-gray-50 duration-200 hover:bg-gray-100',
+  {
+    variants: {
+      inputSize: {
+        default: 'p-1',
+        sm: 'p-0.5',
+      },
+    },
+    defaultVariants: {
+      inputSize: 'default',
+    },
+  },
+)
+
+const resetIconVariants = cva('text-gray-500', {
+  variants: {
+    inputSize: {
+      default: 'size-4',
+      sm: 'size-3',
+    },
+  },
+  defaultVariants: {
+    inputSize: 'default',
+  },
+})
+
+interface CommonInputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'className'>,
+    VariantProps<typeof inputVariants> {
   label?: string
   icon?: React.ReactNode
   onReset?: () => void
@@ -14,6 +73,8 @@ interface CommonInputProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
 }
 
 /**
+ * @param inputSize input 전반적인 크기를 설정
+ * @param offOutline input focus 시 outline 끄기
  * @param label input 상단에 표시되는 라벨
  * @param icon input 왼쪽에 표시되는 아이콘
  * @param onReset input 오른쪽에 표시되는 리셋 버튼의 동작 함수
@@ -27,6 +88,8 @@ interface CommonInputProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
   return (
     <div className="px-mobile_safe">
       <Input
+        inputSize="sm"
+        offOutline
         type="email"
         label="이메일"
         placeholder="이메일을 입력하세요"
@@ -41,16 +104,16 @@ interface CommonInputProps extends Omit<React.InputHTMLAttributes<HTMLInputEleme
  */
 
 const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
-  ({ label, icon, onReset, isInvalid, className, ...props }, ref) => {
+  ({ label, icon, onReset, isInvalid, className, inputSize, offOutline, ...props }, ref) => {
     return (
       <div className="w-full">
-        {label && <ShadcnLabel className="mb-1.5 block text-base font-medium">{label}</ShadcnLabel>}
+        {label && <ShadcnLabel className={labelVariants({ inputSize })}>{label}</ShadcnLabel>}
         <div className={cn('relative', className)}>
           {icon && <div className="absolute left-3 top-1/2 -translate-y-1/2">{icon}</div>}
           <ShadcnInput
             ref={ref}
             className={cn(
-              'py-6',
+              inputVariants({ inputSize, offOutline }),
               icon && 'pl-10', // 아이콘 공간
               isInvalid && 'border-red-500 focus-visible:ring-red-500',
               props.value && 'pr-8', // x 버튼 공간
@@ -58,12 +121,8 @@ const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
             {...props}
           />
           {props.value && onReset && (
-            <button
-              type="button"
-              onClick={onReset}
-              className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-gray-50 p-1 duration-200 hover:bg-gray-100"
-            >
-              <X className="size-4 text-gray-500" />
+            <button type="button" onClick={onReset} className={resetButtonVariants({ inputSize })}>
+              <X className={resetIconVariants({ inputSize })} />
             </button>
           )}
         </div>
