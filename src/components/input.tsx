@@ -3,13 +3,14 @@ import { Label as ShadcnLabel } from '@/components/shadcn/label'
 import { cn } from '@/lib/utils'
 import { X } from 'lucide-react'
 import React from 'react'
+import type { ClassNameValue } from 'tailwind-merge'
 
-interface CommonInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface CommonInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'className'> {
   label?: string
   icon?: React.ReactNode
   onReset?: () => void
   isInvalid?: boolean
-  className?: string
+  className?: ClassNameValue
 }
 
 /**
