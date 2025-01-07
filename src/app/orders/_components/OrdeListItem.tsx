@@ -1,4 +1,3 @@
-import Chip from '@/components/Chip'
 import Icon from '@/components/Icon'
 import Image from 'next/image'
 
@@ -7,19 +6,18 @@ const OrdeListItem = () => {
     <div className="rounded-xl border border-solid border-gray-200 p-4">
       <div className="flex flex-row items-center gap-[10px]">
         <Image
-          className="size-[80px] rounded-xl object-cover object-center"
+          className="size-[60px] rounded-xl object-cover object-center"
           src={
             'https://flexible.img.hani.co.kr/flexible/normal/970/647/imgdb/resize/2017/0709/149948783091_20170709.JPG'
           }
           alt="음식점 대표 이미지"
-          width={80}
-          height={80}
+          width={60}
+          height={60}
           loading="lazy"
         />
         <div className="flex flex-1 flex-col gap-1">
           <div className="flex flex-row items-center justify-between gap-2">
             <span className="text-lg font-bold">빙동댕</span>
-            <Chip text="배달 완료" />
           </div>
           <p className="text-sm text-gray-400">2024-12-28 오후 06:34</p>
         </div>
