@@ -1,6 +1,6 @@
 'use client'
 
-import { Label as ShadcnLabel } from '@/components/ui/label'
+import { Label as ShadcnLabel } from '@/components/shadcn/label'
 import { cn } from '@/lib/utils'
 
 interface ChipProps extends React.HTMLAttributes<HTMLLabelElement> {
