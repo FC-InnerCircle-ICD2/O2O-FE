@@ -8,6 +8,7 @@ import dotsHorizontal from '@/assets/icons/dots-horizontal.svg'
 import heart from '@/assets/icons/heart.svg'
 import home from '@/assets/icons/home.svg'
 import search from '@/assets/icons/search.svg'
+import share from '@/assets/icons/share.svg'
 import star from '@/assets/icons/star.svg'
 import user from '@/assets/icons/user.svg'
 import warning from '@/assets/icons/warning.svg'
@@ -28,6 +29,7 @@ export const ICONS = {
   dotsHorizontal,
   arrowUp,
   dash,
+  share,
 }
 
 interface IconProps {

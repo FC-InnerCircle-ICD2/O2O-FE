@@ -2,9 +2,9 @@ import { Input as ShadcnInput } from '@/components/shadcn/input'
 import { Label as ShadcnLabel } from '@/components/shadcn/label'
 import { cn } from '@/lib/utils'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { X } from 'lucide-react'
 import React from 'react'
 import type { ClassNameValue } from 'tailwind-merge'
+import Icon from './Icon'
 
 const inputVariants = cva('', {
   variants: {
@@ -122,7 +122,8 @@ const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
           />
           {props.value && onReset && (
             <button type="button" onClick={onReset} className={resetButtonVariants({ inputSize })}>
-              <X className={resetIconVariants({ inputSize })} />
+              <Icon variant="share" width={18} height={18} fill="blue" />
+              {/* <X className={resetIconVariants({ inputSize })} /> */}
             </button>
           )}
         </div>
