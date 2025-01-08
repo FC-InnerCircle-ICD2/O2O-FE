@@ -84,12 +84,19 @@ interface CommonInputProps
 
 const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
   ({ label, icon, onReset, isInvalid, className, inputSize, offOutline, ...props }, ref) => {
+    const inputId = React.useId()
+
     return (
       <div className="w-full">
-        {label && <ShadcnLabel className={labelVariants({ inputSize })}>{label}</ShadcnLabel>}
+        {label && (
+          <ShadcnLabel htmlFor={inputId} className={labelVariants({ inputSize })}>
+            {label}
+          </ShadcnLabel>
+        )}
         <div className={cn('relative', className)}>
           {icon && <div className="absolute left-3 top-1/2 -translate-y-1/2">{icon}</div>}
           <ShadcnInput
+            id={inputId}
             ref={ref}
             className={cn(
               inputVariants({ inputSize, offOutline }),
