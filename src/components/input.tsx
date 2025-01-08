@@ -7,11 +7,12 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import React from 'react'
 import type { ClassNameValue } from 'tailwind-merge'
 
+// eslint-disable-next-line tailwindcss/no-unnecessary-arbitrary-value
 const inputVariants = cva('', {
   variants: {
     inputSize: {
-      default: 'py-6 text-base',
-      sm: 'py-3 text-sm',
+      default: 'h-[52px] text-base',
+      sm: 'h-[40px] text-sm',
     },
     offOutline: {
       true: 'focus-visible:ring-0 focus-visible:ring-offset-0',
