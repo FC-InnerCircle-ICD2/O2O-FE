@@ -8,6 +8,7 @@ import search from '@/assets/icons/search.svg'
 import star from '@/assets/icons/star.svg'
 import user from '@/assets/icons/user.svg'
 import warning from '@/assets/icons/warning.svg'
+import xCircle from '@/assets/icons/x-circle.svg'
 import { FC } from 'react'
 
 export const ICONS = {
@@ -21,6 +22,7 @@ export const ICONS = {
   arrowDown,
   close,
   star,
+  xCircle,
 }
 
 interface IconProps {
