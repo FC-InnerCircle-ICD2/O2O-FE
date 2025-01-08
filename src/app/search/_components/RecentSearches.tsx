@@ -62,7 +62,7 @@ const RecentSearches = () => {
               />
             ))
           ) : (
-            <div className="w-full py-2 text-center text-xs text-gray-400">
+            <div className="flex h-navigation flex-1 items-center justify-center text-center text-xs text-gray-400">
               최근 검색어가 없습니다.
             </div>
           )}
