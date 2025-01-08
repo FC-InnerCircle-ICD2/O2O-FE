@@ -1,7 +1,7 @@
 import BottomSheet from '@/components/BottomSheet'
 import CommonLayout from '@/components/CommonLayout'
 import Modal from '@/components/Modal'
-import { pretendard } from '@/styles/fonts'
+import { bmjua, pretendard } from '@/styles/fonts'
 import type { Metadata } from 'next'
 import './globals.css'
 
@@ -16,7 +16,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning={true} className={pretendard.className}>
+    <html
+      lang="ko"
+      suppressHydrationWarning={true}
+      className={`${pretendard.className} ${bmjua.variable}`}
+    >
       <body suppressHydrationWarning={true}>
         <CommonLayout>{children}</CommonLayout>
         <Modal />

@@ -86,7 +86,8 @@ export default {
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
       fontFamily: {
-        sans: ['var(--font-pretendard)'],
+        pretendard: ['var(--font-pretendard)', 'sans-serif'],
+        bmjua: ['var(--font-bmjua)', 'sans-serif'],
       },
     },
   },

@@ -1,7 +1,13 @@
 'use client'
 
 import { bottomSheetStore } from '@/store/bottomSheet'
-import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle } from './ui/drawer'
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+} from './shadcn/drawer'
 
 const BottomSheet = () => {
   const { bottomSheet, hideBottomSheet } = bottomSheetStore()
