@@ -1,16 +1,18 @@
+import Icon from '@/components/Icon'
 import { Input as ShadcnInput } from '@/components/shadcn/input'
 import { Label as ShadcnLabel } from '@/components/shadcn/label'
 import { cn } from '@/lib/utils'
+import { COLORS } from '@/styles/color'
 import { cva, type VariantProps } from 'class-variance-authority'
-import { X } from 'lucide-react'
 import React from 'react'
 import type { ClassNameValue } from 'tailwind-merge'
 
+// eslint-disable-next-line tailwindcss/no-unnecessary-arbitrary-value
 const inputVariants = cva('', {
   variants: {
     inputSize: {
-      default: 'py-6 text-base',
-      sm: 'py-3 text-sm',
+      default: 'h-[52px] text-base',
+      sm: 'h-[40px] text-sm',
     },
     offOutline: {
       true: 'focus-visible:ring-0 focus-visible:ring-offset-0',
@@ -35,32 +37,10 @@ const labelVariants = cva('mb-1.5 block font-medium', {
   },
 })
 
-const resetButtonVariants = cva(
-  'absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-gray-50 duration-200 hover:bg-gray-100',
-  {
-    variants: {
-      inputSize: {
-        default: 'p-1',
-        sm: 'p-0.5',
-      },
-    },
-    defaultVariants: {
-      inputSize: 'default',
-    },
-  },
-)
-
-const resetIconVariants = cva('text-gray-500', {
-  variants: {
-    inputSize: {
-      default: 'size-4',
-      sm: 'size-3',
-    },
-  },
-  defaultVariants: {
-    inputSize: 'default',
-  },
-})
+const resetIconSizes = {
+  default: { width: 24, height: 24 },
+  sm: { width: 20, height: 20 },
+} as const
 
 interface CommonInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'className'>,
@@ -105,12 +85,19 @@ interface CommonInputProps
 
 const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
   ({ label, icon, onReset, isInvalid, className, inputSize, offOutline, ...props }, ref) => {
+    const inputId = React.useId()
+
     return (
       <div className="w-full">
-        {label && <ShadcnLabel className={labelVariants({ inputSize })}>{label}</ShadcnLabel>}
+        {label && (
+          <ShadcnLabel htmlFor={inputId} className={labelVariants({ inputSize })}>
+            {label}
+          </ShadcnLabel>
+        )}
         <div className={cn('relative', className)}>
           {icon && <div className="absolute left-3 top-1/2 -translate-y-1/2">{icon}</div>}
           <ShadcnInput
+            id={inputId}
             ref={ref}
             className={cn(
               inputVariants({ inputSize, offOutline }),
@@ -121,8 +108,17 @@ const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
             {...props}
           />
           {props.value && onReset && (
-            <button type="button" onClick={onReset} className={resetButtonVariants({ inputSize })}>
-              <X className={resetIconVariants({ inputSize })} />
+            <button
+              type="button"
+              onClick={onReset}
+              className="absolute right-2 top-1/2 z-10 -translate-y-1/2"
+            >
+              <Icon
+                variant="xCircle"
+                {...resetIconSizes[inputSize ?? 'default']}
+                fill={COLORS.gray400}
+                className="duration-200 hover:brightness-75"
+              />
             </button>
           )}
         </div>
