@@ -55,7 +55,7 @@ export default {
         mobile_safe: '20px',
       },
       height: {
-        navigation: '30px',
+        navigation: '40px',
         bottom_navigation: '56px',
       },
       borderRadius: {

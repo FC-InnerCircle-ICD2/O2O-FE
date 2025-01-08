@@ -25,7 +25,7 @@ const Navigation = ({
   const { address } = useGeoLocationStore()
 
   return (
-    <nav className="flex h-navigation items-center justify-center gap-[8px] border-b bg-white px-mobile_safe">
+    <nav className="mt-3 flex h-navigation items-center justify-center gap-[8px] border-b bg-white px-mobile_safe">
       <div className="flex h-full w-[24px] items-center justify-center">
         {hasBackButton && (
           <button onClick={() => router.back()}>

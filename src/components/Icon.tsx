@@ -14,6 +14,7 @@ import share from '@/assets/icons/share.svg'
 import star from '@/assets/icons/star.svg'
 import user from '@/assets/icons/user.svg'
 import warning from '@/assets/icons/warning.svg'
+import xCircle from '@/assets/icons/x-circle.svg'
 
 import { FC } from 'react'
 
@@ -34,6 +35,7 @@ export const ICONS = {
   share,
   arrowNarrowUp,
   arrowNarrowDown,
+  xCircle,
 }
 
 interface IconProps {

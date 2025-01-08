@@ -11,7 +11,7 @@ import { useEffect, useState } from 'react'
 
 const SearchInput = () => {
   const [word, setWord] = useState('')
-  const { setKeyword } = useFoodSearchFilterStore()
+  const { keyword, setKeyword } = useFoodSearchFilterStore()
   const { setValue, storedValue } = useLocalStorage<string[]>('recentSearches', [])
   const router = useRouter()
   const pathname = usePathname()
@@ -19,12 +19,15 @@ const SearchInput = () => {
   useEffect(() => {
     if (pathname === ROUTE_PATHS.SEARCH) {
       setWord('')
+    } else {
+      setWord(keyword || '')
     }
   }, [pathname])
 
   return (
     <Input
       placeholder="무엇을 배달, 포장할까요?"
+      inputSize="sm"
       value={word}
       onChange={(e) => setWord(e.target.value)}
       onKeyDown={(e) => {
