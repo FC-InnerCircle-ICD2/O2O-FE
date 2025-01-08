@@ -6,7 +6,7 @@ import Link from 'next/link'
 const SplashPage = () => {
   return (
     <div className="flex flex-1 flex-col justify-between gap-6 px-mobile_safe">
-      <div className="flex size-full flex-1 flex-col gap-8 pt-10">
+      <div className="flex size-full flex-1 flex-col justify-center gap-8 pt-10">
         <div className="relative aspect-square w-full">
           <Image src={splashImage} alt="splash_bg" fill className="object-contain" />
         </div>
