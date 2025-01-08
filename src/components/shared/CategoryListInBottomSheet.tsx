@@ -15,7 +15,7 @@ const CategoryListInBottomSheet = () => {
   }
 
   return (
-    <div className="grid grid-cols-5 gap-y-4 overflow-x-scroll pb-10">
+    <div className="grid grid-cols-5 gap-y-[10px] overflow-x-scroll pb-10">
       {CATEGORY_LIST.map((category) => (
         <CategoryItem
           key={category.id}

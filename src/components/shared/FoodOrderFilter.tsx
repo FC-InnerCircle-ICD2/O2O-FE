@@ -12,7 +12,7 @@ const FoodOrderFilter = () => {
   const { BottomSheet } = useBottomSheet()
 
   return (
-    <div className="px-mobile_safe pb-3">
+    <div className="px-mobile_safe">
       <Chip
         text={order}
         rightIcon={<Icon variant="arrowDown" width={14} height={14} fill={COLORS.gray400} />}

@@ -7,7 +7,6 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import React from 'react'
 import type { ClassNameValue } from 'tailwind-merge'
 
-// eslint-disable-next-line tailwindcss/no-unnecessary-arbitrary-value
 const inputVariants = cva('', {
   variants: {
     inputSize: {

@@ -1,0 +1,5 @@
+{
+  "rules": {
+    "tailwindcss/no-custom-classname": "off"
+  }
+} 
