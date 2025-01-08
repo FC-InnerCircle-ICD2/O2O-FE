@@ -13,7 +13,7 @@ const RecentSearches = () => {
     string[] | undefined
   >('recentSearches', [])
   const router = useRouter()
-  const { keyword, setKeyword } = useFoodSearchFilterStore()
+  const { setKeyword } = useFoodSearchFilterStore()
 
   const handleRemoveSearch = (item: string) => {
     if (recentSearches === undefined) return

@@ -1,6 +1,7 @@
 import { Input as ShadcnInput } from '@/components/shadcn/input'
 import { Label as ShadcnLabel } from '@/components/shadcn/label'
 import { cn } from '@/lib/utils'
+import { COLORS } from '@/styles/color'
 import { cva, type VariantProps } from 'class-variance-authority'
 import React from 'react'
 import type { ClassNameValue } from 'tailwind-merge'
@@ -36,12 +37,12 @@ const labelVariants = cva('mb-1.5 block font-medium', {
 })
 
 const resetButtonVariants = cva(
-  'absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-gray-50 duration-200 hover:bg-gray-100',
+  'absolute flex items-center justify-center right-2 top-1/2 z-10 -translate-y-1/2 size-[20px] rounded-full bg-gray-400 duration-200 hover:bg-gray-100',
   {
     variants: {
       inputSize: {
-        default: 'p-1',
-        sm: 'p-0.5',
+        default: 'p-0',
+        sm: 'p-0',
       },
     },
     defaultVariants: {
@@ -122,7 +123,7 @@ const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
           />
           {props.value && onReset && (
             <button type="button" onClick={onReset} className={resetButtonVariants({ inputSize })}>
-              <Icon variant="share" width={18} height={18} fill="blue" />
+              <Icon variant="close" width={14} height={14} fill={COLORS.white} />
               {/* <X className={resetIconVariants({ inputSize })} /> */}
             </button>
           )}

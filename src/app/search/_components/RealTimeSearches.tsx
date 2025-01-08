@@ -23,9 +23,9 @@ const REAL_TIME_SEARCHES: RealTimeSearch[] = [
 const RankChangeIcon = ({ rankChange }: { rankChange: string }) => {
   switch (rankChange) {
     case 'up':
-      return <Icon variant="arrowUp" width={16} height={16} fill="red" />
+      return <Icon variant="arrowNarrowUp" width={16} height={16} fill="red" />
     case 'down':
-      return <Icon variant="arrowDown" width={16} height={16} fill="blue" />
+      return <Icon variant="arrowNarrowDown" width={16} height={16} fill="blue" />
     default:
       return <Icon variant="dash" width={16} height={16} fill={COLORS.gray400} />
   }
@@ -40,46 +40,75 @@ const RealTimeSearchItem = ({
 }) => {
   // 현재 표시할 검색어만 상태로 관리
   const [currentSearch, setCurrentSearch] = useState<RealTimeSearch>(realTimeSearch)
-
+  // 타임스탬프를 저장할 상태 추가
   useEffect(() => {
-    // realTimeSearch prop이 변경될 때마다 currentSearch 업데이트
     setCurrentSearch(realTimeSearch)
-    console.log(realTimeSearch)
   }, [realTimeSearch])
 
   return (
-    <div className="flex flex-1 gap-3">
+    <div className="flex h-[16px] grow gap-3 overflow-hidden">
       <span>{order}</span>
-      <span>{currentSearch.keyword}</span>
-      <RankChangeIcon rankChange={currentSearch.rankChange} />
+      <div className="flex grow flex-col justify-between">
+        <AnimatePresence mode="wait">
+          <motion.div
+            // 키값에 타임스탬프 추가
+            key={`${currentSearch.id}-${currentSearch.timestamp}`}
+            initial={{ y: 16, opacity: 0 }} // 아래에서 시작, 투명하게
+            animate={{ y: 0, opacity: 1 }} // 원래 위치로, 불투명하게
+            exit={{ y: -16, opacity: 0 }} // 위로 사라지면서 투명하게
+            transition={{
+              duration: 0.5,
+              ease: 'easeInOut',
+            }}
+            className="flex w-full items-center justify-between"
+          >
+            <span>{currentSearch.keyword}</span>
+            <RankChangeIcon rankChange={currentSearch.rankChange} />
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
   )
 }
 
 const RealTimeSearches = () => {
-  const [dummy, setDummy] = useState<RealTimeSearch[]>([])
+  const [dummy, setDummy] = useState<RealTimeSearch[]>(REAL_TIME_SEARCHES)
+  const [isUpdating, setIsUpdating] = useState(false)
+  const [temp, setTemp] = useState<RealTimeSearch[]>([])
 
   useEffect(() => {
-    if (dummy.length === 0) return
+    if (!isUpdating) return
 
-    console.log(dummy)
-  }, [dummy])
+    const updateWithDelay = async () => {
+      for (let i = 0; i < temp.length; i++) {
+        setDummy((prev) => {
+          const newArray = [...prev]
+          newArray[i] = temp[i]
+          return newArray
+        })
+        await new Promise((resolve) => setTimeout(resolve, 1500)) // 1초 대기
+      }
+      setIsUpdating(false)
+    }
+
+    updateWithDelay()
+  }, [isUpdating])
 
   useEffect(() => {
     const interval = setInterval(() => {
       // 배열을 복사하고 무작위로 섞기
-      const shuffled = [...REAL_TIME_SEARCHES].sort(() => Math.random() - 0.5)
-      setDummy(shuffled)
-    }, 5000)
+      const shuffled = [...REAL_TIME_SEARCHES]
+        .sort(() => Math.random() - 0.5)
+        .map((item) => ({
+          ...item,
+          timestamp: Date.now(),
+        }))
+      setTemp(shuffled)
+      setIsUpdating(true)
+    }, 10000)
 
     return () => clearInterval(interval)
   }, [])
-
-  const itemVariants = {
-    initial: { y: 20, opacity: 0 },
-    animate: { y: 0, opacity: 1 },
-    exit: { y: -20, opacity: 0 },
-  }
 
   return (
     <div className="flex flex-col gap-[28px] px-mobile_safe">
@@ -90,50 +119,14 @@ const RealTimeSearches = () => {
       <div className="flex gap-6">
         <div className="flex flex-1 flex-col gap-[20px]">
           {dummy.slice(0, 3).map((item, index) => (
-            <div key={index} className="flex flex-1 gap-3">
-              <span>{index + 1}</span>
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={`${crypto.randomUUID()}`}
-                  className="flex flex-1 items-center justify-between"
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  variants={itemVariants}
-                  transition={{
-                    duration: 0.3,
-                  }}
-                >
-                  <span>{item.keyword}</span>
-                  <RankChangeIcon rankChange={item.rankChange || 'same'} />
-                </motion.div>
-              </AnimatePresence>
-            </div>
+            <RealTimeSearchItem key={index} order={index + 1} realTimeSearch={item} />
           ))}
         </div>
 
         {/* 오른쪽 컬럼 */}
         <div className="flex flex-1 flex-col gap-[20px]">
-          {dummy.slice(3, 6).map((item, index) => (
-            <div key={index} className="flex flex-1 gap-3">
-              <span>{index + 4}</span>
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={`${crypto.randomUUID()}`}
-                  className="flex flex-1 items-center justify-between"
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  variants={itemVariants}
-                  transition={{
-                    duration: 0.3,
-                  }}
-                >
-                  <span>{item.keyword}</span>
-                  <RankChangeIcon rankChange={item.rankChange || 'same'} />
-                </motion.div>
-              </AnimatePresence>
-            </div>
+          {dummy.slice(3).map((item, index) => (
+            <RealTimeSearchItem key={index} order={index + 4} realTimeSearch={item} />
           ))}
         </div>
       </div>

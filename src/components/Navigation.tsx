@@ -10,6 +10,7 @@ interface NavigationProps {
   centerElement?: React.ReactNode
   rightElement?: React.ReactNode
   useAddress?: boolean
+  isSearch?: boolean
 }
 
 const Navigation = ({
@@ -18,12 +19,13 @@ const Navigation = ({
   centerElement,
   rightElement,
   useAddress = false,
+  isSearch = false,
 }: NavigationProps) => {
   const router = useRouter()
   const { address } = useGeoLocationStore()
 
   return (
-    <nav className="flex h-navigation items-center justify-center border-b bg-white px-mobile_safe">
+    <nav className="flex h-navigation items-center justify-center gap-[8px] border-b bg-white px-mobile_safe">
       <div className="flex h-full w-[24px] items-center justify-center">
         {hasBackButton && (
           <button onClick={() => router.back()}>
@@ -41,9 +43,12 @@ const Navigation = ({
           </h1>
         )}
       </div>
-      <div className="flex h-full w-[24px] items-center justify-center">
-        {rightElement && rightElement}
-      </div>
+
+      {!isSearch && (
+        <div className="flex h-full w-[24px] items-center justify-center">
+          {rightElement && rightElement}
+        </div>
+      )}
     </nav>
   )
 }
