@@ -1,7 +1,7 @@
 import MainLayout from '@/components/MainLayout'
 import Navigation from '@/components/Navigation'
 import { ReactNode } from 'react'
-import TestSearch from './_components/TestSearch'
+import SearchInput from './_components/SearchInput'
 
 interface SearchLayoutProps {
   children: ReactNode
@@ -10,7 +10,7 @@ interface SearchLayoutProps {
 export default function SearchLayout({ children }: SearchLayoutProps) {
   return (
     <>
-      <Navigation hasBackButton centerElement={<TestSearch />} />
+      <Navigation hasBackButton centerElement={<SearchInput />} isSearch={true} />
       <MainLayout>{children}</MainLayout>
     </>
   )

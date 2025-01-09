@@ -16,8 +16,8 @@ const FoodListItem = () => {
         height={100}
         loading="lazy"
       />
-      <div className="flex flex-1 flex-col gap-[4px] overflow-x-hidden">
-        <p className="truncate text-sm font-bold text-black">빙동댕</p>
+      <div className="flex flex-1 flex-col gap-[6px] overflow-x-hidden">
+        <p className="truncate text-base font-bold text-black">빙동댕</p>
         <div className="flex items-center gap-[4px]">
           <div className="flex items-center gap-[2px]">
             <Icon variant="star" width={12} height={12} fill={COLORS.primary} />

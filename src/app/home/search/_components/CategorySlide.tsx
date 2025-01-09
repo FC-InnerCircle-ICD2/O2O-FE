@@ -1,9 +1,11 @@
+import Icon from '@/components/Icon'
 import CategoryItem from '@/components/shared/CategoryItem'
 import CategoryListInBottomSheet from '@/components/shared/CategoryListInBottomSheet'
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
+import { COLORS } from '@/styles/color'
 import { useCallback, useEffect, useRef } from 'react'
-import { CATEGORY_LIST } from './Home'
+import { CATEGORY_LIST } from '../../_components/Home'
 
 const CategorySlide = () => {
   const { categoryId, setCategoryId } = useFoodSearchFilterStore()
@@ -46,8 +48,8 @@ const CategorySlide = () => {
   }, [categoryId])
 
   return (
-    <div className="flex gap-2 px-mobile_safe">
-      <div ref={scrollContainerRef} className="flex flex-1 gap-1 overflow-x-auto py-2">
+    <div className="flex px-mobile_safe">
+      <div ref={scrollContainerRef} className="flex flex-1 gap-1 overflow-x-auto">
         {CATEGORY_LIST.map((category) => (
           <CategoryItem
             key={category.id}
@@ -58,12 +60,13 @@ const CategorySlide = () => {
         ))}
       </div>
       <div className="flex items-center">
-        <button
-          className="h-fit rounded-full border border-solid border-gray-300 px-2 text-sm text-gray-500"
+        <Icon
+          variant="dotsHorizontal"
+          width={24}
+          height={24}
+          fill={COLORS.gray600}
           onClick={handleMoreClick}
-        >
-          ...
-        </button>
+        />
       </div>
     </div>
   )

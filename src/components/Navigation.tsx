@@ -1,7 +1,7 @@
 'use client'
 
 import { useGeoLocationStore } from '@/store/geoLocation'
-import { usePathname, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Icon from './Icon'
 
 interface NavigationProps {
@@ -10,22 +10,23 @@ interface NavigationProps {
   centerElement?: React.ReactNode
   rightElement?: React.ReactNode
   useAddress?: boolean
+  isSearch?: boolean
 }
 
 const Navigation = ({
-    hasBackButton,
+  hasBackButton,
   title,
   centerElement,
   rightElement,
   useAddress = false,
+  isSearch = false,
 }: NavigationProps) => {
   const router = useRouter()
   const { address } = useGeoLocationStore()
-  const pathname = usePathname()
 
   return (
-    <nav className="flex px-mobile_safe items-center justify-center h-navigation border-b bg-white">
-      <div className="absolute left-[16px] flex">
+    <nav className="mt-3 flex h-navigation items-center justify-center gap-[8px] border-b bg-white px-mobile_safe">
+      <div className="flex h-full w-[24px] items-center justify-center">
         {hasBackButton && (
           <button onClick={() => router.back()}>
             <Icon variant="arrowLeft" width={24} height={24} />
@@ -33,15 +34,21 @@ const Navigation = ({
         )}
       </div>
 
-      {centerElement ? (
-        centerElement
-      ) : (
-        <h1 className="text-lg font-semibold">
-          {useAddress && address?.addressName ? address?.addressName : title}
-        </h1>
-      )}
+      <div className="flex h-full flex-1 items-center justify-center">
+        {centerElement ? (
+          centerElement
+        ) : (
+          <h1 className="text-lg font-semibold">
+            {useAddress && address?.addressName ? address?.addressName : title}
+          </h1>
+        )}
+      </div>
 
-      {rightElement && <div className="absolute right-[16px] flex">{rightElement}</div>}
+      {!isSearch && (
+        <div className="flex h-full w-[24px] items-center justify-center">
+          {rightElement && rightElement}
+        </div>
+      )}
     </nav>
   )
 }

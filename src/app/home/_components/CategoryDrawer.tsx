@@ -29,8 +29,8 @@ const CategoryDrawer = () => {
   }, [])
 
   return (
-    <div className="pt-2">
-      <div className="grid grid-cols-5 gap-y-2 overflow-x-scroll px-mobile_safe">
+    <div>
+      <div className="grid grid-cols-5 gap-y-[10px] overflow-x-scroll px-mobile_safe">
         {CATEGORY_LIST.slice(0, 9).map((category) => (
           <CategoryItem
             key={category.id}
@@ -41,8 +41,9 @@ const CategoryDrawer = () => {
         ))}
         {!more ? (
           <CategoryItem
-            category={{ id: 0, name: '더보기', icon: '/images/food-categories/bell.png' }}
+            category={{ id: 0, name: '더보기', icon: '/images/food-categories/more.png' }}
             onClick={() => setMore(true)}
+            useAnimation={false}
           />
         ) : (
           <CategoryItem

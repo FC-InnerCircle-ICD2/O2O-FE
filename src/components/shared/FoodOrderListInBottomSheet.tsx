@@ -16,7 +16,7 @@ const FoodOrderListInBottomSheet = () => {
   }
 
   return (
-    <div className="pb-10">
+    <div className="px-mobile_safe pb-10">
       <ul>
         {Object.values(OrderType).map((item) => (
           <li key={item} className="py-2 text-lg text-gray-600" onClick={() => handleOrder(item)}>
