@@ -1,13 +1,9 @@
 import Chip from '@/components/Chip'
 import Image from 'next/image'
 
-const OrderList = () => {
+const OrderItem = () => {
   return (
-    <div className="pt-10">
-      <div className="flex flex-row space-x-40">
-        <div className="text-gray-400">11월 1일(금) 배달완료</div>
-        <Chip text="주문 상세" />
-      </div>
+    <div className="px-mobile_safe pt-10">
       <div className="flex flex-row items-center pt-5">
         <Image
           className="size-[100px] rounded-xl object-cover object-center"
@@ -20,7 +16,7 @@ const OrderList = () => {
           loading="lazy"
         />
         <div className="flex flex-col gap-3 pl-3">
-          <div className="text-xl">빙동댕</div>
+          <div className="text-xl">빙동댕 {'>'}</div>
           <div>새우 로제 파스타 외 2개 20,000원</div>
         </div>
       </div>
@@ -36,4 +32,4 @@ const OrderList = () => {
   )
 }
 
-export default OrderList
+export default OrderItem
