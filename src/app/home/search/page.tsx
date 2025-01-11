@@ -15,7 +15,7 @@ const HomeSearchPage = () => {
         title="홈"
         rightElement={
           <Link href={ROUTE_PATHS.SEARCH}>
-            <Icon variant="search" width={24} height={24} fill={COLORS.black} />
+            <Icon name="Search" size={24} color={COLORS.black} />
           </Link>
         }
       />

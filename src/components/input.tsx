@@ -11,7 +11,7 @@ const inputVariants = cva('', {
   variants: {
     inputSize: {
       default: 'h-[52px] text-base',
-      sm: 'h-[40px] text-sm',
+      sm: 'h-navigation text-sm',
     },
     offOutline: {
       true: 'focus-visible:ring-0 focus-visible:ring-offset-0',
@@ -37,8 +37,8 @@ const labelVariants = cva('mb-1.5 block font-medium', {
 })
 
 const resetIconSizes = {
-  default: { width: 24, height: 24 },
-  sm: { width: 20, height: 20 },
+  default: 24,
+  sm: 20,
 } as const
 
 interface CommonInputProps
@@ -113,8 +113,9 @@ const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
               className="absolute right-2 top-1/2 z-10 -translate-y-1/2"
             >
               <Icon
-                variant="xCircle"
-                {...resetIconSizes[inputSize ?? 'default']}
+                name="CircleX"
+                size={resetIconSizes[inputSize ?? 'default']}
+                color={COLORS.white}
                 fill={COLORS.gray400}
                 className="duration-200 hover:brightness-75"
               />

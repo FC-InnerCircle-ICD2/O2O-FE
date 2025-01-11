@@ -1,4 +1,3 @@
-import React from 'react'
 import Icon from './Icon'
 
 interface ErrorProps {
@@ -7,9 +6,9 @@ interface ErrorProps {
 
 const Error = ({ message }: ErrorProps) => {
   return (
-    <div className="fixed  flex flex-col gap-4 inset-0 items-center justify-center">
-      <Icon variant="warning" width={48} height={48} />
-      <p className="max-w-30 text-center whitespace-pre-line">{message}</p>
+    <div className="fixed inset-0 flex flex-col items-center justify-center gap-4">
+      <Icon name="TriangleAlert" size={48} />
+      <p className="max-w-30 whitespace-pre-line text-center">{message}</p>
     </div>
   )
 }

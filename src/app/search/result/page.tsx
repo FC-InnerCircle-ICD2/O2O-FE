@@ -1,4 +1,4 @@
-import SearchResult from '../_components/SearchResult'
+import SearchResult from './_components/SearchResult'
 
 const SearchResultPage = () => {
   return <SearchResult />
