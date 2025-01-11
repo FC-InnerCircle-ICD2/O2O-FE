@@ -1,4 +1,5 @@
 import Icon from '@/components/Icon'
+import RippleeEffect from '@/components/RippleeEffect'
 import { Separator } from '@radix-ui/react-separator'
 import Link from 'next/link'
 
@@ -22,7 +23,7 @@ const menuItems = [
 
 const QuickMenuList = () => {
   return (
-    <section className="mt-6 flex h-[80px] justify-evenly rounded-md border border-solid border-gray-400 py-4">
+    <section className="mt-6 flex items-center justify-evenly rounded-md border border-solid border-gray-400">
       {menuItems.map((item, index) => (
         <QuickMenuItem
           key={item.label}
@@ -53,11 +54,13 @@ const QuickMenuItem: React.FC<QuickMenuItemProps> = ({
 }) => {
   return (
     <>
-      <Link href={href} className="flex flex-col items-center justify-center gap-1.5">
-        {icon}
-        <div className="text-sm text-gray-600">{label}</div>
-      </Link>
-      {hasSeparator && <Separator orientation="vertical" className="w-px bg-gray-400" />}
+      <RippleeEffect className="grow">
+        <Link href={href} className="flex h-[80px] flex-col items-center justify-center gap-1.5">
+          {icon}
+          <div className="text-sm text-gray-600">{label}</div>
+        </Link>
+      </RippleeEffect>
+      {hasSeparator && <Separator orientation="vertical" className="h-[54px] w-px bg-gray-400" />}
     </>
   )
 }

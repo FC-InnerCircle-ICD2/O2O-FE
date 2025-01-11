@@ -1,4 +1,5 @@
 import Icon from '@/components/Icon'
+import RippleeEffect from '@/components/RippleeEffect'
 import Link from 'next/link'
 
 const menuItems = [
@@ -31,7 +32,7 @@ const menuItems = [
 
 const MenuList = () => {
   return (
-    <section className="mt-12 flex flex-col gap-5">
+    <section className="mt-12">
       {menuItems.map((item) => (
         <MenuItem key={item.label} icon={item.icon} label={item.label} href={item.href} />
       ))}
@@ -49,9 +50,11 @@ interface MenuItemProps {
 
 const MenuItem: React.FC<MenuItemProps> = ({ icon, label, href }) => {
   return (
-    <Link href={href} className="flex items-center gap-3">
-      {icon}
-      <div className="text-lg">{label}</div>
-    </Link>
+    <RippleeEffect>
+      <Link href={href} className="flex items-center gap-3 px-mobile_safe py-3">
+        {icon}
+        <div className="text-lg">{label}</div>
+      </Link>
+    </RippleeEffect>
   )
 }
