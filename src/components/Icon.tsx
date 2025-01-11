@@ -3,6 +3,7 @@ import arrowLeft from '@/assets/icons/arrow-left.svg'
 import arrowNarrowDown from '@/assets/icons/arrow-narrow-down.svg'
 import arrowNarrowUp from '@/assets/icons/arrow-narrow-up.svg'
 import arrowUp from '@/assets/icons/arrow-up.svg'
+import chat from '@/assets/icons/chat.svg'
 import clipboard from '@/assets/icons/clipboard.svg'
 import close from '@/assets/icons/close.svg'
 import dash from '@/assets/icons/dash.svg'
@@ -36,6 +37,7 @@ export const ICONS = {
   arrowNarrowUp,
   arrowNarrowDown,
   xCircle,
+  chat,
 }
 
 interface IconProps {
