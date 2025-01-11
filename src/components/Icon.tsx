@@ -1,67 +1,40 @@
-import arrowDown from '@/assets/icons/arrow-down.svg'
-import arrowLeft from '@/assets/icons/arrow-left.svg'
-import arrowNarrowDown from '@/assets/icons/arrow-narrow-down.svg'
-import arrowNarrowUp from '@/assets/icons/arrow-narrow-up.svg'
-import arrowUp from '@/assets/icons/arrow-up.svg'
-import clipboard from '@/assets/icons/clipboard.svg'
-import close from '@/assets/icons/close.svg'
-import dash from '@/assets/icons/dash.svg'
-import dotsHorizontal from '@/assets/icons/dots-horizontal.svg'
-import heart from '@/assets/icons/heart.svg'
-import home from '@/assets/icons/home.svg'
-import search from '@/assets/icons/search.svg'
-import share from '@/assets/icons/share.svg'
-import star from '@/assets/icons/star.svg'
-import user from '@/assets/icons/user.svg'
-import warning from '@/assets/icons/warning.svg'
-import xCircle from '@/assets/icons/x-circle.svg'
-
-import { FC } from 'react'
-
-export const ICONS = {
-  heart,
-  home,
-  search,
-  clipboard,
-  user,
-  arrowLeft,
-  warning,
-  arrowDown,
-  close,
-  star,
-  dotsHorizontal,
-  arrowUp,
-  dash,
-  share,
-  arrowNarrowUp,
-  arrowNarrowDown,
-  xCircle,
-}
-
-interface IconProps {
-  variant: keyof typeof ICONS
-  width?: number
-  height?: number
+import { icons } from 'lucide-react'
+import { HTMLAttributes } from 'react'
+export type IconName = keyof typeof icons // 아이콘 목록
+export interface IconProps extends HTMLAttributes<HTMLOrSVGElement> {
+  name: IconName
+  color?: string
+  size?: string | number
+  strokeWidth?: string | number
+  absoluteStrokeWidth?: boolean
   fill?: string
-  className?: string
-  onClick?: (e: React.MouseEvent) => void
 }
-
-const Icon: FC<IconProps> = ({
-  variant,
-  width = 24,
-  height = 24,
-  fill = '#000000',
+const Icon = ({
+  name,
+  size = '16px',
+  color = 'currentColor',
+  strokeWidth = '1.75px',
+  absoluteStrokeWidth = false,
   className,
-  onClick,
-}) => {
-  const Component = ICONS[variant]
-
+  fill = 'none',
+  ...props
+}: IconProps) => {
+  const LucideIcon = icons[name]
+  if (!LucideIcon) {
+    console.warn(`Lucide icon '${name}' does not exist.`)
+    return null
+  }
   return (
-    <div className={className} style={{ width, height }} onClick={onClick}>
-      <Component width="100%" height="100%" color={fill} />
-    </div>
+    <LucideIcon
+      size={size}
+      strokeWidth={strokeWidth}
+      color={color}
+      fill={fill}
+      absoluteStrokeWidth={absoluteStrokeWidth}
+      style={{ width: size, height: size }} // !important 없이 인라인 스타일 사용
+      className={className}
+      {...props}
+    />
   )
 }
-
 export default Icon

@@ -13,7 +13,7 @@ const HomePage = () => {
         title="홈"
         rightElement={
           <Link href={ROUTE_PATHS.SEARCH}>
-            <Icon variant="search" width={24} height={24} />
+            <Icon name="Search" size={24} />
           </Link>
         }
       />

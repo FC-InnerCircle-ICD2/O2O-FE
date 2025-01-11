@@ -48,10 +48,9 @@ const RecentSearches = () => {
                 text={item}
                 rightIcon={
                   <Icon
-                    variant="close"
-                    width={14}
-                    height={14}
-                    fill={COLORS.gray400}
+                    name="X"
+                    size={14}
+                    color={COLORS.gray400}
                     onClick={(e) => {
                       e.stopPropagation()
                       handleRemoveSearch(item)

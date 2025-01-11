@@ -1,7 +1,7 @@
 'use client'
 
 import FoodOrderFilter from '@/components/shared/FoodOrderFilter'
-import SearchFoodList from './SearchFoodList'
+import SearchFoodList from '../../_components/SearchFoodList'
 
 const SearchResult = () => {
   return (
