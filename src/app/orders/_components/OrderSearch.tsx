@@ -1,22 +1,19 @@
 import { COLORS } from '@/styles/color'
 import Icon from '@/components/Icon'
+import Input from '@/components/input'
+import { SearchIcon } from 'lucide-react'
 
 const OrderSearch = () => {
   return (
-    <div className="mb-6 flex w-full flex-col gap-3">
-      <div className="fixed left-0 top-8 z-20 w-full bg-white p-2">
-        <div className="relative pt-2">
-          <Icon
-            className="absolute left-3 top-5"
-            variant="search"
-            width={14}
-            height={14}
-            fill={COLORS.gray600}
-          />
-          <input
-            className="w-full rounded-md border-2 border-gray-300 p-2 pl-8"
+    <div className="flex w-full flex-col gap-3">
+      <div className="left-0 top-8 z-20 w-full bg-white">
+        <div className="relative">
+          <Input
+            inputSize="sm"
+            offOutline
             type="search"
             placeholder="주문 내역을 검색하세요"
+            icon={<SearchIcon className="size-5 text-gray-500" />}
           />
         </div>
       </div>
