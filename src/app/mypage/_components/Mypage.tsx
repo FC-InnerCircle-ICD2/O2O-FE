@@ -4,9 +4,11 @@ import UserProfile from '@/app/mypage/_components/UserProfile'
 
 const Mypage = () => {
   return (
-    <section className="p-mobile_safe">
-      <UserProfile />
-      <QuickMenuList />
+    <section>
+      <div className="px-mobile_safe">
+        <UserProfile />
+        <QuickMenuList />
+      </div>
       <MenuList />
     </section>
   )
