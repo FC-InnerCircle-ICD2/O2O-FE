@@ -23,11 +23,11 @@ const REAL_TIME_SEARCHES: RealTimeSearch[] = [
 const RankChangeIcon = ({ rankChange }: { rankChange: string }) => {
   switch (rankChange) {
     case 'up':
-      return <Icon variant="arrowNarrowUp" width={16} height={16} fill="red" />
+      return <Icon name="MoveUp" size={16} strokeWidth={3} color="red" />
     case 'down':
-      return <Icon variant="arrowNarrowDown" width={16} height={16} fill="blue" />
+      return <Icon name="MoveDown" size={16} strokeWidth={3} color="blue" />
     default:
-      return <Icon variant="dash" width={16} height={16} fill={COLORS.gray400} />
+      return <Icon name="Minus" size={16} strokeWidth={4} color={COLORS.gray400} />
   }
 }
 

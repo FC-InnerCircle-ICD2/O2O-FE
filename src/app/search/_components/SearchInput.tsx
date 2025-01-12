@@ -39,7 +39,7 @@ const SearchInput = () => {
         }
       }}
       onReset={() => setWord('')}
-      icon={<Icon variant="search" width={18} height={18} />}
+      icon={<Icon name="Search" size={18} />}
       offOutline
     />
   )

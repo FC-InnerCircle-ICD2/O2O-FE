@@ -20,7 +20,7 @@ const FoodListItem = () => {
         <p className="truncate text-base font-bold text-black">빙동댕</p>
         <div className="flex items-center gap-[4px]">
           <div className="flex items-center gap-[2px]">
-            <Icon variant="star" width={12} height={12} fill={COLORS.primary} />
+            <Icon name="Star" size={12} color={COLORS.primary} fill={COLORS.primary} />
             <span className="text-xs font-bold text-black">5.0</span>
             <span className="text-xs font-medium text-gray-400">(844)</span>
           </div>
