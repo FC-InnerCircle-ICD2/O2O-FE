@@ -44,16 +44,8 @@ const RippleeEffect = ({
 
       // 애니메이션 적용 (반복 동작을 위해)
       setTimeout(() => {
-        ripple.style.setProperty('--animation', 'ripple-effect 0.8s ease-in-out forwards')
+        ripple.style.setProperty('--animation', 'ripple-effect 0.4s ease-in-out forwards')
       })
-    }
-  }
-
-  const handleRippleeEnd = () => {
-    const ripple = rippleRef.current
-    if (ripple) {
-      // 애니메이션을 제거하고 투명도를 0으로 설정
-      ripple.style.setProperty('--animation', 'ripple-fade 0.3s ease-out forwards')
     }
   }
 
@@ -63,9 +55,7 @@ const RippleeEffect = ({
       ref={rippleContainerRef}
       className={`relative overflow-hidden ${className}`}
       onMouseDown={handleRipplee}
-      onMouseUp={handleRippleeEnd}
-      onTouchStart={handleRipplee} // 누르고 있는 동안 물결 효과 유지를 위해 추가
-      onTouchEnd={handleRippleeEnd} // 누르고 있는 동안 물결 효과 유지를 위해 추가
+      onTouchStart={handleRipplee}
     >
       {children}
       {/* 물결 효과 요소 */}

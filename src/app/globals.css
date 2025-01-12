@@ -223,20 +223,14 @@ button {
 
 /* RippleeEffect.tsx에서 사용 */
 @keyframes ripple-effect {
-  from {
+  0% {
     transform: scale(0);
   }
-  to {
+  85% {
     transform: scale(1);
     opacity: 1;
   }
-}
-@keyframes ripple-fade {
-  from {
-    transform: scale(1);
-    opacity: 1;
-  }
-  to {
+  100% {
     transform: scale(0);
     opacity: 0;
   }
