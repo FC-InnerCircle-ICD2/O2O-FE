@@ -4,27 +4,27 @@ import Link from 'next/link'
 
 const menuItems = [
   {
-    icon: <Icon variant="building" />,
+    icon: <Icon name="Building" size={24} />,
     label: '주소관리',
     href: '',
   },
   {
-    icon: <Icon variant="creditCard" />,
+    icon: <Icon name="CreditCard" size={24} />,
     label: '결제수단',
     href: '',
   },
   {
-    icon: <Icon variant="speakerphone" />,
+    icon: <Icon name="Megaphone" size={24} />,
     label: '공지사항',
     href: '',
   },
   {
-    icon: <Icon variant="doubleChat" />,
+    icon: <Icon name="MessageCircleQuestion" size={24} />,
     label: '자주 문는 질문',
     href: '',
   },
   {
-    icon: <Icon variant="cog" />,
+    icon: <Icon name="Cog" size={24} />,
     label: '설정',
     href: '',
   },

@@ -5,17 +5,17 @@ import Link from 'next/link'
 
 const menuItems = [
   {
-    icon: <Icon variant="heart" />,
+    icon: <Icon name="Heart" size={20} />,
     label: '찜 목록',
     href: '/favorites',
   },
   {
-    icon: <Icon variant="clipboard" />,
+    icon: <Icon name="ClipboardList" size={20} />,
     label: '주문내역',
     href: '/orders',
   },
   {
-    icon: <Icon variant="chat" />,
+    icon: <Icon name="MessageSquareMore" size={20} />,
     label: '리뷰관리',
     href: '/reviews',
   },
