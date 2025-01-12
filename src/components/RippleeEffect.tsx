@@ -19,9 +19,11 @@ const RippleeEffect = ({
   const rippleContainerRef = useRef<HTMLDivElement>(null)
   const rippleRef = useRef<HTMLDivElement>(null)
 
-  const handleRipplee = (e: React.MouseEvent<HTMLDivElement>) => {
+  const handleRipplee = (
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
+  ) => {
     // 클릭한 위치의 좌표 가져오기
-    const { clientX, clientY } = e
+    const { clientX, clientY } = 'touches' in e ? e.touches[0] : e
     // 컨테이너의 위치와 크기 정보 가져오기
     const { x, y, width, height } = rippleContainerRef.current?.getBoundingClientRect() ?? {
       x: 0,
@@ -47,18 +49,29 @@ const RippleeEffect = ({
     }
   }
 
+  const handleRippleeEnd = () => {
+    const ripple = rippleRef.current
+    if (ripple) {
+      // 애니메이션을 제거하고 투명도를 0으로 설정
+      ripple.style.setProperty('--animation', 'ripple-fade 0.3s ease-out forwards')
+    }
+  }
+
   return (
     // 물결 효과를 포함할 컨테이너
     <div
       ref={rippleContainerRef}
       className={`relative overflow-hidden ${className}`}
       onMouseDown={handleRipplee}
+      onMouseUp={handleRippleeEnd}
+      onTouchStart={handleRipplee} // 누르고 있는 동안 물결 효과 유지를 위해 추가
+      onTouchEnd={handleRippleeEnd} // 누르고 있는 동안 물결 효과 유지를 위해 추가
     >
       {children}
       {/* 물결 효과 요소 */}
       <div
         ref={rippleRef}
-        className="absolute left-[var(--left)] top-[var(--top)] -z-10 size-[var(--diameter)] scale-100 animate-[var(--animation)] rounded-full bg-gray-300/50"
+        className="absolute left-[var(--left)] top-[var(--top)] -z-10 size-[var(--diameter)] animate-[var(--animation)] rounded-full bg-gray-300/50"
       ></div>
     </div>
   )
