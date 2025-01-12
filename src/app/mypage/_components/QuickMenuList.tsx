@@ -23,7 +23,7 @@ const menuItems = [
 
 const QuickMenuList = () => {
   return (
-    <section className="mt-6 flex items-center justify-evenly rounded-md border border-solid border-gray-400">
+    <section className="mt-2 flex items-center justify-evenly rounded-md border border-solid border-gray-400">
       {menuItems.map((item, index) => (
         <QuickMenuItem
           key={item.label}

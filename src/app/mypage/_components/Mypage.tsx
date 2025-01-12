@@ -5,8 +5,8 @@ import UserProfile from '@/app/mypage/_components/UserProfile'
 const Mypage = () => {
   return (
     <section>
+      <UserProfile />
       <div className="px-mobile_safe">
-        <UserProfile />
         <QuickMenuList />
       </div>
       <MenuList />

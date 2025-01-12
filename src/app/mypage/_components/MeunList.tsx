@@ -32,7 +32,7 @@ const menuItems = [
 
 const MenuList = () => {
   return (
-    <section className="mt-12">
+    <section className="mt-8">
       {menuItems.map((item) => (
         <MenuItem key={item.label} icon={item.icon} label={item.label} href={item.href} />
       ))}
