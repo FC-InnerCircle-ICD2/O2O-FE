@@ -29,7 +29,7 @@ const Navigation = ({
       <div className="flex h-full w-[24px] items-center justify-center">
         {hasBackButton && (
           <button onClick={() => router.back()}>
-            <Icon variant="arrowLeft" width={24} height={24} />
+            <Icon name="ChevronLeft" size={24} />
           </button>
         )}
       </div>

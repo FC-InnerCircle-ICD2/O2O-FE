@@ -15,7 +15,7 @@ const FoodOrderFilter = () => {
     <div className="px-mobile_safe">
       <Chip
         text={order}
-        rightIcon={<Icon variant="arrowDown" width={14} height={14} fill={COLORS.gray400} />}
+        rightIcon={<Icon name="ChevronDown" size={14} strokeWidth={3} color={COLORS.gray400} />}
         onClick={() => BottomSheet({ title: '정렬', content: <FoodOrderListInBottomSheet /> })}
       />
     </div>

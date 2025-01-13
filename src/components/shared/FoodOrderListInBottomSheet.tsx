@@ -23,7 +23,7 @@ const FoodOrderListInBottomSheet = () => {
             <div className="flex items-center gap-4">
               <span className={`${order === item ? 'font-semibold' : 'font-normal'}`}>{item}</span>
               {order === item && (
-                <Icon variant="arrowDown" width={18} height={18} fill={COLORS.gray600} />
+                <Icon name="Check" size={18} strokeWidth={3} color={COLORS.gray600} />
               )}
             </div>
           </li>

@@ -60,13 +60,7 @@ const CategorySlide = () => {
         ))}
       </div>
       <div className="flex items-center">
-        <Icon
-          variant="dotsHorizontal"
-          width={24}
-          height={24}
-          fill={COLORS.gray600}
-          onClick={handleMoreClick}
-        />
+        <Icon name="Ellipsis" size={24} color={COLORS.gray600} onClick={handleMoreClick} />
       </div>
     </div>
   )

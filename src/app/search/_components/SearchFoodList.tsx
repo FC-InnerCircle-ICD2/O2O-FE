@@ -49,7 +49,7 @@ const SearchFoodList = () => {
             className="fixed bottom-10 right-5 rounded-full border border-solid border-gray-300 bg-white p-3"
             onClick={scrollToTop}
           >
-            <Icon className="rotate-180" variant="arrowDown" width={20} height={20} />
+            <Icon name="ChevronUp" size={20} />
           </div>
         )}
       </div>
