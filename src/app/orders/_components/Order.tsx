@@ -4,12 +4,18 @@ import OrderItem from '@/app/orders/_components/OrderItem'
 const Order = () => {
   return (
     <>
-      <OrderSearch />
-      <OrderItem />
-      <OrderItem />
-      <OrderItem />
-      <OrderItem />
-      <OrderItem />
+      <div className="flex h-full flex-col gap-5">
+        <div className="h-navigation px-mobile_safe pt-2">
+          <OrderSearch />
+        </div>
+        <div className="flex flex-1 flex-col gap-4 overflow-y-auto p-3 px-mobile_safe">
+          <OrderItem />
+          <OrderItem />
+          <OrderItem />
+          <OrderItem />
+          <OrderItem />
+        </div>
+      </div>
     </>
   )
 }
