@@ -69,6 +69,7 @@ const LoginForm = () => {
       </div>
       <div className="mb-8">
         <Input
+          type="password"
           placeholder="비밀번호 입력"
           {...register('password')}
           isInvalid={!!errors.password}
