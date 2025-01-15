@@ -212,6 +212,8 @@ button {
   display: none;
 }
 
+
+/*************** keyframes (start) ***************/
 @keyframes scaleIn {
   from {
     transform: scale(0);
@@ -235,3 +237,4 @@ button {
     opacity: 0;
   }
 }
+/*************** keyframes (end) ***************/
