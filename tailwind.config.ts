@@ -51,7 +51,7 @@ export default {
           '5': 'hsl(var(--chart-5))',
         },
       },
-      padding: {
+      spacing: {
         mobile_safe: '20px',
       },
       height: {
