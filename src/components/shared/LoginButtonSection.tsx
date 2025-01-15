@@ -1,9 +1,7 @@
 'use client'
 
 import { Button } from '@/components/button'
-import Icon from '@/components/Icon'
-import Input from '@/components/input'
-import Navigation from '@/components/Navigation'
+import LoginModal from '@/components/shared/LoginModal'
 import useModal from '@/hooks/useModal'
 
 const LoginButtonSection = () => {
@@ -28,27 +26,3 @@ const LoginButtonSection = () => {
 }
 
 export default LoginButtonSection
-
-const LoginModal = () => {
-  const { hide } = useModal()
-  return (
-    <div className="h-screen w-screen bg-white p-mobile_safe">
-      <Navigation
-        title="로그인"
-        rightElement={<Icon name="X" size={24} onClick={hide} className="stroke-2" />}
-      />
-      <div className="mt-6 text-center">
-        <div className="mb-6 font-bmjua text-4xl font-bold">개발의 민족</div>
-        <div className="mb-8 text-gray-500">로그인하고 다양한 혜택을 받아보세요!</div>
-        <div className="mb-8">
-          <Input className="mb-3" placeholder="이메일 주소 입력" />
-          <Input placeholder="비밀번호 입력" />
-        </div>
-        <Button className="mb-2">로그인</Button>
-        <div className="flex justify-center">
-          <button className="text-xs text-gray-500">회원가입</button>
-        </div>
-      </div>
-    </div>
-  )
-}
