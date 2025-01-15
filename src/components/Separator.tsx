@@ -16,8 +16,8 @@ const Separator = ({ ignoreMobileSafe = false, ...props }: SeparatorType) => {
     <ShadcnSeparator
       {...props}
       className={cn(
-        props.className,
         ignoreMobileSafe && props.orientation !== 'vertical' && 'ignore-mobile-safe',
+        props.className,
       )}
     />
   )
