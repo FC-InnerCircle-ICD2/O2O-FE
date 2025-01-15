@@ -5449,8 +5449,6 @@ __metadata:
     "@radix-ui/react-accordion": "npm:^1.2.2"
     "@radix-ui/react-dialog": "npm:^1.1.4"
     "@radix-ui/react-label": "npm:^2.1.1"
-    "@radix-ui/react-progress": "npm:^1.1.1"
-    "@radix-ui/react-separator": "npm:^1.1.1"
     "@svgr/webpack": "npm:^8.1.0"
     "@types/eslint-plugin-tailwindcss": "npm:^3"
     "@types/node": "npm:^20"
