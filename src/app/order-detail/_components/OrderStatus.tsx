@@ -56,7 +56,7 @@ const OrderStatus = () => {
               배달 진행중
             </div>
             <div className={status === '배달 완료' ? 'text-primary' : 'text-gray-400'}>
-              배달완료
+              배달 완료
             </div>
           </div>
         </div>
