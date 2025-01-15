@@ -41,8 +41,8 @@ const OrderStatus = () => {
 
   return (
     <div className="px-mobile_safe">
-      <div className="flex flex-col gap-5">
-        <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
           <div className="text-xl font-bold">{title}</div>
           <div className="text-sm text-gray-400">{subTitle}</div>
         </div>
