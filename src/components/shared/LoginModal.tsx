@@ -21,6 +21,9 @@ const LoginModal = () => {
         <div className="mb-8 text-gray-500">로그인하고 다양한 혜택을 받아보세요!</div>
       </div>
       <LoginForm />
+      <div className="flex justify-center">
+        <button className="text-xs text-gray-500">회원가입</button>
+      </div>
     </div>
   )
 }
@@ -57,7 +60,7 @@ const LoginForm = () => {
   })
 
   return (
-    <form className="mb-8" onSubmit={onSubmit}>
+    <form onSubmit={onSubmit}>
       <div className="mb-3">
         <Input placeholder="이메일 주소 입력" {...register('email')} isInvalid={!!errors.email} />
         {errors.email && (
@@ -77,9 +80,6 @@ const LoginForm = () => {
       <Button className="mb-2" type="submit">
         로그인
       </Button>
-      <div className="flex justify-center">
-        <button className="text-xs text-gray-500">회원가입</button>
-      </div>
     </form>
   )
 }
