@@ -212,6 +212,17 @@ button {
   display: none;
 }
 
+/*************** utilities (start) ***************/
+@layer utilities {
+  .ignore-mobile-safe {
+    width: calc(100% + (2 * theme(spacing[mobile_safe])));
+    margin-left: calc(-1 * theme(spacing[mobile_safe]));
+  }
+}
+
+/*************** utilities (end) ***************/
+
+/*************** keyframes (start) ***************/
 @keyframes scaleIn {
   from {
     transform: scale(0);
@@ -235,3 +246,4 @@ button {
     opacity: 0;
   }
 }
+/*************** keyframes (end) ***************/
