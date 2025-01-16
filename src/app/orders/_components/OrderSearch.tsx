@@ -13,6 +13,7 @@ const OrderSearch = () => {
         <Input
           placeholder="주문 내역을 검색하세요"
           value={word}
+          inputSize="sm"
           onChange={(e) => setWord(e.target.value)}
           onReset={() => setWord('')}
           icon={<Icon name="Search" size={18} />}

@@ -9,15 +9,15 @@ const Order = () => {
         <div className="px-mobile_safe">
           <OrderSearch />
         </div>
-        <div className="flex flex-1 flex-col gap-10 overflow-y-auto px-mobile_safe">
+        <div className="flex flex-1 flex-col gap-10 overflow-y-auto px-mobile_safe mb-10">
           <OrderItem />
-          <Separator ignoreMobileSafe />
+          <Separator ignoreMobileSafe className="h-2"/>
           <OrderItem />
-          <Separator ignoreMobileSafe />
+          <Separator ignoreMobileSafe className="h-2"/>
           <OrderItem />
-          <Separator ignoreMobileSafe />
+          <Separator ignoreMobileSafe className="h-2"/>
           <OrderItem />
-          <Separator ignoreMobileSafe />
+          <Separator ignoreMobileSafe className="h-2"/>
           <OrderItem />
         </div>
       </div>
