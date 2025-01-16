@@ -1,5 +1,7 @@
-const Mypage = () => {
-  return <div style={{ height: '2000px' }}>Mypage</div>
+import Mypage from './_components/Mypage'
+
+const MypagePage = () => {
+  return <Mypage />
 }
 
-export default Mypage
+export default MypagePage
