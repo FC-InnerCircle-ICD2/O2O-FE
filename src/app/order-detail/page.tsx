@@ -10,7 +10,7 @@ const OrderPage = () => {
         <OrderStatus />
         <Separator ignoreMobileSafe className="h-[8px]" />
       </div>
-      <div>
+      <div className="pb-5">
         <OrderList />
       </div>
     </div>
