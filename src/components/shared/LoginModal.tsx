@@ -33,12 +33,16 @@ export default LoginModal
 
 const LoginForm = () => {
   const { hide } = useModal()
-  const { register, handleSubmit } = useForm({
+  const { register, handleSubmit, watch } = useForm({
     defaultValues: {
       email: '',
       password: '',
     },
   })
+
+  const emailValue = watch('email')
+  const passwordValue = watch('password')
+  const isButtonDisabled = !emailValue || !passwordValue
 
   const onSubmit = handleSubmit((formData) => {
     // TODO: 로그인 로직 추가
@@ -56,7 +60,12 @@ const LoginForm = () => {
       <div className="mb-8">
         <Input type="password" placeholder="비밀번호 입력" {...register('password')} offOutline />
       </div>
-      <Button className="mb-2" type="submit" size="m">
+      <Button
+        className="mb-2 disabled:bg-slate-400"
+        type="submit"
+        size="m"
+        disabled={isButtonDisabled}
+      >
         로그인
       </Button>
     </form>
