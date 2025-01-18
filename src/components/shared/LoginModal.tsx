@@ -32,6 +32,7 @@ const LoginModal = () => {
 export default LoginModal
 
 const LoginForm = () => {
+  const { hide } = useModal()
   const { register, handleSubmit } = useForm({
     defaultValues: {
       email: '',
@@ -42,6 +43,9 @@ const LoginForm = () => {
   const onSubmit = handleSubmit((formData) => {
     // TODO: 로그인 로직 추가
     console.log('Form submitted:', formData)
+    // TODO: 로그인 실패 시 에러 토스트 띄우기
+    // 로그인 성공 시 모달 닫기
+    hide()
   })
 
   return (
