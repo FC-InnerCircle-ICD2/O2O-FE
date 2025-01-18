@@ -76,7 +76,7 @@ const LoginForm = () => {
           <div className="mt-1.5 text-left text-xs text-red-500">{errors.password.message}</div>
         )}
       </div>
-      <Button className="mb-2" type="submit">
+      <Button className="mb-2" type="submit" size="m">
         로그인
       </Button>
     </form>
