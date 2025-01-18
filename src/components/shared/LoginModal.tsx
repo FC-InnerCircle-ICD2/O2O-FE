@@ -60,7 +60,12 @@ const LoginForm = () => {
   return (
     <form onSubmit={onSubmit}>
       <div className="mb-3">
-        <Input placeholder="이메일 주소 입력" {...register('email')} isInvalid={!!errors.email} />
+        <Input
+          placeholder="이메일 주소 입력"
+          {...register('email')}
+          isInvalid={!!errors.email}
+          offOutline
+        />
         {errors.email && (
           <div className="mt-1.5 text-left text-xs text-red-500">{errors.email.message}</div>
         )}
@@ -71,6 +76,7 @@ const LoginForm = () => {
           placeholder="비밀번호 입력"
           {...register('password')}
           isInvalid={!!errors.password}
+          offOutline
         />
         {errors.password && (
           <div className="mt-1.5 text-left text-xs text-red-500">{errors.password.message}</div>
