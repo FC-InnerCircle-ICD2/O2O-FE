@@ -1,15 +1,24 @@
+'use client'
+
+import Input from '@/components/input'
 import Icon from '@/components/Icon'
-import Input from '@/components/Input'
-import { COLORS } from '@/styles/color'
+import { useState } from 'react'
+
 
 const OrderSearch = () => {
+  const [word, setWord] = useState('')
+
   return (
-    <div className="mb-6 flex w-full flex-col gap-7">
+    <div className="flex w-full flex-col gap-7">
       <div className="w-full bg-white">
         <Input
-          type="search"
           placeholder="주문 내역을 검색하세요"
-          icon={<Icon name="Search" size={20} color={COLORS.gray400} />}
+          value={word}
+          inputSize="sm"
+          onChange={(e) => setWord(e.target.value)}
+          onReset={() => setWord('')}
+          icon={<Icon name="Search" size={18} />}
+          offOutline
         />
       </div>
     </div>
