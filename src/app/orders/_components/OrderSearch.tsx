@@ -4,6 +4,7 @@ import Input from '@/components/input'
 import Icon from '@/components/Icon'
 import { useState } from 'react'
 
+
 const OrderSearch = () => {
   const [word, setWord] = useState('')
 
