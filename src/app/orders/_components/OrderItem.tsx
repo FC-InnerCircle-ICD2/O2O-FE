@@ -28,11 +28,11 @@ const OrderItem = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-row justify-center gap-7">
-        <Button size="s" className="w-1/2">
+      <div className="flex flex-row justify-center gap-3">
+        <Button size="s" className="w-1/2 h-10">
           주문 상세
         </Button>
-        <Button variant="grayFit" size="s" className="w-1/2">
+        <Button variant="grayFit" size="s" className="w-1/2 h-10">
           리뷰 달기
         </Button>
       </div>
