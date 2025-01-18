@@ -10,7 +10,7 @@ import type { ClassNameValue } from 'tailwind-merge'
 const inputVariants = cva('', {
   variants: {
     inputSize: {
-      default: 'h-[52px] text-base',
+      default: 'h-12 text-base',
       sm: 'h-navigation text-sm',
     },
     offOutline: {
