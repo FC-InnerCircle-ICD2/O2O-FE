@@ -1,5 +1,5 @@
-import Input from '@/components/input'
 import Icon from '@/components/Icon'
+import Input from '@/components/Input'
 import { COLORS } from '@/styles/color'
 
 const OrderSearch = () => {
