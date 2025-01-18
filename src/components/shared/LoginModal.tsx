@@ -3,9 +3,7 @@ import Icon from '@/components/Icon'
 import Input from '@/components/Input'
 import Separator from '@/components/Separator'
 import useModal from '@/hooks/useModal'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
 const LoginModal = () => {
   const { hide } = useModal()
@@ -33,59 +31,26 @@ const LoginModal = () => {
 
 export default LoginModal
 
-const loginFormSchema = z.object({
-  email: z.string().min(1, '이메일을 입력해주세요.').email('유효한 이메일 주소를 입력해주세요.'),
-  password: z
-    .string()
-    .min(8, '비밀번호는 8자 이상이어야 합니다.')
-    .regex(
-      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).+$/,
-      '비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.',
-    ),
-})
-
 const LoginForm = () => {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-  } = useForm({
+  const { register, handleSubmit } = useForm({
     defaultValues: {
       email: '',
       password: '',
     },
-    resolver: zodResolver(loginFormSchema),
   })
 
   const onSubmit = handleSubmit((formData) => {
-    // 폼 데이터 제출 로직
+    // TODO: 로그인 로직 추가
     console.log('Form submitted:', formData)
   })
 
   return (
     <form onSubmit={onSubmit}>
       <div className="mb-3">
-        <Input
-          placeholder="이메일 주소 입력"
-          {...register('email')}
-          isInvalid={!!errors.email}
-          offOutline
-        />
-        {errors.email && (
-          <div className="mt-1.5 text-left text-xs text-red-500">{errors.email.message}</div>
-        )}
+        <Input placeholder="이메일 주소 입력" {...register('email')} offOutline />
       </div>
       <div className="mb-8">
-        <Input
-          type="password"
-          placeholder="비밀번호 입력"
-          {...register('password')}
-          isInvalid={!!errors.password}
-          offOutline
-        />
-        {errors.password && (
-          <div className="mt-1.5 text-left text-xs text-red-500">{errors.password.message}</div>
-        )}
+        <Input type="password" placeholder="비밀번호 입력" {...register('password')} offOutline />
       </div>
       <Button className="mb-2" type="submit" size="m">
         로그인
