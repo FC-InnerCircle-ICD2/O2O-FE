@@ -1,6 +1,7 @@
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Input from '@/components/Input'
+import Separator from '@/components/Separator'
 import useModal from '@/hooks/useModal'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -19,8 +20,12 @@ const LoginModal = () => {
         <div className="mb-8 text-gray-500">로그인하고 다양한 혜택을 받아보세요!</div>
       </div>
       <LoginForm />
-      <div className="flex justify-center">
+      <div className="flex justify-center gap-2">
         <button className="text-xs text-gray-500">회원가입</button>
+        <Separator orientation="vertical" className="h-4" />
+        <button className="text-xs text-gray-500">이메일 찾기</button>
+        <Separator orientation="vertical" className="h-4" />
+        <button className="text-xs text-gray-500">비밀번호 찾기</button>
       </div>
     </div>
   )
