@@ -1,6 +1,6 @@
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
-import Input from '@/components/input'
+import Input from '@/components/Input'
 import useModal from '@/hooks/useModal'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
