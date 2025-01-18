@@ -1,6 +1,8 @@
 'use client'
 
+import More from '@/assets/images/foodCategories/more.png'
 import CategoryItem from '@/components/shared/CategoryItem'
+import CATEGORY_LIST from '@/constants/category'
 import { Category } from '@/models/category'
 import { OrderType } from '@/models/orderType'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
@@ -8,7 +10,6 @@ import { ROUTE_PATHS } from '@/utils/routes'
 import { AnimatePresence, motion } from 'motion/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { CATEGORY_LIST } from './Home'
 
 const CategoryDrawer = () => {
   const [more, setMore] = useState(false)
@@ -19,7 +20,7 @@ const CategoryDrawer = () => {
     setCategoryId(category.id)
 
     setTimeout(() => {
-      router.push(ROUTE_PATHS.HOME_SEARCH)
+      router.push(ROUTE_PATHS.HOME_LIST)
     }, 150)
   }
 
@@ -41,7 +42,7 @@ const CategoryDrawer = () => {
         ))}
         {!more ? (
           <CategoryItem
-            category={{ id: 0, name: '더보기', icon: '/images/food-categories/more.png' }}
+            category={{ id: 0, name: '더보기', icon: More }}
             onClick={() => setMore(true)}
             useAnimation={false}
           />

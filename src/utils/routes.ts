@@ -1,6 +1,6 @@
 export const ROUTE_PATHS = {
   HOME: '/home',
-  HOME_SEARCH: '/home/search',
+  HOME_LIST: '/home/list',
   SEARCH: '/search',
   SEARCH_RESULT: '/search/result',
   FAVORITES: '/favorites',

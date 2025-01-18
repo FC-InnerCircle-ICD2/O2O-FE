@@ -1,6 +1,6 @@
 'use client'
 
-import { CATEGORY_LIST } from '@/app/home/_components/Home'
+import CATEGORY_LIST from '@/constants/category'
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import CategoryItem from './CategoryItem'
