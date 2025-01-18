@@ -1,7 +1,6 @@
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Input from '@/components/input'
-import Navigation from '@/components/Navigation'
 import useModal from '@/hooks/useModal'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -12,10 +11,9 @@ const LoginModal = () => {
 
   return (
     <div className="h-screen w-screen bg-white p-mobile_safe">
-      <Navigation
-        title="로그인"
-        rightElement={<Icon name="X" size={24} onClick={hide} className="stroke-2" />}
-      />
+      <div className="flex justify-end">
+        <Icon name="X" size={24} onClick={hide} className="stroke-2" />
+      </div>
       <div className="mt-6 text-center">
         <div className="mb-6 font-bmjua text-4xl font-bold">개발의 민족</div>
         <div className="mb-8 text-gray-500">로그인하고 다양한 혜택을 받아보세요!</div>
