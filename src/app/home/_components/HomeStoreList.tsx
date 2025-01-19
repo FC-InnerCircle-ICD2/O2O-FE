@@ -6,18 +6,18 @@ import StoreListItemSkeleton from '@/components/shared/StoreListItemSkeleton'
 import { useScrollToTop } from '@/hooks/useScrollToTop'
 import { Store } from '@/models/store'
 
-interface HomeSearchFoodListProps {
+interface HomeStoreListProps {
   data: Store[]
   isLoading: boolean
 }
 
-const HomeSearchFoodList = ({ data, isLoading }: HomeSearchFoodListProps) => {
+const HomeStoreList = ({ data, isLoading }: HomeStoreListProps) => {
   const { topRef, showScrollButton, scrollToTop } = useScrollToTop()
 
   return (
-    <div className="flex flex-col gap-4 overflow-y-auto px-mobile_safe pt-2">
-      <p ref={topRef} className="text-lg font-bold">
-        개발의 민족 등록 맛집
+    <div className="flex flex-col gap-4 px-mobile_safe">
+      <p ref={topRef} className="text-xl font-bold">
+        새로 오픈했어요!
       </p>
       <div className="flex flex-col gap-3">
         {data.map((store) => (
@@ -30,4 +30,4 @@ const HomeSearchFoodList = ({ data, isLoading }: HomeSearchFoodListProps) => {
   )
 }
 
-export default HomeSearchFoodList
+export default HomeStoreList

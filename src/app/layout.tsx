@@ -1,6 +1,8 @@
 import BottomSheet from '@/components/BottomSheet'
 import CommonLayout from '@/components/CommonLayout'
 import Modal from '@/components/Modal'
+import { MockProvider } from '@/providers/MockProvider'
+import QueryProvider from '@/providers/QueryProvider'
 import { bmjua, pretendard } from '@/styles/fonts'
 import type { Metadata } from 'next'
 import './globals.css'
@@ -22,9 +24,13 @@ export default function RootLayout({
       className={`${pretendard.className} ${bmjua.variable}`}
     >
       <body suppressHydrationWarning={true}>
-        <CommonLayout>{children}</CommonLayout>
-        <Modal />
-        <BottomSheet />
+        <MockProvider>
+          <QueryProvider>
+            <CommonLayout>{children}</CommonLayout>
+            <Modal />
+            <BottomSheet />
+          </QueryProvider>
+        </MockProvider>
       </body>
     </html>
   )

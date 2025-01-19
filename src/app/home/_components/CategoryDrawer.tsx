@@ -14,10 +14,10 @@ import { useEffect, useState } from 'react'
 const CategoryDrawer = () => {
   const [more, setMore] = useState(false)
   const router = useRouter()
-  const { categoryId, setCategoryId, setOrder } = useFoodSearchFilterStore()
+  const { category, setCategory, setOrder } = useFoodSearchFilterStore()
 
   const handleCategoryClick = (category: Category) => {
-    setCategoryId(category.id)
+    setCategory(category.name)
 
     setTimeout(() => {
       router.push(ROUTE_PATHS.HOME_LIST)
@@ -25,19 +25,19 @@ const CategoryDrawer = () => {
   }
 
   useEffect(() => {
-    setCategoryId(1)
+    setCategory('')
     setOrder(OrderType.RANKING)
   }, [])
 
   return (
     <div>
       <div className="grid grid-cols-5 gap-y-[10px] overflow-x-scroll px-mobile_safe">
-        {CATEGORY_LIST.slice(0, 9).map((category) => (
+        {CATEGORY_LIST.slice(0, 9).map((cat) => (
           <CategoryItem
-            key={category.id}
-            category={category}
-            isActive={category.id === categoryId}
-            onClick={() => handleCategoryClick(category)}
+            key={cat.id}
+            category={cat}
+            isActive={(cat.name === '전체' && category === '') || cat.name === category}
+            onClick={() => handleCategoryClick(cat)}
           />
         ))}
         {!more ? (
@@ -49,7 +49,7 @@ const CategoryDrawer = () => {
         ) : (
           <CategoryItem
             category={CATEGORY_LIST[9]}
-            isActive={CATEGORY_LIST[9].id === categoryId}
+            isActive={CATEGORY_LIST[9].name === category}
             onClick={() => handleCategoryClick(CATEGORY_LIST[9])}
           />
         )}
@@ -64,12 +64,12 @@ const CategoryDrawer = () => {
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             className="grid grid-cols-5 gap-y-2 overflow-x-scroll px-mobile_safe pt-2"
           >
-            {CATEGORY_LIST.slice(10).map((category) => (
+            {CATEGORY_LIST.slice(10).map((cat) => (
               <CategoryItem
-                key={category.id}
-                category={category}
-                isActive={category.id === categoryId}
-                onClick={() => handleCategoryClick(category)}
+                key={cat.id}
+                category={cat}
+                isActive={cat.name === category}
+                onClick={() => handleCategoryClick(cat)}
               />
             ))}
           </motion.div>

@@ -2,21 +2,21 @@ import { OrderType } from '@/models/orderType'
 import { create } from 'zustand'
 
 interface FoodSearchFilterStore {
-  categoryId: number
+  category: string
   keyword?: string
   order: OrderType
-  setCategoryId: (category: number) => void
+  setCategory: (category: string) => void
   setKeyword: (keyword: string | undefined) => void
   setOrder: (order: OrderType) => void
 }
 
 export const useFoodSearchFilterStore = create<FoodSearchFilterStore>((set) => ({
-  categoryId: 1,
+  category: '',
   keyword: undefined,
   order: OrderType.RANKING,
-  setCategoryId: (categoryId: number) =>
+  setCategory: (category: string) =>
     set((state) => {
-      return { ...state, categoryId, keyword: undefined }
+      return { ...state, category, keyword: undefined }
     }),
   setKeyword: (keyword) =>
     set(() => {

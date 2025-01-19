@@ -19,8 +19,8 @@ const Chip = ({ text, className, rightIcon, onClick, ...props }: ChipProps) => {
       {...props}
       onClick={onClick}
     >
-      {text}
-      {rightIcon && <>{rightIcon}</>}
+      <span className="w-full max-w-28 truncate">{text}</span>
+      {rightIcon && <span className="shrink-0">{rightIcon}</span>}
     </ShadcnLabel>
   )
 }
