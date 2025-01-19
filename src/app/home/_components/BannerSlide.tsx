@@ -21,7 +21,7 @@ const BannerSlide = () => {
     queryFn: () => ky.get('/api/banners').json<{ data: Banner[] }>(),
     enabled: isMockReady,
   })
-  console.log({ data })
+
   return (
     <div className="px-mobile_safe py-4">
       <Swiper
