@@ -5,13 +5,15 @@ import StoreListItem from '@/components/shared/StoreListItem'
 import StoreListItemSkeleton from '@/components/shared/StoreListItemSkeleton'
 import { useScrollToTop } from '@/hooks/useScrollToTop'
 import { Store } from '@/models/store'
+import { RefObject } from 'react'
 
 interface HomeSearchFoodListProps {
   data: Store[]
   isLoading: boolean
+  targetRef: RefObject<HTMLDivElement | null>
 }
 
-const HomeSearchFoodList = ({ data, isLoading }: HomeSearchFoodListProps) => {
+const HomeSearchFoodList = ({ data, isLoading, targetRef }: HomeSearchFoodListProps) => {
   const { topRef, showScrollButton, scrollToTop } = useScrollToTop()
 
   return (
@@ -24,6 +26,7 @@ const HomeSearchFoodList = ({ data, isLoading }: HomeSearchFoodListProps) => {
           <StoreListItem key={store.id} store={store} />
         ))}
         {isLoading && Array.from({ length: 5 }).map((_, i) => <StoreListItemSkeleton key={i} />)}
+        <div ref={targetRef} />
       </div>
       {showScrollButton && <ScrollToTopButton onClick={scrollToTop} />}
     </div>

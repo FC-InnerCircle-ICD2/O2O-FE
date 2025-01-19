@@ -14,7 +14,7 @@ const Home = () => {
     queryKey: 'stores',
     endpoint: '/api/stores',
     filter: { category: undefined },
-    size: 10,
+    size: 1,
   })
 
   return (

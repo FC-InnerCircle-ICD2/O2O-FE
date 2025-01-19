@@ -27,7 +27,7 @@ const StoreListItem = ({ store }: StoreListItemProps) => {
           width={100}
           height={100}
           loading="lazy"
-          onLoadingComplete={() => setIsImageLoading(false)}
+          onLoad={() => setIsImageLoading(false)}
           quality={60}
         />
       </div>

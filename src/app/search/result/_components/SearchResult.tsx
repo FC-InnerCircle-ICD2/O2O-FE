@@ -17,14 +17,13 @@ const SearchResult = () => {
     queryKey: 'stores',
     endpoint: '/api/stores',
     filter: { keyword, order },
-    size: 3,
+    size: 5,
   })
 
   return (
     <div className="flex h-full flex-col gap-4 py-3">
       <FoodOrderFilter />
-      <SearchFoodList data={data} isLoading={isFetching} />
-      <div ref={targetRef} />
+      <SearchFoodList data={data} isLoading={isFetching} targetRef={targetRef} />
     </div>
   )
 }

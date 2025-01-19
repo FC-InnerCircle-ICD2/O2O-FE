@@ -1,6 +1,6 @@
 import BANNER_MOCK_DATA from '@/constants/banners'
 import STORE_MOCK_DATA from '@/constants/stores'
-import { delay, http, HttpResponse } from 'msw'
+import { delay, http, HttpResponse, passthrough } from 'msw'
 
 // API 엔드포인트 예시
 export const handlers = [
@@ -10,6 +10,11 @@ export const handlers = [
 
     if (!imageUrl) {
       return new HttpResponse(null, { status: 400 })
+    }
+
+    // 외부 이미지 URL인 경우 (예: unsplash) passthrough
+    if (imageUrl.startsWith('https://images.unsplash.com')) {
+      return passthrough()
     }
 
     try {
@@ -33,7 +38,7 @@ export const handlers = [
 
     const url = new URL(request.url)
     const page = Number(url.searchParams.get('page')) || 1
-    const pageSize = Number(url.searchParams.get('pageSize')) || 10
+    const pageSize = Number(url.searchParams.get('size')) || 10
     const category = url.searchParams.get('category')
     const order = url.searchParams.get('order')
     const keyword = url.searchParams.get('keyword')

@@ -31,6 +31,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
 }: InfiniteScrollOptions<TFilter>) => {
   const observerRef = useRef<IntersectionObserver | null>(null)
   const targetRef = useRef<HTMLDivElement | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
   const isMockReady = useMockReady()
 
   const {
@@ -72,11 +73,11 @@ export const useInfiniteScroll = <TData, TFilter = void>({
   const handleObserver = useCallback(
     (entries: IntersectionObserverEntry[]) => {
       const [target] = entries
-      if (target.isIntersecting && hasNextPage && !isFetchingNextPage) {
+      if (target.isIntersecting && hasNextPage && !isFetchingNextPage && !isFetching) {
         fetchNextPage()
       }
     },
-    [fetchNextPage, hasNextPage, isFetchingNextPage],
+    [fetchNextPage, hasNextPage, isFetchingNextPage, isFetching],
   )
 
   useEffect(() => {
@@ -94,6 +95,9 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     return () => {
       if (observerRef.current) {
         observerRef.current.disconnect()
+      }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
       }
     }
   }, [handleObserver, root, rootMargin, threshold])

@@ -26,8 +26,7 @@ const HomeList = () => {
         <CategorySlide />
         <FoodOrderFilter />
       </div>
-      <HomeSearchFoodList data={data} isLoading={isFetching} />
-      <div ref={targetRef} />
+      <HomeSearchFoodList data={data} isLoading={isFetching} targetRef={targetRef} />
     </div>
   )
 }

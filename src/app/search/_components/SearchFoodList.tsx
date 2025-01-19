@@ -6,13 +6,15 @@ import StoreListItemSkeleton from '@/components/shared/StoreListItemSkeleton'
 import { useScrollToTop } from '@/hooks/useScrollToTop'
 import { Store } from '@/models/store'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
+import { RefObject } from 'react'
 
 interface SearchFoodListProps {
   data: Store[]
   isLoading: boolean
+  targetRef: RefObject<HTMLDivElement | null>
 }
 
-const SearchFoodList = ({ data, isLoading }: SearchFoodListProps) => {
+const SearchFoodList = ({ data, isLoading, targetRef }: SearchFoodListProps) => {
   const { keyword } = useFoodSearchFilterStore()
   const { topRef, showScrollButton, scrollToTop } = useScrollToTop()
 
@@ -36,6 +38,7 @@ const SearchFoodList = ({ data, isLoading }: SearchFoodListProps) => {
           <StoreListItem key={store.id} store={store} />
         ))}
         {isLoading && Array.from({ length: 5 }).map((_, i) => <StoreListItemSkeleton key={i} />)}
+        <div ref={targetRef} />
       </div>
       {showScrollButton && <ScrollToTopButton onClick={scrollToTop} />}
     </div>
