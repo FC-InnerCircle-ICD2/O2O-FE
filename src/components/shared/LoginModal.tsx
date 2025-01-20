@@ -2,11 +2,16 @@ import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Input from '@/components/Input'
 import Separator from '@/components/Separator'
+import SignupModal from '@/components/shared/SignupModal'
 import { modalStore } from '@/store/modal'
 import { useForm } from 'react-hook-form'
 
 const LoginModal = () => {
-  const { hideModal } = modalStore()
+  const { hideModal, showModal } = modalStore()
+
+  const handleOpenSignupModal = () => {
+    showModal({ content: <SignupModal />, useAnimation: true })
+  }
 
   return (
     <div className="h-screen w-screen bg-white p-mobile_safe">
@@ -19,7 +24,9 @@ const LoginModal = () => {
       </div>
       <LoginForm />
       <div className="flex justify-center gap-2">
-        <button className="text-xs text-gray-500">회원가입</button>
+        <button className="text-xs text-gray-500" onClick={handleOpenSignupModal}>
+          회원가입
+        </button>
         <Separator orientation="vertical" className="h-4" />
         <button className="text-xs text-gray-500">이메일 찾기</button>
         <Separator orientation="vertical" className="h-4" />
