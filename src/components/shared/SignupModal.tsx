@@ -3,6 +3,7 @@ import Icon from '@/components/Icon'
 import Input from '@/components/Input'
 import { modalStore } from '@/store/modal'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
@@ -58,6 +59,8 @@ const SignupForm = () => {
   const nicknameValue = watch('nickname')
   const isButtonDisabled = !emailValue || !passwordValue || !nicknameValue
 
+  const [focusedField, setFocusedField] = useState<'email' | 'password' | 'nickname' | null>(null)
+
   const onSubmit = handleSubmit((formData) => {
     // TODO: 회원가입 로직 추가
     console.log('Form submitted:', formData)
@@ -74,9 +77,10 @@ const SignupForm = () => {
           placeholder="이메일 주소 입력"
           {...register('email')}
           offOutline
-          isInvalid={!!errors.email}
+          isInvalid={!!errors.email && focusedField !== 'email'}
+          onFocus={() => setFocusedField('email')}
         />
-        {errors.email && (
+        {errors.email && focusedField !== 'email' && (
           <div className="mt-1.5 text-left text-xs text-red-500">{errors.email.message}</div>
         )}
       </div>
@@ -87,10 +91,13 @@ const SignupForm = () => {
           placeholder="영문, 숫자, 특수문자를 모두 포함한, 8자리 이상"
           {...register('password')}
           offOutline
-          isInvalid={!!errors.password}
-          onFocus={() => trigger('email')}
+          isInvalid={!!errors.password && focusedField !== 'password'}
+          onFocus={() => {
+            setFocusedField('password')
+            trigger('email')
+          }}
         />
-        {errors.password && (
+        {errors.password && focusedField !== 'password' && (
           <div className="mt-1.5 text-left text-xs text-red-500">{errors.password.message}</div>
         )}
       </div>
@@ -100,10 +107,13 @@ const SignupForm = () => {
           placeholder="영문 혹은 한글만 가능, 10자이내"
           {...register('nickname')}
           offOutline
-          isInvalid={!!errors.nickname}
-          onFocus={() => trigger('email')}
+          isInvalid={!!errors.nickname && focusedField !== 'nickname'}
+          onFocus={() => {
+            setFocusedField('nickname')
+            trigger('email')
+          }}
         />
-        {errors.nickname && (
+        {errors.nickname && focusedField !== 'nickname' && (
           <div className="mt-1.5 text-left text-xs text-red-500">{errors.nickname.message}</div>
         )}
       </div>
