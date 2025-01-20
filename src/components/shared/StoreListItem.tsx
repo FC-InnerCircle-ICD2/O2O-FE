@@ -1,3 +1,4 @@
+import { formatDistance } from '@/lib/format'
 import { Store } from '@/models/store'
 import { COLORS } from '@/styles/color'
 import Image from 'next/image'
@@ -43,7 +44,7 @@ const StoreListItem = ({ store }: StoreListItemProps) => {
           </div>
           <Dot />
           <span className="text-xs font-medium text-gray-600">
-            {store.distance ? store.distance.toLocaleString() : ''}m
+            {store.distance ? formatDistance(store.distance) : ''}
           </span>
           <Dot />
           <span className="text-xs font-medium text-gray-600">{store.deliveryTime}</span>

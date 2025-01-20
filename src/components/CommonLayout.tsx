@@ -126,6 +126,9 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   //   if (error) return <Error message={error} />
   //   if (!address) return <Loading />
 
+  if (pathname === ROUTE_PATHS.WELCOME)
+    return <div className="flex h-full flex-col">{children}</div>
+
   return (
     <div className="flex h-full flex-col">
       <Navigation {...getNavigationProps(pathname)} />
