@@ -14,7 +14,7 @@ const CategorySlide = () => {
 
   const handleCategoryClick = useCallback(
     (category: string) => {
-      setCategory(category)
+      setCategory(category === '전체' ? '' : category)
     },
     [setCategory],
   )
