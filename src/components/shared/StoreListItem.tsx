@@ -1,7 +1,9 @@
 import { formatDistance } from '@/lib/format'
 import { Store } from '@/models/store'
 import { COLORS } from '@/styles/color'
+import { ROUTE_PATHS } from '@/utils/routes'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Dot from '../Dot'
 import Icon from '../Icon'
@@ -12,9 +14,13 @@ interface StoreListItemProps {
 
 const StoreListItem = ({ store }: StoreListItemProps) => {
   const [isImageLoading, setIsImageLoading] = useState(true)
+  const router = useRouter()
 
   return (
-    <div className="flex flex-1 items-center gap-[10px]">
+    <div
+      className="flex flex-1 items-center gap-[10px]"
+      onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${store.id}`)}
+    >
       <div className="relative size-[100px]">
         {isImageLoading && (
           <div className="absolute inset-0 animate-pulse rounded-xl bg-gray-200" />

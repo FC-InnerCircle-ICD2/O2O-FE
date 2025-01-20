@@ -1,9 +1,8 @@
 'use client'
 
-import Input from '@/components/input'
 import Icon from '@/components/Icon'
+import Input from '@/components/Input'
 import { useState } from 'react'
-
 
 const OrderSearch = () => {
   const [word, setWord] = useState('')
