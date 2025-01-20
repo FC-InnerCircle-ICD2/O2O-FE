@@ -2,16 +2,16 @@ import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Input from '@/components/Input'
 import Separator from '@/components/Separator'
-import useModal from '@/hooks/useModal'
+import { modalStore } from '@/store/modal'
 import { useForm } from 'react-hook-form'
 
 const LoginModal = () => {
-  const { hide } = useModal()
+  const { hideModal } = modalStore()
 
   return (
     <div className="h-screen w-screen bg-white p-mobile_safe">
       <div className="my-6 flex justify-end">
-        <Icon name="X" size={24} onClick={hide} className="stroke-2" />
+        <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
       </div>
       <div className="text-center">
         <div className="mb-6 font-bmjua text-4xl font-bold">개발의 민족</div>
@@ -32,7 +32,7 @@ const LoginModal = () => {
 export default LoginModal
 
 const LoginForm = () => {
-  const { hide } = useModal()
+  const { hideModal } = modalStore()
   const { register, handleSubmit, watch } = useForm({
     defaultValues: {
       email: '',
@@ -49,7 +49,7 @@ const LoginForm = () => {
     console.log('Form submitted:', formData)
     // TODO: 로그인 실패 시 에러 토스트 띄우기
     // 로그인 성공 시 모달 닫기
-    hide()
+    hideModal()
   })
 
   return (
