@@ -42,6 +42,7 @@ const SignupForm = () => {
     formState: { errors },
     handleSubmit,
     watch,
+    trigger,
   } = useForm({
     defaultValues: {
       email: '',
@@ -87,6 +88,7 @@ const SignupForm = () => {
           {...register('password')}
           offOutline
           isInvalid={!!errors.password}
+          onFocus={() => trigger('email')}
         />
         {errors.password && (
           <div className="mt-1.5 text-left text-xs text-red-500">{errors.password.message}</div>
@@ -99,6 +101,7 @@ const SignupForm = () => {
           {...register('nickname')}
           offOutline
           isInvalid={!!errors.nickname}
+          onFocus={() => trigger('email')}
         />
         {errors.nickname && (
           <div className="mt-1.5 text-left text-xs text-red-500">{errors.nickname.message}</div>
