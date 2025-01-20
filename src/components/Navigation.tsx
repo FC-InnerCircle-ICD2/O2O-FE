@@ -4,7 +4,7 @@ import { useGeoLocationStore } from '@/store/geoLocation'
 import { useRouter } from 'next/navigation'
 import Icon from './Icon'
 
-interface NavigationProps {
+export interface NavigationProps {
   hasBackButton?: boolean
   title?: string
   centerElement?: React.ReactNode

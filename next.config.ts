@@ -15,6 +15,7 @@ const nextConfig: NextConfig = {
         },
       ],
     })
+
     return config
   },
   devIndicators: {
@@ -27,7 +28,24 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'flexible.img.hani.co.kr',
       },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+      },
     ],
+  },
+  // MSW를 위한 추가 설정
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Access-Control-Allow-Methods', value: 'GET,POST,PUT,DELETE,OPTIONS' },
+          { key: 'Access-Control-Allow-Headers', value: '*' },
+        ],
+      },
+    ]
   },
 }
 

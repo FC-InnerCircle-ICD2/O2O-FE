@@ -1,58 +1,46 @@
 'use client'
 
-import Icon from '@/components/Icon'
-import FoodListItem from '@/components/shared/FoodListItem'
-import { useEffect, useRef, useState } from 'react'
+import ScrollToTopButton from '@/components/ScrollToTopButton'
+import StoreListItem from '@/components/shared/StoreListItem'
+import StoreListItemSkeleton from '@/components/shared/StoreListItemSkeleton'
+import { useScrollToTop } from '@/hooks/useScrollToTop'
+import { Store } from '@/models/store'
+import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
+import { RefObject } from 'react'
 
-const SearchFoodList = () => {
-  const [showScrollButton, setShowScrollButton] = useState(false)
-  const topRef = useRef<HTMLDivElement>(null)
+interface SearchFoodListProps {
+  data: Store[]
+  isLoading: boolean
+  targetRef: RefObject<HTMLDivElement | null>
+}
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // entry.isIntersecting이 false일 때는 요소가 화면에서 벗어났다는 의미
-        setShowScrollButton(!entry.isIntersecting)
-      },
-      { threshold: 1 }, // 요소가 완전히 보일 때만 감지
-    )
-
-    if (topRef.current) {
-      observer.observe(topRef.current)
-    }
-
-    return () => observer.disconnect()
-  }, [])
-
-  const scrollToTop = () => {
-    topRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }
+const SearchFoodList = ({ data, isLoading, targetRef }: SearchFoodListProps) => {
+  const { keyword } = useFoodSearchFilterStore()
+  const { topRef, showScrollButton, scrollToTop } = useScrollToTop()
 
   return (
     <div className="flex flex-1 flex-col overflow-y-auto">
       <div ref={topRef} className="h-px w-full" />
       <div className="relative flex flex-col gap-3 px-mobile_safe pb-3">
-        <FoodListItem />
-        <FoodListItem />
-        <FoodListItem />
-        <FoodListItem />
-        <FoodListItem />
-        <FoodListItem />
-        <FoodListItem />
-        <FoodListItem />
-        <FoodListItem />
-        <FoodListItem />
-        <FoodListItem />
-        <FoodListItem />
-        {showScrollButton && (
-          <div
-            className="fixed bottom-10 right-5 rounded-full border border-solid border-gray-300 bg-white p-3"
-            onClick={scrollToTop}
-          >
-            <Icon name="ChevronUp" size={20} />
+        {!isLoading && data.length === 0 && (
+          <div>
+            <p className="break-words pb-3 text-center text-base text-gray-500">
+              <span className="font-bold text-primary">'{keyword}'</span>에 대한 검색 결과가
+              없습니다.
+            </p>
+            <p className="text-center text-sm text-gray-500">비슷한 다른 검색어를 입력해보세요.</p>
+            <p className="text-center text-sm text-gray-500">
+              검색어의 철자가 정확한지 확인해주세요.
+            </p>
           </div>
         )}
+        {data.map((store) => (
+          <StoreListItem key={store.id} store={store} />
+        ))}
+        {isLoading && Array.from({ length: 5 }).map((_, i) => <StoreListItemSkeleton key={i} />)}
+        <div ref={targetRef} />
       </div>
+      {showScrollButton && <ScrollToTopButton onClick={scrollToTop} />}
     </div>
   )
 }

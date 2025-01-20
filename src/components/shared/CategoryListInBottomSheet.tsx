@@ -1,27 +1,27 @@
 'use client'
 
-import { CATEGORY_LIST } from '@/app/home/_components/Home'
+import CATEGORY_LIST from '@/constants/category'
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import CategoryItem from './CategoryItem'
 
 const CategoryListInBottomSheet = () => {
   const { hide } = useBottomSheet()
-  const { categoryId, setCategoryId } = useFoodSearchFilterStore()
+  const { category, setCategory } = useFoodSearchFilterStore()
 
-  const handleCategoryClick = (categoryId: number) => {
-    setCategoryId(categoryId)
+  const handleCategoryClick = (category: string) => {
+    setCategory(category)
     hide()
   }
 
   return (
     <div className="grid grid-cols-5 gap-y-[10px] overflow-x-scroll pb-10">
-      {CATEGORY_LIST.map((category) => (
+      {CATEGORY_LIST.map((cat) => (
         <CategoryItem
-          key={category.id}
-          category={category}
-          isActive={category.id === categoryId}
-          onClick={() => handleCategoryClick(category.id)}
+          key={cat.id}
+          category={cat}
+          isActive={cat.name === category}
+          onClick={() => handleCategoryClick(cat.name)}
         />
       ))}
     </div>

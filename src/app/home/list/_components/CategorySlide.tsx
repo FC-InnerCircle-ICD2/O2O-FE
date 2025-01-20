@@ -1,22 +1,22 @@
 import Icon from '@/components/Icon'
 import CategoryItem from '@/components/shared/CategoryItem'
 import CategoryListInBottomSheet from '@/components/shared/CategoryListInBottomSheet'
+import CATEGORY_LIST from '@/constants/category'
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { COLORS } from '@/styles/color'
 import { useCallback, useEffect, useRef } from 'react'
-import { CATEGORY_LIST } from '../../_components/Home'
 
 const CategorySlide = () => {
-  const { categoryId, setCategoryId } = useFoodSearchFilterStore()
+  const { category, setCategory } = useFoodSearchFilterStore()
   const { BottomSheet } = useBottomSheet()
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   const handleCategoryClick = useCallback(
-    (categoryId: number) => {
-      setCategoryId(categoryId)
+    (category: string) => {
+      setCategory(category === '전체' ? '' : category)
     },
-    [setCategoryId],
+    [setCategory],
   )
 
   const handleMoreClick = useCallback(() => {
@@ -45,17 +45,17 @@ const CategorySlide = () => {
     }, 100) // 100ms 지연
 
     return () => clearTimeout(timeoutId)
-  }, [categoryId])
+  }, [category])
 
   return (
     <div className="flex px-mobile_safe">
       <div ref={scrollContainerRef} className="flex flex-1 gap-1 overflow-x-auto">
-        {CATEGORY_LIST.map((category) => (
+        {CATEGORY_LIST.map((cat) => (
           <CategoryItem
-            key={category.id}
-            category={category}
-            isActive={category.id === categoryId}
-            onClick={() => handleCategoryClick(category.id)}
+            key={cat.id}
+            category={cat}
+            isActive={(cat.name === '전체' && category === '') || cat.name === category}
+            onClick={() => handleCategoryClick(cat.name)}
           />
         ))}
       </div>

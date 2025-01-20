@@ -13,14 +13,14 @@ const Chip = ({ text, className, rightIcon, onClick, ...props }: ChipProps) => {
   return (
     <ShadcnLabel
       className={cn(
-        'inline-flex min-w-fit items-center gap-[4px] rounded-[16px] border border-solid border-gray-300 px-[10px] py-[4px] text-sm font-normal text-gray-600',
+        'inline-flex min-w-fit items-center rounded-[16px] border border-solid border-gray-300 px-[10px] py-[4px] text-sm font-normal text-gray-600',
         className,
       )}
       {...props}
       onClick={onClick}
     >
-      {text}
-      {rightIcon && <>{rightIcon}</>}
+      <span className={cn('w-full max-w-28 truncate', rightIcon && 'pr-[6px]')}>{text}</span>
+      {rightIcon && <span className="shrink-0">{rightIcon}</span>}
     </ShadcnLabel>
   )
 }
