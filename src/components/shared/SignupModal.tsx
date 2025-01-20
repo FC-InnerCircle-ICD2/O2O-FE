@@ -49,6 +49,7 @@ const SignupForm = () => {
       nickname: '',
     },
     resolver: zodResolver(signupFormSchema),
+    mode: 'onBlur',
   })
 
   const emailValue = watch('email')
