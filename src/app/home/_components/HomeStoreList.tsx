@@ -12,7 +12,7 @@ interface HomeStoreListProps {
 }
 
 const HomeStoreList = ({ data, isLoading }: HomeStoreListProps) => {
-  const { topRef, showScrollButton, scrollToTop } = useScrollToTop()
+  const { topRef, showScrollButton, scrollToTop } = useScrollToTop<HTMLParagraphElement>()
 
   return (
     <div className="flex flex-col gap-4 px-mobile_safe">
@@ -24,8 +24,8 @@ const HomeStoreList = ({ data, isLoading }: HomeStoreListProps) => {
           <StoreListItem key={store.id} store={store} />
         ))}
         {isLoading && Array.from({ length: 5 }).map((_, i) => <StoreListItemSkeleton key={i} />)}
+        {showScrollButton && <ScrollToTopButton onClick={scrollToTop} />}
       </div>
-      {showScrollButton && <ScrollToTopButton onClick={scrollToTop} />}
     </div>
   )
 }

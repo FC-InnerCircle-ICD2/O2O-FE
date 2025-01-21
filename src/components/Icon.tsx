@@ -3,6 +3,7 @@ import {
   Check,
   ChevronDown,
   ChevronLeft,
+  ChevronRight,
   ChevronUp,
   CircleX,
   ClipboardList,
@@ -21,6 +22,7 @@ import {
   Search,
   Share2,
   Star,
+  Store,
   TriangleAlert,
   User,
   X,
@@ -53,6 +55,8 @@ const ICONS = {
   User,
   Share2,
   Loader,
+  ChevronRight,
+  Store,
 } as const
 
 export type IconName = keyof typeof ICONS // 아이콘 목록

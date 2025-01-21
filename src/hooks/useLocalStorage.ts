@@ -39,14 +39,20 @@ export function useLocalStorage<T>(
   const setValue = useMemo(
     () => (value: T) => {
       try {
-        setStoredValue(value)
-        localStorage.setItem(key, JSON.stringify(value))
+        // 배열인 경우 중복 제거
+        let valueToStore = value
+        if (Array.isArray(value)) {
+          valueToStore = Array.from(new Set(value)) as T
+        }
+
+        setStoredValue(valueToStore)
+        localStorage.setItem(key, JSON.stringify(valueToStore))
 
         // 같은 창에서의 변경사항도 감지하기 위한 커스텀 이벤트 발생
         window.dispatchEvent(
           new StorageEvent('storage', {
             key: key,
-            newValue: JSON.stringify(value),
+            newValue: JSON.stringify(valueToStore),
           }),
         )
       } catch (error) {

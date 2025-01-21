@@ -34,9 +34,9 @@ const CategoryDrawer = () => {
     setCategoryList(CATEGORY_LIST)
     if (!more) {
       setCategoryList([
-        ...CATEGORY_LIST.slice(0, 7),
+        ...CATEGORY_LIST.slice(0, 9),
         { id: 0, name: '더보기', icon: More },
-        ...CATEGORY_LIST.slice(8),
+        ...CATEGORY_LIST.slice(10),
       ])
     } else {
       setCategoryList(CATEGORY_LIST)
@@ -51,7 +51,7 @@ const CategoryDrawer = () => {
   return (
     <div
       className={cn(
-        'grid grid-cols-4 grid-rows-[66px] gap-y-[10px] overflow-hidden px-mobile_safe transition-all duration-300 ease-in-out',
+        'grid grid-cols-5 grid-rows-[66px] gap-y-[10px] overflow-hidden px-mobile_safe transition-all duration-300 ease-in-out',
         !more ? 'max-h-[152px]' : 'max-h-[370px]',
       )}
     >

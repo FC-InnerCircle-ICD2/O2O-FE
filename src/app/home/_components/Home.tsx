@@ -10,6 +10,7 @@ import CategoryDrawer from './CategoryDrawer'
 
 const Home = () => {
   const scrollRef = useRef<HTMLDivElement>(null)
+
   const { data, isFetching, targetRef, refetch } = useInfiniteScroll<
     Store,
     { category: string | undefined }
@@ -30,6 +31,7 @@ const Home = () => {
         <CategoryDrawer />
         <BannerSlide />
         <HomeStoreList data={data} isLoading={isFetching} />
+
         <div ref={targetRef} />
       </div>
     </PullToRefresh>

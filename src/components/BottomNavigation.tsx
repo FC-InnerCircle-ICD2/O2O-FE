@@ -1,11 +1,17 @@
 'use client'
 
-import Icon from '@/components/Icon'
-import { BottomNavigationMenu } from '@/models/bottomNavigationMenu'
+import Icon, { IconName } from '@/components/Icon'
 import { COLORS } from '@/styles/color'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+
+interface BottomNavigationMenu {
+  id: string
+  label: string
+  path: keyof typeof ROUTE_PATHS
+  icon: IconName
+}
 
 const MENU_ITEMS: BottomNavigationMenu[] = [
   { id: '/home', label: '홈', path: 'HOME', icon: 'House' },

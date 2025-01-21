@@ -1,29 +1,20 @@
 'use client'
 
-import Sample from '@/assets/images/sample.jpg'
 import Icon from '@/components/Icon'
-import { cn } from '@/lib/utils'
-import { AnimatePresence, motion } from 'motion/react'
-import Image from 'next/image'
-import { useRouter } from 'next/navigation'
+import { COLORS } from '@/styles/color'
 import { useEffect, useRef, useState } from 'react'
-import type { Swiper as SwiperType } from 'swiper'
-import 'swiper/css'
-import { Autoplay, Pagination } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/react'
+import StoreHeader from './StoreHeader'
+import StoreImage, { IMAGE_HEIGHT } from './StoreImage'
 
 const MAX_PULL_HEIGHT = 160
 const BLUE_BOX_MAX_PULL = 300
 const HEADER_HEIGHT = 50
-const IMAGE_HEIGHT = 200
 
 const StoreDetail = () => {
   const [pullHeight, setPullHeight] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
-  const router = useRouter()
-  const [currentSlide, setCurrentSlide] = useState(1)
 
   const handleTouchStart = (e: TouchEvent) => {
     const container = containerRef.current
@@ -83,93 +74,9 @@ const StoreDetail = () => {
       className="relative size-full overflow-auto"
       style={{ WebkitOverflowScrolling: 'touch' }}
     >
-      <div className="fixed z-0 size-full">
-        <div
-          className="relative w-full"
-          style={{
-            height: `calc(${IMAGE_HEIGHT}px + ${pullHeight}px)`,
-            transition: pullHeight === 0 ? 'height 0.3s ease-out' : 'none',
-          }}
-        >
-          <Swiper
-            className="size-full"
-            modules={[Pagination, Autoplay]}
-            onSlideChange={(swiper: SwiperType) => {
-              setCurrentSlide(swiper.realIndex + 1)
-            }}
-            loop={true}
-            autoplay={{
-              delay: 2000,
-              disableOnInteraction: false,
-            }}
-          >
-            {[Sample, Sample, Sample].map((image, index) => (
-              <SwiperSlide key={index}>
-                <Image
-                  src={image}
-                  alt={`store-image-${index + 1}`}
-                  className="object-cover object-center"
-                  fill
-                  priority={index === 0}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-        </div>
-        <div
-          className="absolute right-4 z-10 flex items-center rounded-full bg-zinc-900/50 px-1.5 py-1"
-          style={{
-            top: `calc(17% + ${pullHeight * 0.7}px)`,
-            transition: pullHeight === 0 ? 'top 0.3s ease-out' : 'none',
-          }}
-        >
-          <span className="text-xs font-light tracking-tighter text-gray-100">
-            {currentSlide} / {[Sample, Sample, Sample].length}
-          </span>
-        </div>
-      </div>
+      <StoreHeader isHeaderOpaque={isHeaderOpaque} />
+      <StoreImage pullHeight={pullHeight} />
 
-      <div
-        className={cn(
-          'fixed top-0 z-20 flex h-[50px] w-full items-center justify-between pt-2 transition-all duration-200',
-          isHeaderOpaque
-            ? 'border-b border-solid border-gray-200 bg-white px-[10px]'
-            : 'bg-transparent px-mobile_safe',
-        )}
-      >
-        <div className="flex items-center gap-2">
-          <button
-            className="flex size-7 items-center justify-center rounded-full bg-white"
-            onClick={() => router.back()}
-          >
-            <Icon name="ChevronLeft" size={22} />
-          </button>
-          <AnimatePresence>
-            {isHeaderOpaque && (
-              <motion.span
-                className="text-lg font-bold"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.1 }}
-              >
-                비비큐치킨
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </div>
-        <div className="flex items-center gap-2">
-          <button className="flex size-7 items-center justify-center rounded-full bg-white">
-            <Icon name="Share2" size={18} />
-          </button>
-          <button className="flex size-7 items-center justify-center rounded-full bg-white">
-            <Icon name="Heart" size={18} />
-          </button>
-          <button className="flex size-7 items-center justify-center rounded-full bg-white">
-            <Icon name="Search" size={18} />
-          </button>
-        </div>
-      </div>
       <div
         className="relative z-10 w-full bg-white"
         style={{
@@ -177,7 +84,29 @@ const StoreDetail = () => {
           height: '1000px',
           transition: pullHeight === 0 ? 'margin-top 0.3s ease-out' : 'none',
         }}
-      ></div>
+      >
+        <div className="flex flex-col items-center gap-2 pt-6">
+          <p className="text-lg font-bold">비비큐치킨</p>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs">
+              <Icon name="Star" size={12} color={COLORS.primary} fill={COLORS.primary} />
+              <div>
+                <span className="mr-1 font-semibold">리뷰 5.0</span>
+                <span className="text-gray-600">(109)</span>
+              </div>
+              <Icon name="ChevronRight" size={16} />
+            </div>
+            <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs">
+              <Icon name="Store" size={12} />
+              <div className="flex">
+                <span className="mr-1 font-bold">가게</span>
+                <span className="text-gray-600">(2.1km)</span>
+              </div>
+              <Icon name="ChevronRight" size={16} />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
