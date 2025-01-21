@@ -6,5 +6,6 @@ export const ROUTE_PATHS = {
   SEARCH_RESULT: '/search/result',
   FAVORITES: '/favorites',
   ORDERS: '/orders',
+  ORDER_DETAIL: '/order-detail',
   MYPAGE: '/mypage',
 }
