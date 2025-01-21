@@ -48,6 +48,9 @@ const NAVIGATION_PROPS: Record<string, NavigationProps> = {
   [ROUTE_PATHS.MYPAGE]: {
     title: '마이페이지',
   },
+  [ROUTE_PATHS.PAY]: {
+    title: '주문하기',
+  },
 }
 
 export const getNavigationProps = (pathname: string): NavigationProps => {

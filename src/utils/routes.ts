@@ -7,5 +7,6 @@ export const ROUTE_PATHS = {
   FAVORITES: '/favorites',
   ORDERS: '/orders',
   ORDER_DETAIL: '/order-detail',
+  PAY: '/pay',
   MYPAGE: '/mypage',
 }
