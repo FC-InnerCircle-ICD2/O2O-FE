@@ -9,7 +9,9 @@ export const useScrollToTop = () => {
       ([entry]) => {
         setShowScrollButton(!entry.isIntersecting)
       },
-      { threshold: 1 },
+      {
+        threshold: 0.9,
+      },
     )
 
     if (topRef.current) {

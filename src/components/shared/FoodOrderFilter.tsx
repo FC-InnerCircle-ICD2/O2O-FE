@@ -12,7 +12,7 @@ const FoodOrderFilter = () => {
   const { BottomSheet } = useBottomSheet()
 
   return (
-    <div className="px-mobile_safe">
+    <div className="sticky top-0 z-10 bg-white pb-2">
       <Chip
         text={order}
         rightIcon={<Icon name="ChevronDown" size={14} strokeWidth={3} color={COLORS.gray400} />}

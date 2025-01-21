@@ -11,6 +11,7 @@ import {
   Ellipsis,
   Heart,
   House,
+  Loader,
   Megaphone,
   MessageCircleQuestion,
   MessageSquareMore,
@@ -51,6 +52,7 @@ const ICONS = {
   House,
   User,
   Share2,
+  Loader,
 } as const
 
 export type IconName = keyof typeof ICONS // 아이콘 목록
@@ -90,4 +92,5 @@ const Icon = ({
     />
   )
 }
+
 export default Icon

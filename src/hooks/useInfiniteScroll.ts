@@ -43,6 +43,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     isFetching,
     isError,
     error,
+    refetch,
   } = useInfiniteQuery({
     queryKey: [queryKey, filter],
     queryFn: async ({ pageParam = 1 }) => {
@@ -111,5 +112,6 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     isFetchingNextPage,
     hasNextPage,
     targetRef,
+    refetch: refetch,
   }
 }

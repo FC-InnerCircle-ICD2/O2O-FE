@@ -7,6 +7,10 @@ import { AnimatePresence, motion } from 'motion/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
+import type { Swiper as SwiperType } from 'swiper'
+import 'swiper/css'
+import { Autoplay, Pagination } from 'swiper/modules'
+import { Swiper, SwiperSlide } from 'swiper/react'
 
 const MAX_PULL_HEIGHT = 160
 const BLUE_BOX_MAX_PULL = 300
@@ -19,10 +23,11 @@ const StoreDetail = () => {
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
+  const [currentSlide, setCurrentSlide] = useState(1)
 
   const handleTouchStart = (e: TouchEvent) => {
     const container = containerRef.current
-    if (!container || container.scrollTop > 0) return
+    if (!container || container.scrollTop > 0 || e.touches[0].clientY <= IMAGE_HEIGHT) return
     setTouchStart(e.touches[0].clientY)
   }
 
@@ -83,10 +88,44 @@ const StoreDetail = () => {
           className="relative w-full"
           style={{
             height: `calc(${IMAGE_HEIGHT}px + ${pullHeight}px)`,
-            transition: pullHeight === 0 ? 'height 0.4s ease-out' : 'none',
+            transition: pullHeight === 0 ? 'height 0.3s ease-out' : 'none',
           }}
         >
-          <Image src={Sample} alt="sample" className="object-cover object-center" fill />
+          <Swiper
+            className="size-full"
+            modules={[Pagination, Autoplay]}
+            onSlideChange={(swiper: SwiperType) => {
+              setCurrentSlide(swiper.realIndex + 1)
+            }}
+            loop={true}
+            autoplay={{
+              delay: 2000,
+              disableOnInteraction: false,
+            }}
+          >
+            {[Sample, Sample, Sample].map((image, index) => (
+              <SwiperSlide key={index}>
+                <Image
+                  src={image}
+                  alt={`store-image-${index + 1}`}
+                  className="object-cover object-center"
+                  fill
+                  priority={index === 0}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+        <div
+          className="absolute right-4 z-10 flex items-center rounded-full bg-zinc-900/50 px-1.5 py-1"
+          style={{
+            top: `calc(17% + ${pullHeight * 0.7}px)`,
+            transition: pullHeight === 0 ? 'top 0.3s ease-out' : 'none',
+          }}
+        >
+          <span className="text-xs font-light tracking-tighter text-gray-100">
+            {currentSlide} / {[Sample, Sample, Sample].length}
+          </span>
         </div>
       </div>
 
@@ -100,10 +139,10 @@ const StoreDetail = () => {
       >
         <div className="flex items-center gap-2">
           <button
-            className="flex size-8 items-center justify-center rounded-full bg-white"
+            className="flex size-7 items-center justify-center rounded-full bg-white"
             onClick={() => router.back()}
           >
-            <Icon name="ChevronLeft" size={24} />
+            <Icon name="ChevronLeft" size={22} />
           </button>
           <AnimatePresence>
             {isHeaderOpaque && (
@@ -120,14 +159,14 @@ const StoreDetail = () => {
           </AnimatePresence>
         </div>
         <div className="flex items-center gap-2">
-          <button className="flex size-8 items-center justify-center rounded-full bg-white">
-            <Icon name="Share2" size={22} />
+          <button className="flex size-7 items-center justify-center rounded-full bg-white">
+            <Icon name="Share2" size={18} />
           </button>
-          <button className="flex size-8 items-center justify-center rounded-full bg-white">
-            <Icon name="Heart" size={22} />
+          <button className="flex size-7 items-center justify-center rounded-full bg-white">
+            <Icon name="Heart" size={18} />
           </button>
-          <button className="flex size-8 items-center justify-center rounded-full bg-white">
-            <Icon name="Search" size={22} />
+          <button className="flex size-7 items-center justify-center rounded-full bg-white">
+            <Icon name="Search" size={18} />
           </button>
         </div>
       </div>

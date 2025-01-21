@@ -247,3 +247,12 @@ button {
   }
 }
 /*************** keyframes (end) ***************/
+
+.swiper-pagination-bullet {
+  background: white !important;
+  opacity: 0.7 !important;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1 !important;
+}
