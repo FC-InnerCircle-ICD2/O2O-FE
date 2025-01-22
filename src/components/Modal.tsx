@@ -19,7 +19,7 @@ const Modal = () => {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: '100%', opacity: 0 }}
               transition={{ type: 'spring', damping: 80, stiffness: 1000 }}
-              className="relative z-10 w-fit"
+              className="absolute z-10 w-fit"
             >
               {modal.content}
             </motion.div>
