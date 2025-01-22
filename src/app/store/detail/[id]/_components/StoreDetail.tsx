@@ -1,14 +1,15 @@
 'use client'
 
+import MenuBottomSheet from '@/app/store/detail/[id]/_components/MenuBottomSheet'
 import Icon from '@/components/Icon'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
 import Separator from '@/components/Separator'
+import useBottomSheet from '@/hooks/useBottomSheet'
 import { useScrollToTop } from '@/hooks/useScrollToTop'
 import { useThrottle } from '@/hooks/useThrottle'
-import { cn } from '@/lib/utils'
 import { COLORS } from '@/styles/color'
-import { motion } from 'motion/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import MenuCategory from './MenuCategory'
 import StoreDetailMenuItem from './StoreDetailMenuItem'
 import StoreHeader from './StoreHeader'
 import StoreImage, { IMAGE_HEIGHT } from './StoreImage'
@@ -24,7 +25,8 @@ const StoreDetail = () => {
   const [pullHeight, setPullHeight] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
-  const [activeCategory, setActiveCategory] = useState('대표메뉴')
+  const [activeCategoryIndex, setActiveCategoryIndex] = useState(0)
+  const { BottomSheet, hide } = useBottomSheet()
 
   const containerRef = useRef<HTMLDivElement>(null)
   const menuContainerRef = useRef<HTMLDivElement>(null)
@@ -33,7 +35,7 @@ const StoreDetail = () => {
   const { topRef, scrollToTop, showScrollButton } = useScrollToTop<HTMLDivElement>(() => {
     containerRef.current?.scrollTo({
       top: (topRef.current?.offsetTop || 0) + STICKY_HEADER_HEIGHT + HEADER_HEIGHT,
-      behavior: 'smooth'
+      behavior: 'smooth',
     })
   })
 
@@ -78,13 +80,34 @@ const StoreDetail = () => {
       const offsetTop = ref.offsetTop + 91 + 10 - 1
 
       if (offsetTop <= scrollPosition) {
-        setActiveCategory(ref.getAttribute('data-category') || activeCategory)
+        setActiveCategoryIndex(i)
         return
       }
     }
-  }, [activeCategory])
+  }, [activeCategoryIndex])
 
-  const handleScroll = useThrottle(updateActiveCategory, 100)
+  const scrollToMenuTop = (index: number) => {
+    const element = menuRefs.current[index]
+
+    if (element && containerRef.current) {
+      containerRef.current.scrollTo({
+        top: element.offsetTop + STICKY_HEADER_HEIGHT + HEADER_HEIGHT,
+      })
+    }
+  }
+
+  const openBottomSheet = () => {
+    BottomSheet({
+      title: '전체 메뉴', content: <MenuBottomSheet
+        menuList={MENU_CATEGORIES} activeCategoryIndex={activeCategoryIndex} setActiveCategoryIndex={setActiveCategoryIndex}
+        callback={scrollToMenuTop}
+      />
+    })
+  }
+
+  const handleScroll = useThrottle(updateActiveCategory, 50)
+
+  useEffect(() => { }, [])
 
   useEffect(() => {
     const container = containerRef.current
@@ -108,7 +131,7 @@ const StoreDetail = () => {
     const timeoutId = setTimeout(() => {
       if (!menuContainerRef.current) return
 
-      const activeItem = menuContainerRef.current.querySelector('[data-active="true"]')
+      const activeItem = menuContainerRef.current.querySelector(`[data-index="${activeCategoryIndex}"]`)
       if (!activeItem) return
 
       const container = menuContainerRef.current
@@ -124,8 +147,10 @@ const StoreDetail = () => {
       })
     }, 100) // 100ms 지연
 
+
+
     return () => clearTimeout(timeoutId)
-  }, [activeCategory])
+  }, [activeCategoryIndex])
 
   return (
     <div
@@ -145,7 +170,7 @@ const StoreDetail = () => {
         }}
       >
         {/* 가게 정보 */}
-        <div className="flex flex-col items-center gap-2 pt-6 pb-4">
+        <div className="flex flex-col items-center gap-2 pb-4 pt-6">
           <p className="text-lg font-bold">비비큐치킨</p>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs">
@@ -168,36 +193,32 @@ const StoreDetail = () => {
         </div>
 
         {/* 메뉴 카테고리 */}
-        <div className="sticky top-detail_header  py-2 border-b border-solid bg-white border-gray-200 shadow-sm z-20 flex items-center justify-between">
-          <div ref={menuContainerRef} className="px-mobile_safe flex items-center gap-2 flex-1 overflow-x-auto">
+        <div className="top-detail_header sticky z-20 flex items-center justify-between border-b border-solid border-gray-200 bg-white py-2 shadow-sm">
+          <div
+            ref={menuContainerRef}
+            className="flex flex-1 items-center gap-2 overflow-x-auto px-mobile_safe"
+          >
             {MENU_CATEGORIES.map((category, index) => (
               <MenuCategory
                 key={category}
                 category={category}
-                setActiveCategory={setActiveCategory}
-                isActive={activeCategory === category}
+                index={index}
+                isActive={activeCategoryIndex === index}
                 onClick={() => {
-                  setActiveCategory(category)
-                  const element = menuRefs.current[index]
-                  const container = containerRef.current
-                  if (element && container) {
-                    container.scrollTo({
-                      top: element.offsetTop + STICKY_HEADER_HEIGHT + HEADER_HEIGHT,
-                    })
-                  }
+                  setActiveCategoryIndex(index)
+                  scrollToMenuTop(index)
                 }}
               />
             ))}
           </div>
-          <div className="flex items-center pr-1 gap-1">
-            <Separator className='h-4' orientation="vertical" />
+          <div className="flex items-center gap-1 pr-1" onClick={openBottomSheet}>
+            <Separator className="h-4" orientation="vertical" />
             <Icon name="Ellipsis" size={20} color={COLORS.gray600} />
           </div>
         </div>
 
         {/* 메뉴 */}
-        <div className="flex flex-col gap-[10px] py-4 px-mobile_safe">
-
+        <div className="flex flex-col gap-[10px] px-mobile_safe py-4">
           {MENU_CATEGORIES.map((category, index) => (
             <div
               key={category}
@@ -206,11 +227,16 @@ const StoreDetail = () => {
               }}
               data-category={category}
             >
-              <p className="text-lg font-bold pb-2" ref={el => {
-                if (index === 0) {
-                  topRef.current = el
-                }
-              }}>{category}</p>
+              <p
+                className="pb-2 text-lg font-bold"
+                ref={(el) => {
+                  if (index === 0) {
+                    topRef.current = el
+                  }
+                }}
+              >
+                {category}
+              </p>
               {new Array(3).fill(0).map((_, index) => (
                 <StoreDetailMenuItem key={index} />
               ))}
@@ -219,8 +245,10 @@ const StoreDetail = () => {
         </div>
 
         {/* 경고 문구 */}
-        <div className='px-mobile_safe pb-40'>
-          <p className='text-[10px] text-gray-500'>메뉴 이미지는 이미지컷이며 실제 배달되는 음식과 다를 수 있습니다.</p>
+        <div className="px-mobile_safe pb-40">
+          <p className="text-[10px] text-gray-500">
+            메뉴 이미지는 이미지컷이며 실제 배달되는 음식과 다를 수 있습니다.
+          </p>
         </div>
 
         {showScrollButton && <ScrollToTopButton onClick={scrollToTop} />}
@@ -231,25 +259,6 @@ const StoreDetail = () => {
 
 export default StoreDetail
 
-interface MenuCategoryProps {
-  category: string
-  isActive?: boolean
-  setActiveCategory: (category: string) => void
-  onClick: () => void
-}
 
-const MenuCategory = ({ category, setActiveCategory, isActive, onClick }: MenuCategoryProps) => {
-  return (
-    <motion.span
-      className={cn(
-        'flex min-w-fit cursor-pointer items-center text-xs px-2 py-1 rounded-full tracking-wide transition-colors duration-200',
-        isActive && 'bg-black text-white font-semibold'
-      )}
-      onClick={onClick}
-      data-active={isActive}
-      whileTap={{ scale: 0.95 }}
-    >
-      {category}
-    </motion.span>
-  )
-}
+
+
