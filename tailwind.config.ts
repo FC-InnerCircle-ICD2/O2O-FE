@@ -53,6 +53,7 @@ export default {
       },
       spacing: {
         mobile_safe: '20px',
+        detail_header: '50px',
       },
       height: {
         navigation: '40px',

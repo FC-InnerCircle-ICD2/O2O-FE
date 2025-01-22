@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
-export const useScrollToTop = <T extends HTMLElement>() => {
+export const useScrollToTop = <T extends HTMLElement>(callBack?: () => void) => {
   const topRef = useRef<T>(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
 
@@ -8,6 +8,7 @@ export const useScrollToTop = <T extends HTMLElement>() => {
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries
+
         if (entry.isIntersecting) {
           setShowScrollButton(false)
           return
@@ -36,7 +37,9 @@ export const useScrollToTop = <T extends HTMLElement>() => {
   }, [])
 
   const scrollToTop = () => {
-    if (topRef.current) {
+    if (callBack) {
+      callBack()
+    } else if (topRef.current) {
       topRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }
