@@ -44,6 +44,7 @@ const SignupForm = () => {
     handleSubmit,
     watch,
     trigger,
+    setValue,
   } = useForm({
     defaultValues: {
       email: '',
@@ -73,12 +74,16 @@ const SignupForm = () => {
     <form onSubmit={onSubmit}>
       <div className="mb-3">
         <Input
+          value={emailValue}
           label="이메일 주소"
           placeholder="이메일 주소 입력"
           {...register('email')}
           offOutline
           isInvalid={!!errors.email && focusedField !== 'email'}
           onFocus={() => setFocusedField('email')}
+          onReset={() => {
+            setValue('email', '')
+          }}
         />
         {errors.email && focusedField !== 'email' && (
           <div className="mt-1.5 text-left text-xs text-red-500">{errors.email.message}</div>
@@ -86,6 +91,7 @@ const SignupForm = () => {
       </div>
       <div className="mb-3">
         <Input
+          value={passwordValue}
           label="비밀번호"
           type="password"
           placeholder="영문, 숫자, 특수문자를 모두 포함한, 8자리 이상"
@@ -103,6 +109,7 @@ const SignupForm = () => {
       </div>
       <div className="mb-8">
         <Input
+          value={nicknameValue}
           label="닉네임"
           placeholder="영문 혹은 한글만 가능, 10자이내"
           {...register('nickname')}
@@ -111,6 +118,9 @@ const SignupForm = () => {
           onFocus={() => {
             setFocusedField('nickname')
             trigger('email')
+          }}
+          onReset={() => {
+            setValue('nickname', '')
           }}
         />
         {errors.nickname && focusedField !== 'nickname' && (
