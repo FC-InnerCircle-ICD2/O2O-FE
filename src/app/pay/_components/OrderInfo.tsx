@@ -27,14 +27,16 @@ const OrderInfo = () => {
         </div>
       </div>
       <div>
-        <div className="ml-7 text-xs text-gray-700">서울특별시 세종대로 14 그랜드센트럴(GRAND CENTRAL) 8층</div>
+        <div className="ml-7 text-xs text-gray-700">
+          서울특별시 세종대로 14 그랜드센트럴(GRAND CENTRAL) 8층
+        </div>
       </div>
-      <div className="border-solid border rounded-xl border-gray-400">
+      <div className="rounded-xl border border-solid border-gray-400">
         <div className="flex flex-row justify-between p-5">
           <div className="text-base font-extrabold">BBQ-남대문점</div>
-          <div className="text-xs text-gray-700 place-content-center">전체삭제</div>
+          <div className="place-content-center text-xs text-gray-700">전체삭제</div>
         </div>
-        <Separator className="mb-5"/>
+        <Separator className="mb-5" />
         <MenuItem />
       </div>
     </div>

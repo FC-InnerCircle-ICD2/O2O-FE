@@ -36,7 +36,7 @@ const OrderItem = () => {
             주문 상세
           </Button>
         </Link>
-        <Button variant="grayFit" size="s" className="w-1/2 h-10">
+        <Button variant="grayFit" size="s" className="h-10 w-1/2">
           리뷰 달기
         </Button>
       </div>
