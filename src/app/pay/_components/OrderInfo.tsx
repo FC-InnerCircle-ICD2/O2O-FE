@@ -38,6 +38,7 @@ const OrderInfo = () => {
         </div>
         <Separator className="mb-5" />
         <MenuItem />
+        <MenuItem />
       </div>
     </div>
   )
