@@ -32,6 +32,6 @@ export const kyClient = ky.create({
   },
 })
 
-export const mockApi = kyClient.extend({
+export const mockClient = kyClient.extend({
   prefixUrl: ``,
 })
