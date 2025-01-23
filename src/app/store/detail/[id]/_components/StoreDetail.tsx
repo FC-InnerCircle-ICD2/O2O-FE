@@ -7,17 +7,20 @@ import Separator from '@/components/Separator'
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { useScrollToTop } from '@/hooks/useScrollToTop'
 import { useThrottle } from '@/hooks/useThrottle'
+import { orderDetailStore } from '@/store/orderDetail'
 import { COLORS } from '@/styles/color'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import MenuCategory from './MenuCategory'
 import StoreDetailMenuItem from './StoreDetailMenuItem'
 import StoreHeader from './StoreHeader'
 import StoreImage, { IMAGE_HEIGHT } from './StoreImage'
+import StoreOrderDetail from './StoreOrderDetail'
 
 const MAX_PULL_HEIGHT = 160
 const BLUE_BOX_MAX_PULL = 300
-const HEADER_HEIGHT = 50
 const STICKY_HEADER_HEIGHT = 50 // 메뉴 카테고리 헤더의 높이
+export const HEADER_HEIGHT = 50
 
 const MENU_CATEGORIES = ['대표메뉴', '메인 메뉴', '세트 메뉴', '사이드 메뉴', '음료', '패키지']
 
@@ -31,6 +34,8 @@ const StoreDetail = () => {
   const containerRef = useRef<HTMLDivElement>(null)
   const menuContainerRef = useRef<HTMLDivElement>(null)
   const menuRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  const { orderDetail, showOrderDetail } = orderDetailStore()
 
   const { topRef, scrollToTop, showScrollButton } = useScrollToTop<HTMLDivElement>(() => {
     containerRef.current?.scrollTo({
@@ -106,8 +111,6 @@ const StoreDetail = () => {
   }
 
   const handleScroll = useThrottle(updateActiveCategory, 50)
-
-  useEffect(() => { }, [])
 
   useEffect(() => {
     const container = containerRef.current
@@ -251,6 +254,7 @@ const StoreDetail = () => {
           </p>
         </div>
 
+        {orderDetail && createPortal(<StoreOrderDetail />, document.body)}
         {showScrollButton && <ScrollToTopButton onClick={scrollToTop} />}
       </div>
     </div>

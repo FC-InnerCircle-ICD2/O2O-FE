@@ -2,11 +2,14 @@
 
 import Icon from '@/components/Icon'
 import { cn } from '@/lib/utils'
+import { orderDetailStore } from '@/store/orderDetail'
 import { AnimatePresence, motion } from 'motion/react'
 import { useRouter } from 'next/navigation'
 
-const StoreHeader = ({ isHeaderOpaque }: { isHeaderOpaque: boolean }) => {
+const StoreHeader = ({ isHeaderOpaque, isOrderDetail = false }: { isHeaderOpaque: boolean, isOrderDetail?: boolean }) => {
   const router = useRouter()
+  const { hideOrderDetail } = orderDetailStore()
+
   return (
     <div
       className={cn(
@@ -19,7 +22,13 @@ const StoreHeader = ({ isHeaderOpaque }: { isHeaderOpaque: boolean }) => {
       <div className="flex items-center gap-2">
         <button
           className="flex size-7 items-center justify-center rounded-full bg-white"
-          onClick={() => router.back()}
+          onClick={() => {
+            if (isOrderDetail) {
+              hideOrderDetail()
+            } else {
+              router.back()
+            }
+          }}
         >
           <Icon name="ChevronLeft" size={22} />
         </button>
@@ -41,12 +50,16 @@ const StoreHeader = ({ isHeaderOpaque }: { isHeaderOpaque: boolean }) => {
         <button className="flex size-7 items-center justify-center rounded-full bg-white">
           <Icon name="Share2" size={18} />
         </button>
-        <button className="flex size-7 items-center justify-center rounded-full bg-white">
-          <Icon name="Heart" size={18} />
-        </button>
-        <button className="flex size-7 items-center justify-center rounded-full bg-white">
-          <Icon name="Search" size={18} />
-        </button>
+        {!isOrderDetail && (
+          <button className="flex size-7 items-center justify-center rounded-full bg-white">
+            <Icon name="Heart" size={18} />
+          </button>
+        )}
+        {!isOrderDetail && (
+          <button className="flex size-7 items-center justify-center rounded-full bg-white">
+            <Icon name="Search" size={18} />
+          </button>
+        )}
       </div>
     </div>
   )
