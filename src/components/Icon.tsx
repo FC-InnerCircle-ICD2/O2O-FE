@@ -12,6 +12,7 @@ import {
   Ellipsis,
   Heart,
   House,
+  Link,
   Loader,
   Megaphone,
   MessageCircleQuestion,
@@ -25,7 +26,7 @@ import {
   Store,
   TriangleAlert,
   User,
-  X,
+  X
 } from 'lucide-react'
 import { HTMLAttributes } from 'react'
 
@@ -57,6 +58,7 @@ const ICONS = {
   Loader,
   ChevronRight,
   Store,
+  Link
 } as const
 
 export type IconName = keyof typeof ICONS // 아이콘 목록

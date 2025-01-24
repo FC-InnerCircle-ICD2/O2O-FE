@@ -38,7 +38,6 @@ const MenuOption = ({ id, title, type, limit, options, onChangeOption }: MenuOpt
                 toast({
                     description: '최대 선택 개수를 초과하였습니다.',
                     position: 'center',
-                    variant: 'destructive',
                 })
                 return
             }

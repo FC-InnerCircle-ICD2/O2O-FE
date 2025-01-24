@@ -255,7 +255,7 @@ const StoreDetail = () => {
         </div>
 
         {orderDetail && createPortal(<StoreOrderDetail />, document.body)}
-        {showScrollButton && <ScrollToTopButton onClick={scrollToTop} />}
+        {showScrollButton && <ScrollToTopButton onClick={scrollToTop} hasBottomNavigation={false} />}
       </div>
     </div>
   )

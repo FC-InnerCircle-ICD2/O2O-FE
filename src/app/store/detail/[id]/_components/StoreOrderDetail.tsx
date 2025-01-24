@@ -105,7 +105,16 @@ const StoreOrderDetail = () => {
     return (
         createPortal(
             <div className="fixed inset-0 z-50 bg-black/50 transition-opacity duration-300">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{
+                        delay: 0.2, duration: 0,
+                        ease: "easeIn",
+                    }}
+                >
                 <StoreHeader isHeaderOpaque={isHeaderOpaque} isOrderDetail={true} />
+                </motion.div>
                 <motion.div
                     initial={{
                         top: orderDetail.originY,
@@ -190,15 +199,12 @@ const StoreOrderDetail = () => {
                 </motion.div>
                 <motion.div className="fixed bottom-0 h-[7rem] w-full bg-white rounded-tr-lg rounded-tl-lg shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.1)] px-mobile_safe"
                     initial={{
-                        bottom: -100,
-                        left: 0,
                         position: 'absolute',
-                        borderRadius: '0.75rem',
-                        opacity: 1
+                        borderRadius: '0',
+                        opacity: 0
                     }}
                     animate={{
-                        bottom: 0,
-                        left: 0,
+                        borderRadius: '0.75rem',
                         opacity: 1
                     }}
                     transition={{
@@ -207,7 +213,7 @@ const StoreOrderDetail = () => {
                         delay: 0.2
                     }}
                 >
-                    <p className="text-sm text-center text-red-500 font-bold py-4">18,000원부터 배달 가능해요</p>
+                    <p className="text-sm text-center text-red-600 font-bold py-4">18,000원부터 배달 가능해요</p>
                     <Button className="text-base font-semibold">{price.toLocaleString()}원 주문하기</Button>
                 </motion.div>
             </div>,

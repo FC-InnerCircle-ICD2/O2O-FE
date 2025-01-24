@@ -1,6 +1,7 @@
 'use client'
 
 import Icon from '@/components/Icon'
+import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
 import { orderDetailStore } from '@/store/orderDetail'
 import { AnimatePresence, motion } from 'motion/react'
@@ -9,6 +10,23 @@ import { useRouter } from 'next/navigation'
 const StoreHeader = ({ isHeaderOpaque, isOrderDetail = false }: { isHeaderOpaque: boolean, isOrderDetail?: boolean }) => {
   const router = useRouter()
   const { hideOrderDetail } = orderDetailStore()
+  const { toast } = useToast()
+
+  const handleShare = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+      toast({
+        description: 'URL이 복사되었습니다.',
+        position: 'center'
+      })
+    } catch (error) {
+      toast({
+        description: 'URL 복사에 실패했습니다.',
+        position: 'center',
+        variant: 'destructive'
+      })
+    }
+  }
 
   return (
     <div
@@ -21,7 +39,7 @@ const StoreHeader = ({ isHeaderOpaque, isOrderDetail = false }: { isHeaderOpaque
     >
       <div className="flex items-center gap-2">
         <button
-          className="flex size-7 items-center justify-center rounded-full bg-white"
+          className="flex size-8 items-center justify-center rounded-full bg-white"
           onClick={() => {
             if (isOrderDetail) {
               hideOrderDetail()
@@ -47,16 +65,16 @@ const StoreHeader = ({ isHeaderOpaque, isOrderDetail = false }: { isHeaderOpaque
         </AnimatePresence>
       </div>
       <div className="flex items-center gap-2">
-        <button className="flex size-7 items-center justify-center rounded-full bg-white">
+        <button className="flex size-8 items-center justify-center rounded-full bg-white" onClick={handleShare}>
           <Icon name="Share2" size={18} />
         </button>
         {!isOrderDetail && (
-          <button className="flex size-7 items-center justify-center rounded-full bg-white">
+          <button className="flex size-8 items-center justify-center rounded-full bg-white">
             <Icon name="Heart" size={18} />
           </button>
         )}
         {!isOrderDetail && (
-          <button className="flex size-7 items-center justify-center rounded-full bg-white">
+          <button className="flex size-8 items-center justify-center rounded-full bg-white">
             <Icon name="Search" size={18} />
           </button>
         )}
