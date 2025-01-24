@@ -26,15 +26,15 @@ const StoreDetailMenuItem = () => {
                     <Badge className="font-light" variant="default">
                         베스트
                     </Badge>
-                    <div className="text-base font-bold">
-                        <p className="">1인치떡 세트</p>
-                        <p className="">16,900원</p>
+                    <div className="text-base pb-1">
+                        <p className="font-bold">1인치떡 세트</p>
+                        <p className="font-semibold">16,900원</p>
                     </div>
                     <div>
-                        <p className="max-w-[calc(100dvw-100px-0.5rem)] truncate text-sm text-gray-500">
+                        <p className="max-w-[calc(100dvw-100px-0.5rem)] truncate text-sm text-zinc-500">
                             혼자서도 즐기는 치킨&떡볶이
                         </p>
-                        <p className="text-sm text-gray-600">리뷰 4</p>
+                        <p className="text-sm text-zinc-700">리뷰 4</p>
                     </div>
                 </div>
                 <div className="img-wrapper relative size-[100px] overflow-hidden rounded-xl cursor-pointer">

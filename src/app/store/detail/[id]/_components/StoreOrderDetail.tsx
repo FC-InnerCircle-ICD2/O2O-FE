@@ -134,7 +134,7 @@ const StoreOrderDetail = () => {
                     className="overflow-auto bg-white"
                     ref={containerRef}
                 >
-                    <div className="pb-[6.5rem]">
+                    <div className="pb-[7.5rem]">
                         <div className="relative w-full h-[200px]">
                             <Image
                                 src={orderDetail.imageUrl}
@@ -149,15 +149,15 @@ const StoreOrderDetail = () => {
                                 <Badge variant='default'>베스트</Badge>
                                 <Badge variant='default'>재주문 많음</Badge>
                             </div>
-                            <p className="text-lg font-bold">맵소디</p>
-                            <p className="text-base font-semibold pb-2">{PRICE.toLocaleString()}원</p>
+                            <p className="text-2xl font-bold">맵소디</p>
+                            <p className="text-xl font-semibold pb-2">{PRICE.toLocaleString()}원</p>
                             <div
                                 ref={descriptionRef}
-                                className={cn('relative text-zinc-400 text-[13px] leading-[1.2] mb-2', !isExpanded && 'line-clamp-2')}
+                                className={cn('relative text-zinc-400 text-sm leading-[1.2] mb-2', !isExpanded && 'line-clamp-2')}
                             >
                                 <p>BBQ의 전통간장소스로 맛을 낸 매콤 달콤 찜닭의 하모니 치킨을 더 완벽하게 만드는 간장소스가 입안 가득 감칠맛을BBQ의 전통간장소스로 맛을 낸 매콤 달콤 찜닭의 하모니 치킨</p>
                                 {isTextOverflow && !isExpanded && (
-                                    <div className="absolute bottom-0 gap-[2px] right-0 flex items-center bg-gradient-to-r from-[0%] to-[50%] from-transparent via-white to-white text-[13px] font-medium pl-8">
+                                    <div className="absolute bottom-[1px] gap-[2px] right-0 flex items-center bg-gradient-to-r from-[0%] to-[50%] from-transparent via-white to-white text-sm font-medium pl-8">
                                         <button className="text-gray-500" onClick={() => setIsExpanded(!isExpanded)}>
                                             더보기
                                         </button>
@@ -172,23 +172,23 @@ const StoreOrderDetail = () => {
                                 )}
                             </div>
                             <div className="flex items-center gap-1">
-                                <Icon name="Star" size={12} color={COLORS.primary} fill={COLORS.primary} />
-                                <p className="text-xs font-semibold">리뷰<span className="text-xs ml-1">1</span></p>
+                                <Icon name="Star" size={14} color={COLORS.primary} fill={COLORS.primary} />
+                                <p className="text-sm font-semibold">리뷰<span className="ml-1">1</span></p>
                                 <Icon name="ChevronRight" size={16} />
                             </div>
                         </div>
 
                         <div>
-                            {MENU_OPTIONS.map((menu, index) => <MenuOption key={`menu-${index}`} id={`option-${index}`} title={menu.title} type={menu.type} options={menu.options} onChangeOption={onChangeOption} />)}
+                            {MENU_OPTIONS.map((menu, index) => <MenuOption key={`menu-${index}`} id={`option-${index}`} title={menu.title} type={menu.type} limit={menu.limit} options={menu.options} onChangeOption={onChangeOption} />)}
                         </div>
 
                         <div className="flex justify-between items-center px-mobile_safe py-4">
-                            <span className="text-sm font-semibold">총 주문금액</span>
-                            <span className="text-base font-semibold">{price.toLocaleString()}원</span>
+                            <span className="text-base font-semibold">총 주문금액</span>
+                            <span className="text-lg font-semibold">{price.toLocaleString()}원</span>
                         </div>
                     </div>
                 </motion.div>
-                <motion.div className="fixed bottom-0 h-[100px] w-full bg-white rounded-tr-lg rounded-tl-lg shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.1)] px-mobile_safe"
+                <motion.div className="fixed bottom-0 h-[7rem] w-full bg-white rounded-tr-lg rounded-tl-lg shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.1)] px-mobile_safe"
                     initial={{
                         bottom: -100,
                         left: 0,
@@ -207,8 +207,8 @@ const StoreOrderDetail = () => {
                         delay: 0.2
                     }}
                 >
-                    <p className="text-xs text-center text-red-500 font-semibold py-2">18,000원부터 배달 가능해요</p>
-                    <Button className="text-sm font-semibold">{price.toLocaleString()}원 주문하기</Button>
+                    <p className="text-sm text-center text-red-500 font-bold py-4">18,000원부터 배달 가능해요</p>
+                    <Button className="text-base font-semibold">{price.toLocaleString()}원 주문하기</Button>
                 </motion.div>
             </div>,
             document.body

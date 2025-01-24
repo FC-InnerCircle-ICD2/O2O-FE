@@ -14,7 +14,7 @@ const MenuBottomSheet = ({ menuList, activeCategoryIndex, setActiveCategoryIndex
     const { hide } = useBottomSheet()
 
     return (
-        <div className="flex gap-2 px-mobile_safe flex-wrap pb-10">
+        <div className="flex gap-x-2 gap-y-3 px-mobile_safe flex-wrap pb-16">
             {menuList.map((menu, index) => (
                 <MenuCategory key={menu} category={menu} index={index} isActive={index === activeCategoryIndex} onClick={() => {
                     setActiveCategoryIndex(index)

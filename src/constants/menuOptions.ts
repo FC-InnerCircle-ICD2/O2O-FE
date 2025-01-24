@@ -3,6 +3,7 @@ import { MenuSelectOption } from "@/app/store/detail/[id]/_components/MenuOption
 export const MENU_OPTIONS: {
     title: string
     type: 'radio' | 'checkbox'
+    limit?: number
     options: MenuSelectOption[]
 }[] = [
     {
@@ -32,6 +33,7 @@ export const MENU_OPTIONS: {
     {
         title: '추가메뉴',
         type: 'checkbox',
+        limit: 3,
         options: [
             { title: 'BBQ 카레고로케(3개)', price: 4000 },
             { title: 'BBQ 떡볶이', price: 7000 },

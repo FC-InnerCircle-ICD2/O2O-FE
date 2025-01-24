@@ -1,20 +1,20 @@
-import * as React from 'react'
 import { cva, type VariantProps } from 'class-variance-authority'
+import * as React from 'react'
 
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva('inline-flex items-center justify-center gap-2 whitespace-nowrap', {
   variants: {
     variant: {
-      default: 'bg-primary text-white hover:bg-primary/90 w-full px-4 py-2',
-      primaryFit: 'w-fit px-4 py-2 text-primary border-solid border border-primary',
-      grayFit: 'w-fit px-4 py-2 text-gray-400 border-solid border border-gray-400',
+      default: 'bg-primary text-white hover:bg-primary/90 w-full px-4',
+      primaryFit: 'w-fit px-4 text-primary border-solid border border-primary',
+      grayFit: 'w-fit px-4 text-gray-400 border-solid border border-gray-400',
     },
 
     size: {
-      default: 'rounded-md text-base h-10',
-      s: 'rounded text-sm h-8',
-      m: 'rounded-md text-base h-12',
+      default: 'rounded-md text-base h-12',
+      s: 'rounded text-sm h-10',
+      m: 'rounded-md text-base h-14',
     },
   },
   defaultVariants: {

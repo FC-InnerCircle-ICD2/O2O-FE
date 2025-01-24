@@ -174,7 +174,7 @@ const StoreDetail = () => {
       >
         {/* 가게 정보 */}
         <div className="flex flex-col items-center gap-2 pb-4 pt-6">
-          <p className="text-lg font-bold">비비큐치킨</p>
+          <p className="text-2xl font-bold pb-2">비비큐치킨</p>
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs">
               <Icon name="Star" size={12} color={COLORS.primary} fill={COLORS.primary} />
@@ -231,7 +231,7 @@ const StoreDetail = () => {
               data-category={category}
             >
               <p
-                className="pb-2 text-lg font-bold"
+                className="pt-1 pb-2 text-lg font-bold"
                 ref={(el) => {
                   if (index === 0) {
                     topRef.current = el
