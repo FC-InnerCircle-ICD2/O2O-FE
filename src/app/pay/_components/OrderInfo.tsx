@@ -25,9 +25,7 @@ const OrderInfo = () => {
           <div className="place-content-center text-sm font-bold">세종대로 14</div>
           <div className="place-content-center text-xs">(으)로 배달</div>
         </div>
-        <div>
           <Icon name="ChevronRight" size={24} />
-        </div>
       </div>
       <div>
         <div className="ml-7 text-xs text-gray-700">

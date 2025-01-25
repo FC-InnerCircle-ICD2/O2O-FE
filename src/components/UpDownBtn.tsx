@@ -23,7 +23,7 @@ const UpDownBtn = ({ value = 0 }: UpDownProps) => {
       <button onClick={() => setCount(onMinus(counter))}>
         <Icon name="Minus" size={20} className="text-gray-400" />
       </button>
-      <div className="px-3">{counter}</div>
+      <div className="mx-2 w-3 place-content-center">{counter}</div>
       <button onClick={() => setCount(counter + 1)}>
         <Icon name="Plus" size={20} />
       </button>
