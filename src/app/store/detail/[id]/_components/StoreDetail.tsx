@@ -9,6 +9,8 @@ import { useScrollToTop } from '@/hooks/useScrollToTop'
 import { useThrottle } from '@/hooks/useThrottle'
 import { orderDetailStore } from '@/store/orderDetail'
 import { COLORS } from '@/styles/color'
+import { useQuery } from '@tanstack/react-query'
+import ky from 'ky'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import MenuCategory from './MenuCategory'
@@ -29,7 +31,6 @@ const StoreDetail = () => {
   const [touchStart, setTouchStart] = useState(0)
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
   const [activeCategoryIndex, setActiveCategoryIndex] = useState(0)
-  const { BottomSheet, hide } = useBottomSheet()
 
   const containerRef = useRef<HTMLDivElement>(null)
   const menuContainerRef = useRef<HTMLDivElement>(null)
@@ -37,12 +38,28 @@ const StoreDetail = () => {
 
   const { orderDetail, showOrderDetail } = orderDetailStore()
 
+  const { BottomSheet, hide } = useBottomSheet()
   const { topRef, scrollToTop, showScrollButton } = useScrollToTop<HTMLDivElement>(() => {
     containerRef.current?.scrollTo({
       top: (topRef.current?.offsetTop || 0) + STICKY_HEADER_HEIGHT + HEADER_HEIGHT,
       behavior: 'smooth',
     })
   })
+
+  const { data: storeDetail } = useQuery({
+    queryKey: ['storeDetail', 1],
+    queryFn: () => ky.get(`http://13.124.27.138:8081/api/v1/stores/1006816630/menus`, {
+      headers: {
+        'X-User-Lat': '37.71936226550588',
+        'X-User-Lng': '126.9780',
+        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhY2Nlc3NUb2tlbiIsInJvbGUiOiJVU0VSIiwiaWQiOjIsInN0YXRlIjoiSk9JTiIsImV4cCI6MTczNzgxODQ5MX0.UhO6bjXErrvQH9RdqR063LaMJZX2r0FObZOt-vKXa-MVifXFizE91cwBlv7jhe20r2lypVHeBWxuQdVJix1WbA`
+      }
+    }).json(),
+  })
+
+  useEffect(() => {
+    console.log(storeDetail)
+  }, [storeDetail])
 
   const handleTouchStart = (e: TouchEvent) => {
     const container = containerRef.current
