@@ -1,4 +1,5 @@
 import {
+  Bike,
   Building,
   Check,
   ChevronDown,
@@ -14,12 +15,14 @@ import {
   House,
   Link,
   Loader,
+  MapPin,
   Megaphone,
   MessageCircleQuestion,
   MessageSquareMore,
   Minus,
   MoveDown,
   MoveUp,
+  Plus,
   Search,
   Share2,
   Star,
@@ -58,7 +61,10 @@ const ICONS = {
   Loader,
   ChevronRight,
   Store,
-  Link
+  Link,
+  Bike,
+  MapPin,
+  Plus
 } as const
 
 export type IconName = keyof typeof ICONS // 아이콘 목록

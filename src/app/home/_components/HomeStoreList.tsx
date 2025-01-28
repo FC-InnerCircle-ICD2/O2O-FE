@@ -17,7 +17,7 @@ const HomeStoreList = ({ data, isLoading }: HomeStoreListProps) => {
   return (
     <div className="flex flex-col gap-4 px-mobile_safe">
       <p ref={topRef} className="text-xl font-bold">
-        새로 오픈했어요!
+        새로 오픈했어요!!
       </p>
       <div className="flex flex-col gap-3">
         {data.map((store) => (

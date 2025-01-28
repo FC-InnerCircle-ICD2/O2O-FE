@@ -1,10 +1,10 @@
 import MainLayout from '@/components/MainLayout'
 import { ReactNode } from 'react'
 
-interface OrderDetailLayoutProps {
+interface PayLayoutProps {
   children: ReactNode
 }
 
-export default function OrderDetailLayout({ children }: OrderDetailLayoutProps) {
+export default function PayLayout({ children }: PayLayoutProps) {
   return <MainLayout>{children}</MainLayout>
 }

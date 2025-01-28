@@ -2,6 +2,8 @@ import Chip from '@/components/Chip'
 import Image from 'next/image'
 import { Button } from '@/components/button'
 import Badge from '@/components/Badge'
+import { ROUTE_PATHS } from '@/utils/routes'
+import Link from 'next/link'
 
 const OrderItem = () => {
   return (
@@ -29,10 +31,12 @@ const OrderItem = () => {
         </div>
       </div>
       <div className="flex flex-row justify-center gap-3">
-        <Button size="s" className="w-1/2 h-10">
-          주문 상세
-        </Button>
-        <Button variant="grayFit" size="s" className="w-1/2 h-10">
+        <Link className="w-1/2" href={ROUTE_PATHS.ORDER_DETAIL}>
+          <Button size="s" className="h-10">
+            주문 상세
+          </Button>
+        </Link>
+        <Button variant="grayFit" size="s" className="h-10 w-1/2">
           리뷰 달기
         </Button>
       </div>

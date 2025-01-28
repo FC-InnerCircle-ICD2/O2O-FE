@@ -83,8 +83,9 @@ interface CommonInputProps
  */
 
 const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
-  ({ label, icon, onReset, isInvalid, className, inputSize, offOutline, ...props }, ref) => {
+  ({ label, icon, onReset, isInvalid, className, inputSize, offOutline, type, ...props }, ref) => {
     const inputId = React.useId()
+    const [showPassword, setShowPassword] = React.useState(false)
 
     return (
       <div className="w-full">
@@ -98,29 +99,39 @@ const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
           <ShadcnInput
             id={inputId}
             ref={ref}
+            type={type === 'password' ? (showPassword ? 'text' : 'password') : type}
             className={cn(
               inputVariants({ inputSize, offOutline }),
               icon && 'pl-10', // 아이콘 공간
               isInvalid && 'border-red-500 focus-visible:ring-red-500',
-              props.value && 'pr-8', // x 버튼 공간
+              props.value && type === 'password' && onReset && 'pr-20', // 패스워드 토글과 x 버튼 공간
+              props.value && type === 'password' && !onReset && 'pr-14', // 패스워드 토글 공간만
+              props.value && type !== 'password' && onReset && 'pr-10', // x 버튼 공간만
             )}
             {...props}
           />
-          {props.value && onReset && (
-            <button
-              type="button"
-              onClick={onReset}
-              className="absolute right-2 top-1/2 z-10 -translate-y-1/2"
-            >
-              <Icon
-                name="CircleX"
-                size={resetIconSizes[inputSize ?? 'default']}
-                color={COLORS.white}
-                fill={COLORS.gray400}
-                className="duration-200 hover:brightness-75"
-              />
-            </button>
-          )}
+          <div className="absolute right-2 top-1/2 flex -translate-y-1/2 gap-0.5">
+            {type === 'password' && props.value && (
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="z-10 mr-2 text-xs font-semibold text-gray-500"
+              >
+                {showPassword ? '가리기' : '보기'}
+              </button>
+            )}
+            {props.value && onReset && (
+              <button type="button" onClick={onReset} className="z-10">
+                <Icon
+                  name="CircleX"
+                  size={resetIconSizes[inputSize ?? 'default']}
+                  color={COLORS.white}
+                  fill={COLORS.gray400}
+                  className="duration-200 hover:brightness-75"
+                />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     )

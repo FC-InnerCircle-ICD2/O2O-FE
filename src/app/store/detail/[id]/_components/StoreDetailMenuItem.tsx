@@ -2,10 +2,11 @@
 
 import Sample from '@/assets/images/sample.jpg'
 import Badge from '@/components/Badge'
+import { Menu } from '@/models/menu'
 import { orderDetailStore } from '@/store/orderDetail'
 import Image from 'next/image'
 
-const StoreDetailMenuItem = () => {
+const StoreDetailMenuItem = ({ menu }: { menu: Menu }) => {
     const { showOrderDetail } = orderDetailStore()
 
     const handleOrderDetail = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -27,17 +28,14 @@ const StoreDetailMenuItem = () => {
                         베스트
                     </Badge>
                     <div className="text-base pb-1">
-                        <p className="font-bold">1인치떡 세트</p>
-                        <p className="font-semibold">16,900원</p>
+                        <p className="font-bold">{menu.name}</p>
+                        <p className="font-semibold">{menu.price.toLocaleString()}원</p>
                     </div>
-                    <div>
-                        <p className="max-w-[calc(100dvw-100px-0.5rem)] truncate text-sm text-zinc-500">
-                            혼자서도 즐기는 치킨&떡볶이
-                        </p>
-                        <p className="text-sm text-zinc-700">리뷰 4</p>
-                    </div>
+                    <p className="max-w-[calc(100dvw-100px-0.5rem-40px)] line-clamp-2 text-sm text-zinc-500">
+                        {menu.description}
+                    </p>
                 </div>
-                <div className="img-wrapper relative size-[100px] overflow-hidden rounded-xl cursor-pointer">
+                <div className="img-wrapper relative min-w-[100px] min-h-[100px] size-[100px] overflow-hidden rounded-xl cursor-pointer">
                     <Image src={Sample} alt="sample" className="object-cover" fill />
                 </div>
             </div>

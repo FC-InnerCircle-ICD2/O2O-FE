@@ -1,13 +1,21 @@
 'use client'
 
 import Icon from '@/components/Icon'
+import { Skeleton } from '@/components/shadcn/skeleton'
 import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
 import { orderDetailStore } from '@/store/orderDetail'
 import { AnimatePresence, motion } from 'motion/react'
 import { useRouter } from 'next/navigation'
 
-const StoreHeader = ({ isHeaderOpaque, isOrderDetail = false }: { isHeaderOpaque: boolean, isOrderDetail?: boolean }) => {
+interface StoreHeaderProps {
+  isHeaderOpaque: boolean
+  isSuccess: boolean
+  title: string
+  isOrderDetail?: boolean
+}
+
+const StoreHeader = ({ isHeaderOpaque, isSuccess, title, isOrderDetail = false }: StoreHeaderProps) => {
   const router = useRouter()
   const { hideOrderDetail } = orderDetailStore()
   const { toast } = useToast()
@@ -59,7 +67,7 @@ const StoreHeader = ({ isHeaderOpaque, isOrderDetail = false }: { isHeaderOpaque
               exit={{ opacity: 0 }}
               transition={{ duration: 0.1 }}
             >
-              비비큐치킨
+              {!isSuccess ? <Skeleton className="size-10" /> : title}
             </motion.span>
           )}
         </AnimatePresence>

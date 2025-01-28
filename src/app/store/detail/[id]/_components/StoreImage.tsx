@@ -1,29 +1,41 @@
 'use client'
 
-import Sample from '@/assets/images/sample.jpg'
+import { Skeleton } from '@/components/shadcn/skeleton'
 import Image from 'next/image'
 import { useRef, useState } from 'react'
 import type { Swiper as SwiperType } from 'swiper'
 import 'swiper/css'
-import { Autoplay, Pagination } from 'swiper/modules'
-import { Swiper, SwiperSlide } from 'swiper/react'
 
 export const IMAGE_HEIGHT = 200
 
-const StoreImage = ({ pullHeight }: { pullHeight: number }) => {
+const StoreImage = ({ pullHeight, imageMain, isSuccess }: { pullHeight: number, imageMain: string, isSuccess: boolean }) => {
   const swiperRef = useRef<SwiperType>(null)
   const [currentSlide, setCurrentSlide] = useState(1)
 
   return (
     <div className="fixed z-0 size-full">
       <div
-        className="relative w-full"
+        className="relative overflow-hidden"
         style={{
           height: `calc(${IMAGE_HEIGHT}px + ${pullHeight}px)`,
           transition: pullHeight === 0 ? 'height 0.3s ease-out' : 'none',
         }}
       >
-        <Swiper
+        {!isSuccess ? <Skeleton className="size-full" /> : <Image
+          src={imageMain}
+          alt="store-image"
+          className="size-full object-cover"
+          style={{
+            objectPosition: 'center',
+            transform: `scale(${1 + pullHeight / IMAGE_HEIGHT})`,
+            transformOrigin: 'center',
+            transition: pullHeight === 0 ? 'transform 0.3s ease-out' : 'none',
+          }}
+          fill
+          priority={true}
+        />}
+
+        {/* <Swiper
           className="size-full"
           modules={[Pagination, Autoplay]}
           onSlideChange={(swiper: SwiperType) => {
@@ -46,9 +58,9 @@ const StoreImage = ({ pullHeight }: { pullHeight: number }) => {
               />
             </SwiperSlide>
           ))}
-        </Swiper>
+        </Swiper> */}
       </div>
-      <div
+      {/* <div
         className="absolute right-4 z-10 flex items-center rounded-full bg-zinc-900/50 px-1.5 py-1"
         style={{
           top: `calc(160px + ${pullHeight * 0.7}px)`,
@@ -58,7 +70,7 @@ const StoreImage = ({ pullHeight }: { pullHeight: number }) => {
         <span className="text-xs font-light tracking-tighter text-gray-100">
           {currentSlide} / {[Sample, Sample, Sample].length}
         </span>
-      </div>
+      </div> */}
     </div>
   )
 }

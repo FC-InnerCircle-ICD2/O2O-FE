@@ -1,4 +1,5 @@
 import BANNER_MOCK_DATA from '@/constants/banners'
+import { MENU_MOCK_DATA } from '@/constants/menu'
 import STORE_MOCK_DATA from '@/constants/stores'
 import { delay, http, HttpResponse, passthrough } from 'msw'
 
@@ -96,6 +97,14 @@ export const handlers = [
     await delay(500)
     return HttpResponse.json({
       data: BANNER_MOCK_DATA,
+    })
+  }),
+
+  // Get Menu
+  http.get('/api/stores/:id/menus', async ({ request }) => {
+    await delay(2000)
+    return HttpResponse.json({
+      data: MENU_MOCK_DATA,
     })
   }),
 ]

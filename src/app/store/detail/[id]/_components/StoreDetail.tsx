@@ -1,19 +1,21 @@
 'use client'
 
+import useGetStoreDetail from '@/api/useGetStoreDetail'
+import useGetStoreMenuCategory from '@/api/useGetStoreMenuCategory'
 import MenuBottomSheet from '@/app/store/detail/[id]/_components/MenuBottomSheet'
 import Icon from '@/components/Icon'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
 import Separator from '@/components/Separator'
+import { Skeleton } from '@/components/shadcn/skeleton'
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { useScrollToTop } from '@/hooks/useScrollToTop'
 import { useThrottle } from '@/hooks/useThrottle'
 import { orderDetailStore } from '@/store/orderDetail'
 import { COLORS } from '@/styles/color'
-import { useQuery } from '@tanstack/react-query'
-import ky from 'ky'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import MenuCategory from './MenuCategory'
+import MenuItemSkeleton from './MenuItemSkeleton'
 import StoreDetailMenuItem from './StoreDetailMenuItem'
 import StoreHeader from './StoreHeader'
 import StoreImage, { IMAGE_HEIGHT } from './StoreImage'
@@ -36,30 +38,31 @@ const StoreDetail = () => {
   const menuContainerRef = useRef<HTMLDivElement>(null)
   const menuRefs = useRef<(HTMLDivElement | null)[]>([])
 
-  const { orderDetail, showOrderDetail } = orderDetailStore()
+  const { orderDetail } = orderDetailStore()
 
   const { BottomSheet, hide } = useBottomSheet()
-  const { topRef, scrollToTop, showScrollButton } = useScrollToTop<HTMLDivElement>(() => {
-    containerRef.current?.scrollTo({
-      top: (topRef.current?.offsetTop || 0) + STICKY_HEADER_HEIGHT + HEADER_HEIGHT,
-      behavior: 'smooth',
-    })
-  })
 
-  const { data: storeDetail } = useQuery({
-    queryKey: ['storeDetail', 1],
-    queryFn: () => ky.get(`http://13.124.27.138:8081/api/v1/stores/1006816630/menus`, {
-      headers: {
-        'X-User-Lat': '37.71936226550588',
-        'X-User-Lng': '126.9780',
-        Authorization: `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhY2Nlc3NUb2tlbiIsInJvbGUiOiJVU0VSIiwiaWQiOjIsInN0YXRlIjoiSk9JTiIsImV4cCI6MTczNzgxODQ5MX0.UhO6bjXErrvQH9RdqR063LaMJZX2r0FObZOt-vKXa-MVifXFizE91cwBlv7jhe20r2lypVHeBWxuQdVJix1WbA`
-      }
-    }).json(),
+  const { storeDetail, resetStoreDetail, isSuccess } = useGetStoreDetail(1006816630)
+  const { storeMenuCategory, resetStoreMenuCategory, isSuccess: isSuccessMenuCategory } = useGetStoreMenuCategory(1006816630)
+
+  const { topRef, scrollToTop, showScrollButton } = useScrollToTop<HTMLDivElement>({
+    callBack: () => {
+      containerRef.current?.scrollTo({
+        top: (topRef.current?.offsetTop || 0) + STICKY_HEADER_HEIGHT + HEADER_HEIGHT,
+        behavior: 'smooth',
+      })
+    },
+    dependencies: [storeMenuCategory]
   })
 
   useEffect(() => {
-    console.log(storeDetail)
-  }, [storeDetail])
+    if (storeMenuCategory && storeMenuCategory.length > 0) {
+      const firstCategoryElement = document.querySelector(`[data-category="${storeMenuCategory[0].categoryId}"] p`)
+      if (firstCategoryElement && topRef.current !== firstCategoryElement) {
+        topRef.current = firstCategoryElement as HTMLParagraphElement
+      }
+    }
+  }, [storeMenuCategory])
 
   const handleTouchStart = (e: TouchEvent) => {
     const container = containerRef.current
@@ -121,7 +124,7 @@ const StoreDetail = () => {
   const openBottomSheet = () => {
     BottomSheet({
       title: '전체 메뉴', content: <MenuBottomSheet
-        menuList={MENU_CATEGORIES} activeCategoryIndex={activeCategoryIndex} setActiveCategoryIndex={setActiveCategoryIndex}
+        menuList={storeMenuCategory?.map((category) => category.categoryName) || []} activeCategoryIndex={activeCategoryIndex} setActiveCategoryIndex={setActiveCategoryIndex}
         callback={scrollToMenuTop}
       />
     })
@@ -172,14 +175,20 @@ const StoreDetail = () => {
     return () => clearTimeout(timeoutId)
   }, [activeCategoryIndex])
 
+  useEffect(() => {
+    return () => {
+      resetStoreDetail()
+    }
+  }, [])
+
   return (
     <div
       ref={containerRef}
       className="relative size-full overflow-auto"
       style={{ WebkitOverflowScrolling: 'touch' }}
     >
-      <StoreHeader isHeaderOpaque={isHeaderOpaque} />
-      <StoreImage pullHeight={pullHeight} />
+      <StoreHeader isHeaderOpaque={isHeaderOpaque} isSuccess={isSuccess} title={storeDetail?.name || ''} />
+      <StoreImage pullHeight={pullHeight} isSuccess={isSuccess} imageMain={storeDetail?.imageMain || ''} />
 
       <div
         className="relative z-10 w-full bg-white"
@@ -191,24 +200,24 @@ const StoreDetail = () => {
       >
         {/* 가게 정보 */}
         <div className="flex flex-col items-center gap-2 pb-4 pt-6">
-          <p className="text-2xl font-bold pb-2">비비큐치킨</p>
+          {!storeDetail ? <Skeleton className="w-[200px] h-[40px] pb-2" /> : <p className="text-2xl font-bold pb-2">{storeDetail.name}</p>}
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs">
+            {!storeDetail ? <Skeleton className='w-[123px] h-[26px] rounded-full py-1 pl-2 pr-1' /> : <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs">
               <Icon name="Star" size={12} color={COLORS.primary} fill={COLORS.primary} />
               <div>
-                <span className="mr-1 font-semibold">리뷰 5.0</span>
-                <span className="text-gray-600">(109)</span>
+                <span className="mr-1 font-semibold">리뷰 {storeDetail.rating}</span>
+                <span className="text-gray-600">({storeDetail.reviewCount})</span>
               </div>
               <Icon name="ChevronRight" size={16} />
-            </div>
-            <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs">
+            </div>}
+            {!storeDetail ? <Skeleton className='w-[123px] h-[26px] rounded-full py-1 pl-2 pr-1' /> : <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs">
               <Icon name="Store" size={12} />
               <div className="flex">
                 <span className="mr-1 font-bold">가게</span>
                 <span className="text-gray-600">(2.1km)</span>
               </div>
               <Icon name="ChevronRight" size={16} />
-            </div>
+            </div>}
           </div>
         </div>
 
@@ -218,10 +227,10 @@ const StoreDetail = () => {
             ref={menuContainerRef}
             className="flex flex-1 items-center gap-2 overflow-x-auto px-mobile_safe"
           >
-            {MENU_CATEGORIES.map((category, index) => (
+            {!storeMenuCategory ? new Array(7).fill(0).map((dummy, index) => <Skeleton key={index} className='min-w-[65px] h-[28px] rounded-full' />) : storeMenuCategory.map((category, index) => (
               <MenuCategory
-                key={category}
-                category={category}
+                key={category.categoryId}
+                category={category.categoryName}
                 index={index}
                 isActive={activeCategoryIndex === index}
                 onClick={() => {
@@ -239,13 +248,15 @@ const StoreDetail = () => {
 
         {/* 메뉴 */}
         <div className="flex flex-col gap-[10px] px-mobile_safe py-4">
-          {MENU_CATEGORIES.map((category, index) => (
+          {!storeMenuCategory ? new Array(7).fill(0).map((dummy, index) => (
+            <MenuItemSkeleton key={index} />
+          )) : storeMenuCategory.map((category, index) => (
             <div
-              key={category}
+              key={category.categoryId}
               ref={(el) => {
                 menuRefs.current[index] = el
               }}
-              data-category={category}
+              data-category={category.categoryId}
             >
               <p
                 className="pt-1 pb-2 text-lg font-bold"
@@ -255,10 +266,10 @@ const StoreDetail = () => {
                   }
                 }}
               >
-                {category}
+                {category.categoryName}
               </p>
-              {new Array(3).fill(0).map((_, index) => (
-                <StoreDetailMenuItem key={index} />
+              {category.menus.map((menu) => (
+                <StoreDetailMenuItem key={menu.id} menu={menu} />
               ))}
             </div>
           ))}

@@ -1,8 +1,8 @@
 'use client'
 
+import { mockApi } from '@/lib/api'
 import { useMockReady } from '@/providers/MockProvider'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import ky from 'ky'
 import { useCallback, useEffect, useRef } from 'react'
 
 interface PaginatedResponse<T> {
@@ -60,11 +60,10 @@ export const useInfiniteScroll = <TData, TFilter = void>({
           )),
       }
 
-      return ky
-        .get(endpoint, {
-          searchParams,
-        })
-        .json<PaginatedResponse<TData>>()
+      const res = await mockApi.get<PaginatedResponse<TData>>(endpoint, {
+        searchParams,
+      })
+      return res
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
     initialPageParam: 1,

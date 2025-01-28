@@ -5,10 +5,10 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 // Swiper 스타일 import
 import { Skeleton } from '@/components/shadcn/skeleton'
+import { mockApi } from '@/lib/api'
 import { Banner } from '@/models/banner'
 import { useMockReady } from '@/providers/MockProvider'
 import { useQuery } from '@tanstack/react-query'
-import ky from 'ky'
 import Image from 'next/image'
 import 'swiper/css'
 import 'swiper/css/pagination'
@@ -18,7 +18,7 @@ const BannerSlide = () => {
 
   const { data, isFetching } = useQuery({
     queryKey: ['banners'],
-    queryFn: () => ky.get('/api/banners').json<{ data: Banner[] }>(),
+    queryFn: () => mockApi.get<{ data: Banner[] }>('/api/banners'),
     enabled: isMockReady,
   })
 

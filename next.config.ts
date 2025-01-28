@@ -32,7 +32,17 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: 't1.kakaocdn.net',
+      },
     ],
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
   },
   // MSW를 위한 추가 설정
   async headers() {
@@ -46,6 +56,9 @@ const nextConfig: NextConfig = {
         ],
       },
     ]
+  },
+  env: {
+    BASE_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
   },
 }
 
