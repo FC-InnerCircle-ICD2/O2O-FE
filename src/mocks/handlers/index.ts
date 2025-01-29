@@ -1,5 +1,6 @@
 import BANNER_MOCK_DATA from '@/constants/banners'
 import { MENU_MOCK_DATA } from '@/constants/menu'
+import { MENU_OPTIONS_MOCK_DATA } from '@/constants/menuOptions'
 import STORE_MOCK_DATA from '@/constants/stores'
 import { delay, http, HttpResponse, passthrough } from 'msw'
 
@@ -108,11 +109,20 @@ export const handlers = [
 
   // Get Menu
   http.get('/api/stores/:id/menus', async ({ request }) => {
-    await delay(2000)
     return HttpResponse.json({
       status: 200,
       message: 'success',
       data: MENU_MOCK_DATA,
+    })
+  }),
+
+  // Get Menu Options
+  http.get('/api/stores/:id/menus/:menuId/options', async ({ request }) => {
+    await delay(2000)
+    return HttpResponse.json({
+      status: 200,
+      message: 'success',
+      data: MENU_OPTIONS_MOCK_DATA,
     })
   }),
 ]
