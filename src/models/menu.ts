@@ -5,6 +5,8 @@ export interface Menu {
   price: number
   imageUrl: string
   soldout: boolean
+  isBest?: boolean
+  isManyOrder?: boolean
 }
 
 export interface MenuCategory {

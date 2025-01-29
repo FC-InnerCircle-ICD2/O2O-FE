@@ -12,6 +12,7 @@ export const MENU_MOCK_DATA: MenuCategory[] = [
           price: 24500,
           imageUrl: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec',
           soldout: false,
+          isBest: true,
         },
         {
           id: '6d5a2735-1359-4e78-8a1c-c3c069e7d23b',
@@ -19,7 +20,8 @@ export const MENU_MOCK_DATA: MenuCategory[] = [
           description: '특제 올리브유로 튀겨낸 바삭하고 촉촉한 닭다리 치킨',
           price: 23000,
           imageUrl: 'https://images.unsplash.com/photo-1567620832903-9fc6debc209f',
-          soldout: false,
+          soldout: true,
+          
         },
         {
           id: '9d8c7b6a-5e4d-3c2b-1a0z-9y8x7w6v5u4t',
@@ -28,6 +30,7 @@ export const MENU_MOCK_DATA: MenuCategory[] = [
           price: 25000,
           imageUrl: 'https://images.unsplash.com/photo-1585703900468-13c7a978ad86',
           soldout: false,
+          isManyOrder: true,
         }
       ]
     },
