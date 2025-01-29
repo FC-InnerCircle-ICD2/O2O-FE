@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/shadcn/skeleton'
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { useScrollToTop } from '@/hooks/useScrollToTop'
 import { useThrottle } from '@/hooks/useThrottle'
+import { useToast } from '@/hooks/useToast'
 import { orderDetailStore } from '@/store/orderDetail'
 import { COLORS } from '@/styles/color'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -28,7 +29,7 @@ export const HEADER_HEIGHT = 50
 
 const MENU_CATEGORIES = ['대표메뉴', '메인 메뉴', '세트 메뉴', '사이드 메뉴', '음료', '패키지']
 
-const StoreDetail = () => {
+const StoreDetail = ({ storeId }: { storeId: number }) => {
   const [pullHeight, setPullHeight] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
@@ -38,13 +39,12 @@ const StoreDetail = () => {
   const menuContainerRef = useRef<HTMLDivElement>(null)
   const menuRefs = useRef<(HTMLDivElement | null)[]>([])
 
+  const { storeDetail, resetStoreDetail, isSuccess } = useGetStoreDetail(storeId)
+  const { storeMenuCategory } = useGetStoreMenuCategory(storeId)
+
   const { orderDetail } = orderDetailStore()
-
   const { BottomSheet, hide } = useBottomSheet()
-
-  const { storeDetail, resetStoreDetail, isSuccess } = useGetStoreDetail(1006816630)
-  const { storeMenuCategory, resetStoreMenuCategory, isSuccess: isSuccessMenuCategory } = useGetStoreMenuCategory(1006816630)
-
+  const { toast } = useToast()
   const { topRef, scrollToTop, showScrollButton } = useScrollToTop<HTMLDivElement>({
     callBack: () => {
       containerRef.current?.scrollTo({
@@ -202,22 +202,34 @@ const StoreDetail = () => {
         <div className="flex flex-col items-center gap-2 pb-4 pt-6">
           {!storeDetail ? <Skeleton className="w-[200px] h-[40px] pb-2" /> : <p className="text-2xl font-bold pb-2">{storeDetail.name}</p>}
           <div className="flex items-center gap-2">
-            {!storeDetail ? <Skeleton className='w-[123px] h-[26px] rounded-full py-1 pl-2 pr-1' /> : <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs">
-              <Icon name="Star" size={12} color={COLORS.primary} fill={COLORS.primary} />
-              <div>
-                <span className="mr-1 font-semibold">리뷰 {storeDetail.rating}</span>
-                <span className="text-gray-600">({storeDetail.reviewCount})</span>
-              </div>
-              <Icon name="ChevronRight" size={16} />
-            </div>}
-            {!storeDetail ? <Skeleton className='w-[123px] h-[26px] rounded-full py-1 pl-2 pr-1' /> : <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs">
-              <Icon name="Store" size={12} />
-              <div className="flex">
-                <span className="mr-1 font-bold">가게</span>
-                <span className="text-gray-600">(2.1km)</span>
-              </div>
-              <Icon name="ChevronRight" size={16} />
-            </div>}
+            {!storeDetail ? <Skeleton className='w-[123px] h-[26px] rounded-full py-1 pl-2 pr-1' /> :
+              <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs" onClick={() => {
+                toast({
+                  description: '준비중입니다.',
+                  position: 'center'
+                })
+              }}>
+                <Icon name="Star" size={12} color={COLORS.primary} fill={COLORS.primary} />
+                <div>
+                  <span className="mr-1 font-semibold">리뷰 {storeDetail.rating}</span>
+                  <span className="text-gray-600">({storeDetail.reviewCount})</span>
+                </div>
+                <Icon name="ChevronRight" size={16} />
+              </div>}
+            {!storeDetail ? <Skeleton className='w-[123px] h-[26px] rounded-full py-1 pl-2 pr-1' /> :
+              <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs" onClick={() => {
+                toast({
+                  description: '준비중입니다.',
+                  position: 'center'
+                })
+              }}>
+                <Icon name="Store" size={12} />
+                <div className="flex">
+                  <span className="mr-1 font-bold">가게</span>
+                  <span className="text-gray-600">(2.1km)</span>
+                </div>
+                <Icon name="ChevronRight" size={16} />
+              </div>}
           </div>
         </div>
 

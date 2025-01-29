@@ -17,7 +17,7 @@ const HomeList = () => {
     { category: string; order: OrderType }
   >({
     queryKey: 'stores',
-    endpoint: '/api/stores',
+    endpoint: 'api/stores',
     filter: { category, order },
     size: 10,
   })

@@ -18,6 +18,7 @@ interface InfiniteScrollOptions<TFilter> {
   threshold?: number
   root?: Element | null
   rootMargin?: string
+  location?: { lat: number; lng: number }
 }
 
 export const useInfiniteScroll = <TData, TFilter = void>({
@@ -28,6 +29,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
   threshold = 0.1,
   root = null,
   rootMargin = '0px',
+  location,
 }: InfiniteScrollOptions<TFilter>) => {
   const observerRef = useRef<IntersectionObserver | null>(null)
   const targetRef = useRef<HTMLDivElement | null>(null)
@@ -48,7 +50,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     queryKey: [queryKey, filter],
     queryFn: async ({ pageParam = 1 }) => {
       const searchParams = {
-        page: String(pageParam),
+        offset: String(pageParam),
         size: String(size),
         ...(filter &&
           Object.entries(filter).reduce(
@@ -61,8 +63,13 @@ export const useInfiniteScroll = <TData, TFilter = void>({
       }
 
       const res = await mockApi.get<PaginatedResponse<TData>>(endpoint, {
+        headers: {
+          'X-User-Lat': location?.lat.toString() ?? '',
+          'X-User-Lng': location?.lng.toString() ?? '',
+        },
         searchParams,
       })
+
       return res
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
@@ -114,3 +121,4 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     refetch: refetch,
   }
 }
+

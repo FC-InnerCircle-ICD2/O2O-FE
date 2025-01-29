@@ -18,7 +18,7 @@ const BannerSlide = () => {
 
   const { data, isFetching } = useQuery({
     queryKey: ['banners'],
-    queryFn: () => mockApi.get<{ data: Banner[] }>('/api/banners'),
+    queryFn: () => mockApi.get<Banner[]>('api/banners'),
     enabled: isMockReady,
   })
 
@@ -37,8 +37,8 @@ const BannerSlide = () => {
             <Skeleton className="aspect-[353/100] w-full" />
           </div>
         )}
-        {data?.data &&
-          data.data.map((banner) => (
+        {data &&
+          data.map((banner) => (
             <SwiperSlide key={banner.id}>
               <div className="relative aspect-[353/100] w-full">
                 <Image className="object-cover" src={banner.imageUrl} alt="banner" fill />

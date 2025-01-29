@@ -17,7 +17,7 @@ const SearchResult = () => {
     { keyword: string | undefined; order: OrderType }
   >({
     queryKey: 'stores',
-    endpoint: '/api/stores',
+    endpoint: 'api/stores',
     filter: { keyword, order },
     size: 5,
   })

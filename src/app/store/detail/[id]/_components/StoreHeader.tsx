@@ -67,7 +67,7 @@ const StoreHeader = ({ isHeaderOpaque, isSuccess, title, isOrderDetail = false }
               exit={{ opacity: 0 }}
               transition={{ duration: 0.1 }}
             >
-              {!isSuccess ? <Skeleton className="size-10" /> : title}
+              {!isSuccess ? <Skeleton className="h-[28px] w-[150px]" /> : title}
             </motion.span>
           )}
         </AnimatePresence>
@@ -77,12 +77,22 @@ const StoreHeader = ({ isHeaderOpaque, isSuccess, title, isOrderDetail = false }
           <Icon name="Share2" size={18} />
         </button>
         {!isOrderDetail && (
-          <button className="flex size-8 items-center justify-center rounded-full bg-white">
+          <button className="flex size-8 items-center justify-center rounded-full bg-white" onClick={() => {
+            toast({
+              description: '준비중입니다.',
+              position: 'center'
+            })
+          }}>
             <Icon name="Heart" size={18} />
           </button>
         )}
         {!isOrderDetail && (
-          <button className="flex size-8 items-center justify-center rounded-full bg-white">
+          <button className="flex size-8 items-center justify-center rounded-full bg-white" onClick={() => {
+            toast({
+              description: '준비중입니다.',
+              position: 'center'
+            })
+          }}>
             <Icon name="Search" size={18} />
           </button>
         )}
