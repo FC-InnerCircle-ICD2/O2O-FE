@@ -131,9 +131,12 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
 
   return (
     <div className="flex h-full flex-col">
-      <Navigation {...getNavigationProps(pathname)} />
+      {!pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) && (
+        <Navigation {...getNavigationProps(pathname)} />
+      )}
       {children}
-      {!pathname.startsWith(ROUTE_PATHS.SEARCH) && <BottomNavigation />}
+      {!pathname.startsWith(ROUTE_PATHS.SEARCH) &&
+        !pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) && <BottomNavigation />}
     </div>
   )
 }

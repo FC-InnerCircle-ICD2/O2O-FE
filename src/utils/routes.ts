@@ -9,4 +9,5 @@ export const ROUTE_PATHS = {
   ORDER_DETAIL: '/order-detail',
   PAY: '/pay',
   MYPAGE: '/mypage',
+  STORE_DETAIL: '/store/detail',
 }

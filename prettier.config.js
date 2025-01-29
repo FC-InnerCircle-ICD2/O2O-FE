@@ -4,11 +4,11 @@ module.exports = {
   printWidth: 100,
   tabWidth: 2,
   singleQuote: true,
-  trailingComma: 'all',
+  trailingComma: 'es5',
   endOfLine: 'lf',
   semi: false,
   arrowParens: 'always',
-  plugins: [require.resolve('prettier-plugin-tailwindcss')],
+  plugins: ['prettier-plugin-tailwindcss'],
   tailwindConfig: './tailwind.config.ts',
   tailwindFunctions: ['clsx', 'tw'],
 }

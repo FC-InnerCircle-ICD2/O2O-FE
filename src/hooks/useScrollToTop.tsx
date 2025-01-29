@@ -1,26 +1,47 @@
 import { useEffect, useRef, useState } from 'react'
 
-export const useScrollToTop = () => {
+export const useScrollToTop = <T extends HTMLElement>(dependencies?: any, callBack?: () => void) => {
+  const topRef = useRef<T>(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
-  const topRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        setShowScrollButton(!entry.isIntersecting)
+      (entries) => {
+        const [entry] = entries
+
+        if (entry.isIntersecting) {
+          setShowScrollButton(false)
+          return
+        }
+        const bottomNavHeight = 56 // bottom_navigation height from tailwind config
+        const isAboveViewport =
+          entry.boundingClientRect.bottom <
+          window.innerHeight - bottomNavHeight - entry.boundingClientRect.height
+
+        setShowScrollButton(isAboveViewport)
       },
-      { threshold: 1 },
+      {
+        // viewport 상단 근처에서 관찰
+        rootMargin: '0px',
+        threshold: 1,
+      },
     )
 
     if (topRef.current) {
       observer.observe(topRef.current)
     }
 
-    return () => observer.disconnect()
-  }, [])
+    return () => {
+      observer.disconnect()
+    }
+  }, [dependencies])
 
   const scrollToTop = () => {
-    topRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (callBack) {
+      callBack()
+    } else if (topRef.current) {
+      topRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
   }
 
   return {

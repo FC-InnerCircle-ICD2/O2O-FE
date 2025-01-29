@@ -1,6 +1,73 @@
-import { icons } from 'lucide-react'
+import {
+  Bike,
+  Building,
+  Check,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+  CircleX,
+  ClipboardList,
+  Cog,
+  CreditCard,
+  Ellipsis,
+  Heart,
+  House,
+  Link,
+  Loader,
+  MapPin,
+  Megaphone,
+  MessageCircleQuestion,
+  MessageSquareMore,
+  Minus,
+  MoveDown,
+  MoveUp,
+  Plus,
+  Search,
+  Share2,
+  Star,
+  Store,
+  TriangleAlert,
+  User,
+  X
+} from 'lucide-react'
 import { HTMLAttributes } from 'react'
-export type IconName = keyof typeof icons // 아이콘 목록
+
+const ICONS = {
+  Ellipsis,
+  Building,
+  CreditCard,
+  Megaphone,
+  MessageCircleQuestion,
+  Cog,
+  Heart,
+  ClipboardList,
+  MessageSquareMore,
+  ChevronLeft,
+  Search,
+  ChevronDown,
+  MoveUp,
+  MoveDown,
+  Minus,
+  X,
+  TriangleAlert,
+  CircleX,
+  ChevronUp,
+  Check,
+  Star,
+  House,
+  User,
+  Share2,
+  Loader,
+  ChevronRight,
+  Store,
+  Link,
+  Bike,
+  MapPin,
+  Plus
+} as const
+
+export type IconName = keyof typeof ICONS // 아이콘 목록
 export interface IconProps extends HTMLAttributes<HTMLOrSVGElement> {
   name: IconName
   color?: string
@@ -19,7 +86,7 @@ const Icon = ({
   fill = 'none',
   ...props
 }: IconProps) => {
-  const LucideIcon = icons[name]
+  const LucideIcon = ICONS[name]
   if (!LucideIcon) {
     console.warn(`Lucide icon '${name}' does not exist.`)
     return null
@@ -37,4 +104,5 @@ const Icon = ({
     />
   )
 }
+
 export default Icon

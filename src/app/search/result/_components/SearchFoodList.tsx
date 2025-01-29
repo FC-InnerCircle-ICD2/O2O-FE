@@ -12,16 +12,17 @@ interface SearchFoodListProps {
   data: Store[]
   isLoading: boolean
   targetRef: RefObject<HTMLDivElement | null>
+  scrollRef: RefObject<HTMLDivElement | null>
 }
 
-const SearchFoodList = ({ data, isLoading, targetRef }: SearchFoodListProps) => {
+const SearchFoodList = ({ data, isLoading, targetRef, scrollRef }: SearchFoodListProps) => {
   const { keyword } = useFoodSearchFilterStore()
-  const { topRef, showScrollButton, scrollToTop } = useScrollToTop()
+  const { topRef, showScrollButton, scrollToTop } = useScrollToTop<HTMLDivElement>()
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto">
+    <div ref={scrollRef} className="flex flex-1 flex-col overflow-y-auto">
       <div ref={topRef} className="h-px w-full" />
-      <div className="relative flex flex-col gap-3 px-mobile_safe pb-3">
+      <div className="relative flex flex-col gap-3 pb-3">
         {!isLoading && data.length === 0 && (
           <div>
             <p className="break-words pb-3 text-center text-base text-gray-500">

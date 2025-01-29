@@ -7,7 +7,7 @@ import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { COLORS } from '@/styles/color'
 import { useCallback, useEffect, useRef } from 'react'
 
-const CategorySlide = () => {
+const CategorySlide = ({ isHide }: { isHide: boolean }) => {
   const { category, setCategory } = useFoodSearchFilterStore()
   const { BottomSheet } = useBottomSheet()
   const scrollContainerRef = useRef<HTMLDivElement>(null)
@@ -56,6 +56,8 @@ const CategorySlide = () => {
             category={cat}
             isActive={(cat.name === '전체' && category === '') || cat.name === category}
             onClick={() => handleCategoryClick(cat.name)}
+            isHide={isHide}
+            isBorder={true}
           />
         ))}
       </div>

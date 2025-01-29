@@ -1,6 +1,8 @@
 import BottomSheet from '@/components/BottomSheet'
 import CommonLayout from '@/components/CommonLayout'
 import Modal from '@/components/Modal'
+
+import { Toaster } from '@/components/Toaster'
 import { MockProvider } from '@/providers/MockProvider'
 import QueryProvider from '@/providers/QueryProvider'
 import { bmjua, pretendard } from '@/styles/fonts'
@@ -31,6 +33,7 @@ export default function RootLayout({
             <BottomSheet />
           </QueryProvider>
         </MockProvider>
+        <Toaster />
       </body>
     </html>
   )

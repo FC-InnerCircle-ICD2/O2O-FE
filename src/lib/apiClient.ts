@@ -1,7 +1,7 @@
 import ky from 'ky'
 
 export const kyClient = ky.create({
-  prefixUrl: process.env.BASE_API_URL, // Base URL 설정
+  prefixUrl: process.env.NEXT_PUBLIC_BASE_API_URL, // Base URL 설정
   timeout: 10000, // 타임아웃 설정
   retry: {
     limit: 3, // 재시도 횟수
@@ -23,15 +23,15 @@ export const kyClient = ky.create({
         console.log(`Response: ${response.status} ${response.url}`)
       },
     ],
-    beforeError: [
-      (error) => {
-        console.error(error.message)
-        return error
-      },
-    ],
+    // beforeError: [
+    //   (error) => {
+    //     console.error(error.message)
+    //     return error
+    //   },
+    // ],
   },
 })
 
 export const mockClient = kyClient.extend({
-  prefixUrl: ``,
+  prefixUrl: `http://localhost:3000`,
 })

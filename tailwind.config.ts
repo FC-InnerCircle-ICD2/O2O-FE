@@ -53,6 +53,7 @@ export default {
       },
       spacing: {
         mobile_safe: '20px',
+        detail_header: '50px',
       },
       height: {
         navigation: '40px',
@@ -88,11 +89,21 @@ export default {
             opacity: '0.8',
           },
         },
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        "fade-out": {
+          from: { opacity: "1" },
+          to: { opacity: "0" },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'pulse-custom': 'pulse-custom 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'fade-in': 'fade-in 0.2s ease-in-out',
+        'fade-out': 'fade-out 0.2s ease-in-out',
       },
       fontFamily: {
         pretendard: ['var(--font-pretendard)', 'sans-serif'],

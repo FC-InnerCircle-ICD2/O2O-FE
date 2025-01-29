@@ -1,4 +1,6 @@
 import BANNER_MOCK_DATA from '@/constants/banners'
+import { MENU_MOCK_DATA } from '@/constants/menu'
+import { MENU_OPTIONS_MOCK_DATA } from '@/constants/menuOptions'
 import STORE_MOCK_DATA from '@/constants/stores'
 import { delay, http, HttpResponse, passthrough } from 'msw'
 
@@ -37,8 +39,8 @@ export const handlers = [
     await delay(1000)
 
     const url = new URL(request.url)
-    const page = Number(url.searchParams.get('page')) || 1
-    const pageSize = Number(url.searchParams.get('size')) || 10
+    const offset = Number(url.searchParams.get('offset')) || 0
+    const size = Number(url.searchParams.get('size')) || 10
     const category = url.searchParams.get('category')
     const order = url.searchParams.get('order')
     const keyword = url.searchParams.get('keyword')
@@ -79,23 +81,48 @@ export const handlers = [
     }
 
     // 페이지네이션
-    const startIndex = (page - 1) * pageSize
-    const endIndex = startIndex + pageSize
+    const startIndex = (offset - 1) * size
+    const endIndex = startIndex + size
     const paginatedData = filteredData.slice(startIndex, endIndex)
 
     // 다음 페이지가 있는지 확인
     const hasNextPage = endIndex < filteredData.length
 
     return HttpResponse.json({
-      data: paginatedData,
-      nextCursor: hasNextPage ? page + 1 : null,
+      status: 200,
+      data: {
+        data: paginatedData,
+        nextCursor: hasNextPage ? offset + 1 : null,
+      },
+      message: 'success',
     })
   }),
   // Get Banners
   http.get('/api/banners', async () => {
     await delay(500)
     return HttpResponse.json({
+      status: 200,
       data: BANNER_MOCK_DATA,
+      message: 'success',
+    })
+  }),
+
+  // Get Menu
+  http.get('/api/stores/:id/menus', async ({ request }) => {
+    return HttpResponse.json({
+      status: 200,
+      message: 'success',
+      data: MENU_MOCK_DATA,
+    })
+  }),
+
+  // Get Menu Options
+  http.get('/api/stores/:id/menus/:menuId/options', async ({ request }) => {
+    await delay(2000)
+    return HttpResponse.json({
+      status: 200,
+      message: 'success',
+      data: MENU_OPTIONS_MOCK_DATA,
     })
   }),
 ]
