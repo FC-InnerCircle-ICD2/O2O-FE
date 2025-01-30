@@ -34,8 +34,8 @@ const BottomNavigation = () => {
             <li key={id} className="w-full cursor-pointer">
               <Link href={ROUTE_PATHS[path]}>
                 <div className="flex w-full flex-col items-center gap-2">
-                  <Icon name={icon} size={24} color={isActive ? COLORS.black : COLORS.gray400} />
-                  <span className={`text-xs ${isActive ? 'text-black' : 'text-gray-400'}`}>
+                  <Icon name={icon} size={24} color={isActive ? COLORS.primary : COLORS.gray400} />
+                  <span className={`text-xs ${isActive ? 'text-primary' : 'text-gray-400'}`}>
                     {label}
                   </span>
                 </div>
