@@ -1,6 +1,7 @@
 'use client'
 
 import CompletedReviews from '@/app/review/_components/CompletedReviews'
+import PedingReviewSkeleton from '@/app/review/_components/PedingReviewSkeleton'
 import PendingReview from '@/app/review/_components/PendingReview'
 import ReviewTab from '@/app/review/_components/ReviewTab'
 import Icon from '@/components/Icon'
@@ -12,7 +13,7 @@ export type ReviewTabType = '작성가능' | '작성완료'
 
 const Review = () => {
   const [tab, setTab] = useState<ReviewTabType>('작성가능')
-  const { data: pendingReviews } = usePendingReviews()
+  const { data: pendingReviews, isLoading } = usePendingReviews()
 
   const handleChangeTab = (tab: ReviewTabType) => {
     setTab(tab)
@@ -36,7 +37,11 @@ const Review = () => {
           transition={{ duration: 0.3 }}
           className="absolute w-full"
         >
-          {pendingReviews ? (
+          {isLoading ? (
+            Array.from({ length: 5 }).map((_, i) => (
+              <PedingReviewSkeleton key={i} offSeparator={i === 4} />
+            ))
+          ) : pendingReviews ? (
             pendingReviews.map((review, index) => (
               <PendingReview
                 key={review.orderId}
