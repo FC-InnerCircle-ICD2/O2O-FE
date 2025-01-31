@@ -16,13 +16,15 @@ const Review = () => {
   }
 
   return (
-    <section className="px-mobile_safe">
-      <ReviewTab tab={tab} onChangeTab={handleChangeTab} />
+    <section>
+      <div className="px-mobile_safe">
+        <ReviewTab tab={tab} onChangeTab={handleChangeTab} />
+      </div>
       <div className="relative h-screen overflow-hidden">
         <motion.div
           initial={{ x: 0 }}
           animate={{
-            x: tab === '작성가능' ? 0 : '-100%',
+            x: tab === '작성가능' ? 0 : '-110%',
           }}
           transition={{ duration: 0.3 }}
           className="absolute w-full"
@@ -31,9 +33,9 @@ const Review = () => {
         </motion.div>
 
         <motion.div
-          initial={{ x: '100%' }}
+          initial={{ x: '110%' }}
           animate={{
-            x: tab === '작성가능' ? '100%' : 0,
+            x: tab === '작성가능' ? '110%' : 0,
           }}
           transition={{ duration: 0.3 }}
           className="absolute w-full"
