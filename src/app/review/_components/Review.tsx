@@ -26,7 +26,7 @@ const Review = () => {
           pendingReviewsCount={pendingReviews?.length ?? 0}
         />
       </div>
-      <div className="relative mt-2 h-[calc(100vh-180px)] overflow-y-auto overflow-x-hidden">
+      <div className="relative mt-2 h-[calc(100vh-190px)] overflow-y-auto overflow-x-hidden">
         <motion.div
           initial={{ x: 0 }}
           animate={{
