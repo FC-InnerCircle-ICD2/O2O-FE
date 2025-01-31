@@ -1,10 +1,10 @@
 'use client'
 
 import CompletedReviews from '@/app/review/_components/CompletedReviews'
+import NoPendingReview from '@/app/review/_components/NoPendingReview'
 import PedingReviewSkeleton from '@/app/review/_components/PedingReviewSkeleton'
 import PendingReview from '@/app/review/_components/PendingReview'
 import ReviewTab from '@/app/review/_components/ReviewTab'
-import Icon from '@/components/Icon'
 import { usePendingReviews } from '@/models/review'
 import { motion } from 'motion/react'
 import { useState } from 'react'
@@ -50,10 +50,7 @@ const Review = () => {
               />
             ))
           ) : (
-            <div className="flex h-[calc(100vh-190px)] flex-col items-center justify-center gap-6">
-              <Icon name="UtensilsCrossed" size="96px" className="text-gray-400" />
-              <div className="font-medium text-gray-400">주문 후 리뷰를 작성해주세요!</div>
-            </div>
+                <NoPendingReview />
           )}
         </motion.div>
 
