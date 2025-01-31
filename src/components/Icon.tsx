@@ -29,7 +29,8 @@ import {
   Store,
   TriangleAlert,
   User,
-  X
+  UtensilsCrossed,
+  X,
 } from 'lucide-react'
 import { HTMLAttributes } from 'react'
 
@@ -64,7 +65,8 @@ const ICONS = {
   Link,
   Bike,
   MapPin,
-  Plus
+  Plus,
+  UtensilsCrossed,
 } as const
 
 export type IconName = keyof typeof ICONS // 아이콘 목록
