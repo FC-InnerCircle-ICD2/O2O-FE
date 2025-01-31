@@ -1,8 +1,9 @@
 'use client'
 
 import CompletedReviews from '@/app/review/_components/CompletedReviews'
-import PendingReviews from '@/app/review/_components/PendingReviews'
+import PendingReview from '@/app/review/_components/PendingReview'
 import ReviewTab from '@/app/review/_components/ReviewTab'
+import { usePendingReviews } from '@/models/review'
 import { motion } from 'motion/react'
 import { useState } from 'react'
 
@@ -10,6 +11,7 @@ export type ReviewTabType = '작성가능' | '작성완료'
 
 const Review = () => {
   const [tab, setTab] = useState<ReviewTabType>('작성가능')
+  const { data: pendingReviews } = usePendingReviews()
 
   const handleChangeTab = (tab: ReviewTabType) => {
     setTab(tab)
@@ -18,9 +20,13 @@ const Review = () => {
   return (
     <section>
       <div className="px-mobile_safe">
-        <ReviewTab tab={tab} onChangeTab={handleChangeTab} />
+        <ReviewTab
+          tab={tab}
+          onChangeTab={handleChangeTab}
+          pendingReviewsCount={pendingReviews?.length ?? 0}
+        />
       </div>
-      <div className="relative h-screen overflow-hidden">
+      <div className="relative mt-2 h-[calc(100vh-180px)] overflow-y-auto overflow-x-hidden">
         <motion.div
           initial={{ x: 0 }}
           animate={{
@@ -29,7 +35,13 @@ const Review = () => {
           transition={{ duration: 0.3 }}
           className="absolute w-full"
         >
-          <PendingReviews />
+          {pendingReviews?.map((review, index) => (
+            <PendingReview
+              key={review.orderId}
+              review={review}
+              offSeparator={index === pendingReviews.length - 1}
+            />
+          ))}
         </motion.div>
 
         <motion.div

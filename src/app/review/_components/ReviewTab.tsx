@@ -4,9 +4,10 @@ import { motion } from 'motion/react'
 interface ReviewTabProps {
   tab: ReviewTabType
   onChangeTab: (tab: ReviewTabType) => void
+  pendingReviewsCount: number
 }
 
-const ReviewTab = ({ tab, onChangeTab }: ReviewTabProps) => {
+const ReviewTab = ({ tab, onChangeTab, pendingReviewsCount }: ReviewTabProps) => {
   const handleClickTab = (e: React.MouseEvent<HTMLButtonElement>) => {
     onChangeTab(e.currentTarget.value as ReviewTabType)
   }
@@ -18,7 +19,7 @@ const ReviewTab = ({ tab, onChangeTab }: ReviewTabProps) => {
         value="작성가능"
         className={`w-1/2 ${tab === '작성가능' ? 'text-white' : 'text-gray-700'}`}
       >
-        {`작성 가능한 리뷰 (${2})`}
+        {`작성 가능한 리뷰 (${pendingReviewsCount})`}
       </button>
       <button
         onClick={handleClickTab}
