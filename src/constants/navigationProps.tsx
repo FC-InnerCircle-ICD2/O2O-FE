@@ -51,6 +51,10 @@ const NAVIGATION_PROPS: Record<string, NavigationProps> = {
   [ROUTE_PATHS.PAY]: {
     title: '주문하기',
   },
+  [ROUTE_PATHS.REVIEW]: {
+    title: '리뷰관리',
+    hasBackButton: true,
+  },
 }
 
 export const getNavigationProps = (pathname: string): NavigationProps => {
