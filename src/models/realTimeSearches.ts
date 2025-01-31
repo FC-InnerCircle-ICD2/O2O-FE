@@ -1,6 +1,5 @@
 export interface RealTimeSearch {
-  id: number
+  rank: number
   keyword: string
   rankChange: 'up' | 'down' | 'same'
-  timestamp?: number
 }
