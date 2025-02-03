@@ -2,6 +2,7 @@ import BANNER_MOCK_DATA from '@/constants/banners'
 import { MENU_MOCK_DATA } from '@/constants/menu'
 import { MENU_OPTIONS_MOCK_DATA } from '@/constants/menuOptions'
 import { PENDING_REVIEWS_MOCK_DATA } from '@/constants/pendingReviews'
+import REAL_TIME_SEARCHES from '@/constants/realTimeSearches'
 import STORE_MOCK_DATA from '@/constants/stores'
 import { delay, http, HttpResponse, passthrough } from 'msw'
 
@@ -133,6 +134,20 @@ export const handlers = [
       status: 200,
       message: 'success',
       data: PENDING_REVIEWS_MOCK_DATA,
+    })
+  }),
+
+
+  // 실시간 급상승 검색어
+  http.get('/api/stores/trend', async () => {
+    // 배열에서 랜덤으로 6개 항목 선택
+    const shuffled = [...REAL_TIME_SEARCHES].sort(() => 0.5 - Math.random())
+    const selected = shuffled.slice(0, 6).map((item, index) => ({ rank: index + 1, keyword: item }))
+
+    return HttpResponse.json({
+      status: 200,
+      message: 'success',
+      data: selected,
     })
   }),
 ]

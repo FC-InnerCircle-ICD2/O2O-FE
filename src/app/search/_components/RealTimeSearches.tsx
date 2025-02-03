@@ -1,5 +1,6 @@
 'use client'
 
+import useGetStoreTrend from '@/api/useGetStoreTrend'
 import Icon from '@/components/Icon'
 import { RealTimeSearch } from '@/models/realTimeSearches'
 import { COLORS } from '@/styles/color'
@@ -11,12 +12,12 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 
 const REAL_TIME_SEARCHES: RealTimeSearch[] = [
-  { id: 1, keyword: '교촌치킨', rankChange: 'up' },
-  { id: 2, keyword: '굽네치킨', rankChange: 'down' },
-  { id: 3, keyword: 'BBQ', rankChange: 'same' },
-  { id: 4, keyword: '네네치킨', rankChange: 'up' },
-  { id: 5, keyword: '푸라닭', rankChange: 'down' },
-  { id: 6, keyword: '설빙', rankChange: 'down' },
+  { rank: 1, keyword: '교촌치킨', rankChange: 'up' },
+  { rank: 2, keyword: '굽네치킨', rankChange: 'down' },
+  { rank: 3, keyword: 'BBQ', rankChange: 'same' },
+  { rank: 4, keyword: '네네치킨', rankChange: 'up' },
+  { rank: 5, keyword: '푸라닭', rankChange: 'down' },
+  { rank: 6, keyword: '설빙', rankChange: 'down' },
 ]
 
 // Icon 컴포넌트를 분리하여 코드 정리
@@ -40,19 +41,22 @@ const RealTimeSearchItem = ({
 }) => {
   // 현재 표시할 검색어만 상태로 관리
   const [currentSearch, setCurrentSearch] = useState<RealTimeSearch>(realTimeSearch)
-  // 타임스탬프를 저장할 상태 추가
+  const [timestamp, setTimestamp] = useState(Date.now())
+
   useEffect(() => {
     setCurrentSearch(realTimeSearch)
+    setTimestamp(Date.now())
   }, [realTimeSearch])
 
   return (
     <div className="flex h-[16px] grow gap-3 overflow-hidden">
-      <span>{order}</span>
+      <span className='min-w-[10px]'>{order}</span>
       <div className="flex grow flex-col justify-between">
         <AnimatePresence mode="wait">
           <motion.div
             // 키값에 타임스탬프 추가
-            key={`${currentSearch.id}-${currentSearch.timestamp}`}
+            key={`${currentSearch.keyword}-${timestamp}`}
+            data-key={`${currentSearch.keyword}-${timestamp}`}
             initial={{ y: 16, opacity: 0 }} // 아래에서 시작, 투명하게
             animate={{ y: 0, opacity: 1 }} // 원래 위치로, 불투명하게
             exit={{ y: -16, opacity: 0 }} // 위로 사라지면서 투명하게
@@ -72,21 +76,41 @@ const RealTimeSearchItem = ({
 }
 
 const RealTimeSearches = () => {
-  const [dummy, setDummy] = useState<RealTimeSearch[]>(REAL_TIME_SEARCHES)
+  const [trends, setTrends] = useState<RealTimeSearch[]>([])
   const [isUpdating, setIsUpdating] = useState(false)
   const [temp, setTemp] = useState<RealTimeSearch[]>([])
+  const [isFirst, setIsFirst] = useState(true)
+  const [currentTime, setCurrentTime] = useState<string>()
+
+  const { realTimeSearches } = useGetStoreTrend()
 
   useEffect(() => {
     if (!isUpdating) return
 
     const updateWithDelay = async () => {
+      const prevTrends = [...trends]
+
       for (let i = 0; i < temp.length; i++) {
-        setDummy((prev) => {
+        setTrends((prev) => {
           const newArray = [...prev]
-          newArray[i] = temp[i]
+          // 기존 trends에서 같은 키워드를 찾습니다
+          const existingItem = prevTrends.find(item => item.keyword === temp[i].keyword)
+
+          if (existingItem) {
+            // 기존 아이템이 있는 경우 순위를 비교합니다
+            const rankChange =
+              temp[i].rank < existingItem.rank ? 'up' :
+                temp[i].rank === existingItem.rank ? 'same' : 'down'
+
+            newArray[i] = { ...temp[i], rankChange }
+          } else {
+            // 기존 아이템이 없는 경우 새로운 항목으로 취급하여 'up'을 설정합니다
+            newArray[i] = { ...temp[i], rankChange: 'up' }
+          }
+
           return newArray
         })
-        await new Promise((resolve) => setTimeout(resolve, 1500)) // 1초 대기
+        await new Promise((resolve) => setTimeout(resolve, 1500))
       }
       setIsUpdating(false)
     }
@@ -95,37 +119,40 @@ const RealTimeSearches = () => {
   }, [isUpdating])
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      // 배열을 복사하고 무작위로 섞기
-      const shuffled = [...REAL_TIME_SEARCHES]
-        .sort(() => Math.random() - 0.5)
-        .map((item) => ({
-          ...item,
-          timestamp: Date.now(),
-        }))
-      setTemp(shuffled)
+    if (!realTimeSearches) return
+
+    // 현재 시간을 HH:mm 형식으로 포맷팅
+    const now = new Date()
+    const hours = String(now.getHours()).padStart(2, '0')
+    const minutes = String(now.getMinutes()).padStart(2, '0')
+    setCurrentTime(`${hours}:${minutes}`)
+
+    if (isFirst) {
+      setIsFirst(false)
+      setTrends(realTimeSearches.map((item) => ({ ...item, rankChange: 'same' })))
+    } else {
+      setTemp(realTimeSearches.map((item) => ({ ...item, rankChange: 'up' })))
       setIsUpdating(true)
-    }, 10000)
+    }
+  }, [realTimeSearches])
 
-    return () => clearInterval(interval)
-  }, [])
-
+  if (!realTimeSearches) return null
   return (
     <div className="flex flex-col gap-[28px] px-mobile_safe">
       <div className="flex items-center justify-between">
         <span className="text-lg font-bold">실시간 급상승 검색어</span>
-        <span className="text-xs font-normal text-gray-400">내 주소 지역, 22:45 기준</span>
+        <span className="text-xs font-normal text-gray-400">내 주소 지역, {currentTime} 기준</span>
       </div>
       <div className="flex gap-6">
         <div className="flex flex-1 flex-col gap-[20px]">
-          {dummy.slice(0, 3).map((item, index) => (
+          {trends.slice(0, 3).map((item, index) => (
             <RealTimeSearchItem key={index} order={index + 1} realTimeSearch={item} />
           ))}
         </div>
 
         {/* 오른쪽 컬럼 */}
         <div className="flex flex-1 flex-col gap-[20px]">
-          {dummy.slice(3).map((item, index) => (
+          {trends.slice(3).map((item, index) => (
             <RealTimeSearchItem key={index} order={index + 4} realTimeSearch={item} />
           ))}
         </div>
