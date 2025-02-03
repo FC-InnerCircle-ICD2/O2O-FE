@@ -51,7 +51,7 @@ export const handlers = [
     // 검색어 필터링
     if (keyword) {
       filteredData = filteredData.filter((store) =>
-        store.name.toLowerCase().includes(keyword.toLowerCase()),
+        store.name.toLowerCase().includes(keyword.toLowerCase())
       )
     }
 
@@ -99,7 +99,7 @@ export const handlers = [
     })
   }),
   // Get Banners
-  http.get('/api/banners', async () => {
+  http.get('/api/v1/banners', async () => {
     await delay(500)
     return HttpResponse.json({
       status: 200,

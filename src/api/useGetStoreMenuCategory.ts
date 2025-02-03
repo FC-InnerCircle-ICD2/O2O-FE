@@ -1,4 +1,4 @@
-import { mockApi } from '@/lib/api';
+import { api } from '@/lib/api';
 import { MenuCategory } from '@/models/menu';
 import { useMockReady } from '@/providers/MockProvider';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -9,8 +9,8 @@ const useGetStoreMenuCategory = (id: number) => {
 
     const { data: storeMenuCategory, isSuccess } = useQuery({
         queryKey: ['storeMenuCategory', id],
-        queryFn: async () => await mockApi.get<MenuCategory[]>(`api/stores/${id}/menus`),
-        enabled: isReady
+        queryFn: async () => await api.get<MenuCategory[]>(`api/stores/${id}/menus`),
+        enabled: true
       })
 
       const resetStoreMenuCategory = () => {
