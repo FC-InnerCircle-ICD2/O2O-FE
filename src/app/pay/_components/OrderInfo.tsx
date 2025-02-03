@@ -1,9 +1,8 @@
+import MenuItem from '@/app/pay/_components/MenuItem'
+import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Separator from '@/components/Separator'
-import MenuItem from '@/app/pay/_components/MenuItem'
-import Input from '@/components/input'
 import { Checkbox } from '@/components/shadcn/checkbox'
-import { Button } from '@/components/button'
 
 const OrderInfo = () => {
   return (

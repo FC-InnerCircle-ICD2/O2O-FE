@@ -1,6 +1,6 @@
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
-import Input from '@/components/Input'
+import Input from '@/components/InputOrigin'
 import { modalStore } from '@/store/modal'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'

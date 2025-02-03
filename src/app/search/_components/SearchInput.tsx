@@ -1,7 +1,7 @@
 'use client'
 
 import Icon from '@/components/Icon'
-import Input from '@/components/Input'
+import Input from '@/components/InputOrigin'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { ROUTE_PATHS } from '@/utils/routes'
