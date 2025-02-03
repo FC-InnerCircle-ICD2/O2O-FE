@@ -136,7 +136,6 @@ export const handlers = [
       data: PENDING_REVIEWS_MOCK_DATA,
     })
   }),
-]
 
 
   // 실시간 급상승 검색어
