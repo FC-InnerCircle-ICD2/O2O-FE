@@ -23,7 +23,7 @@ const CategoryDrawer = () => {
       return
     }
 
-    setCategory(category.name)
+    setCategory(category.value)
 
     setTimeout(() => {
       router.push(ROUTE_PATHS.HOME_LIST)
@@ -35,7 +35,7 @@ const CategoryDrawer = () => {
     if (!more) {
       setCategoryList([
         ...CATEGORY_LIST.slice(0, 9),
-        { id: 0, name: '더보기', icon: More },
+        { id: 0, name: '더보기', value: 'more', icon: More },
         ...CATEGORY_LIST.slice(10),
       ])
     } else {
@@ -59,7 +59,7 @@ const CategoryDrawer = () => {
         <CategoryItem
           key={cat.id}
           category={cat}
-          isActive={(cat.name === '전체' && category === '') || cat.name === category}
+          isActive={(cat.name === '전체' && category === '') || cat.value === category}
           onClick={() => handleCategoryClick(cat)}
         />
       ))}

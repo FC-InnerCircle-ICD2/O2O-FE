@@ -36,7 +36,7 @@ export const handlers = [
     }
   }),
   // Get Store
-  http.get('/api/stores', async ({ request }) => {
+  http.get('/api/v1/stores', async ({ request }) => {
     // 1초 지연 추가
     await delay(1000)
 
@@ -110,7 +110,7 @@ export const handlers = [
   }),
 
   // Get Menu
-  http.get('/api/stores/:id/menus', async ({ request }) => {
+  http.get('/api/v1/stores/:id/menus', async ({ request }) => {
     return HttpResponse.json({
       status: 200,
       message: 'success',
@@ -119,7 +119,7 @@ export const handlers = [
   }),
 
   // Get Menu Options
-  http.get('/api/stores/:id/menus/:menuId/options', async ({ request }) => {
+  http.get('/api/v1/stores/:id/menus/:menuId/options', async ({ request }) => {
     await delay(2000)
     return HttpResponse.json({
       status: 200,
@@ -139,7 +139,7 @@ export const handlers = [
 
 
   // 실시간 급상승 검색어
-  http.get('/api/stores/trend', async () => {
+  http.get('/api/v1/stores/trend', async () => {
     // 배열에서 랜덤으로 6개 항목 선택
     const shuffled = [...REAL_TIME_SEARCHES].sort(() => 0.5 - Math.random())
     const selected = shuffled.slice(0, 6).map((item, index) => ({ rank: index + 1, keyword: item }))

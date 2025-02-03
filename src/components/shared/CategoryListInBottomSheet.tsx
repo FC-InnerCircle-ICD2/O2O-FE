@@ -20,8 +20,8 @@ const CategoryListInBottomSheet = () => {
         <CategoryItem
           key={cat.id}
           category={cat}
-          isActive={cat.name === category}
-          onClick={() => handleCategoryClick(cat.name)}
+          isActive={cat.value === category}
+          onClick={() => handleCategoryClick(cat.value)}
         />
       ))}
     </div>

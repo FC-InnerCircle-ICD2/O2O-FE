@@ -16,7 +16,7 @@ const Home = () => {
     { category: string | undefined }
   >({
     queryKey: 'stores',
-    endpoint: 'api/stores',
+    endpoint: 'stores',
     filter: { category: undefined },
     size: 10,
   })

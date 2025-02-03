@@ -25,7 +25,7 @@ const useGetStoreDetail = (id: number) => {
             'X-User-Lat': '37.71936226550588',
             'X-User-Lng': '126.9780',
           }
-        }),
+        })
     })
 
       const resetStoreDetail = () => {
