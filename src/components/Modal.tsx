@@ -13,7 +13,7 @@ const Modal = () => {
       <div className="fixed inset-0 z-50 flex items-center justify-center">
         {modals.map((modal, index) => {
           return (
-            <div key={`modal-${index}`} className="relative z-10">
+            <div key={`modal-${index}`} className="fixed z-10">
               <div className={cn("fixed inset-0", modal.useDimmed ? 'bg-black/50' : 'bg-transparent')} onClick={() => {
                 if (modal.useDimmedClickClose) {
                   hideModal()
