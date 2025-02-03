@@ -54,8 +54,8 @@ const CategorySlide = ({ isHide }: { isHide: boolean }) => {
           <CategoryItem
             key={cat.id}
             category={cat}
-            isActive={(cat.name === '전체' && category === '') || cat.name === category}
-            onClick={() => handleCategoryClick(cat.name)}
+            isActive={(cat.name === '전체' && category === '') || cat.value === category}
+            onClick={() => handleCategoryClick(cat.value)}
             isHide={isHide}
             isBorder={true}
           />

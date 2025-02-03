@@ -18,7 +18,7 @@ const BannerSlide = () => {
 
   const { data, isFetching } = useQuery({
     queryKey: ['banners'],
-    queryFn: () => api.get<Banner[]>('api/v1/banners'),
+    queryFn: () => api.get<Banner[]>('banners'),
     enabled: true,
   })
 
