@@ -10,4 +10,5 @@ export const ROUTE_PATHS = {
   PAY: '/pay',
   MYPAGE: '/mypage',
   STORE_DETAIL: '/store/detail',
+  REVIEW: '/review',
 }

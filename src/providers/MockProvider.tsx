@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
 const MockContext = createContext<boolean>(false)
+const isMockingMode = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled'
 
 export const useMockReady = () => useContext(MockContext)
 
@@ -11,9 +12,11 @@ export function MockProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const init = async () => {
-      const initMsw = await import('../mocks/index').then((res) => res.initMsw)
-      await initMsw()
-      setMswReady(true)
+      if (isMockingMode) {
+        const initMsw = await import('../mocks/index').then((res) => res.initMsw)
+        await initMsw()
+        setMswReady(true)
+      }
     }
 
     if (!mswReady) {

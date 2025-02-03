@@ -1,6 +1,7 @@
 import BANNER_MOCK_DATA from '@/constants/banners'
 import { MENU_MOCK_DATA } from '@/constants/menu'
 import { MENU_OPTIONS_MOCK_DATA } from '@/constants/menuOptions'
+import { PENDING_REVIEWS_MOCK_DATA } from '@/constants/pendingReviews'
 import REAL_TIME_SEARCHES from '@/constants/realTimeSearches'
 import STORE_MOCK_DATA from '@/constants/stores'
 import { delay, http, HttpResponse, passthrough } from 'msw'
@@ -51,7 +52,7 @@ export const handlers = [
     // 검색어 필터링
     if (keyword) {
       filteredData = filteredData.filter((store) =>
-        store.name.toLowerCase().includes(keyword.toLowerCase()),
+        store.name.toLowerCase().includes(keyword.toLowerCase())
       )
     }
 
@@ -99,7 +100,7 @@ export const handlers = [
     })
   }),
   // Get Banners
-  http.get('/api/banners', async () => {
+  http.get('/api/v1/banners', async () => {
     await delay(500)
     return HttpResponse.json({
       status: 200,
@@ -126,6 +127,17 @@ export const handlers = [
       data: MENU_OPTIONS_MOCK_DATA,
     })
   }),
+
+  // Get Pending Reviews
+  http.get('/api/reviews/pending', async () => {
+    return HttpResponse.json({
+      status: 200,
+      message: 'success',
+      data: PENDING_REVIEWS_MOCK_DATA,
+    })
+  }),
+]
+
 
   // 실시간 급상승 검색어
   http.get('/api/stores/trend', async () => {

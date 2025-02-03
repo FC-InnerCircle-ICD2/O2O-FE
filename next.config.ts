@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
 
     return config
   },
+  output: 'standalone',
   devIndicators: {
     buildActivity: false,
     buildActivityPosition: 'bottom-right',

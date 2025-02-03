@@ -5,7 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 // Swiper 스타일 import
 import { Skeleton } from '@/components/shadcn/skeleton'
-import { mockApi } from '@/lib/api'
+import { api } from '@/lib/api'
 import { Banner } from '@/models/banner'
 import { useMockReady } from '@/providers/MockProvider'
 import { useQuery } from '@tanstack/react-query'
@@ -18,8 +18,8 @@ const BannerSlide = () => {
 
   const { data, isFetching } = useQuery({
     queryKey: ['banners'],
-    queryFn: () => mockApi.get<Banner[]>('api/banners'),
-    enabled: isMockReady,
+    queryFn: () => api.get<Banner[]>('api/v1/banners'),
+    enabled: true,
   })
 
   return (

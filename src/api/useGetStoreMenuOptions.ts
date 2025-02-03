@@ -1,4 +1,4 @@
-import { mockApi } from '@/lib/api';
+import { api } from '@/lib/api';
 import { MenuOption } from '@/models/menu';
 import { useMockReady } from '@/providers/MockProvider';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -10,8 +10,8 @@ const useGetStoreMenuOptions = (id: number, menuId: number) => {
 
     const { data: storeMenuOptions, isSuccess } = useQuery({
         queryKey: ['storeMenuOptions', id, menuId],
-        queryFn: async () => await mockApi.get<MenuOption>(`api/stores/${id}/menus/${menuId}/options`),
-        enabled: isMockReady
+        queryFn: async () => await api.get<MenuOption>(`api/stores/${id}/menus/${menuId}/options`),
+        enabled: true
     })
 
       const resetStoreMenuOptions = () => {

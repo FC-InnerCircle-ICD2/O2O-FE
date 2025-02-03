@@ -1,6 +1,6 @@
 'use client'
 
-import { mockApi } from '@/lib/api'
+import { api } from '@/lib/api'
 import { useMockReady } from '@/providers/MockProvider'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef } from 'react'
@@ -58,11 +58,11 @@ export const useInfiniteScroll = <TData, TFilter = void>({
               ...acc,
               [key]: value?.toString() ?? '',
             }),
-            {},
+            {}
           )),
       }
 
-      const res = await mockApi.get<PaginatedResponse<TData>>(endpoint, {
+      const res = await api.get<PaginatedResponse<TData>>(endpoint, {
         headers: {
           'X-User-Lat': location?.lat.toString() ?? '',
           'X-User-Lng': location?.lng.toString() ?? '',
@@ -84,7 +84,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
         fetchNextPage()
       }
     },
-    [fetchNextPage, hasNextPage, isFetchingNextPage, isFetching],
+    [fetchNextPage, hasNextPage, isFetchingNextPage, isFetching]
   )
 
   useEffect(() => {
