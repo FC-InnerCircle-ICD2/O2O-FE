@@ -51,6 +51,10 @@ const NAVIGATION_PROPS: Record<string, NavigationProps> = {
   [ROUTE_PATHS.PAY]: {
     title: '주문하기',
   },
+  [ROUTE_PATHS.MYPAGE_EDIT_PROFILE]: {
+    title: '내 정보 수정',
+    hasBackButton: true,
+  },
 }
 
 export const getNavigationProps = (pathname: string): NavigationProps => {
