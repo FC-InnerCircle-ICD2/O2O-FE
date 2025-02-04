@@ -15,11 +15,11 @@ export const MENU_OPTIONS_MOCK_DATA: MenuOption = {
             name: '맵소디 부분육 선택',
             type: 'radio',
             options: [
-                { name: '한마리', price: 0, isSoldOut: false, },
-                { name: '순살 변경(다리살 30%, 가슴살 70%)', price: 2000, isSoldOut: false, },
-                { name: '닭다리 변경(10개)', price: 3000, isSoldOut: false, },
-                { name: '윙&봉 변경', price: 3000, isSoldOut: false, },
-                { name: '콤보 변경(닭다리5&윙5,봉5)', price: 4000, isSoldOut: false, }
+                { id: '8f7e6d5c-4b3a-2d1e-9f8g-7h6zxcvdds', name: '한마리', price: 0, isSoldOut: false, },
+                { id: 'a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6', name: '순살 변경(다리살 30%, 가슴살 70%)', price: 2000, isSoldOut: false, },
+                { id: 'b2c3d4e5-f6g7-h8i9-j0k1-l2m3n4o5p6q7', name: '닭다리 변경(10개)', price: 3000, isSoldOut: false, },
+                { id: 'c3d4e5f6-g7h8-i9j0-k1l2-m3n4o5p6q7r8', name: '윙&봉 변경', price: 3000, isSoldOut: false, },
+                { id: 'd4e5f6g7-h8i9-j0k1-l2m3-n4o5p6q7r8s9', name: '콤보 변경(닭다리5&윙5,봉5)', price: 4000, isSoldOut: false, }
             ]
         },
         {
@@ -27,9 +27,9 @@ export const MENU_OPTIONS_MOCK_DATA: MenuOption = {
             name: '맵기 선택',
             type: 'radio',
             options: [
-                { name: '기본맵기', price: 0, isSoldOut: false, },
-                { name: '매운맛', price: 1000, isSoldOut: true, },
-                { name: '아주매운맛', price: 1000, isSoldOut: false, }
+                { id: 'e5f6g7h8-i9j0-k1l2-m3n4-o5p6q7r8s9t0', name: '기본맵기', price: 0, isSoldOut: false, },
+                { id: 'f6g7h8i9-j0k1-l2m3-n4o5-p6q7r8s9t0u1', name: '매운맛', price: 1000, isSoldOut: true, },
+                { id: 'g7h8i9j0-k1l2-m3n4-o5p6-q7r8s9t0u1v2', name: '아주매운맛', price: 1000, isSoldOut: false, }
             ]
         },
         {
@@ -38,13 +38,13 @@ export const MENU_OPTIONS_MOCK_DATA: MenuOption = {
             type: 'checkbox',
             limit: 3,
             options: [
-                { name: 'BBQ 카레고로케(3개)', price: 4000, isSoldOut: false, },
-                { name: 'BBQ 떡볶이', price: 7000, isSoldOut: false, },
-                { name: 'BBQ 소떡(땡초숯불양념맛)', price: 3000, isSoldOut: false, },
-                { name: 'BBQ 소떡(양념맛)', price: 3000, isSoldOut: false, },
-                { name: '치킨무 추가', price: 1000, isSoldOut: false, },
-                { name: '콜라 1.25L', price: 2500, isSoldOut: false, },
-                { name: '사이다 1.25L', price: 2500, isSoldOut: false, },
+                { id: 'h8i9j0k1-l2m3-n4o5-p6q7-r8s9t0u1v2w3', name: 'BBQ 카레고로케(3개)', price: 4000, isSoldOut: false, },
+                { id: 'i9j0k1l2-m3n4-o5p6-q7r8-s9t0u1v2w3x4', name: 'BBQ 떡볶이', price: 7000, isSoldOut: false, },
+                { id: 'j0k1l2m3-n4o5-p6q7-r8s9-t0u1v2w3x4y5', name: 'BBQ 소떡(땡초숯불양념맛)', price: 3000, isSoldOut: false, },
+                { id: 'k1l2m3n4-o5p6-q7r8-s9t0-u1v2w3x4y5z6', name: 'BBQ 소떡(양념맛)', price: 3000, isSoldOut: false, },
+                { id: 'l2m3n4o5-p6q7-r8s9-t0u1-v2w3x4y5z6a7', name: '치킨무 추가', price: 1000, isSoldOut: false, },
+                { id: 'm3n4o5p6-q7r8-s9t0-u1v2-w3x4y5z6a7b8', name: '콜라 1.25L', price: 2500, isSoldOut: false, },
+                { id: 'n4o5p6q7-r8s9-t0u1-v2w3-x4y5z6a7b8c9', name: '사이다 1.25L', price: 2500, isSoldOut: false, },
             ]
         },
         {
@@ -52,10 +52,10 @@ export const MENU_OPTIONS_MOCK_DATA: MenuOption = {
             name: '사이드 메뉴',
             type: 'checkbox',
             options: [
-                { name: '감자튀김', price: 3000, isSoldOut: true, },
-                { name: '치즈볼(3개)', price: 4000, isSoldOut: false, },
-                { name: '콜라 1.25L', price: 2500, isSoldOut: false, },
-                { name: '사이다 1.25L', price: 2500, isSoldOut: false, }
+                { id: 'o5p6q7r8-s9t0-u1v2-w3x4-y5z6a7b8c9d0', name: '감자튀김', price: 3000, isSoldOut: true, },
+                { id: 'p6q7r8s9-t0u1-v2w3-x4y5-z6a7b8c9d0e1', name: '치즈볼(3개)', price: 4000, isSoldOut: false, },
+                { id: 'q7r8s9t0-u1v2-w3x4-y5z6-a7b8c9d0e1f2', name: '콜라 1.25L', price: 2500, isSoldOut: false, },
+                { id: 'r8s9t0u1-v2w3-x4y5-z6a7-b8c9d0e1f2g3', name: '사이다 1.25L', price: 2500, isSoldOut: false, }
             ]
         }
     ]

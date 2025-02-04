@@ -1,6 +1,6 @@
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
-import Input from '@/components/InputOrigin'
+import Input from '@/components/Input'
 import Separator from '@/components/Separator'
 import SignupModal from '@/components/shared/SignupModal'
 import { modalStore } from '@/store/modal'
