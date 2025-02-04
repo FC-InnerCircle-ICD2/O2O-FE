@@ -115,7 +115,7 @@ const StoreOrderDetail = () => {
     if (!orderDetail) return null
     return (
         createPortal(
-            <div className="fixed inset-0 z-50 bg-black/50 transition-opacity duration-300">
+            <div className="fixed max-w-[480px] min-w-[320px] mx-auto inset-0 z-50 bg-black/50 transition-opacity duration-300">
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -139,8 +139,8 @@ const StoreOrderDetail = () => {
                     animate={{
                         top: 0,
                         left: 0,
-                        width: '100dvw',
-                        height: '100dvh',
+                        width: '100%',
+                        height: '100%',
                         x: 0,
                         y: 0,
                         borderRadius: '0px',
