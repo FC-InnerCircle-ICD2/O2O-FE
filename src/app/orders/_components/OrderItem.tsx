@@ -4,8 +4,9 @@ import { Button } from '@/components/button'
 import Badge from '@/components/Badge'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
+import { Order } from '@/api/useGetOrders'
 
-const OrderItem = () => {
+const OrderItem = (order) => {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-row">

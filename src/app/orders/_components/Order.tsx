@@ -4,10 +4,13 @@ import OrderSearch from '@/app/orders/_components/OrderSearch'
 import OrderItem from '@/app/orders/_components/OrderItem'
 import Separator from '@/components/Separator'
 import useGetOrders from '@/api/useGetOrders'
+import { v4 as uuidv4 } from 'uuid'
+import React from 'react'
 
 const Order = () => {
   const { orders, resetGetOrders, isSuccess } = useGetOrders()
 
+  console.log(orders)
   return (
     <>
       <div className="flex flex-col gap-10 pt-5">
@@ -15,12 +18,13 @@ const Order = () => {
           <OrderSearch />
         </div>
         <div className="mb-10 flex flex-1 flex-col gap-10 overflow-y-auto px-mobile_safe">
-          {/*{orders?.map((order, index) => (*/}
-          {/*  <>*/}
-          {/*    <OrderItem key={index} />*/}
-          {/*    <Separator ignoreMobileSafe className="h-2" />*/}
-          {/*  </>*/}
-          {/*))}*/}
+          {orders?.content.map((order) => (
+            <React.Fragment key={uuidv4()}>
+              <OrderItem order={order} />
+              <div>{order}</div>
+              <Separator ignoreMobileSafe className="h-2" />
+            </React.Fragment>
+          ))}
         </div>
       </div>
     </>

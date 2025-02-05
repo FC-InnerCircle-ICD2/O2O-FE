@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 
-interface Order {
+export interface Order {
   storeId: string
   storeName: string
   orderId: string
