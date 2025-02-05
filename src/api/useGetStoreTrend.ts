@@ -1,4 +1,4 @@
-import { mockApi } from '@/lib/api'
+import { api } from '@/lib/api'
 import { RealTimeSearch } from '@/models/realTimeSearches'
 import { useMockReady } from '@/providers/MockProvider'
 import { useQuery } from '@tanstack/react-query'
@@ -8,7 +8,10 @@ const useGetStoreTrend = () => {
 
   const { data: realTimeSearches } = useQuery({
     queryKey: ['storeTrend'],
-    queryFn: async () => await mockApi.get<RealTimeSearch[]>('api/stores/trend'),
+    queryFn: async () => {
+      const res = await api.get<{trendKeywords: RealTimeSearch[]}>('stores/trend')
+      return res.trendKeywords
+    },
     refetchInterval: 10000,
     enabled: isMockReady,
   })
