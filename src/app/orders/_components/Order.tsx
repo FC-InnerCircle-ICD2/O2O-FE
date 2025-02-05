@@ -21,7 +21,6 @@ const Order = () => {
           {orders?.content.map((order) => (
             <React.Fragment key={uuidv4()}>
               <OrderItem order={order} />
-              <div>{order}</div>
               <Separator ignoreMobileSafe className="h-2" />
             </React.Fragment>
           ))}
