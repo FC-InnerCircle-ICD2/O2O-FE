@@ -29,9 +29,9 @@ const MenuItem = () => {
         </div>
       </div>
       <div className="mr-5 flex flex-row justify-end gap-2 py-2">
-        <Button variant="grayFit" size="s" className="text-black">
-          옵션변경
-        </Button>
+        {/*<Button variant="grayFit" size="s" className="text-black">*/}
+        {/*  옵션변경*/}
+        {/*</Button>*/}
         <UpDownBtn value={1} />
       </div>
     </div>
