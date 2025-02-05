@@ -1,8 +1,9 @@
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { api } from '@/lib/api';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 const usePostLogout = () => {
+    const queryClient = useQueryClient()
     const accessToken = useLocalStorage('accessToken')
     const accessTokenExpiresIn = useLocalStorage('accessTokenExpiresIn')
     const refreshToken = useLocalStorage('refreshToken')
@@ -13,10 +14,11 @@ const usePostLogout = () => {
             refreshToken: refreshToken.storedValue,
         }),
         onSuccess: () => {
-            accessToken.setValue(null)
-            accessTokenExpiresIn.setValue(null)
-            refreshToken.setValue(null)
-            refreshTokenExpiresIn.setValue(null)
+            accessToken.resetValue()
+            accessTokenExpiresIn.resetValue()
+            refreshToken.resetValue()
+            refreshTokenExpiresIn.resetValue()
+            queryClient.setQueryData(['member'], null)
         }
     })
 }

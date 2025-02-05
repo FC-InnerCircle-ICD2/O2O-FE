@@ -1,7 +1,7 @@
 'use client'
+import useGetMember from '@/api/useGetMember'
 import usePostLogout from '@/api/usePostLogout'
 import Icon from '@/components/Icon'
-import { useLocalStorage } from '@/hooks/useLocalStorage'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
@@ -9,27 +9,27 @@ import { useEffect } from 'react'
 const EditProfile = () => {
   const router = useRouter()
   const { mutate: logout } = usePostLogout()
-  const accessToken = useLocalStorage('accessToken')
+  const { data: memberData } = useGetMember()
 
   const handleLogout = () => {
     logout(undefined)
+    router.back()
   }
-
 
   // 로그인 상태가 아닌 경우 마이페이지로 이동
   useEffect(() => {
-    if (accessToken.storedValue === null) {
-      router.push('/mypage')
+    if (!memberData?.signname) {
+      router.back()
     }
-  }, [accessToken, router])
+  }, [memberData?.signname, router])
 
-  if (!accessToken.storedValue) return null
+  if (!memberData?.signname) return null
 
   return (
     <div className='px-mobile_safe mt-4  h-[90%] flex flex-col justify-between'>
       <section className='flex flex-col gap-3'>
-        <EditProfileItem title="닉네임" value="김개민" />
-        <EditProfileItem title="이메일" value="abcd@abc.com" />
+        <EditProfileItem title="닉네임" value={memberData?.nickname} />
+        <EditProfileItem title="이메일" value={memberData?.signname} />
       </section>
       <section className='text-center mt-4 text-gray-500'>
         <button onClick={handleLogout}>로그아웃</button>

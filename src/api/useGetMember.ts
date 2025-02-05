@@ -1,3 +1,4 @@
+import { useLocalStorage } from '@/hooks/useLocalStorage';
 import { api } from '@/lib/api';
 import { Member } from '@/models/auth';
 import { useQuery } from '@tanstack/react-query';
@@ -17,10 +18,13 @@ interface StoreDetail {
 }
 
 const useGetMember = () => {
+    const accessToken = useLocalStorage('accessToken')
     return useQuery({
         queryKey: ['member'],
-            queryFn: async () => await api.get<Member>(`members`, {
+        queryFn: async () => await api.get<Member>(`members`, {
         }),
+        enabled: !!accessToken.storedValue,
+        initialData: null
     })
 }
 
