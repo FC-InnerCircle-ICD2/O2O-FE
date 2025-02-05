@@ -10,7 +10,7 @@ import { z } from 'zod'
 const SignupModal = () => {
   const { hideModal } = modalStore()
   return (
-    <div className="h-screen w-screen bg-white p-mobile_safe">
+    <div className="size-full bg-white p-mobile_safe">
       <div className="relative my-6 flex justify-end">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold">
           회원가입
