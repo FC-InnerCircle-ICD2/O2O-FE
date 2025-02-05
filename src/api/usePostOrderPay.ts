@@ -37,11 +37,11 @@ const usePostOrderPay = (orderPayData: OrderPay) => {
     },
   })
 
-  const restPostOrderPay = () => {
+  const resetPostOrderPay = () => {
     qc.removeQueries({ queryKey: ['orderPay'] })
   }
 
-  return { orderPay, isSuccess, restPostOrderPay }
+  return { orderPay, isSuccess, resetPostOrderPay }
 }
 
 export default usePostOrderPay
