@@ -1,6 +1,6 @@
-import OrderStatus from '@/app/orders-detail/_components/OrderStatus'
 import Separator from '@/components/Separator'
-import OrderList from '@/app/orders-detail/_components/OrderList'
+import OrderStatus from '@/app/orders/detail/[id]/_components/OrderStatus'
+import OrderList from '@/app/orders/detail/[id]/_components/OrderList'
 
 const OrderPage = () => {
   return (
