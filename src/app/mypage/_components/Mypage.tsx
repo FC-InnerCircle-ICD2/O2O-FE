@@ -1,13 +1,18 @@
+
+'use client'
+
 import MenuList from '@/app/mypage/_components/MeunList'
 import QuickMenuList from '@/app/mypage/_components/QuickMenuList'
 import UserProfile from '@/app/mypage/_components/UserProfile'
 import LoginButtonSection from '@/components/shared/LoginButtonSection'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 
 const Mypage = () => {
-  const { user } = { user: false }
+  const accessToken = useLocalStorage('accessToken')
+
   return (
     <section>
-      {user ? (
+      {accessToken.storedValue ? (
         <>
           <UserProfile />
           <div className="px-mobile_safe">
