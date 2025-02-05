@@ -4,7 +4,7 @@ import { useMockReady } from '@/providers/MockProvider';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 
-const useGetStoreMenuOptions = (id: number, menuId: number) => {
+const useGetStoreMenuOptions = (id: string, menuId: number) => {
     const qc = useQueryClient()
     const isMockReady = useMockReady()
 

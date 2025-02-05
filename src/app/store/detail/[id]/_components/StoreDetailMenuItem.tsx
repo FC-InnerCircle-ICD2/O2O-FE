@@ -24,7 +24,7 @@ const StoreDetailMenuItem = ({ menu }: { menu: Menu }) => {
         const imgWrapper = e.currentTarget.querySelector('.img-wrapper')
         const rect = imgWrapper?.getBoundingClientRect()
         showOrderDetail({
-            storeId: 1,
+            storeId: 'asdfdfsdf-sadfdsfdfdf',
             menuId: 0,
             originX: rect?.left ?? 0,
             originY: rect?.top ?? 0,
