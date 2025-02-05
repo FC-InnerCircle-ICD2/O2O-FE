@@ -25,7 +25,7 @@ export default function RootLayout({
       suppressHydrationWarning={true}
       className={`${pretendard.className} ${bmjua.variable}`}
     >
-      <body suppressHydrationWarning={true}>
+      <body suppressHydrationWarning={true} className="bg-gray-100">
         <MockProvider>
           <QueryProvider>
             <CommonLayout>{children}</CommonLayout>

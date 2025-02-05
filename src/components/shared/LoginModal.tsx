@@ -1,6 +1,6 @@
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
-import Input from '@/components/InputOrigin'
+import Input from '@/components/Input'
 import Separator from '@/components/Separator'
 import SignupModal from '@/components/shared/SignupModal'
 import { modalStore } from '@/store/modal'
@@ -14,7 +14,7 @@ const LoginModal = () => {
   }
 
   return (
-    <div className="h-screen w-screen bg-white p-mobile_safe">
+    <div className="size-full bg-white p-mobile_safe">
       <div className="my-6 flex justify-end">
         <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
       </div>

@@ -36,6 +36,7 @@ export interface MenuOptionGroup {
 }
 
 export interface MenuGroupOption {
+  id: string
   name: string
   price: number
   isSoldOut: boolean

@@ -13,7 +13,7 @@ const Modal = () => {
       <div className="fixed inset-0 z-50 flex items-center justify-center">
         {modals.map((modal, index) => {
           return (
-            <div key={`modal-${index}`} className="relative z-10">
+            <div key={`modal-${index}`} className="fixed h-full w-full z-10">
               <div className={cn("fixed inset-0", modal.useDimmed ? 'bg-black/50' : 'bg-transparent')} onClick={() => {
                 if (modal.useDimmedClickClose) {
                   hideModal()
@@ -25,12 +25,12 @@ const Modal = () => {
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: '100%', opacity: 0 }}
                   transition={{ type: 'spring', damping: 80, stiffness: 1000 }}
-                  className="relative z-10 w-fit"
+                  className="relative z-10 max-w-[480px] min-w-[320px] h-full mx-auto"
                 >
                   {modal.content}
                 </motion.div> 
                 :
-                <div className="relative z-10">
+                <div className="relative z-10 max-w-[480px] min-w-[320px] h-full mx-auto">
                   {modal.content}
                 </div>
               }

@@ -1,7 +1,7 @@
 'use client'
 
 import Icon from '@/components/Icon'
-import Input from '@/components/InputOrigin'
+import Input from '@/components/Input'
 import { useState } from 'react'
 
 const OrderSearch = () => {
