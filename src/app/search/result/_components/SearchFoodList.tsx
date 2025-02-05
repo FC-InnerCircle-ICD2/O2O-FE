@@ -17,7 +17,7 @@ interface SearchFoodListProps {
 
 const SearchFoodList = ({ data, isLoading, targetRef, scrollRef }: SearchFoodListProps) => {
   const { keyword } = useFoodSearchFilterStore()
-  const { topRef, showScrollButton, scrollToTop } = useScrollToTop<HTMLDivElement>()
+  const { topRef, showScrollButton, scrollToTop } = useScrollToTop<HTMLDivElement>({})
 
   return (
     <div ref={scrollRef} className="flex flex-1 flex-col overflow-y-auto">

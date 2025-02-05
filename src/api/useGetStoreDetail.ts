@@ -5,7 +5,7 @@ interface StoreDetail {
   address: string
   deliveryTime: string
   freeDelivery: boolean
-  id: number
+  id: string
   imageMain: string
   latitude: number
   longitude: number
@@ -28,11 +28,11 @@ const useGetStoreDetail = (id: number) => {
         })
     })
 
-      const resetStoreDetail = () => {
-        qc.removeQueries({ queryKey: ['storeDetail', id] })
-      }
+    const resetStoreDetail = () => {
+      qc.removeQueries({ queryKey: ['storeDetail', id] })
+    }
 
-      return { storeDetail, resetStoreDetail, isSuccess }
+    return { storeDetail, resetStoreDetail, isSuccess }
 }
 
 export default useGetStoreDetail

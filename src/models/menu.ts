@@ -5,8 +5,8 @@ export interface Menu {
   price: number
   imageUrl: string
   soldout: boolean
-  isBest?: boolean
-  isManyOrder?: boolean
+  best: boolean
+  manyOrder: boolean
 }
 
 export interface MenuCategory {
@@ -18,12 +18,12 @@ export interface MenuCategory {
 export interface MenuOption {
   menuId: string
   name: string
-  price: number
+  price: string
   desc: string
   imgUrl: string
-  isSoldOut: boolean
-  isBest: boolean
-  isManyOrder: boolean
+  soldOut: boolean
+  best: boolean
+  manyOrder: boolean
   menuOptionGroups: MenuOptionGroup[]
 }
 
@@ -31,7 +31,8 @@ export interface MenuOptionGroup {
   id: string
   name: string
   type: 'radio' | 'checkbox'
-  limit?: number
+  maxSel?: number
+  minSel?: number
   options: MenuGroupOption[]
 }
 
@@ -39,5 +40,5 @@ export interface MenuGroupOption {
   id: string
   name: string
   price: number
-  isSoldOut: boolean
+  soldOut: boolean
 }

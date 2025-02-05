@@ -12,7 +12,7 @@ interface HomeStoreListProps {
 }
 
 const HomeStoreList = ({ data, isLoading }: HomeStoreListProps) => {
-  const { topRef, showScrollButton, scrollToTop } = useScrollToTop<HTMLParagraphElement>()
+  const { topRef, showScrollButton, scrollToTop } = useScrollToTop<HTMLParagraphElement>({})
 
   return (
     <div className="flex flex-col gap-4 px-mobile_safe">
