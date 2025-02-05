@@ -1,7 +1,7 @@
-import ky from 'ky'
+import ky from 'ky';
 
 export const kyClient = ky.create({
-  prefixUrl: process.env.NEXT_PUBLIC_BASE_API_URL, // Base URL 설정
+  prefixUrl: process.env.NEXT_PUBLIC_API_URL, // Base URL 설정
   timeout: 10000, // 타임아웃 설정
   retry: {
     limit: 3, // 재시도 횟수
@@ -10,12 +10,11 @@ export const kyClient = ky.create({
   hooks: {
     beforeRequest: [
       (request) => {
-        // 예: Authorization 헤더 추가
-        const token = localStorage.getItem('authToken') // 예시로 LocalStorage 사용
-        if (token) {
-          request.headers.set('Authorization', `Bearer ${token}`)
+        const accessToken = localStorage.getItem('accessToken')?.replace(/['"]+/g, '');
+        if (accessToken) {
+            request.headers.set('Authorization', accessToken);
         }
-      },
+      },  
     ],
     afterResponse: [
       (_request, _options, response) => {
