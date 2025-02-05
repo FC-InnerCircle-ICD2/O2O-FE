@@ -10,7 +10,7 @@ export const kyClient = ky.create({
   hooks: {
     beforeRequest: [
       (request) => {
-        const accessToken = localStorage.getItem('accessToken')?.replace(/['"]+/g, '');
+        const accessToken = localStorage.getItem('accessToken')
         if (accessToken) {
             request.headers.set('Authorization', accessToken);
         }

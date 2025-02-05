@@ -11,9 +11,9 @@ const usePostLogin = () => {
     return useMutation({
         mutationFn: async (loginData:LoginData) => await api.post<LoginResponse>(`auth/login`, loginData),
         onSuccess: (data) => {
-            accessToken.setValue(data.accessToken?.replace(/['"]+/g, ''))
+            accessToken.setValue(data.accessToken)
             accessTokenExpiresIn.setValue(data.accessTokenExpiresIn)
-            refreshToken.setValue(data.refreshToken?.replace(/['"]+/g, ''))
+            refreshToken.setValue(data.refreshToken)
             refreshTokenExpiresIn.setValue(data.refreshTokenExpiresIn)
         }
     })

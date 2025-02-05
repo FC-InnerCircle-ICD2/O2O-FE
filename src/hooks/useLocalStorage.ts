@@ -46,7 +46,7 @@ export function useLocalStorage<T>(
         }
 
         setStoredValue(valueToStore)
-        localStorage.setItem(key, JSON.stringify(valueToStore))
+        localStorage.setItem(key, typeof valueToStore === 'string' ? valueToStore : JSON.stringify(valueToStore))
 
         // 같은 창에서의 변경사항도 감지하기 위한 커스텀 이벤트 발생
         window.dispatchEvent(
