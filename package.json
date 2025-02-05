@@ -63,7 +63,7 @@
     "typescript": "^5",
     "typescript-eslint": "^8.19.0"
   },
-  "packageManager": "yarn@4.6.0",
+  "packageManager": "yarn@4.5.3",
   "dependenciesMeta": {
     "prettier-plugin-tailwindcss@0.6.9": {
       "unplugged": true

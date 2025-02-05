@@ -2,12 +2,16 @@ import BANNER_MOCK_DATA from '@/constants/banners'
 import { MENU_MOCK_DATA } from '@/constants/menu'
 import { MENU_OPTIONS_MOCK_DATA } from '@/constants/menuOptions'
 import { PENDING_REVIEWS_MOCK_DATA } from '@/constants/pendingReviews'
-import REAL_TIME_SEARCHES from '@/constants/realTimeSearches'
 import STORE_MOCK_DATA from '@/constants/stores'
 import { delay, http, HttpResponse, passthrough } from 'msw'
 
 // API 엔드포인트 예시
 export const handlers = [
+  // Next.js 웹팩 핫 리로딩 요청 무시
+  http.get('/_next/static/webpack/*', () => {
+    return passthrough()
+  }),
+  
   http.get('/_next/image', async ({ request }) => {
     const originalUrl = new URL(request.url)
     const imageUrl = originalUrl.searchParams.get('url')
@@ -137,17 +141,8 @@ export const handlers = [
     })
   }),
 
-
-  // 실시간 급상승 검색어
-  http.get('/api/v1/stores/trend', async () => {
-    // 배열에서 랜덤으로 6개 항목 선택
-    const shuffled = [...REAL_TIME_SEARCHES].sort(() => 0.5 - Math.random())
-    const selected = shuffled.slice(0, 6).map((item, index) => ({ rank: index + 1, keyword: item }))
-
-    return HttpResponse.json({
-      status: 200,
-      message: 'success',
-      data: selected,
-    })
+  // trend API는 실제 API로 통과
+  http.get('*/api/v1/stores/trend', () => {
+    return passthrough()
   }),
 ]

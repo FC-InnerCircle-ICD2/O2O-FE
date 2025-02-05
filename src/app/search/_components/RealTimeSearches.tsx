@@ -11,15 +11,6 @@ import { useEffect, useState } from 'react'
 import 'swiper/css'
 import 'swiper/css/pagination'
 
-const REAL_TIME_SEARCHES: RealTimeSearch[] = [
-  { rank: 1, keyword: '교촌치킨', rankChange: 'up' },
-  { rank: 2, keyword: '굽네치킨', rankChange: 'down' },
-  { rank: 3, keyword: 'BBQ', rankChange: 'same' },
-  { rank: 4, keyword: '네네치킨', rankChange: 'up' },
-  { rank: 5, keyword: '푸라닭', rankChange: 'down' },
-  { rank: 6, keyword: '설빙', rankChange: 'down' },
-]
-
 // Icon 컴포넌트를 분리하여 코드 정리
 const RankChangeIcon = ({ rankChange }: { rankChange: string }) => {
   switch (rankChange) {
@@ -99,8 +90,8 @@ const RealTimeSearches = () => {
           if (existingItem) {
             // 기존 아이템이 있는 경우 순위를 비교합니다
             const rankChange =
-              temp[i].rank < existingItem.rank ? 'up' :
-                temp[i].rank === existingItem.rank ? 'same' : 'down'
+              temp[i].order < existingItem.order ? 'up' :
+                temp[i].order === existingItem.order ? 'same' : 'down'
 
             newArray[i] = { ...temp[i], rankChange }
           } else {
