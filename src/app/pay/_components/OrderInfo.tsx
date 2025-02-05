@@ -1,9 +1,8 @@
+import MenuItem from '@/app/pay/_components/MenuItem'
+import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Separator from '@/components/Separator'
-import MenuItem from '@/app/pay/_components/MenuItem'
-import Input from '@/components/input'
 import { Checkbox } from '@/components/shadcn/checkbox'
-import { Button } from '@/components/button'
 
 const OrderInfo = () => {
   return (
@@ -50,7 +49,7 @@ const OrderInfo = () => {
       </div>
       <div className="flex flex-col gap-4 rounded-xl border border-solid border-gray-400 p-5">
         <div className="text-base font-extrabold">가게 요청사항</div>
-        <Input placeholder="예) 견과류 빼주세요" />
+        {/* <Input placeholder="예) 견과류 빼주세요" /> */}
         <div className="items-top flex space-x-2">
           <Checkbox id="terms1" />
           <div className="grid gap-1.5 leading-none">

@@ -69,7 +69,7 @@ const MenuOption = ({ id, title, type, limit, options, onChangeOption }: MenuOpt
                     if (option) onChange(option, 'change');
                 }}>
                     {options.map((option, index) => (
-                        <div key={option.name} className="flex items-center space-x-2">
+                        <div key={option.id} className="flex items-center space-x-2">
                             <RadioGroupItem
                                 id={`${id}-${index}`}
                                 value={option.name}
@@ -86,7 +86,7 @@ const MenuOption = ({ id, title, type, limit, options, onChangeOption }: MenuOpt
             ) : (
                     <div className="flex flex-col gap-6">
                     {options.map((option, index) => (
-                        <div key={option.name} className="flex items-center space-x-2">
+                        <div key={option.id} className="flex items-center space-x-2">
                             <Checkbox
                                 id={`${id}-${index}`}
                                 className="h-5 w-5 border-solid data-[state=checked]:bg-white data-[state=checked]:border-primary border-gray-300 outline-none"

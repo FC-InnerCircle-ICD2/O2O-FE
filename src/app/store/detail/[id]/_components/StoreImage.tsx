@@ -2,18 +2,12 @@
 
 import { Skeleton } from '@/components/shadcn/skeleton'
 import Image from 'next/image'
-import { useRef, useState } from 'react'
-import type { Swiper as SwiperType } from 'swiper'
-import 'swiper/css'
 
 export const IMAGE_HEIGHT = 200
 
 const StoreImage = ({ pullHeight, imageMain, isSuccess }: { pullHeight: number, imageMain: string, isSuccess: boolean }) => {
-  const swiperRef = useRef<SwiperType>(null)
-  const [currentSlide, setCurrentSlide] = useState(1)
-
   return (
-    <div className="fixed z-0 size-full">
+    <div className="fixed z-0 size-full max-w-[480px] min-w-[320px]">
       <div
         className="relative overflow-hidden"
         style={{

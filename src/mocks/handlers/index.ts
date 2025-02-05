@@ -1,11 +1,17 @@
 import BANNER_MOCK_DATA from '@/constants/banners'
 import { MENU_MOCK_DATA } from '@/constants/menu'
 import { MENU_OPTIONS_MOCK_DATA } from '@/constants/menuOptions'
+import { PENDING_REVIEWS_MOCK_DATA } from '@/constants/pendingReviews'
 import STORE_MOCK_DATA from '@/constants/stores'
 import { delay, http, HttpResponse, passthrough } from 'msw'
 
 // API 엔드포인트 예시
 export const handlers = [
+  // Next.js 웹팩 핫 리로딩 요청 무시
+  http.get('/_next/static/webpack/*', () => {
+    return passthrough()
+  }),
+  
   http.get('/_next/image', async ({ request }) => {
     const originalUrl = new URL(request.url)
     const imageUrl = originalUrl.searchParams.get('url')
@@ -34,7 +40,7 @@ export const handlers = [
     }
   }),
   // Get Store
-  http.get('/api/stores', async ({ request }) => {
+  http.get('/api/v1/stores', async ({ request }) => {
     // 1초 지연 추가
     await delay(1000)
 
@@ -50,7 +56,7 @@ export const handlers = [
     // 검색어 필터링
     if (keyword) {
       filteredData = filteredData.filter((store) =>
-        store.name.toLowerCase().includes(keyword.toLowerCase()),
+        store.name.toLowerCase().includes(keyword.toLowerCase())
       )
     }
 
@@ -98,7 +104,7 @@ export const handlers = [
     })
   }),
   // Get Banners
-  http.get('/api/banners', async () => {
+  http.get('/api/v1/banners', async () => {
     await delay(500)
     return HttpResponse.json({
       status: 200,
@@ -108,7 +114,7 @@ export const handlers = [
   }),
 
   // Get Menu
-  http.get('/api/stores/:id/menus', async ({ request }) => {
+  http.get('/api/v1/stores/:id/menus', async ({ request }) => {
     return HttpResponse.json({
       status: 200,
       message: 'success',
@@ -117,12 +123,26 @@ export const handlers = [
   }),
 
   // Get Menu Options
-  http.get('/api/stores/:id/menus/:menuId/options', async ({ request }) => {
+  http.get('/api/v1/stores/:id/menus/:menuId/options', async ({ request }) => {
     await delay(2000)
     return HttpResponse.json({
       status: 200,
       message: 'success',
       data: MENU_OPTIONS_MOCK_DATA,
     })
+  }),
+
+  // Get Pending Reviews
+  http.get('/api/reviews/pending', async () => {
+    return HttpResponse.json({
+      status: 200,
+      message: 'success',
+      data: PENDING_REVIEWS_MOCK_DATA,
+    })
+  }),
+
+  // trend API는 실제 API로 통과
+  http.get('*/api/v1/stores/trend', () => {
+    return passthrough()
   }),
 ]

@@ -17,7 +17,7 @@ const LoginModal = () => {
   }
 
   return (
-    <div className="h-screen w-screen bg-white p-mobile_safe">
+    <div className="size-full bg-white p-mobile_safe">
       <div className="my-6 flex justify-end">
         <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
       </div>

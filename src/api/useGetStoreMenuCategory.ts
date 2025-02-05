@@ -9,7 +9,7 @@ const useGetStoreMenuCategory = (id: number) => {
 
     const { data: storeMenuCategory, isSuccess } = useQuery({
         queryKey: ['storeMenuCategory', id],
-        queryFn: async () => await mockApi.get<MenuCategory[]>(`api/stores/${id}/menus`),
+        queryFn: async () => await mockApi.get<MenuCategory[]>(`stores/${id}/menus`),
         enabled: isReady
       })
 

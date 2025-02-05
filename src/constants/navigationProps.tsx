@@ -53,6 +53,8 @@ const NAVIGATION_PROPS: Record<string, NavigationProps> = {
   },
   [ROUTE_PATHS.MYPAGE_EDIT_PROFILE]: {
     title: '내 정보 수정',
+  [ROUTE_PATHS.REVIEW]: {
+    title: '리뷰관리',
     hasBackButton: true,
   },
 }

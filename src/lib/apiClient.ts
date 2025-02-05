@@ -32,5 +32,5 @@ export const kyClient = ky.create({
 })
 
 export const mockClient = kyClient.extend({
-  prefixUrl: `http://localhost:3000`,
+  prefixUrl: `http://localhost:3000/api/v1`,
 })
