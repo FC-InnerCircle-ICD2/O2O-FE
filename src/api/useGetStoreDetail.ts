@@ -1,5 +1,5 @@
-import { api } from '@/lib/api';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { api } from '@/lib/api'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 interface StoreDetail {
   address: string
@@ -16,6 +16,7 @@ interface StoreDetail {
 }
 
 const useGetStoreDetail = (id: number) => {
+  
     const qc = useQueryClient()
 
     const { data: storeDetail, isSuccess } = useQuery({
@@ -36,6 +37,3 @@ const useGetStoreDetail = (id: number) => {
 }
 
 export default useGetStoreDetail
-
-
-

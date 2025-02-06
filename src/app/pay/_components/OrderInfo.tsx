@@ -1,10 +1,40 @@
+'use client'
+
 import MenuItem from '@/app/pay/_components/MenuItem'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Separator from '@/components/Separator'
 import { Checkbox } from '@/components/shadcn/checkbox'
+import usePostOrderPay, { OrderPay } from '@/api/usePostOrderPay'
 
 const OrderInfo = () => {
+  const orderData: OrderPay = {
+    storeId: '26466355',
+    roadAddress: '서울특별시 강남구 테헤란로 123',
+    jibunAddress: '서울특별시 강남구 역삼동 123-45',
+    detailAddress: '101호',
+    orderType: 'DELIVERY',
+    paymentType: 'TOSS_PAY',
+    orderMenus: [
+      {
+        id: '9e15c3da-cae8-4c25-8b4e-ae21a926f072',
+        quantity: 2,
+        orderMenuOptionGroups: [
+          {
+            id: '62f5ab82-6f9f-4344-964c-9a09a568df62',
+            orderMenuOptionIds: ['c5d18e3d-e643-49d6-b089-3dbb5a148800'],
+          },
+        ],
+      },
+    ],
+  }
+
+  const { orderPay, isSuccess } = usePostOrderPay(orderData)
+
+  if (isSuccess) {
+    console.log('주문 성공:', orderPay)
+  }
+
   return (
     <div className="mb-5 flex flex-col gap-5">
       <div className="flex flex-row justify-between">
@@ -24,12 +54,10 @@ const OrderInfo = () => {
           <div className="place-content-center text-sm font-bold">세종대로 14</div>
           <div className="place-content-center text-xs">(으)로 배달</div>
         </div>
-          <Icon name="ChevronRight" size={24} />
+        <Icon name="ChevronRight" size={24} />
       </div>
       <div>
-        <div className="ml-7 text-xs text-gray-700">
-          서울특별시 세종대로 14 그랜드센트럴(GRAND CENTRAL) 8층
-        </div>
+        <div className="ml-7 text-xs text-gray-700">서울특별시 강남구 테헤란로 123</div>
       </div>
       <div className="rounded-xl border border-solid border-gray-400">
         <div className="flex flex-row justify-between p-5">
