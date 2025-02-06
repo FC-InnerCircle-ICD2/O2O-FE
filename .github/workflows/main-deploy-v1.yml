@@ -1,4 +1,3 @@
-
 on:
   workflow_call:
 
@@ -28,6 +27,8 @@ jobs:
           context: .
           push: true
           tags: yong7317/o2o-fe:latest
+          build-args: |
+            ENV_CONTENT="${{ secrets.ENV_PROPERTIES }}"
 
       # EC2 도커 컴포즈 실행
       - name: SSH and Deploy
