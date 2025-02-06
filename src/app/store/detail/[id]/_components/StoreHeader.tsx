@@ -39,7 +39,7 @@ const StoreHeader = ({ isHeaderOpaque, isSuccess, title, isOrderDetail = false }
   return (
     <div
       className={cn(
-        'h-detail_header fixed top-0 z-20 flex w-full items-center justify-between pt-2 transition-all duration-200',
+        'h-detail_header fixed top-0 z-20 flex w-full max-w-[480px] min-w-[320px] items-center justify-between pt-2 transition-all duration-200',
         isHeaderOpaque
           ? 'border-b border-solid border-gray-200 bg-white px-[10px]'
           : 'bg-transparent px-mobile_safe',

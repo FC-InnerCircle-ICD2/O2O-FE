@@ -1,13 +1,64 @@
 import BANNER_MOCK_DATA from '@/constants/banners'
-import { MENU_MOCK_DATA } from '@/constants/menu'
 import { MENU_OPTIONS_MOCK_DATA } from '@/constants/menuOptions'
 import { PENDING_REVIEWS_MOCK_DATA } from '@/constants/pendingReviews'
-import REAL_TIME_SEARCHES from '@/constants/realTimeSearches'
 import STORE_MOCK_DATA from '@/constants/stores'
 import { delay, http, HttpResponse, passthrough } from 'msw'
 
 // API 엔드포인트 예시
 export const handlers = [
+  // Next.js 웹팩 핫 리로딩 요청 무시
+  http.get('/_next/static/webpack/*', () => {
+    return passthrough()
+  }),
+  
+  // Next.js 정적 미디어 파일 요청 무시
+  http.get('/_next/static/media/*', () => {
+    return passthrough()
+  }),
+  
+  // Next.js 청크 파일 요청 무시
+  http.get('/_next/static/chunks/*', () => {
+    return passthrough()
+  }),
+  
+  // 카카오 이미지 요청 처리
+  http.get('https://t1.kakaocdn.net/*', async ({ request }) => {
+    try {
+      const response = await fetch(request.url)
+      const imageBuffer = await response.arrayBuffer()
+
+      return new HttpResponse(imageBuffer, {
+        headers: {
+          'Content-Type': response.headers.get('Content-Type') || 'image/jpeg',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'public, max-age=31536000, immutable',
+        },
+      })
+    } catch (error) {
+      console.error('카카오 이미지 로딩 실패:', error)
+      return passthrough()
+    }
+  }),
+
+  // 카카오 이미지 요청 처리 (img1)
+  http.get('https://img1.kakaocdn.net/*', async ({ request }) => {
+    try {
+      const response = await fetch(request.url)
+      const imageBuffer = await response.arrayBuffer()
+
+      return new HttpResponse(imageBuffer, {
+        headers: {
+          'Content-Type': response.headers.get('Content-Type') || 'image/jpeg',
+          'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'public, max-age=31536000, immutable',
+        },
+      })
+    } catch (error) {
+      console.error('카카오 이미지 로딩 실패:', error)
+      return passthrough()
+    }
+  }),
+  
   http.get('/_next/image', async ({ request }) => {
     const originalUrl = new URL(request.url)
     const imageUrl = originalUrl.searchParams.get('url')
@@ -16,8 +67,11 @@ export const handlers = [
       return new HttpResponse(null, { status: 400 })
     }
 
-    // 외부 이미지 URL인 경우 (예: unsplash) passthrough
-    if (imageUrl.startsWith('https://images.unsplash.com')) {
+    // 외부 이미지 URL인 경우 passthrough
+    if (
+      imageUrl.startsWith('https://images.unsplash.com') ||
+      imageUrl.includes('kakaocdn.net')
+    ) {
       return passthrough()
     }
 
@@ -110,12 +164,8 @@ export const handlers = [
   }),
 
   // Get Menu
-  http.get('/api/v1/stores/:id/menus', async ({ request }) => {
-    return HttpResponse.json({
-      status: 200,
-      message: 'success',
-      data: MENU_MOCK_DATA,
-    })
+  http.get('*/api/v1/stores/:id/menus', () => {
+    return passthrough()
   }),
 
   // Get Menu Options
@@ -137,17 +187,13 @@ export const handlers = [
     })
   }),
 
+  // trend API는 실제 API로 통과
+  http.get('*/api/v1/stores/trend', () => {
+    return passthrough()
+  }),
 
-  // 실시간 급상승 검색어
-  http.get('/api/v1/stores/trend', async () => {
-    // 배열에서 랜덤으로 6개 항목 선택
-    const shuffled = [...REAL_TIME_SEARCHES].sort(() => 0.5 - Math.random())
-    const selected = shuffled.slice(0, 6).map((item, index) => ({ rank: index + 1, keyword: item }))
-
-    return HttpResponse.json({
-      status: 200,
-      message: 'success',
-      data: selected,
-    })
+  // trend API는 실제 API로 통과
+  http.get('*/api/v1/stores/:id', () => {
+    return passthrough()
   }),
 ]

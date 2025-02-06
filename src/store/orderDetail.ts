@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 
 interface OrderDetail {
-  storeId: number
-  menuId: number  
+  storeId: string
+  menuId: string  
   imageUrl: string
   originX: number
   originY: number

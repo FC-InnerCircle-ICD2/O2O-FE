@@ -127,10 +127,10 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   //   if (!address) return <Loading />
 
   if (pathname === ROUTE_PATHS.WELCOME)
-    return <div className="flex h-full flex-col">{children}</div>
+    return <div className="flex h-full flex-col max-w-[480px] min-w-[320px] mx-auto bg-white">{children}</div>
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full flex-col max-w-[480px] min-w-[320px] mx-auto bg-white">
       {!pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) && (
         <Navigation {...getNavigationProps(pathname)} />
       )}
