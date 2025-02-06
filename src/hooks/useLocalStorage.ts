@@ -12,8 +12,13 @@ const globalStorageHandler = (event: StorageEvent) => {
 
   const keyListeners = listeners.get(key)
   if (event.newValue && keyListeners) {
-    const newValue = JSON.parse(event.newValue)
-    keyListeners.forEach((listener) => listener(newValue))
+    try {
+      const newValue = JSON.parse(event.newValue)
+      keyListeners.forEach((listener) => listener(newValue))
+    } catch (e) {
+      // JSON 파싱에 실패하면 일반 문자열로 처리
+      keyListeners.forEach((listener) => listener(event.newValue))
+    }
   }
 }
 
@@ -46,13 +51,14 @@ export function useLocalStorage<T>(
         }
 
         setStoredValue(valueToStore)
-        localStorage.setItem(key, typeof valueToStore === 'string' ? valueToStore : JSON.stringify(valueToStore))
+        const stringifiedValue = typeof valueToStore === 'string' ? valueToStore : JSON.stringify(valueToStore)
+        localStorage.setItem(key, stringifiedValue)
 
         // 같은 창에서의 변경사항도 감지하기 위한 커스텀 이벤트 발생
         window.dispatchEvent(
           new StorageEvent('storage', {
             key: key,
-            newValue: JSON.stringify(valueToStore),
+            newValue: stringifiedValue,
           }),
         )
       } catch (error) {
@@ -77,7 +83,14 @@ export function useLocalStorage<T>(
     try {
       const item = localStorage.getItem(key)
       if (item) {
-        setStoredValue(typeof item !== 'string' ? JSON.parse(item) : item)
+        try {
+          // 첫 번째로 JSON 파싱을 시도
+          const parsedItem = JSON.parse(item)
+          setStoredValue(parsedItem)
+        } catch (e) {
+          // JSON 파싱에 실패하면 일반 문자열로 처리
+          setStoredValue(item as T)
+        }
       } else {
         setStoredValue(initialValue)
       }
