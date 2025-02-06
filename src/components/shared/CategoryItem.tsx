@@ -40,11 +40,12 @@ const CategoryItem = ({
         style={{ overflow: 'hidden' }}
       >
         {!isHide && isActive && (
-          <div className="absolute left-[2px] top-[2px] -z-10 size-[42px] animate-[scaleIn_150ms_ease-out] rounded-full bg-primary-foreground/10 transition-transform duration-150 active:scale-90" />
+          <div className="absolute left-[2px] top-[2px] size-[42px] animate-[scaleIn_150ms_ease-out] rounded-full bg-primary-foreground/10 transition-transform duration-150 active:scale-90" />
         )}
         <AnimatePresence mode="wait">
           {!isHide && (
             <motion.div
+              className='z-10 relative'
               initial={{ opacity: 0, y: -5 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
