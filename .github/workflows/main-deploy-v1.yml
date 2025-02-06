@@ -33,8 +33,6 @@ jobs:
           context: .
           push: true
           tags: yong7317/o2o-fe:latest
-          build-args: |
-            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
 
       # EC2 도커 컴포즈 실행
       - name: SSH and Deploy

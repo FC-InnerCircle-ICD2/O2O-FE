@@ -6,11 +6,11 @@ WORKDIR /app
 # 필요한 시스템 패키지 설치
 RUN apk add --no-cache libc6-compat
 
-# 환경 변수 파일을 먼저 복사 (이 부분이 중요합니다)
-COPY .env ./
-
 # 전체 소스 코드 복사
 COPY . .
+
+# .env 파일이 이미 소스 코드와 함께 복사되었으므로 별도의 COPY 명령은 필요하지 않습니다
+# COPY .env ./ 라인 제거
 
 # nodeLinker를 node-modules로 설정
 RUN rm .yarnrc.yml && \
