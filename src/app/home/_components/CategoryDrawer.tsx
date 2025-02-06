@@ -48,10 +48,6 @@ const CategoryDrawer = () => {
     setOrder(OrderType.RANKING)
   }, [])
 
-  useEffect(() => {
-    console.log({ categoryList, category })
-  }, [categoryList, category])
-
   return (
     <div
       className={cn(
