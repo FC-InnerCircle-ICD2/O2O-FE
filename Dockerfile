@@ -5,12 +5,11 @@ RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
-# 먼저 package.json만 복사
-COPY package.json ./
-
-# Yarn Berry 설정 파일들 복사
-COPY .yarnrc.yml ./
-COPY .yarn ./.yarn
+# package.json과 Yarn 설정 파일들 복사
+COPY package.json .yarnrc.yml ./
+COPY .yarn/releases .yarn/releases/
+COPY .yarn/plugins .yarn/plugins/
+COPY .yarn/sdks .yarn/sdks/
 COPY yarn.lock ./
 
 # 의존성 설치
