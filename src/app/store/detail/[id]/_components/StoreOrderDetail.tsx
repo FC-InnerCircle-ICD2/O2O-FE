@@ -9,7 +9,6 @@ import { useThrottle } from "@/hooks/useThrottle"
 import { cn } from "@/lib/utils"
 import { MenuGroupOption } from "@/models/menu"
 import { orderDetailStore } from "@/store/orderDetail"
-import { orderListStore } from "@/store/orderList"
 import { COLORS } from "@/styles/color"
 import { motion } from "motion/react"
 import Image from "next/image"
@@ -22,8 +21,7 @@ import StoreHeader from "./StoreHeader"
 import { IMAGE_HEIGHT } from "./StoreImage"
 
 const StoreOrderDetail = () => {
-    const { orderDetail } = orderDetailStore()
-    const { orderList, setOrderList } = orderListStore()
+    const { orderDetail, hideOrderDetail } = orderDetailStore()
 
     const containerRef = useRef<HTMLDivElement>(null)
     const descriptionRef = useRef<HTMLParagraphElement>(null)
@@ -35,7 +33,7 @@ const StoreOrderDetail = () => {
     const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
     const [selectedOptions, setSelectedOptions] = useState<Record<string, MenuGroupOption[]>>({})
 
-    const { storeMenuOptions, isSuccess } = useGetStoreMenuOptions(orderDetail?.storeId ?? 'ass', orderDetail?.menuId ?? 0)
+    const { storeMenuOptions, isSuccess } = useGetStoreMenuOptions(orderDetail?.storeId ?? 0, orderDetail?.menuId ?? 0)
 
     const onChangeOption = (id: string, action: 'add' | 'remove' | 'change', option: MenuGroupOption) => {
         setSelectedOptions(prev => {
@@ -61,6 +59,14 @@ const StoreOrderDetail = () => {
         })
     }
 
+    useEffect(() => {
+        const totalOptionPrice = Object.values(selectedOptions).reduce((total, options) => {
+            return total + options.reduce((sum, option) => sum + (option.price || 0), 0)
+        }, 0)
+
+        setPrice(priceRef.current + totalOptionPrice)
+    }, [selectedOptions])
+
     const updateActiveCategory = useCallback(() => {
         const container = containerRef.current
         if (!container) return
@@ -71,28 +77,6 @@ const StoreOrderDetail = () => {
     }, [])
 
     const handleScroll = useThrottle(updateActiveCategory, 50)
-
-    const handleOrder = () => {
-        setOrderList({
-            storeId: orderDetail?.storeId.toString() ?? 'aa',
-            price: price,
-            menu: {
-                menuId: storeMenuOptions?.menuId ?? '',
-                name: storeMenuOptions?.name ?? '',
-                imgUrl: storeMenuOptions?.imgUrl ?? '',
-                optionNames: Object.values(selectedOptions).map(options => options.map(option => option.name).join(', ')).join(', '),
-                selectedOptions
-            },
-        })
-    }
-
-    useEffect(() => {
-        const totalOptionPrice = Object.values(selectedOptions).reduce((total, options) => {
-            return total + options.reduce((sum, option) => sum + (option.price || 0), 0)
-        }, 0)
-
-        setPrice(priceRef.current + totalOptionPrice)
-    }, [selectedOptions])      
 
     useEffect(() => {
         const container = containerRef.current
@@ -131,7 +115,7 @@ const StoreOrderDetail = () => {
     if (!orderDetail) return null
     return (
         createPortal(
-            <div className="fixed max-w-[480px] min-w-[320px] mx-auto inset-0 z-50 bg-black/50 transition-opacity duration-300">
+            <div className="fixed inset-0 z-50 bg-black/50 transition-opacity duration-300">
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -155,8 +139,8 @@ const StoreOrderDetail = () => {
                     animate={{
                         top: 0,
                         left: 0,
-                        width: '100%',
-                        height: '100%',
+                        width: '100dvw',
+                        height: '100dvh',
                         x: 0,
                         y: 0,
                         borderRadius: '0px',
@@ -217,7 +201,7 @@ const StoreOrderDetail = () => {
                         </div>
 
                         <div>
-                            {!storeMenuOptions ? new Array(2).fill(0).map((_, index) => <MenuOptionSkeleton key={index} />) : storeMenuOptions?.menuOptionGroups.map((menu, index) => <MenuOption key={menu.id} id={menu.id} title={menu.name} type={menu.type} limit={menu.limit} options={menu.options} onChangeOption={onChangeOption} />)}
+                            {!storeMenuOptions ? new Array(2).fill(0).map((_, index) => <MenuOptionSkeleton key={index} />) : storeMenuOptions?.menuOptionGroups.map((menu, index) => <MenuOption key={menu.id} id={`option-${index}`} title={menu.name} type={menu.type} limit={menu.limit} options={menu.options} onChangeOption={onChangeOption} />)}
                         </div>
 
                         <div className="flex justify-between items-center px-mobile_safe py-4">
@@ -243,7 +227,7 @@ const StoreOrderDetail = () => {
                     }}
                 >
                     <p className="text-sm text-center text-red-600 font-bold py-4">18,000원부터 배달 가능해요</p>
-                    <Button className="text-base font-semibold" onClick={handleOrder}>{price.toLocaleString()}원 주문하기</Button>
+                    <Button className="text-base font-semibold">{price.toLocaleString()}원 주문하기</Button>
                 </motion.div>
             </div>,
             document.body
