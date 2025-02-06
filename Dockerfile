@@ -11,12 +11,16 @@ COPY . .
 
 # ENV_CONTENT build-arg를 통해 .env 파일 생성
 ARG ENV_CONTENT
-RUN echo "${ENV_CONTENT}" > .env
+RUN echo "${ENV_CONTENT}" > .env && \
+    echo "ENV_CONTENT value:" && \
+    echo "${ENV_CONTENT}"
 
-# .env 파일 확인
+# .env 파일 확인 및 내용 출력
 RUN echo "=== Checking .env file ===" && \
     ls -la .env && \
-    echo "=== .env contents ===" && \
+    echo "=== Current directory contents ===" && \
+    ls -la && \
+    echo "=== .env file contents ===" && \
     cat .env
 
 # nodeLinker를 node-modules로 설정
