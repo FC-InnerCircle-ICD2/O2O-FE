@@ -8,6 +8,7 @@ interface OrdersDetail {
     desc: string
   }
   orderTime: string
+  storeName: string
   tel: string
   roadAddress: string
   jibunAddress: string
