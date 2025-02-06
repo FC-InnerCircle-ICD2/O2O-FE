@@ -8,7 +8,6 @@ WORKDIR /app
 # package.json과 Yarn 설정 파일들 복사
 COPY package.json .yarnrc.yml ./
 COPY .yarn/releases .yarn/releases/
-COPY .yarn/plugins .yarn/plugins/
 COPY yarn.lock ./
 
 # 의존성 설치
