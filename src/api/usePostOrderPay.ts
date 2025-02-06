@@ -1,5 +1,5 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export interface OrderPay {
   storeId: string // 가게ID
@@ -24,11 +24,11 @@ const usePostOrderPay = (orderPayData: OrderPay) => {
   const { data: orderPay, isSuccess } = useQuery({
     queryKey: ['orderPay'],
     queryFn: async () => {
-      const authToken = localStorage.getItem('authToken')
+      const accessToken = localStorage.getItem('accessToken')
       const headers: Record<string, string> = {}
 
-      if (authToken) {
-        headers.Authorization = authToken
+      if (accessToken) {
+        headers.Authorization = accessToken
       }
 
       return await api.post<OrderPay>(`orders`, orderPayData, {

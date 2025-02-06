@@ -1,5 +1,5 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export interface Orders {
   content: []
@@ -28,19 +28,13 @@ const useGetOrders = () => {
   const { data: orders, isSuccess } = useQuery({
     queryKey: ['orders'],
     queryFn: async () => {
-      const authToken = localStorage.getItem('authToken')
-      const headers: Record<string, string> = {}
       const params: Record<string, string> = {}
 
-      if (authToken) {
-        headers.Authorization = authToken
-        params.page = ''
-        params.size = ''
-        params.keyword = ''
-      }
+      params.page = ''
+      params.size = ''
+      params.keyword = ''
 
       return await api.get<Orders>(`orders`, {
-        headers,
         searchParams: params,
       })
     },
