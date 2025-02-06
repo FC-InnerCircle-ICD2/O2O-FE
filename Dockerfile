@@ -33,7 +33,7 @@ COPY --from=builder /app/next.config.ts ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/.env ./
+# COPY --from=builder /app/.env ./
 
 # 보안을 위한 비root 유저 설정
 RUN addgroup --system --gid 1001 nodejs
