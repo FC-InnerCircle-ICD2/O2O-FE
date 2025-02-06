@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 
-export const useScrollToTop = <T extends HTMLElement>(dependencies?: any, callBack?: () => void) => {
+interface ScrollToTopProps {
+  dependencies?: any
+  callBack?: () => void
+}
+
+export const useScrollToTop = <T extends HTMLElement>({ dependencies, callBack }: ScrollToTopProps) => {
   const topRef = useRef<T>(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
 
@@ -36,7 +41,7 @@ export const useScrollToTop = <T extends HTMLElement>(dependencies?: any, callBa
     }
   }, [dependencies])
 
-  const scrollToTop = () => {
+  const scrollToTop = () => {    
     if (callBack) {
       callBack()
     } else if (topRef.current) {

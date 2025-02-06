@@ -1,11 +1,11 @@
-import Chip from '@/components/Chip'
 import Image from 'next/image'
 import { Button } from '@/components/button'
 import Badge from '@/components/Badge'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
+import { OrdersList } from '@/api/useGetOrders'
 
-const OrderItem = () => {
+const OrderItem = ({ order }: OrdersList) => {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-row">
@@ -21,24 +21,28 @@ const OrderItem = () => {
         />
         <div className="flex w-[calc(100%-1rem-100px)] flex-col gap-4 pl-4">
           <div className="flex flex-row justify-between">
-            <Badge variant="complete">배달완료</Badge>
-            <div className="place-content-center text-xs text-gray-400">2025.01.11 오후 07:24</div>
+            <Badge variant="complete">{order.status.desc}</Badge>
+            <div className="place-content-center text-xs text-gray-400">
+              {new Date(order.orderTime).toLocaleString()}
+            </div>
           </div>
           <div className="flex flex-col gap-2">
-            <div className="truncate text-lg font-bold hover:text-clip">빙동댕</div>
-            <div className="text-sm text-gray-700">새우 로제 파스타 외 2개 20,000원</div>
+            <div className="truncate text-lg font-bold hover:text-clip">{order.storeName}</div>
+            <div className="text-sm text-gray-700">{order.orderSummary}</div>
           </div>
         </div>
       </div>
-      <div className="flex flex-row justify-center gap-3">
-        <Link className="w-1/2" href={ROUTE_PATHS.ORDER_DETAIL}>
+      <div className="flex flex-row gap-3">
+        <Link className="w-full" href={`${ROUTE_PATHS.ORDERS_DETAIL}/${order.orderId}`}>
           <Button size="s" className="h-10">
             주문 상세
           </Button>
         </Link>
-        <Button variant="grayFit" size="s" className="h-10 w-1/2">
-          리뷰 달기
-        </Button>
+        <Link className="w-full" href={ROUTE_PATHS.REVIEW}>
+          <Button variant="grayFit" size="s" className="h-10">
+            리뷰 달기
+          </Button>
+        </Link>
       </div>
     </div>
   )

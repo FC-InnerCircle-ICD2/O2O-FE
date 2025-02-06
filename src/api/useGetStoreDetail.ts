@@ -1,11 +1,11 @@
-import { api } from '@/lib/api';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { api } from '@/lib/api'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 interface StoreDetail {
   address: string
   deliveryTime: string
   freeDelivery: boolean
-  id: number
+  id: string
   imageMain: string
   latitude: number
   longitude: number
@@ -16,6 +16,7 @@ interface StoreDetail {
 }
 
 const useGetStoreDetail = (id: number) => {
+  
     const qc = useQueryClient()
 
     const { data: storeDetail, isSuccess } = useQuery({
@@ -28,14 +29,11 @@ const useGetStoreDetail = (id: number) => {
         })
     })
 
-      const resetStoreDetail = () => {
-        qc.removeQueries({ queryKey: ['storeDetail', id] })
-      }
+    const resetStoreDetail = () => {
+      qc.removeQueries({ queryKey: ['storeDetail', id] })
+    }
 
-      return { storeDetail, resetStoreDetail, isSuccess }
+    return { storeDetail, resetStoreDetail, isSuccess }
 }
 
 export default useGetStoreDetail
-
-
-

@@ -18,7 +18,7 @@ interface HomeSearchFoodListProps {
 
 const HomeSearchFoodList = ({ data, isLoading, targetRef, scrollRef }: HomeSearchFoodListProps) => {
   const { order, category } = useFoodSearchFilterStore()
-  const { topRef, showScrollButton, scrollToTop } = useScrollToTop<HTMLParagraphElement>()
+  const { topRef, showScrollButton, scrollToTop } = useScrollToTop<HTMLParagraphElement>({})
 
   useEffect(() => {
     scrollToTop()

@@ -6,9 +6,17 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_API_MOCKING=${NEXT_PUBLIC_API_MOCKING}
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+        - NEXT_PUBLIC_KAKAO_APP_KEY=${NEXT_PUBLIC_KAKAO_APP_KEY}
     image: yong7317/o2o-fe:latest
     ports:
       - '3000:3000'
+    environment:
+      - NEXT_PUBLIC_API_MOCKING=${NEXT_PUBLIC_API_MOCKING}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+      - NEXT_PUBLIC_KAKAO_APP_KEY=${NEXT_PUBLIC_KAKAO_APP_KEY}
     networks:
       - o2o-network
   
