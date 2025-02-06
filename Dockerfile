@@ -1,40 +1,26 @@
-FROM node:20-alpine AS base
+FROM node:20-alpine
 
-FROM base AS deps
-
+# 필요한 시스템 패키지 설치
 RUN apk add --no-cache libc6-compat
 
 WORKDIR /app
 
-COPY package.json yarn.lock .yarnrc.yml ./
-COPY .yarn/releases/yarn-4.5.3.cjs .yarn/releases/yarn-4.5.3.cjs
+# 먼저 package.json만 복사
+COPY package.json ./
 
+# Yarn Berry 설정 파일들 복사
+COPY .yarnrc.yml ./
+COPY .yarn ./.yarn
+COPY yarn.lock ./
+
+# 의존성 설치
 RUN yarn install --immutable
 
-FROM base AS builder
-
-WORKDIR /app
-
-COPY --from=deps /app/node_modules ./node_modules
+# 소스 코드 복사
 COPY . .
 
+# 빌드
 RUN yarn build
 
-FROM base AS runner
-
-WORKDIR /app
-
-ENV NODE_ENV=production
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=builder /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
-
-EXPOSE 3000
-
-CMD ["node", "server.js"]
+# 서버 실행
+CMD ["yarn", "start"]
