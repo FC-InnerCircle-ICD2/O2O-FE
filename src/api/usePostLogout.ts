@@ -5,9 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 const usePostLogout = () => {
     const queryClient = useQueryClient()
     const accessToken = useLocalStorage('accessToken')
-    const accessTokenExpiresIn = useLocalStorage('accessTokenExpiresIn')
     const refreshToken = useLocalStorage('refreshToken')
-    const refreshTokenExpiresIn = useLocalStorage('refreshTokenExpiresIn')
     return useMutation({
         mutationFn: async () => await api.post(`auth/logout`, {
             accessToken: accessToken.storedValue,
@@ -15,9 +13,7 @@ const usePostLogout = () => {
         }),
         onSuccess: () => {
             accessToken.resetValue()
-            accessTokenExpiresIn.resetValue()
             refreshToken.resetValue()
-            refreshTokenExpiresIn.resetValue()
             queryClient.setQueryData(['member'], null)
         }
     })
