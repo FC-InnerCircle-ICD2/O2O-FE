@@ -18,6 +18,10 @@ RUN rm .yarnrc.yml && \
 RUN rm -rf node_modules .yarn/cache .pnp.* && \
     yarn install
 
+# ENV_PROPERTIES에서 환경 변수 설정
+ARG ENV_PROPERTIES
+RUN echo "${ENV_PROPERTIES}" > .env
+
 # 빌드
 ENV NODE_ENV production
 RUN yarn build
@@ -33,6 +37,7 @@ COPY --from=builder /app/next.config.ts ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/.env ./
 
 # 보안을 위한 비root 유저 설정
 RUN addgroup --system --gid 1001 nodejs
