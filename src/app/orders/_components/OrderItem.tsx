@@ -3,7 +3,7 @@ import { Button } from '@/components/button'
 import Badge from '@/components/Badge'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
-import { Orders, OrdersList } from '@/api/useGetOrders'
+import { OrdersList } from '@/api/useGetOrders'
 
 const OrderItem = ({ order }: OrdersList) => {
   return (
@@ -33,7 +33,7 @@ const OrderItem = ({ order }: OrdersList) => {
         </div>
       </div>
       <div className="flex flex-row gap-3">
-        <Link className="w-full" href={`${ROUTE_PATHS.ORDERS_DETAIL}/1`}>
+        <Link className="w-full" href={`${ROUTE_PATHS.ORDERS_DETAIL}/${order.orderId}`}>
           <Button size="s" className="h-10">
             주문 상세
           </Button>

@@ -10,7 +10,6 @@ import React from 'react'
 const Order = () => {
   const { orders, resetGetOrders, isSuccess } = useGetOrders()
 
-  console.log(orders)
   return (
     <>
       <div className="flex flex-col gap-10 pt-5">
