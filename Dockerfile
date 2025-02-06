@@ -9,8 +9,11 @@ RUN apk add --no-cache libc6-compat
 # 전체 소스 코드 복사
 COPY . .
 
-# .env 파일이 이미 소스 코드와 함께 복사되었으므로 별도의 COPY 명령은 필요하지 않습니다
-# COPY .env ./ 라인 제거
+# .env 파일 확인
+RUN echo "=== Checking .env file ===" && \
+    ls -la .env && \
+    echo "=== .env contents ===" && \
+    cat .env
 
 # nodeLinker를 node-modules로 설정
 RUN rm .yarnrc.yml && \
