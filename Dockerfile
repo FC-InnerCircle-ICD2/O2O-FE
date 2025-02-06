@@ -11,9 +11,9 @@ COPY . .
 
 # ENV_CONTENT build-arg를 통해 .env 파일 생성
 ARG ENV_CONTENT
-RUN echo ${ENV_CONTENT} > .env && \
+RUN printf "%s" "$ENV_CONTENT" > .env && \
     echo "ENV_CONTENT value:" && \
-    echo ${ENV_CONTENT}
+    cat .env
 
 # .env 파일 확인 및 내용 출력
 RUN echo "=== Checking .env file ===" && \
