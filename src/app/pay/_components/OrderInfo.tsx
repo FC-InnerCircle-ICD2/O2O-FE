@@ -6,34 +6,39 @@ import Icon from '@/components/Icon'
 import Separator from '@/components/Separator'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import usePostOrderPay, { OrderPay } from '@/api/usePostOrderPay'
+import { OrderList, orderListStore } from '@/store/orderList'
 
 const OrderInfo = () => {
-  const orderData: OrderPay = {
-    storeId: '26466355',
-    roadAddress: '서울특별시 강남구 테헤란로 123',
-    jibunAddress: '서울특별시 강남구 역삼동 123-45',
-    detailAddress: '101호',
-    orderType: 'DELIVERY',
-    paymentType: 'TOSS_PAY',
-    orderMenus: [
-      {
-        id: '9e15c3da-cae8-4c25-8b4e-ae21a926f072',
-        quantity: 2,
-        orderMenuOptionGroups: [
-          {
-            id: '62f5ab82-6f9f-4344-964c-9a09a568df62',
-            orderMenuOptionIds: ['c5d18e3d-e643-49d6-b089-3dbb5a148800'],
-          },
-        ],
-      },
-    ],
-  }
+  const orderList = orderListStore()
 
-  const { orderPay, isSuccess } = usePostOrderPay(orderData)
+  // const orderData: OrderPay = {
+  //   storeId: orderList.storeId,
+  //   roadAddress: '서울특별시 강남구 테헤란로 123',
+  //   jibunAddress: '서울특별시 강남구 역삼동 123-45',
+  //   detailAddress: '101호',
+  //   orderType: 'DELIVERY',
+  //   paymentType: 'TOSS_PAY',
+  //   orderMenus: [
+  //     {
+  //       id: '9e15c3da-cae8-4c25-8b4e-ae21a926f072',
+  //       quantity: 2,
+  //       orderMenuOptionGroups: [
+  //         {
+  //           id: '62f5ab82-6f9f-4344-964c-9a09a568df62',
+  //           orderMenuOptionIds: ['c5d18e3d-e643-49d6-b089-3dbb5a148800'],
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // }
 
-  if (isSuccess) {
-    console.log('주문 성공:', orderPay)
-  }
+  // console.log('orderList', orderList)
+
+  // const { orderPay, isSuccess } = usePostOrderPay(orderList)
+
+  // if (isSuccess) {
+  //   console.log('주문 성공:', orderPay)
+  // }
 
   return (
     <div className="mb-5 flex flex-col gap-5">
@@ -66,8 +71,9 @@ const OrderInfo = () => {
         </div>
         <Separator className="mb-5" />
         <div className="flex flex-col gap-1">
-          <MenuItem />
-          <MenuItem />
+          {orderList.map(() => (
+            <MenuItem />
+          ))}
         </div>
         <Separator className="mb-5 mt-5" />
         <div className="mb-5 flex flex-row items-center justify-center gap-1">
