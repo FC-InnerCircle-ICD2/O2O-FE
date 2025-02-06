@@ -12,8 +12,10 @@ import { MenuGroupOption } from "@/models/menu"
 import { orderDetailStore } from "@/store/orderDetail"
 import { orderListStore } from "@/store/orderList"
 import { COLORS } from "@/styles/color"
+import { ROUTE_PATHS } from "@/utils/routes"
 import { motion } from "motion/react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import MenuOption from "./MenuOption"
@@ -38,6 +40,8 @@ const StoreOrderDetail = () => {
     const [isValid, setIsValid] = useState(false)
 
     const { storeMenuOptions, isSuccess } = useGetStoreMenuOptions(orderDetail?.storeId ?? '', orderDetail?.menuId ?? '')
+
+    const router = useRouter()
 
     const onChangeOption = (id: string, action: 'add' | 'remove' | 'change', option: MenuGroupOption) => {
         setSelectedOptions(prev => {
@@ -102,6 +106,8 @@ const StoreOrderDetail = () => {
                 selectedOptions
             },
         })
+
+        router.push(ROUTE_PATHS.PAY)
     }
 
     useEffect(() => {

@@ -1,5 +1,5 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 interface OrdersDetail {
   orderId: string
@@ -55,16 +55,9 @@ const useGetOrdersDetail = (orderId?: string) => {
   const { data: ordersDetail, isSuccess } = useQuery({
     queryKey: ['ordersDetail'],
     queryFn: async () => {
-      const authToken = localStorage.getItem('authToken')
-      const headers: Record<string, string> = {}
 
-      if (authToken) {
-        headers.Authorization = authToken
-      }
 
-      return await api.get<OrdersDetail>(`orders/${orderId}`, {
-        headers,
-      })
+      return await api.get<OrdersDetail>(`orders/${orderId}`)
     },
   })
 

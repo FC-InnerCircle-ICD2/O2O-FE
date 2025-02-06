@@ -1,12 +1,10 @@
 import { api } from '@/lib/api';
 import { MenuOption } from '@/models/menu';
-import { useMockReady } from '@/providers/MockProvider';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 
 const useGetStoreMenuOptions = (id: string, menuId: string) => {
     const qc = useQueryClient()
-    const isMockReady = useMockReady()
 
     const { data: storeMenuOptions, isSuccess } = useQuery({
         queryKey: ['storeMenuOptions', id, menuId],
