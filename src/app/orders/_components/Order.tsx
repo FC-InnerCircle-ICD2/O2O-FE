@@ -3,7 +3,7 @@
 import OrderSearch from '@/app/orders/_components/OrderSearch'
 import OrderItem from '@/app/orders/_components/OrderItem'
 import Separator from '@/components/Separator'
-import useGetOrders from '@/api/useGetOrders'
+import useGetOrders, { Orders, OrdersList } from '@/api/useGetOrders'
 import { v4 as uuidv4 } from 'uuid'
 import React from 'react'
 

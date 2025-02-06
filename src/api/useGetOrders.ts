@@ -1,19 +1,25 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 
-export interface Order {
-  storeId: string
-  storeName: string
-  orderId: string
-  status: {
-    code: string
-    desc: string
+export interface Orders {
+  content: []
+}
+
+export interface OrdersList {
+  order: {
+    storeId: string
+    storeName: string
+    orderId: string
+    status: {
+      code: string
+      desc: string
+    }
+    orderTime: string
+    orderSummary: string
+    deliveryCompleteTime: string | null
+    imageThumbnail: string
+    paymentPrice: number
   }
-  orderTime: string // ISO 8601 형식의 날짜 문자열
-  orderSummary: string
-  deliveryCompleteTime: string | null // 완료 시간이 없을 수 있으므로 null 허용
-  imageThumbnail: string
-  paymentPrice: number
 }
 
 const useGetOrders = () => {
@@ -33,7 +39,7 @@ const useGetOrders = () => {
         params.keyword = ''
       }
 
-      return await api.get<Order>(`orders`, {
+      return await api.get<Orders>(`orders`, {
         headers,
         searchParams: params,
       })
