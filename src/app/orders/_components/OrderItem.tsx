@@ -3,7 +3,7 @@ import { Button } from '@/components/button'
 import Badge from '@/components/Badge'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
-import { Orders, OrdersList } from '@/api/useGetOrders'
+import { OrdersList } from '@/api/useGetOrders'
 
 const OrderItem = ({ order }: OrdersList) => {
   return (

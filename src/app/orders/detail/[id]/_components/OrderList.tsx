@@ -4,7 +4,56 @@ import { Button } from '@/components/button'
 import Link from 'next/link'
 import { ROUTE_PATHS } from '@/utils/routes'
 
-const OrderList = () => {
+interface OrderDataList {
+  ordersData: {
+    orderId: string
+    status: {
+      code: string
+      desc: string
+    }
+    orderTime: string
+    tel: string
+    roadAddress: string
+    jibunAddress: string
+    detailAddress: string
+    excludingSpoonAndFork: boolean
+    requestToRider: string | null
+    orderPrice: number
+    deliveryPrice: number
+    deliveryCompleteTime: string | null
+    paymentPrice: number
+    paymentId: number
+    paymentType: {
+      code: string
+      desc: string
+    }
+    type: {
+      code: string
+      desc: string
+    }
+    orderMenus: {
+      id: number
+      menuId: string
+      menuName: string
+      menuQuantity: number
+      menuPrice: number
+      totalPrice: number
+      orderMenuOptionGroups: {
+        id: number
+        orderMenuId: number
+        orderMenuOptionGroupName: string
+        orderMenuOptions: {
+          id: number
+          orderMenuOptionGroupId: number
+          menuOptionName: string
+          menuOptionPrice: number
+        }[]
+      }[]
+    }[]
+  }
+}
+
+const OrderList = ({ ordersData }: OrderDataList) => {
   return (
     <div className="flex flex-col gap-2.5 px-mobile_safe">
       <div className="flex flex-row items-center justify-between py-2">
@@ -16,11 +65,13 @@ const OrderList = () => {
         <div className="flex flex-col gap-3">
           <div className="flex flex-row justify-between">
             <div className="text-xs text-gray-500">주문번호</div>
-            <div className="text-xs text-gray-500">F251232323-12321323</div>
+            <div className="text-xs text-gray-500">{ordersData.orderId}</div>
           </div>
           <div className="flex flex-row justify-between">
             <div className="text-xs text-gray-500">주문시간</div>
-            <div className="text-xs text-gray-500">25.01.02 오후 09:54</div>
+            <div className="text-xs text-gray-500">
+              {new Date(ordersData.orderTime).toLocaleString()}
+            </div>
           </div>
         </div>
       </div>
@@ -28,39 +79,49 @@ const OrderList = () => {
       <div className="flex flex-col gap-5 py-2.5">
         <div className="text-sm font-bold">주문내역</div>
         <div className="grid grid-cols-2 gap-3">
-          <div className="text-[14px]">[주문폭주] 투움바 파스타1</div>
-          <div className="justify-self-end text-[14px]">12,400원</div>
-          <div className="max-w-48 text-xs text-gray-500">
-            별 다섯개 이벤트+ 포토리뷰 이벤트 참여: 별5점/포토리뷰[355ml 뚱캔콜라]
-          </div>
-          <div className="justify-self-end text-xs text-gray-500">500원</div>
-          <div className="max-w-48 text-xs text-gray-500">피클 선택</div>
-          <div className="justify-self-end text-xs text-gray-500">0원</div>
+          {ordersData.orderMenus.map((menu) => (
+            <>
+              <div className="text-[14px]">{menu.menuName}</div>
+              <div className="justify-self-end text-[14px]">{`${menu.menuPrice}원`}</div>
+              {menu.orderMenuOptionGroups.map((menuDetail) => (
+                <>
+                  <div className="max-w-48 text-xs text-gray-500">
+                    {menuDetail.orderMenuOptionGroupName}
+                  </div>
+                  {menuDetail.orderMenuOptions.map((menuOption) => (
+                    <>
+                      <div className="justify-self-end text-xs text-gray-500">{`${menuOption.menuOptionPrice}원`}</div>
+                    </>
+                  ))}
+                </>
+              ))}
+            </>
+          ))}
         </div>
       </div>
       <Separator className="mb-3 mt-5" />
       <div className="flex flex-col gap-5">
         <div className="flex flex-row items-center justify-between">
           <div className="text-[14px]">상품금액</div>
-          <div className="text-[14px]">12,900원</div>
+          <div className="text-[14px]">{`${ordersData.orderPrice}원`}</div>
         </div>
       </div>
       <Separator className="mb-3 mt-5" />
       <div className="flex flex-col gap-5">
         <div className="flex flex-row justify-between">
           <div className="text-[14px]">배달요금</div>
-          <div className="text-[14px]">0원</div>
+          <div className="text-[14px]">{`${ordersData.deliveryPrice}원`}</div>
         </div>
       </div>
       <Separator className="mb-3 mt-5" />
       <div className="flex flex-col gap-5">
         <div className="flex flex-row justify-between">
           <div className="text-[14px]">총 결제 금액</div>
-          <div className="text-[14px]">12,400원</div>
+          <div className="text-[14px]">{`${ordersData.paymentPrice}원`}</div>
         </div>
         <div className="flex flex-row justify-between">
           <div className="max-w-48 text-xs text-gray-500">결제방식</div>
-          <div className="text-xs text-gray-500">요기서결제/카카오페이</div>
+          <div className="text-xs text-gray-500">{ordersData.paymentType.desc}</div>
         </div>
       </div>
       <Separator className="mb-3 mt-5" />
@@ -68,11 +129,11 @@ const OrderList = () => {
       <div className="flex flex-col gap-3">
         <div className="flex flex-row justify-between">
           <div className="max-w-48 text-xs text-gray-500">연락처</div>
-          <div className="text-xs text-gray-500">010-1234-5678</div>
+          <div className="text-xs text-gray-500">{ordersData.tel}</div>
         </div>
         <div className="flex flex-row justify-between">
           <div className="max-w-48 text-xs text-gray-500">주소</div>
-          <div className="text-xs text-gray-500">서울특별시 구구구 동동동 123-4 123호</div>
+          <div className="text-xs text-gray-500">{ordersData.roadAddress}</div>
         </div>
       </div>
       <Separator className="mb-3 mt-5" />
