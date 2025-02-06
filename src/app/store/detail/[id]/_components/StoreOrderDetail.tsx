@@ -10,7 +10,6 @@ import { toast } from "@/hooks/useToast"
 import { cn } from "@/lib/utils"
 import { MenuGroupOption } from "@/models/menu"
 import { orderDetailStore } from "@/store/orderDetail"
-import { orderListStore } from "@/store/orderList"
 import { COLORS } from "@/styles/color"
 import { motion } from "motion/react"
 import Image from "next/image"
@@ -23,8 +22,7 @@ import StoreHeader from "./StoreHeader"
 import { IMAGE_HEIGHT } from "./StoreImage"
 
 const StoreOrderDetail = () => {
-    const { orderDetail } = orderDetailStore()
-    const { orderList, setOrderList } = orderListStore()
+    const { orderDetail, hideOrderDetail } = orderDetailStore()
 
     const containerRef = useRef<HTMLDivElement>(null)
     const descriptionRef = useRef<HTMLParagraphElement>(null)
@@ -62,6 +60,14 @@ const StoreOrderDetail = () => {
             return prev
         })
     }
+
+    useEffect(() => {
+        const totalOptionPrice = Object.values(selectedOptions).reduce((total, options) => {
+            return total + options.reduce((sum, option) => sum + (option.price || 0), 0)
+        }, 0)
+
+        setPrice(priceRef.current + totalOptionPrice)
+    }, [selectedOptions])
 
     const updateActiveCategory = useCallback(() => {
         const container = containerRef.current
@@ -156,7 +162,7 @@ const StoreOrderDetail = () => {
     if (!orderDetail) return null
     return (
         createPortal(
-            <div className="fixed max-w-[480px] min-w-[320px] mx-auto inset-0 z-50 bg-black/50 transition-opacity duration-300">
+            <div className="fixed inset-0 z-50 bg-black/50 transition-opacity duration-300">
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -180,8 +186,8 @@ const StoreOrderDetail = () => {
                     animate={{
                         top: 0,
                         left: 0,
-                        width: '100%',
-                        height: '100%',
+                        width: '100dvw',
+                        height: '100dvh',
                         x: 0,
                         y: 0,
                         borderRadius: '0px',
