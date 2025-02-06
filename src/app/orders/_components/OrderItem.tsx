@@ -30,15 +30,17 @@ const OrderItem = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-row justify-center gap-3">
-        <Link className="w-1/2" href={ROUTE_PATHS.ORDER_DETAIL}>
+      <div className="flex flex-row gap-3">
+        <Link className="w-full" href="orders/detail/1">
           <Button size="s" className="h-10">
             주문 상세
           </Button>
         </Link>
-        <Button variant="grayFit" size="s" className="h-10 w-1/2">
-          리뷰 달기
-        </Button>
+        <Link className="w-full" href={ROUTE_PATHS.REVIEW}>
+          <Button variant="grayFit" size="s" className="h-10">
+            리뷰 달기
+          </Button>
+        </Link>
       </div>
     </div>
   )
