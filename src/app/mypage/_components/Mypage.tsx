@@ -9,13 +9,17 @@ import { Skeleton } from '@/components/shadcn/skeleton'
 import LoginButtonSection from '@/components/shared/LoginButtonSection'
 
 const Mypage = () => {
-  const { data: memberData, isLoading } = useGetMember()
-  
+  const { data: memberData, isLoading, refetch } = useGetMember()
+
+  const handleRefetch = () => {
+    refetch()
+  }
+
   return (
     <section>
       {isLoading ? (
         <div className="p-mobile_safe">
-          <Skeleton className='w-full h-[170px] '/>
+          <Skeleton className='w-full h-[170px]' />
         </div>
         ) : (
           memberData?.signname ? (
@@ -27,7 +31,7 @@ const Mypage = () => {
         </>
       ) : (
         <div className="p-mobile_safe">
-          <LoginButtonSection />
+                <LoginButtonSection handleRefetchMember={handleRefetch} />
         </div>
       )
       )}

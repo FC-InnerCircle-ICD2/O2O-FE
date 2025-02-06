@@ -145,4 +145,8 @@ export const handlers = [
   http.get('*/api/v1/stores/trend', () => {
     return passthrough()
   }),
+
+  http.post('*/api/v1/auth/login', () => {
+    return passthrough()
+  }),
 ]

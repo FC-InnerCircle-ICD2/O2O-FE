@@ -77,7 +77,7 @@ export function useLocalStorage<T>(
     try {
       const item = localStorage.getItem(key)
       if (item) {
-        setStoredValue(JSON.parse(item))
+        setStoredValue(typeof item !== 'string' ? JSON.parse(item) : item)
       } else {
         setStoredValue(initialValue)
       }
