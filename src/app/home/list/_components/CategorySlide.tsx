@@ -47,6 +47,10 @@ const CategorySlide = ({ isHide }: { isHide: boolean }) => {
     return () => clearTimeout(timeoutId)
   }, [category])
 
+  useEffect(() => {
+    console.log({ category })
+  }, [category])
+
   return (
     <div className="flex px-mobile_safe">
       <div ref={scrollContainerRef} className="flex flex-1 gap-1 overflow-x-auto">

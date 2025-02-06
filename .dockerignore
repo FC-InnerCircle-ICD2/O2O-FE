@@ -1,0 +1,7 @@
+node_modules
+.next
+dist
+.git
+.env*
+!.env.example
+# .yarn과 .pnp.* 파일들은 제외하지 않음 

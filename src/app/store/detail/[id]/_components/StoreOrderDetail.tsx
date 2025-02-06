@@ -10,6 +10,7 @@ import { toast } from "@/hooks/useToast"
 import { cn } from "@/lib/utils"
 import { MenuGroupOption } from "@/models/menu"
 import { orderDetailStore } from "@/store/orderDetail"
+import { orderListStore } from "@/store/orderList"
 import { COLORS } from "@/styles/color"
 import { motion } from "motion/react"
 import Image from "next/image"
@@ -23,6 +24,7 @@ import { IMAGE_HEIGHT } from "./StoreImage"
 
 const StoreOrderDetail = () => {
     const { orderDetail, hideOrderDetail } = orderDetailStore()
+    const { setOrderList } = orderListStore()
 
     const containerRef = useRef<HTMLDivElement>(null)
     const descriptionRef = useRef<HTMLParagraphElement>(null)
