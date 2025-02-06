@@ -9,6 +9,10 @@ RUN apk add --no-cache libc6-compat
 # 전체 소스 코드 복사
 COPY . .
 
+# ENV_CONTENT build-arg를 통해 .env 파일 생성
+ARG ENV_CONTENT
+RUN echo "${ENV_CONTENT}" > .env
+
 # .env 파일 확인
 RUN echo "=== Checking .env file ===" && \
     ls -la .env && \
