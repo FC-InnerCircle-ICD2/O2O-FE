@@ -61,7 +61,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
 
         if (permissionStatus.state === 'denied') {
           setError(
-            '위치 정보가 차단되어 있습니다.\n 브라우저 설정에서 위치 정보 접근을 허용해주세요.',
+            '위치 정보가 차단되어 있습니다.\n 브라우저 설정에서 위치 정보 접근을 허용해주세요.'
           )
           return
         }
@@ -103,13 +103,13 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
                     setAddress(address)
                     setIsLoading(false)
                   }
-                },
+                }
               )
             },
             (error) => {
               console.error('위치 정보 에러:', error)
               setError('위치 정보를 가져오는데 실패했습니다.')
-            },
+            }
           )
         }
       } catch (error) {
@@ -127,13 +127,18 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   //   if (!address) return <Loading />
 
   if (pathname === ROUTE_PATHS.WELCOME)
-    return <div className="flex h-full flex-col max-w-[480px] min-w-[320px] mx-auto bg-white">{children}</div>
+    return (
+      <div className="mx-auto flex h-full min-w-[320px] max-w-[480px] flex-col bg-white">
+        {children}
+      </div>
+    )
 
   return (
-    <div className="flex h-full flex-col max-w-[480px] min-w-[320px] mx-auto bg-white">
-      {!pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) && (
-        <Navigation {...getNavigationProps(pathname)} />
-      )}
+    <div className="mx-auto flex h-full min-w-[320px] max-w-[480px] flex-col bg-white">
+      {!pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) &&
+        !pathname.startsWith(ROUTE_PATHS.ORDERS_DETAIL) && (
+          <Navigation {...getNavigationProps(pathname)} />
+        )}
       {children}
       {!pathname.startsWith(ROUTE_PATHS.SEARCH) &&
         !pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) && <BottomNavigation />}
