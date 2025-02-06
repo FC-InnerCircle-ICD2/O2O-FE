@@ -39,5 +39,7 @@ jobs:
             cd frontend
             docker stop o2o-fe || true
             docker rm o2o-fe || true
+            docker rm o2o-fe || true
+            docker rmi yong7317/o2o-fe:latest || true
             docker pull yong7317/o2o-fe:latest
             docker-compose up -d
