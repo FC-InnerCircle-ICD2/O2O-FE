@@ -35,5 +35,7 @@ export const kyClient = ky.create({
 })
 
 export const mockClient = kyClient.extend({
-  prefixUrl: `http://localhost:3000/api/v1`,
+  prefixUrl: process.env.NODE_ENV === 'development' 
+    ? `http://localhost:3000/api/v1`
+    : process.env.NEXT_PUBLIC_API_URL,
 })
