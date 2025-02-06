@@ -6,6 +6,7 @@ import { Button } from "@/components/button"
 import Icon from "@/components/Icon"
 import { Skeleton } from "@/components/shadcn/skeleton"
 import { useThrottle } from "@/hooks/useThrottle"
+import { toast } from "@/hooks/useToast"
 import { cn } from "@/lib/utils"
 import { MenuGroupOption } from "@/models/menu"
 import { orderDetailStore } from "@/store/orderDetail"
@@ -32,8 +33,9 @@ const StoreOrderDetail = () => {
     const [price, setPrice] = useState(0)
     const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
     const [selectedOptions, setSelectedOptions] = useState<Record<string, MenuGroupOption[]>>({})
+    const [isValid, setIsValid] = useState(false)
 
-    const { storeMenuOptions, isSuccess } = useGetStoreMenuOptions(orderDetail?.storeId ?? 0, orderDetail?.menuId ?? 0)
+    const { storeMenuOptions, isSuccess } = useGetStoreMenuOptions(orderDetail?.storeId ?? '', orderDetail?.menuId ?? '')
 
     const onChangeOption = (id: string, action: 'add' | 'remove' | 'change', option: MenuGroupOption) => {
         setSelectedOptions(prev => {
@@ -78,6 +80,51 @@ const StoreOrderDetail = () => {
 
     const handleScroll = useThrottle(updateActiveCategory, 50)
 
+    const handleOrder = () => {
+        if (!isValid) {
+            toast({
+                description: '필수 옵션을 선택해주세요.',
+                position: 'center',
+            })
+            return
+        }
+
+        setOrderList({
+            storeId: orderDetail?.storeId.toString() ?? 'aa',
+            price: price,
+            menu: {
+                menuId: storeMenuOptions?.menuId ?? '',
+                name: storeMenuOptions?.name ?? '',
+                imgUrl: storeMenuOptions?.imgUrl ?? '',
+                optionNames: Object.values(selectedOptions).map(options => options.map(option => option.name).join(', ')).join(', '),
+                selectedOptions
+            },
+        })
+    }
+
+    useEffect(() => {
+        const totalOptionPrice = Object.values(selectedOptions).reduce((total, options) => {
+            return total + options.reduce((sum, option) => sum + (option.price || 0), 0)
+        }, 0)
+
+        setPrice(priceRef.current + totalOptionPrice)
+
+        if (storeMenuOptions) {
+            let isValid = true
+
+            for (const menuOptionGroup of storeMenuOptions.menuOptionGroups) {
+                if (menuOptionGroup.type === 'checkbox' && menuOptionGroup.minSel) {
+                    if (!selectedOptions[menuOptionGroup.id] || selectedOptions[menuOptionGroup.id].length < menuOptionGroup.minSel) {
+                        isValid = false
+                        break
+                    }
+                }
+            }
+
+            setIsValid(isValid)
+        }
+    }, [selectedOptions])      
+
     useEffect(() => {
         const container = containerRef.current
         if (!container) return
@@ -107,8 +154,8 @@ const StoreOrderDetail = () => {
 
     useEffect(() => {
         if (storeMenuOptions) {
-            priceRef.current = storeMenuOptions.price
-            setPrice(storeMenuOptions.price)
+            priceRef.current = Number(storeMenuOptions.price.replace(/,/g, ''))
+            setPrice(Number(storeMenuOptions.price.replace(/,/g, '')))
         }
     }, [storeMenuOptions])
 
@@ -168,8 +215,8 @@ const StoreOrderDetail = () => {
                         <div className="px-mobile_safe pt-4 pb-5 border-b border-gray-200 border-solid">
                             <div className="flex gap-1 pb-2">
                                 {!storeMenuOptions && <Skeleton className="w-[40px] h-[19px]" />}
-                                {storeMenuOptions?.isBest && <Badge variant='default'>베스트</Badge>}
-                                {storeMenuOptions?.isManyOrder && <Badge variant='default'>재주문 많음</Badge>}
+                                {storeMenuOptions?.best && <Badge variant='default'>베스트</Badge>}
+                                {storeMenuOptions?.manyOrder && <Badge variant='default'>재주문 많음</Badge>}
                             </div>
                             {!storeMenuOptions ? <Skeleton className="w-[150px] h-[28px] mb-1" /> : <p className="text-2xl font-bold">{storeMenuOptions.name}</p>}
                             {!storeMenuOptions ? <Skeleton className="w-[100px] h-[32px] mb-1" /> : <p className="text-xl font-semibold pb-2">{storeMenuOptions.price.toLocaleString()}원</p>}
@@ -201,7 +248,7 @@ const StoreOrderDetail = () => {
                         </div>
 
                         <div>
-                            {!storeMenuOptions ? new Array(2).fill(0).map((_, index) => <MenuOptionSkeleton key={index} />) : storeMenuOptions?.menuOptionGroups.map((menu, index) => <MenuOption key={menu.id} id={`option-${index}`} title={menu.name} type={menu.type} limit={menu.limit} options={menu.options} onChangeOption={onChangeOption} />)}
+                            {!storeMenuOptions ? new Array(2).fill(0).map((_, index) => <MenuOptionSkeleton key={index} />) : storeMenuOptions?.menuOptionGroups.map((menu, index) => <MenuOption key={menu.id} id={menu.id} title={menu.name} type={menu.type} minSel={menu.minSel} maxSel={menu.maxSel} options={menu.options} onChangeOption={onChangeOption} />)}
                         </div>
 
                         <div className="flex justify-between items-center px-mobile_safe py-4">
@@ -227,7 +274,7 @@ const StoreOrderDetail = () => {
                     }}
                 >
                     <p className="text-sm text-center text-red-600 font-bold py-4">18,000원부터 배달 가능해요</p>
-                    <Button className="text-base font-semibold">{price.toLocaleString()}원 주문하기</Button>
+                    <Button className={cn("text-base font-semibold", !isValid && "bg-gray-400 hover:bg-gray-400")} onClick={handleOrder} >{price.toLocaleString()}원 주문하기</Button>
                 </motion.div>
             </div>,
             document.body
