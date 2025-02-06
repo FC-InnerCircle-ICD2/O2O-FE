@@ -9,7 +9,6 @@ WORKDIR /app
 COPY package.json .yarnrc.yml ./
 COPY .yarn/releases .yarn/releases/
 COPY .yarn/plugins .yarn/plugins/
-COPY .yarn/sdks .yarn/sdks/
 COPY yarn.lock ./
 
 # 의존성 설치
