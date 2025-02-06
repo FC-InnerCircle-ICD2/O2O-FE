@@ -193,6 +193,8 @@ export const handlers = [
     return passthrough()
   }),
 
+ 
+
   // trend API는 실제 API로 통과
   http.get('*/api/v1/stores/:id', () => {
     return passthrough()

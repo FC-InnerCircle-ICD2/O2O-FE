@@ -1,12 +1,15 @@
+import usePostLogin from '@/api/usePostLogin'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Input from '@/components/Input'
 import Separator from '@/components/Separator'
 import SignupModal from '@/components/shared/SignupModal'
+import { useToast } from '@/hooks/useToast'
 import { modalStore } from '@/store/modal'
+import { HTTPError } from 'ky'
 import { useForm } from 'react-hook-form'
 
-const LoginModal = () => {
+const LoginModal = ({ handleRefetchMember }: { handleRefetchMember: () => void }) => {
   const { hideModal, showModal } = modalStore()
 
   const handleOpenSignupModal = () => {
@@ -22,7 +25,7 @@ const LoginModal = () => {
         <div className="mb-6 font-bmjua text-4xl font-bold">개발의 민족</div>
         <div className="mb-8 text-gray-500">로그인하고 다양한 혜택을 받아보세요!</div>
       </div>
-      <LoginForm />
+      <LoginForm handleRefetchMember={handleRefetchMember} />
       <div className="flex justify-center gap-2">
         <button className="text-xs text-gray-500" onClick={handleOpenSignupModal}>
           회원가입
@@ -38,31 +41,45 @@ const LoginModal = () => {
 
 export default LoginModal
 
-const LoginForm = () => {
+const LoginForm = ({ handleRefetchMember }: { handleRefetchMember: () => void }) => {
   const { hideModal } = modalStore()
   const { register, handleSubmit, watch } = useForm({
     defaultValues: {
-      email: '',
+      signname: '',
       password: '',
     },
   })
 
-  const emailValue = watch('email')
+  const signnameValue = watch('signname')
   const passwordValue = watch('password')
-  const isButtonDisabled = !emailValue || !passwordValue
+  const isButtonDisabled = !signnameValue || !passwordValue
+  const { mutate: login, isPending } = usePostLogin()
+  const { toast } = useToast()
+
 
   const onSubmit = handleSubmit((formData) => {
-    // TODO: 로그인 로직 추가
-    console.log('Form submitted:', formData)
-    // TODO: 로그인 실패 시 에러 토스트 띄우기
-    // 로그인 성공 시 모달 닫기
-    hideModal()
+    login(formData, {
+      onSuccess: () => {
+        hideModal()
+        handleRefetchMember()
+      },
+      onError: async (error: Error) => {
+        const httpError = error as HTTPError
+        const errorData = await httpError.response?.json() as { data: { error: string } }
+        toast({
+          title: "로그인 실패",
+          description: errorData?.data.error || "로그인에 실패했습니다.",
+          variant: "destructive",
+          position: "center",
+        })
+      }
+    })
   })
 
   return (
     <form onSubmit={onSubmit}>
       <div className="mb-3">
-        <Input placeholder="이메일 주소 입력" {...register('email')} offOutline />
+        <Input placeholder="이메일 주소 입력" {...register('signname')} offOutline />
       </div>
       <div className="mb-8">
         <Input type="password" placeholder="비밀번호 입력" {...register('password')} offOutline />
@@ -73,7 +90,7 @@ const LoginForm = () => {
         size="m"
         disabled={isButtonDisabled}
       >
-        로그인
+        {isPending ? <span className="loading loading-dots loading-sm"></span> : '로그인'}
       </Button>
     </form>
   )

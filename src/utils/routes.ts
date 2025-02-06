@@ -10,5 +10,6 @@ export const ROUTE_PATHS = {
   PAY: '/pay',
   MYPAGE: '/mypage',
   STORE_DETAIL: '/store/detail',
+  MYPAGE_EDIT_PROFILE: '/mypage/edit-profile',
   REVIEW: '/review',
 }

@@ -1,4 +1,4 @@
-import ky from 'ky'
+import ky from 'ky';
 
 console.log(process.env.NEXT_PUBLIC_API_URL)
 
@@ -12,12 +12,11 @@ export const kyClient = ky.create({
   hooks: {
     beforeRequest: [
       (request) => {
-        // 예: Authorization 헤더 추가
-        const token = localStorage.getItem('authToken') // 예시로 LocalStorage 사용
-        if (token) {
-          request.headers.set('Authorization', `Bearer ${token}`)
+        const accessToken = localStorage.getItem('accessToken')
+        if (accessToken) {
+            request.headers.set('Authorization', accessToken);
         }
-      },
+      },  
     ],
     afterResponse: [
       (_request, _options, response) => {
