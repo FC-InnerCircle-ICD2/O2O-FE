@@ -6,6 +6,9 @@ WORKDIR /app
 # 필요한 시스템 패키지 설치
 RUN apk add --no-cache libc6-compat
 
+# 환경 변수 파일을 먼저 복사 (이 부분이 중요합니다)
+COPY .env ./
+
 # 전체 소스 코드 복사
 COPY . .
 
