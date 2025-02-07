@@ -8,7 +8,7 @@ module.exports = {
   endOfLine: 'lf',
   semi: false,
   arrowParens: 'always',
-  plugins: ['prettier-plugin-tailwindcss'],
+  plugins: [require.resolve('prettier-plugin-tailwindcss')],
   tailwindConfig: './tailwind.config.ts',
   tailwindFunctions: ['clsx', 'tw'],
 }
