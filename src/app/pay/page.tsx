@@ -1,21 +1,22 @@
-import LoginButtonSection from '@/components/shared/LoginButtonSection'
+'use client'
 import OrderInfo from '@/app/pay/_components/OrderInfo'
+import LoginButtonSection from '@/components/shared/LoginButtonSection'
+import memberStore from '@/store/user'
 
 const PayPage = () => {
-  const { user } = { user: false }
+  const { member } = memberStore()
 
   return (
     <>
-      {user ? (
-        <></>
+      {member ? (
+        <div className="px-mobile_safe">
+          <OrderInfo />
+        </div>
       ) : (
         <div className="p-mobile_safe">
           <LoginButtonSection />
         </div>
       )}
-      <div className="px-mobile_safe">
-        <OrderInfo />
-      </div>
     </>
   )
 }

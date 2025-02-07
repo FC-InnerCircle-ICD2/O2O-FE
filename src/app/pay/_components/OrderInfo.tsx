@@ -1,11 +1,11 @@
 'use client'
 
+import usePostOrderPay, { OrderPay } from '@/api/usePostOrderPay'
 import MenuItem from '@/app/pay/_components/MenuItem'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Separator from '@/components/Separator'
 import { Checkbox } from '@/components/shadcn/checkbox'
-import usePostOrderPay, { OrderPay } from '@/api/usePostOrderPay'
 
 const OrderInfo = () => {
   const orderData: OrderPay = {
@@ -36,7 +36,7 @@ const OrderInfo = () => {
   }
 
   return (
-    <div className="mb-5 flex flex-col gap-5">
+    <div className="my-5 flex flex-col gap-5">
       <div className="flex flex-row justify-between">
         <div className="flex flex-row gap-2">
           <Icon name="Bike" size={24} />
@@ -69,7 +69,7 @@ const OrderInfo = () => {
           <MenuItem />
           <MenuItem />
         </div>
-        <Separator className="mb-5 mt-5" />
+        <Separator className="my-5" />
         <div className="mb-5 flex flex-row items-center justify-center gap-1">
           <Icon name="Plus" size={20} />
           <div className="font-bold">메뉴 추가하기</div>

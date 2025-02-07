@@ -4,11 +4,11 @@ import { Button } from '@/components/button'
 import LoginModal from '@/components/shared/LoginModal'
 import { modalStore } from '@/store/modal'
 
-const LoginButtonSection = ({ handleRefetchMember }: { handleRefetchMember: () => void }) => {
+const LoginButtonSection = () => {
   const { showModal } = modalStore()
 
   const handleOpenLoginModal = () => {
-    showModal({ content: <LoginModal handleRefetchMember={handleRefetchMember} />, useAnimation: true })
+    showModal({ content: <LoginModal />, useAnimation: true })
   }
   return (
     <section className="rounded-xl border border-solid border-gray-400 p-4 text-center">

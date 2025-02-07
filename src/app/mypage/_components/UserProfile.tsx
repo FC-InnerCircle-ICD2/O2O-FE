@@ -10,7 +10,7 @@ interface UserProfileProps {
 
 const UserProfile = ({ name, email }: UserProfileProps) => {
   return (
-    <RippleeEffect className="mt-4">
+    <RippleeEffect className="">
       <Link href="/mypage/edit-profile" className="flex w-full items-center justify-between px-mobile_safe py-4">
         <div>
           <div className="text-xl font-bold">{name}</div>
