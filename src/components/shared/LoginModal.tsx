@@ -6,10 +6,12 @@ import Separator from '@/components/Separator'
 import SignupModal from '@/components/shared/SignupModal'
 import { useToast } from '@/hooks/useToast'
 import { modalStore } from '@/store/modal'
+import memberStore from '@/store/user'
 import { HTTPError } from 'ky'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
-const LoginModal = ({ handleRefetchMember }: { handleRefetchMember: () => void }) => {
+const LoginModal = () => {
   const { hideModal, showModal } = modalStore()
 
   const handleOpenSignupModal = () => {
@@ -25,7 +27,7 @@ const LoginModal = ({ handleRefetchMember }: { handleRefetchMember: () => void }
         <div className="mb-6 font-bmjua text-4xl font-bold">개발의 민족</div>
         <div className="mb-8 text-gray-500">로그인하고 다양한 혜택을 받아보세요!</div>
       </div>
-      <LoginForm handleRefetchMember={handleRefetchMember} />
+      <LoginForm />
       <div className="flex justify-center gap-2">
         <button className="text-xs text-gray-500" onClick={handleOpenSignupModal}>
           회원가입
@@ -41,7 +43,7 @@ const LoginModal = ({ handleRefetchMember }: { handleRefetchMember: () => void }
 
 export default LoginModal
 
-const LoginForm = ({ handleRefetchMember }: { handleRefetchMember: () => void }) => {
+const LoginForm = () => {
   const { hideModal } = modalStore()
   const { register, handleSubmit, watch } = useForm({
     defaultValues: {
@@ -55,14 +57,10 @@ const LoginForm = ({ handleRefetchMember }: { handleRefetchMember: () => void })
   const isButtonDisabled = !signnameValue || !passwordValue
   const { mutate: login, isPending } = usePostLogin()
   const { toast } = useToast()
-
+  const { member } = memberStore()
 
   const onSubmit = handleSubmit((formData) => {
     login(formData, {
-      onSuccess: () => {
-        hideModal()
-        handleRefetchMember()
-      },
       onError: async (error: Error) => {
         const httpError = error as HTTPError
         const errorData = await httpError.response?.json() as { data: { error: string } }
@@ -76,7 +74,14 @@ const LoginForm = ({ handleRefetchMember }: { handleRefetchMember: () => void })
     })
   })
 
+  useEffect(() => {
+    if (member) {
+      hideModal()
+    }
+  }, [member])
+
   return (
+    <>
     <form onSubmit={onSubmit}>
       <div className="mb-3">
         <Input placeholder="이메일 주소 입력" {...register('signname')} offOutline />
@@ -93,5 +98,6 @@ const LoginForm = ({ handleRefetchMember }: { handleRefetchMember: () => void })
         {isPending ? <span className="loading loading-dots loading-sm"></span> : '로그인'}
       </Button>
     </form>
+    </>
   )
 }

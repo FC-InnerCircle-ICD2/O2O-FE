@@ -1,7 +1,12 @@
 'use client'
 
+import useGetMember from '@/api/useGetMember'
+import usePostLogout from '@/api/usePostLogout'
 import { getNavigationProps } from '@/constants/navigationProps'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useGeoLocationStore } from '@/store/geoLocation'
+import globalLoaderStore from '@/store/globalLoader'
+import memberStore from '@/store/user'
 import { ROUTE_PATHS } from '@/utils/routes'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -25,6 +30,36 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   const { address, error, setCoordinates, setAddress, setError, setIsLoading } =
     useGeoLocationStore()
   const pathname = usePathname()
+
+  const { storedValue: accessToken } = useLocalStorage('accessToken')
+  const { data: memberData, isFetching, refetch } = useGetMember()
+  const { mutate: logout } = usePostLogout()
+  const { member, setMember } = memberStore()
+  const { isGlobalLoading, setIsGlobalLoading } = globalLoaderStore()
+
+  useEffect(() => {
+    if (accessToken) {
+      setIsGlobalLoading(true)
+
+      refetch()
+        .then((res) => {
+          if (res.error) {
+            logout()
+            return
+          }
+
+          if (res.data) {
+            setMember(res.data)
+          }
+        })
+        .catch((error) => {
+          logout()
+        })
+        .finally(() => {
+          setIsGlobalLoading(false)
+        })
+    }
+  }, [accessToken])
 
   useEffect(() => {
     setIsMounted(true)
@@ -141,7 +176,8 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
         )}
       {children}
       {!pathname.startsWith(ROUTE_PATHS.SEARCH) &&
-        !pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) && <BottomNavigation />}
+        !pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) &&
+        !pathname.startsWith(ROUTE_PATHS.MYPAGE_EDIT_PROFILE) && <BottomNavigation />}
     </div>
   )
 }

@@ -39,7 +39,7 @@ const NAVIGATION_PROPS: Record<string, NavigationProps> = {
   [ROUTE_PATHS.ORDERS]: {
     title: '주문내역',
   },
-  [ROUTE_PATHS.ORDER_DETAIL]: {
+  [ROUTE_PATHS.ORDERS_DETAIL]: {
     title: '주문상세',
   },
   [ROUTE_PATHS.FAVORITES]: {
@@ -52,6 +52,7 @@ const NAVIGATION_PROPS: Record<string, NavigationProps> = {
     title: '주문하기',
   },
   [ROUTE_PATHS.MYPAGE_EDIT_PROFILE]: {
+    hasBackButton: true,
     title: '내 정보 수정',
   },
   [ROUTE_PATHS.REVIEW]: {
