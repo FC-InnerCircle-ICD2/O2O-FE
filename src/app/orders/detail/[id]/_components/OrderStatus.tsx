@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { Progress } from '@/components/shadcn/progress'
+import { useEffect, useState } from 'react'
 
 type OrderStatusProps = {
   orderStatus?: string | null
@@ -14,7 +14,6 @@ const OrderStatus: React.FC<OrderStatusProps> = ({ orderStatus }) => {
   const [value, setValue] = useState(0)
 
   useEffect(() => {
-    console.log('status', status)
     switch (status) {
       case '주문거절':
         setTitle('주문이 거절되었습니다.')

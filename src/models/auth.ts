@@ -22,4 +22,7 @@ export interface Member {
   signname: string
   nickname: string
   profileImage: string
+  roadAddress?: string
+  jibunAddress?: string
+  detailAddress?: string
 }

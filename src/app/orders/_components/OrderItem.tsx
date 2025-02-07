@@ -1,9 +1,9 @@
-import Image from 'next/image'
-import { Button } from '@/components/button'
-import Badge from '@/components/Badge'
-import { ROUTE_PATHS } from '@/utils/routes'
-import Link from 'next/link'
 import { OrdersList } from '@/api/useGetOrders'
+import Badge from '@/components/Badge'
+import { Button } from '@/components/button'
+import { ROUTE_PATHS } from '@/utils/routes'
+import Image from 'next/image'
+import Link from 'next/link'
 
 const OrderItem = ({ order }: OrdersList) => {
   return (
@@ -11,9 +11,7 @@ const OrderItem = ({ order }: OrdersList) => {
       <div className="flex flex-row">
         <Image
           className="size-[100px] rounded-xl object-cover object-center"
-          src={
-            'https://flexible.img.hani.co.kr/flexible/normal/970/647/imgdb/resize/2017/0709/149948783091_20170709.JPG'
-          }
+          src={order.imageThumbnail}
           alt="음식점 대표 이미지"
           width={100}
           height={100}

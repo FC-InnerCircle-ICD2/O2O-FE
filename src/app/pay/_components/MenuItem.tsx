@@ -1,38 +1,44 @@
-import Image from 'next/image'
 import Icon from '@/components/Icon'
-import { Button } from '@/components/button'
 import UpDownBtn from '@/components/UpDownBtn'
+import { OrderMenu } from '@/store/orderList'
+import Image from 'next/image'
+import { useState } from 'react'
 
-const MenuItem = () => {
+const MenuItem = ({ menu, handlePriceAndCount }: { menu: OrderMenu, handlePriceAndCount: (id: string, count: number) => void }) => {
+  const [count, setCount] = useState(1)
+
+  const handlerCount = (count: number) => {
+    setCount(count)
+    handlePriceAndCount(menu.menuId, count)
+  }
+
   return (
-    <div>
+    <div className='px-3 flex flex-col gap-2'>
       <div className="flex flex-row justify-between">
-        <div className="ml-5 flex flex-row gap-2">
+        <div className="flex flex-row gap-3">
           <Image
             className="size-[60px] rounded-xl object-cover object-center"
-            src={
-              'https://flexible.img.hani.co.kr/flexible/normal/970/647/imgdb/resize/2017/0709/149948783091_20170709.JPG'
-            }
+            src={menu.imgUrl}
             alt="음식점 대표 이미지"
             width={60}
             height={60}
             loading="lazy"
           />
-          <div className="flex flex-col place-content-center gap-2">
-            <div>맵소디</div>
-            <div className="text-sm text-gray-700">한마리</div>
-            <div className="font-bold">24,500원</div>
+          <div className="flex flex-col place-content-center">
+            <div className="text-base font-medium">{menu.name}</div>
+            <div className="text-sm text-gray-700 pb-3">{menu.optionNames}</div>
+            <div className="font-bold">{(menu.price * count).toLocaleString()}원</div>
           </div>
         </div>
-        <div className="mr-5">
+        <div className="">
           <Icon name="X" size={20} className="text-gray-700" />
         </div>
       </div>
-      <div className="mr-5 flex flex-row justify-end gap-2 py-2">
+      <div className="flex flex-row justify-end gap-2">
         {/*<Button variant="grayFit" size="s" className="text-black">*/}
         {/*  옵션변경*/}
         {/*</Button>*/}
-        <UpDownBtn value={1} />
+        <UpDownBtn value={count} handlerCount={handlerCount} />
       </div>
     </div>
   )

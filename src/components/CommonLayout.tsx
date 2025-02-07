@@ -31,6 +31,14 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
     useGeoLocationStore()
   const pathname = usePathname()
 
+  const HIDDEN_BOTTOM_NAV_PATHS = [
+    ROUTE_PATHS.SEARCH,
+    ROUTE_PATHS.STORE_DETAIL,
+    ROUTE_PATHS.MYPAGE_EDIT_PROFILE,
+    ROUTE_PATHS.PAY,
+    ROUTE_PATHS.ORDERS_DETAIL,
+  ]
+
   const { storedValue: accessToken } = useLocalStorage('accessToken')
   const { data: memberData, isFetching, refetch } = useGetMember()
   const { mutate: logout } = usePostLogout()
@@ -170,14 +178,11 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
 
   return (
     <div className="mx-auto flex h-full min-w-[320px] max-w-[480px] flex-col bg-white">
-      {!pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) &&
-        !pathname.startsWith(ROUTE_PATHS.ORDERS_DETAIL) && (
+      {!pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) && (
           <Navigation {...getNavigationProps(pathname)} />
         )}
       {children}
-      {!pathname.startsWith(ROUTE_PATHS.SEARCH) &&
-        !pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) &&
-        !pathname.startsWith(ROUTE_PATHS.MYPAGE_EDIT_PROFILE) && <BottomNavigation />}
+      {!HIDDEN_BOTTOM_NAV_PATHS.some((path) => pathname.startsWith(path)) && <BottomNavigation />}
     </div>
   )
 }

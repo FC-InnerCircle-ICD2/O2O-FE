@@ -97,14 +97,16 @@ const StoreOrderDetail = () => {
 
         setOrderList({
             storeId: orderDetail?.storeId.toString() ?? 'aa',
+            storeName: orderDetail?.storeName ?? '',
             price: price,
-            menu: {
+            menu: [{
                 menuId: storeMenuOptions?.menuId ?? '',
                 name: storeMenuOptions?.name ?? '',
                 imgUrl: storeMenuOptions?.imgUrl ?? '',
                 optionNames: Object.values(selectedOptions).map(options => options.map(option => option.name).join(', ')).join(', '),
+                price: price,
                 selectedOptions
-            },
+            }],
         })
 
         router.push(ROUTE_PATHS.PAY)
@@ -281,7 +283,7 @@ const StoreOrderDetail = () => {
                         delay: 0.2
                     }}
                 >
-                    <p className="text-sm text-center text-red-600 font-bold py-4">18,000원부터 배달 가능해요</p>
+                    <p className="text-sm text-center text-red-600 font-bold py-4">5,000원부터 배달 가능해요</p>
                     <Button className={cn("text-base font-semibold", !isValid && "bg-gray-400 hover:bg-gray-400")} onClick={handleOrder} >{price.toLocaleString()}원 주문하기</Button>
                 </motion.div>
             </div>,
