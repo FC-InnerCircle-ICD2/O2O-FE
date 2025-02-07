@@ -16,6 +16,11 @@ const OrderStatus: React.FC<OrderStatusProps> = ({ orderStatus }) => {
   useEffect(() => {
     console.log('status', status)
     switch (status) {
+      case '주문거절':
+        setTitle('주문이 거절되었습니다.')
+        setSubTitle('다음에 다시 이용해 주세요')
+        setValue(0)
+        break
       case '주문확인':
         setTitle('주문을 확인하고 있습니다')
         setSubTitle('확인 중입니다. 잠시만 기다려 주세요!')

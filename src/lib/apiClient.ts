@@ -7,7 +7,7 @@ export const kyClient = ky.create({
   timeout: 10000, // 타임아웃 설정
   retry: {
     limit: 3, // 재시도 횟수
-    methods: ['get', 'post', 'put', 'delete'], // 재시도 허용 메서드
+    methods: ['get', 'post', 'put', 'delete', 'patch'], // 재시도 허용 메서드
   },
   hooks: {
     beforeRequest: [
