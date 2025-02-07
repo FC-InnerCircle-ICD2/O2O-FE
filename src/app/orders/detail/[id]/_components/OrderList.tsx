@@ -4,6 +4,7 @@ import { Button } from '@/components/button'
 import Link from 'next/link'
 import { ROUTE_PATHS } from '@/utils/routes'
 import { v4 as uuidv4 } from 'uuid'
+import React from 'react'
 
 interface OrderDataList {
   ordersData: {
@@ -82,30 +83,30 @@ const OrderList = ({ ordersData }: OrderDataList) => {
         <div className="text-sm font-bold">주문내역</div>
         <div className="grid grid-cols-2 gap-3">
           {ordersData.orderMenus.map((menu) => (
-            <>
+            <React.Fragment key={uuidv4()}>
               <div className="text-[14px]" key={uuidv4()}>
                 {menu.menuName}
               </div>
               <div
                 className="justify-self-end text-[14px]"
                 key={uuidv4()}
-              >{`${menu.menuPrice}원`}</div>
+              >{`${menu.menuPrice.toLocaleString()}원`}</div>
               {menu.orderMenuOptionGroups.map((menuDetail) => (
-                <>
+                <React.Fragment key={uuidv4()}>
                   <div className="max-w-48 text-xs text-gray-500" key={uuidv4()}>
                     {menuDetail.orderMenuOptionGroupName}
                   </div>
                   {menuDetail.orderMenuOptions.map((menuOption) => (
-                    <>
+                    <React.Fragment key={uuidv4()}>
                       <div
                         className="justify-self-end text-xs text-gray-500"
                         key={uuidv4()}
-                      >{`${menuOption.menuOptionPrice}원`}</div>
-                    </>
+                      >{`${menuOption.menuOptionPrice.toLocaleString()}원`}</div>
+                    </React.Fragment>
                   ))}
-                </>
+                </React.Fragment>
               ))}
-            </>
+            </React.Fragment>
           ))}
         </div>
       </div>
@@ -113,21 +114,21 @@ const OrderList = ({ ordersData }: OrderDataList) => {
       <div className="flex flex-col gap-5">
         <div className="flex flex-row items-center justify-between">
           <div className="text-[14px]">상품금액</div>
-          <div className="text-[14px]">{`${ordersData.orderPrice}원`}</div>
+          <div className="text-[14px]">{`${ordersData.orderPrice.toLocaleString()}원`}</div>
         </div>
       </div>
       <Separator className="mb-3 mt-5" />
       <div className="flex flex-col gap-5">
         <div className="flex flex-row justify-between">
           <div className="text-[14px]">배달요금</div>
-          <div className="text-[14px]">{`${ordersData.deliveryPrice}원`}</div>
+          <div className="text-[14px]">{`${ordersData.deliveryPrice.toLocaleString()}원`}</div>
         </div>
       </div>
       <Separator className="mb-3 mt-5" />
       <div className="flex flex-col gap-5">
         <div className="flex flex-row justify-between">
           <div className="text-[14px]">총 결제 금액</div>
-          <div className="text-[14px]">{`${ordersData.paymentPrice}원`}</div>
+          <div className="text-[14px]">{`${ordersData.paymentPrice.toLocaleString()}원`}</div>
         </div>
         <div className="flex flex-row justify-between">
           <div className="max-w-48 text-xs text-gray-500">결제방식</div>
