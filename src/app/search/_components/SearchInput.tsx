@@ -1,20 +1,29 @@
 'use client'
 
+import useGetStoreSuggestion from '@/api/useGetStoreSuggestion'
 import Icon from '@/components/Icon'
 import Input from '@/components/Input'
+import useDebounce from '@/hooks/useDebounce'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
+import suggestionStore from '@/store/suggestion'
 import { ROUTE_PATHS } from '@/utils/routes'
 import { usePathname, useRouter } from 'next/navigation'
 
 import { useEffect, useState } from 'react'
 
 const SearchInput = () => {
-  const [word, setWord] = useState('')
-  const { keyword, setKeyword } = useFoodSearchFilterStore()
-  const { setValue, storedValue } = useLocalStorage<string[]>('recentSearches', [])
   const router = useRouter()
   const pathname = usePathname()
+
+  const [word, setWord] = useState('')
+
+  const { keyword, setKeyword } = useFoodSearchFilterStore()
+  const { setValue, storedValue } = useLocalStorage<string[]>('recentSearches', [])
+  const { setSuggestion, resetSuggestion, setSuggestionWord } = suggestionStore()
+
+  const { storeSuggestion, refetch, resetStoreSuggestion } = useGetStoreSuggestion(word)
+  const debouncedRefetch = useDebounce(refetch, 200)
 
   useEffect(() => {
     if (pathname === ROUTE_PATHS.SEARCH) {
@@ -23,6 +32,30 @@ const SearchInput = () => {
       setWord(keyword || '')
     }
   }, [pathname])
+
+  useEffect(() => {
+    if (storeSuggestion && storeSuggestion.length > 0) {
+      setSuggestion(storeSuggestion)
+    } else {
+      setSuggestion([])
+    }
+  }, [storeSuggestion])
+
+  useEffect(() => {
+    if (word) {
+      setSuggestionWord(word)
+      debouncedRefetch()
+    } else {
+      setSuggestionWord('')
+    }
+  }, [word])
+
+  useEffect(() => {
+    return () => {
+      resetStoreSuggestion()
+      resetSuggestion()
+    }
+  }, [])
 
   return (
     <Input

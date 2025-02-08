@@ -5858,6 +5858,8 @@ __metadata:
     zod: "npm:^3.24.1"
     zustand: "npm:^5.0.2"
   dependenciesMeta:
+    eslint-plugin-prettier@5.2.3:
+      unplugged: true
     prettier-plugin-tailwindcss@0.6.9:
       unplugged: true
   languageName: unknown

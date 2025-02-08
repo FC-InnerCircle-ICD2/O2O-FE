@@ -41,7 +41,7 @@ const RealTimeSearchItem = ({
 
   return (
     <div className="flex h-[16px] grow gap-3 overflow-hidden">
-      <span className='min-w-[10px]'>{order}</span>
+      <span className="min-w-[10px]">{order}</span>
       <div className="flex grow flex-col justify-between">
         <AnimatePresence mode="wait">
           <motion.div
@@ -85,13 +85,16 @@ const RealTimeSearches = () => {
         setTrends((prev) => {
           const newArray = [...prev]
           // 기존 trends에서 같은 키워드를 찾습니다
-          const existingItem = prevTrends.find(item => item.keyword === temp[i].keyword)
+          const existingItem = prevTrends.find((item) => item.keyword === temp[i].keyword)
 
           if (existingItem) {
             // 기존 아이템이 있는 경우 순위를 비교합니다
             const rankChange =
-              temp[i].order < existingItem.order ? 'up' :
-                temp[i].order === existingItem.order ? 'same' : 'down'
+              temp[i].order < existingItem.order
+                ? 'up'
+                : temp[i].order === existingItem.order
+                  ? 'same'
+                  : 'down'
 
             newArray[i] = { ...temp[i], rankChange }
           } else {
@@ -127,7 +130,8 @@ const RealTimeSearches = () => {
     }
   }, [realTimeSearches])
 
-  if (!realTimeSearches) return null
+  if (!realTimeSearches || realTimeSearches.length === 0) return null
+
   return (
     <div className="flex flex-col gap-[28px] px-mobile_safe">
       <div className="flex items-center justify-between">
@@ -135,14 +139,14 @@ const RealTimeSearches = () => {
         <span className="text-xs font-normal text-gray-400">내 주소 지역, {currentTime} 기준</span>
       </div>
       <div className="flex gap-6">
-        <div className="flex flex-1 flex-col gap-[20px]">
+        <div className="flex flex-1 flex-col gap-mobile_safe">
           {trends.slice(0, 3).map((item, index) => (
             <RealTimeSearchItem key={index} order={index + 1} realTimeSearch={item} />
           ))}
         </div>
 
         {/* 오른쪽 컬럼 */}
-        <div className="flex flex-1 flex-col gap-[20px]">
+        <div className="flex flex-1 flex-col gap-mobile_safe">
           {trends.slice(3).map((item, index) => (
             <RealTimeSearchItem key={index} order={index + 4} realTimeSearch={item} />
           ))}

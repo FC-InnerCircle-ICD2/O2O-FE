@@ -66,6 +66,9 @@
   },
   "packageManager": "yarn@4.6.0",
   "dependenciesMeta": {
+    "eslint-plugin-prettier@5.2.3": {
+      "unplugged": true
+    },
     "prettier-plugin-tailwindcss@0.6.9": {
       "unplugged": true
     }
