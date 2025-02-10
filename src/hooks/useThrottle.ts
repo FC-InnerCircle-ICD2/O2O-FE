@@ -4,21 +4,24 @@ export function useThrottle<T extends (...args: any[]) => any>(callback: T, dela
   const lastRun = useRef<number>(Date.now())
   const timeout = useRef<NodeJS.Timeout | null>(null)
 
-  return useCallback((...args: Parameters<T>) => {
-    const now = Date.now()
+  return useCallback(
+    (...args: Parameters<T>) => {
+      const now = Date.now()
 
-    if (timeout.current) {
-      clearTimeout(timeout.current)
-    }
+      if (timeout.current) {
+        clearTimeout(timeout.current)
+      }
 
-    if (now - lastRun.current >= delay) {
-      callback(...args)
-      lastRun.current = now
-    } else {
-      timeout.current = setTimeout(() => {
+      if (now - lastRun.current >= delay) {
         callback(...args)
-        lastRun.current = Date.now()
-      }, delay)
-    }
-  }, [callback, delay])
-} 
+        lastRun.current = now
+      } else {
+        timeout.current = setTimeout(() => {
+          callback(...args)
+          lastRun.current = Date.now()
+        }, delay)
+      }
+    },
+    [callback, delay]
+  )
+}
