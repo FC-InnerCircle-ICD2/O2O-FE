@@ -7,7 +7,7 @@ import { Menu } from '@/models/menu'
 import { orderDetailStore } from '@/store/orderDetail'
 import Image from 'next/image'
 
-const StoreDetailMenuItem = ({ storeId, menu }: { storeId: string, menu: Menu }) => {
+const StoreDetailMenuItem = ({ storeName, storeId, menu }: { storeName: string, storeId: string, menu: Menu }) => {
     const { showOrderDetail } = orderDetailStore()
     const { toast } = useToast()
 
@@ -24,6 +24,7 @@ const StoreDetailMenuItem = ({ storeId, menu }: { storeId: string, menu: Menu })
         const rect = imgWrapper?.getBoundingClientRect()
         showOrderDetail({
             storeId: storeId,
+            storeName: storeName,
             menuId: menu.id,
             originX: rect?.left ?? 0,
             originY: rect?.top ?? 0,

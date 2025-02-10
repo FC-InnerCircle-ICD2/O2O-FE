@@ -1,11 +1,12 @@
 import { api } from '@/lib/api'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 export interface OrderPay {
   storeId: string // 가게ID
   roadAddress: string // 주문시점의 도로명주소
   jibunAddress: string // 주문시점의 지번주소
   detailAddress: string // 주문시점의 상세주소
+  excludingSpoonAndFork: boolean // 스푼과 포크 제외 여부
   orderType: 'DELIVERY' | 'PACKING' // 주문타입
   paymentType: 'TOSS_PAY' | 'KAKAO_PAY' // 결제타입
   orderMenus: {
@@ -18,30 +19,18 @@ export interface OrderPay {
   }[] // 주문할 메뉴정보 배열
 }
 
-const usePostOrderPay = (orderPayData: OrderPay) => {
-  const qc = useQueryClient()
-
-  const { data: orderPay, isSuccess } = useQuery({
-    queryKey: ['orderPay'],
-    queryFn: async () => {
-      const accessToken = localStorage.getItem('accessToken')
-      const headers: Record<string, string> = {}
-
-      if (accessToken) {
-        headers.Authorization = accessToken
-      }
-
-      return await api.post<OrderPay>(`orders`, orderPayData, {
-        headers,
-      })
+export interface OrderPayResponse {
+  orderId: string
+  orderSummary: string
+  totalPrice: number
+}
+const usePostOrderPay = () => {
+  return useMutation({
+    mutationKey: ['orderPay'],
+    mutationFn: async (data: OrderPay) => {
+      return await api.post<OrderPayResponse>(`orders`, data)
     },
   })
-
-  const resetPostOrderPay = () => {
-    qc.removeQueries({ queryKey: ['orderPay'] })
-  }
-
-  return { orderPay, isSuccess, resetPostOrderPay }
 }
 
 export default usePostOrderPay

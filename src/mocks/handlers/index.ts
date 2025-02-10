@@ -171,6 +171,10 @@ export const handlers = [
     return passthrough()
   }),
 
+  http.post('*/api/v1/orders', () => {
+    return passthrough()
+  }),
+
   // Get Menu Options
   http.get('/api/v1/stores/:id/menus/:menuId/options', async ({ request }) => {
     return passthrough()

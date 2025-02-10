@@ -281,7 +281,7 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
                 {category.categoryName}
               </p>
               {category.menus.map((menu) => (
-                <StoreDetailMenuItem key={menu.id} storeId={storeDetail?.id || ''} menu={menu} />
+                <StoreDetailMenuItem key={menu.id} storeName={storeDetail?.name || ''} storeId={storeDetail?.id || ''} menu={menu} />
               ))}
             </div>
           ))}

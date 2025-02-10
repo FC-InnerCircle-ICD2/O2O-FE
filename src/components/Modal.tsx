@@ -30,7 +30,7 @@ const Modal = () => {
                   {modal.content}
                 </motion.div> 
                 :
-                <div className="relative z-10 max-w-[480px] min-w-[320px] h-full mx-auto">
+                <div className="relative z-10 max-w-[480px] min-w-[320px] h-full mx-auto flex items-center justify-center">
                   {modal.content}
                 </div>
               }

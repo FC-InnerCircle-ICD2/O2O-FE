@@ -8,7 +8,7 @@ const buttonVariants = cva('inline-flex items-center justify-center gap-2 whites
     variant: {
       default: 'bg-primary text-white hover:bg-primary/90 w-full px-4',
       primaryFit: 'w-full px-4 text-primary border-solid border border-primary',
-      grayFit: 'w-full px-4 text-gray-400 border-solid border border-gray-400',
+      grayFit: 'w-full px-4 text-gray-800 border-solid border border-gray-400',
     },
 
     size: {
