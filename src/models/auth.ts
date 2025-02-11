@@ -2,6 +2,15 @@ export interface SignupData {
   signname: string
   password: string
   nickname: string
+  username: string
+  phone: string
+  address: {
+    roadAddress: string
+    jibunAddress: string
+    detailAddress: string
+    latitude: number
+    longitude: number
+  }
 }
 
 export interface LoginData {
