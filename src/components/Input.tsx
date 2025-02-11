@@ -106,7 +106,7 @@ const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
               isInvalid && 'border-red-500 focus-visible:ring-red-500',
               props.value && type === 'password' && onReset && 'pr-20', // 패스워드 토글과 x 버튼 공간
               props.value && type === 'password' && !onReset && 'pr-14', // 패스워드 토글 공간만
-              props.value && type !== 'password' && onReset && 'pr-10', // x 버튼 공간만
+              props.value && type !== 'password' && onReset && 'pr-10' // x 버튼 공간만
             )}
             {...props}
           />
@@ -135,7 +135,7 @@ const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
         </div>
       </div>
     )
-  },
+  }
 )
 
 Input.displayName = 'CommonInput'

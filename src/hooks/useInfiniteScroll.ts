@@ -123,4 +123,3 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     refetch: refetch,
   }
 }
-

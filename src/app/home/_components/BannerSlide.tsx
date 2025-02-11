@@ -34,7 +34,7 @@ const BannerSlide = () => {
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,
-          pauseOnMouseEnter: false
+          pauseOnMouseEnter: false,
         }}
       >
         {isFetching ? (

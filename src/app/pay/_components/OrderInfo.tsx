@@ -28,7 +28,9 @@ const OrderInfo = () => {
 
   const [isExcludingSpoon, setIsExcludingSpoon] = useState(false)
   const [deliveryPrice, setDeliveryPrice] = useState(0)
-  const [menuPriceAndCount, setMenuPriceAndCount] = useState<Record<string, { count: number, price: number }>>({})
+  const [menuPriceAndCount, setMenuPriceAndCount] = useState<
+    Record<string, { count: number; price: number }>
+  >({})
 
   // const orderData: OrderPay = {
   //   storeId: '26466355',
@@ -58,12 +60,18 @@ const OrderInfo = () => {
   const handleOrderPay = () => {
     if (!orderList || !member) {
       showModal({
-        content: <Alert title="주문 오류" message="주문에 필요한 정보가 없습니다." onClick={() => router.back()} />,
+        content: (
+          <Alert
+            title="주문 오류"
+            message="주문에 필요한 정보가 없습니다."
+            onClick={() => router.back()}
+          />
+        ),
       })
       return
     }
 
-    let orderData: OrderPay = {
+    const orderData: OrderPay = {
       storeId: orderList.storeId,
       roadAddress: member.roadAddress || '',
       jibunAddress: member.jibunAddress || '',
@@ -75,9 +83,9 @@ const OrderInfo = () => {
         return {
           id: item.menuId,
           quantity: menuPriceAndCount[item.menuId].count,
-          orderMenuOptionGroups: Object.keys(item.selectedOptions).map(group => ({
+          orderMenuOptionGroups: Object.keys(item.selectedOptions).map((group) => ({
             id: group,
-            orderMenuOptionIds: item.selectedOptions[group].map(option => option.id),
+            orderMenuOptionIds: item.selectedOptions[group].map((option) => option.id),
           })),
         }
       }),
@@ -87,7 +95,7 @@ const OrderInfo = () => {
   }
 
   const handlePriceAndCount = (id: string, count: number) => {
-    setMenuPriceAndCount(prev => {
+    setMenuPriceAndCount((prev) => {
       const currentPriceAndCount = prev[id] || { count: 0, price: 0 }
       return {
         ...prev,
@@ -108,19 +116,30 @@ const OrderInfo = () => {
 
       if (!orderList && modals.length === 0) {
         showModal({
-          content: <Alert title="주문 오류" message="주문 목록을 추가해주세요." onClick={() => router.back()} />,
+          content: (
+            <Alert
+              title="주문 오류"
+              message="주문 목록을 추가해주세요."
+              onClick={() => router.back()}
+            />
+          ),
         })
 
         return
       }
 
-      setMenuPriceAndCount(orderList?.menu.reduce((acc, menu) => {
-        acc[menu.menuId] = {
-          count: 1,
-          price: menu.price,
-        }
-        return acc
-      }, {} as Record<string, { count: number, price: number }>) || {})
+      setMenuPriceAndCount(
+        orderList?.menu.reduce(
+          (acc, menu) => {
+            acc[menu.menuId] = {
+              count: 1,
+              price: menu.price,
+            }
+            return acc
+          },
+          {} as Record<string, { count: number; price: number }>
+        ) || {}
+      )
     }
   }, [])
 
@@ -137,12 +156,19 @@ const OrderInfo = () => {
   useEffect(() => {
     if (paymentSuccess) {
       showModal({
-        content: <Confirm title="주문 완료" message="주문이 완료되었습니다.<br />주문 내역을 확인하러갈까요?"
-          confirmText='확인하러 가기' onConfirmClick={() => {
-            removeOrderList()
-            router.push(`${ROUTE_PATHS.ORDERS_DETAIL}/${orderResponse?.orderId}`)
-          }}
-          cancelText='홈으로' onCancelClick={() => router.push(ROUTE_PATHS.HOME)} />,
+        content: (
+          <Confirm
+            title="주문 완료"
+            message="주문이 완료되었습니다.<br />주문 내역을 확인하러갈까요?"
+            confirmText="확인하러 가기"
+            onConfirmClick={() => {
+              removeOrderList()
+              router.push(`${ROUTE_PATHS.ORDERS_DETAIL}/${orderResponse?.orderId}`)
+            }}
+            cancelText="홈으로"
+            onCancelClick={() => router.push(ROUTE_PATHS.HOME)}
+          />
+        ),
       })
     }
   }, [paymentSuccess])
@@ -176,16 +202,18 @@ const OrderInfo = () => {
         <div className="ml-7 text-xs text-gray-700">{member?.jibunAddress}</div>
       </div>
       <div className="rounded-xl border border-solid border-gray-400">
-        <div className="flex flex-row justify-between px-3 py-3 border-b border-solid border-gray-300">
+        <div className="flex flex-row justify-between border-b border-solid border-gray-300 p-3">
           <div className="text-base font-extrabold">{orderList.storeName}</div>
           <div className="place-content-center text-xs text-gray-700">전체삭제</div>
         </div>
 
         <div className="flex flex-col gap-1 py-4">
-          {orderList.menu.map((item) => <MenuItem key={item.menuId} menu={item} handlePriceAndCount={handlePriceAndCount} />)}          
+          {orderList.menu.map((item) => (
+            <MenuItem key={item.menuId} menu={item} handlePriceAndCount={handlePriceAndCount} />
+          ))}
         </div>
 
-        <div className="flex flex-row items-center justify-center gap-1 px-3 py-3 border-t border-solid border-gray-300">
+        <div className="flex flex-row items-center justify-center gap-1 border-t border-solid border-gray-300 p-3">
           <Icon name="Plus" size={20} />
           <div className="font-bold">메뉴 추가하기</div>
         </div>
@@ -194,14 +222,17 @@ const OrderInfo = () => {
         <div className="text-base font-extrabold">가게 요청사항</div>
         {/* <Input placeholder="예) 견과류 빼주세요" /> */}
         <div className="items-top flex items-center space-x-2">
-          <Checkbox id="terms1" className="h-5 w-5 border-solid data-[state=checked]:bg-white data-[state=checked]:border-primary border-gray-300 outline-none"
+          <Checkbox
+            id="terms1"
+            className="size-5 border-solid border-gray-300 outline-none data-[state=checked]:border-primary data-[state=checked]:bg-white"
             checked={isExcludingSpoon}
-            onCheckedChange={(checked: boolean) => setIsExcludingSpoon(checked)} />
+            onCheckedChange={(checked: boolean) => setIsExcludingSpoon(checked)}
+          />
           <Label
-              htmlFor="terms1"
+            htmlFor="terms1"
             className="text-sm font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              일회용 수저, 포크는 빼주세요
+          >
+            일회용 수저, 포크는 빼주세요
           </Label>
         </div>
         <Separator />
@@ -237,7 +268,9 @@ const OrderInfo = () => {
         <div className="text-lg font-bold">총 결재금액</div>
         <div className="text-lg font-bold">{(getPrice() + deliveryPrice).toLocaleString()}원</div>
       </div>
-      <Button onClick={handleOrderPay}>{(getPrice() + deliveryPrice).toLocaleString()}원 배달 결제하기</Button>
+      <Button onClick={handleOrderPay}>
+        {(getPrice() + deliveryPrice).toLocaleString()}원 배달 결제하기
+      </Button>
     </div>
   )
 }

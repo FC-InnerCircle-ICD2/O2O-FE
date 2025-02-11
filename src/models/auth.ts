@@ -16,7 +16,6 @@ export interface LoginResponse {
   refreshTokenExpiresIn: string
 }
 
-
 export interface Member {
   id: number
   signname: string

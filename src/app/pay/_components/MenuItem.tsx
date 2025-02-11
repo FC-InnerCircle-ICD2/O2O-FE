@@ -4,7 +4,13 @@ import { OrderMenu } from '@/store/orderList'
 import Image from 'next/image'
 import { useState } from 'react'
 
-const MenuItem = ({ menu, handlePriceAndCount }: { menu: OrderMenu, handlePriceAndCount: (id: string, count: number) => void }) => {
+const MenuItem = ({
+  menu,
+  handlePriceAndCount,
+}: {
+  menu: OrderMenu
+  handlePriceAndCount: (id: string, count: number) => void
+}) => {
   const [count, setCount] = useState(1)
 
   const handlerCount = (count: number) => {
@@ -13,7 +19,7 @@ const MenuItem = ({ menu, handlePriceAndCount }: { menu: OrderMenu, handlePriceA
   }
 
   return (
-    <div className='px-3 flex flex-col gap-2'>
+    <div className="flex flex-col gap-2 px-3">
       <div className="flex flex-row justify-between">
         <div className="flex flex-row gap-3">
           <Image
@@ -26,7 +32,7 @@ const MenuItem = ({ menu, handlePriceAndCount }: { menu: OrderMenu, handlePriceA
           />
           <div className="flex flex-col place-content-center">
             <div className="text-base font-medium">{menu.name}</div>
-            <div className="text-sm text-gray-700 pb-3">{menu.optionNames}</div>
+            <div className="pb-3 text-sm text-gray-700">{menu.optionNames}</div>
             <div className="font-bold">{(menu.price * count).toLocaleString()}원</div>
           </div>
         </div>

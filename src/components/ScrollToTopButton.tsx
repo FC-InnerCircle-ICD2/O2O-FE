@@ -7,13 +7,17 @@ interface ScrollToTopButtonProps {
   className?: string
 }
 
-const ScrollToTopButton = ({ className = '', onClick, hasBottomNavigation = true }: ScrollToTopButtonProps) => {
+const ScrollToTopButton = ({
+  className = '',
+  onClick,
+  hasBottomNavigation = true,
+}: ScrollToTopButtonProps) => {
   return (
     <div
       className={cn(
         'fixed bottom-[4.5rem] right-5 z-50 cursor-pointer rounded-full border border-solid border-gray-300 bg-white p-[12px] transition-colors hover:bg-gray-50',
         hasBottomNavigation && 'bottom-[7.5rem]',
-        className,
+        className
       )}
       onClick={onClick}
     >

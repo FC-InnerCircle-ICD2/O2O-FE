@@ -1,8 +1,8 @@
 import js from '@eslint/js'
-import ts from 'typescript-eslint'
-import tailwind from 'eslint-plugin-tailwindcss'
-import pluginPrettier from 'eslint-plugin-prettier'
 import nextPlugin from '@next/eslint-plugin-next'
+import pluginPrettier from 'eslint-plugin-prettier'
+import tailwind from 'eslint-plugin-tailwindcss'
+import ts from 'typescript-eslint'
 
 export default [
   {
@@ -20,7 +20,7 @@ export default [
       '@next/next': nextPlugin,
     },
     rules: {
-      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       'prettier/prettier': 'error',
       'tailwindcss/no-custom-classname': 'off',

@@ -16,7 +16,7 @@ const CategorySlide = ({ isHide }: { isHide: boolean }) => {
     (category: string) => {
       setCategory(category === '전체' ? '' : category)
     },
-    [setCategory],
+    [setCategory]
   )
 
   const handleMoreClick = useCallback(() => {

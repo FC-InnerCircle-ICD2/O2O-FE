@@ -55,8 +55,6 @@ const useGetOrdersDetail = (orderId?: string) => {
   const { data: ordersDetail, isSuccess } = useQuery({
     queryKey: ['ordersDetail'],
     queryFn: async () => {
-
-
       return await api.get<OrdersDetail>(`orders/${orderId}`)
     },
   })

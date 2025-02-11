@@ -1,16 +1,15 @@
 'use client'
 
-import FavoritesStoreList from "./FavoritesStoreList"
-import RecentStoreList from "./RecentStoreList"
-
+import FavoritesStoreList from './FavoritesStoreList'
+import RecentStoreList from './RecentStoreList'
 
 const Favorites = () => {
-    return (
-        <div className="bg-neutral-100 h-full">
-            <FavoritesStoreList />
-            <RecentStoreList />
-        </div>
-    )
+  return (
+    <div className="h-full bg-neutral-100">
+      <FavoritesStoreList />
+      <RecentStoreList />
+    </div>
+  )
 }
 
 export default Favorites

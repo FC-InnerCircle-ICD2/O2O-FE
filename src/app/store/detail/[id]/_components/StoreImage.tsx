@@ -5,9 +5,17 @@ import Image from 'next/image'
 
 export const IMAGE_HEIGHT = 200
 
-const StoreImage = ({ pullHeight, imageMain, isSuccess }: { pullHeight: number, imageMain: string, isSuccess: boolean }) => {
+const StoreImage = ({
+  pullHeight,
+  imageMain,
+  isSuccess,
+}: {
+  pullHeight: number
+  imageMain: string
+  isSuccess: boolean
+}) => {
   return (
-    <div className="fixed z-0 size-full max-w-[480px] min-w-[320px]">
+    <div className="fixed z-0 size-full min-w-[320px] max-w-[480px]">
       <div
         className="relative overflow-hidden"
         style={{
@@ -15,19 +23,23 @@ const StoreImage = ({ pullHeight, imageMain, isSuccess }: { pullHeight: number, 
           transition: pullHeight === 0 ? 'height 0.3s ease-out' : 'none',
         }}
       >
-        {!isSuccess ? <Skeleton className="size-full" /> : <Image
-          src={imageMain}
-          alt="store-image"
-          className="size-full object-cover"
-          style={{
-            objectPosition: 'center',
-            transform: `scale(${1 + pullHeight / IMAGE_HEIGHT})`,
-            transformOrigin: 'center',
-            transition: pullHeight === 0 ? 'transform 0.3s ease-out' : 'none',
-          }}
-          fill
-          priority={true}
-        />}
+        {!isSuccess ? (
+          <Skeleton className="size-full" />
+        ) : (
+          <Image
+            src={imageMain}
+            alt="store-image"
+            className="size-full object-cover"
+            style={{
+              objectPosition: 'center',
+              transform: `scale(${1 + pullHeight / IMAGE_HEIGHT})`,
+              transformOrigin: 'center',
+              transition: pullHeight === 0 ? 'transform 0.3s ease-out' : 'none',
+            }}
+            fill
+            priority={true}
+          />
+        )}
 
         {/* <Swiper
           className="size-full"

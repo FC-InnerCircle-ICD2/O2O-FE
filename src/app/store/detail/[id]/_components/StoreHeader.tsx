@@ -15,7 +15,12 @@ interface StoreHeaderProps {
   isOrderDetail?: boolean
 }
 
-const StoreHeader = ({ isHeaderOpaque, isSuccess, title, isOrderDetail = false }: StoreHeaderProps) => {
+const StoreHeader = ({
+  isHeaderOpaque,
+  isSuccess,
+  title,
+  isOrderDetail = false,
+}: StoreHeaderProps) => {
   const router = useRouter()
   const { hideOrderDetail } = orderDetailStore()
   const { toast } = useToast()
@@ -25,13 +30,13 @@ const StoreHeader = ({ isHeaderOpaque, isSuccess, title, isOrderDetail = false }
       await navigator.clipboard.writeText(window.location.href)
       toast({
         description: 'URL이 복사되었습니다.',
-        position: 'center'
+        position: 'center',
       })
     } catch (error) {
       toast({
         description: 'URL 복사에 실패했습니다.',
         position: 'center',
-        variant: 'destructive'
+        variant: 'destructive',
       })
     }
   }
@@ -39,10 +44,10 @@ const StoreHeader = ({ isHeaderOpaque, isSuccess, title, isOrderDetail = false }
   return (
     <div
       className={cn(
-        'h-detail_header fixed top-0 z-20 flex w-full max-w-[480px] min-w-[320px] items-center justify-between pt-2 transition-all duration-200',
+        'fixed top-0 z-20 flex h-detail_header w-full min-w-[320px] max-w-[480px] items-center justify-between pt-2 transition-all duration-200',
         isHeaderOpaque
           ? 'border-b border-solid border-gray-200 bg-white px-[10px]'
-          : 'bg-transparent px-mobile_safe',
+          : 'bg-transparent px-mobile_safe'
       )}
     >
       <div className="flex items-center gap-2">
@@ -73,26 +78,35 @@ const StoreHeader = ({ isHeaderOpaque, isSuccess, title, isOrderDetail = false }
         </AnimatePresence>
       </div>
       <div className="flex items-center gap-2">
-        <button className="flex size-8 items-center justify-center rounded-full bg-white" onClick={handleShare}>
+        <button
+          className="flex size-8 items-center justify-center rounded-full bg-white"
+          onClick={handleShare}
+        >
           <Icon name="Share2" size={18} />
         </button>
         {!isOrderDetail && (
-          <button className="flex size-8 items-center justify-center rounded-full bg-white" onClick={() => {
-            toast({
-              description: '준비중입니다.',
-              position: 'center'
-            })
-          }}>
+          <button
+            className="flex size-8 items-center justify-center rounded-full bg-white"
+            onClick={() => {
+              toast({
+                description: '준비중입니다.',
+                position: 'center',
+              })
+            }}
+          >
             <Icon name="Heart" size={18} />
           </button>
         )}
         {!isOrderDetail && (
-          <button className="flex size-8 items-center justify-center rounded-full bg-white" onClick={() => {
-            toast({
-              description: '준비중입니다.',
-              position: 'center'
-            })
-          }}>
+          <button
+            className="flex size-8 items-center justify-center rounded-full bg-white"
+            onClick={() => {
+              toast({
+                description: '준비중입니다.',
+                position: 'center',
+              })
+            }}
+          >
             <Icon name="Search" size={18} />
           </button>
         )}
