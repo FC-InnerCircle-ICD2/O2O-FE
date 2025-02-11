@@ -42,7 +42,7 @@ const signupFormSchema = z.object({
   username: z.string().min(1, '이름을 입력해주세요.')
     .max(10, '이름은 10자 이내여야 합니다.')
     .regex(/^[a-zA-Z가-힣]+$/, '이름은 영문, 한글만 가능합니다.'),
-  phone: z.string().min(1, '전화번호를 입력해주세요.').max(13, '전화번호는 13자 이내여야 합니다.'),
+  phone: z.string().min(10, '전화번호는 8자 이상이어야 합니다.').max(13, '전화번호는 11자 이내여야 합니다.'),
 })
 
 const SignupForm = () => {  
