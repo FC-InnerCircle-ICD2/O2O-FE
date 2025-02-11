@@ -51,7 +51,7 @@ const SignupForm = () => {
   const { toast } = useToast()
   const {
     register,
-    formState: { errors },
+    formState: { errors, isValid },
     handleSubmit,
     watch,
     trigger,
@@ -73,7 +73,7 @@ const SignupForm = () => {
   const nicknameValue = watch('nickname')
   const usernameValue = watch('username')
   const phoneValue = watch('phone')
-  const isButtonDisabled = !signnameValue || !passwordValue || !nicknameValue || !usernameValue || !phoneValue
+
 
   const [focusedField, setFocusedField] = useState<'signname' | 'password' | 'nickname' | 'username' | 'phone' | null>(
     null,
@@ -206,7 +206,7 @@ const SignupForm = () => {
         className="mb-2 disabled:bg-slate-400"
         type="submit"
         size="m"
-        disabled={isButtonDisabled}
+        disabled={!isValid}
       >
         가입하기
       </Button>
