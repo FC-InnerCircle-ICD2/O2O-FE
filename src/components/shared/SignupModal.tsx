@@ -1,6 +1,7 @@
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Input from '@/components/Input'
+import { formatPhoneNumber, unformatPhoneNumber } from '@/lib/format'
 import { modalStore } from '@/store/modal'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
@@ -33,16 +34,13 @@ const signupFormSchema = z.object({
       /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).+$/,
       '비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.',
     ),
-  nickname: z.string().min(1, '닉네임을 입력해주세요.').max(10, '닉네임은 10자 이내여야 합니다.'),
-  username: z.string(),
-  phone: z.string(),
-  address: z.object({
-    roadAddress: z.string().min(1, '도로명 주소를 입력해주세요.'),
-    jibunAddress: z.string().min(1, '지번 주소를 입력해주세요.'),
-    detailAddress: z.string().min(1, '상세 주소를 입력해주세요.'),
-    latitude: z.number().min(1, '위도를 입력해주세요.'),
-    longitude: z.number().min(1, '경도를 입력해주세요.'),
-  }),
+  nickname: z.string().min(1, '닉네임을 입력해주세요.')
+    .max(10, '닉네임은 10자 이내여야 합니다.')
+    .regex(/^[a-zA-Z가-힣0-9]+$/, '닉네임은 영문, 한글, 숫자만 가능합니다.'),
+  username: z.string().min(1, '이름을 입력해주세요.')
+    .max(10, '이름은 10자 이내여야 합니다.')
+    .regex(/^[a-zA-Z가-힣]+$/, '이름은 영문, 한글만 가능합니다.'),
+  phone: z.string().min(1, '전화번호를 입력해주세요.').max(13, '전화번호는 13자 이내여야 합니다.'),
 })
 
 const SignupForm = () => {
@@ -61,7 +59,6 @@ const SignupForm = () => {
       nickname: '',
       username: '',
       phone: '',
-      address: null,
     },
     resolver: zodResolver(signupFormSchema),
     mode: 'onBlur',
@@ -70,19 +67,30 @@ const SignupForm = () => {
   const signnameValue = watch('signname')
   const passwordValue = watch('password')
   const nicknameValue = watch('nickname')
-  const isButtonDisabled = !signnameValue || !passwordValue || !nicknameValue
+  const usernameValue = watch('username')
+  const phoneValue = watch('phone')
+  const isButtonDisabled = !signnameValue || !passwordValue || !nicknameValue || !usernameValue || !phoneValue
 
-  const [focusedField, setFocusedField] = useState<'signname' | 'password' | 'nickname' | null>(
+  const [focusedField, setFocusedField] = useState<'signname' | 'password' | 'nickname' | 'username' | 'phone' | null>(
     null,
   )
 
   const onSubmit = handleSubmit((formData) => {
     // TODO: 회원가입 로직 추가
-    console.log('Form submitted:', formData)
+    const processedFormData = {
+      ...formData,
+      phone: unformatPhoneNumber(formData.phone),
+    }
+    console.log('Form submitted:', processedFormData)
     // TODO: 회원가입 실패 시 에러 토스트 띄우기
     // 회원가입 성공 시 모달 닫기
     hideModal()
   })
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedNumber = formatPhoneNumber(e.target.value)
+    setValue('phone', formattedNumber)
+  }
 
   return (
     <form onSubmit={onSubmit}>
@@ -121,12 +129,13 @@ const SignupForm = () => {
           <div className="mt-1.5 text-left text-xs text-red-500">{errors.password.message}</div>
         )}
       </div>
-      <div className="mb-8">
+      <div className="mb-3">
         <Input
           value={nicknameValue}
           label="닉네임"
           placeholder="영문 혹은 한글만 가능, 10자이내"
           {...register('nickname')}
+          maxLength={10}
           offOutline
           isInvalid={!!errors.nickname && focusedField !== 'nickname'}
           onFocus={() => {
@@ -139,6 +148,44 @@ const SignupForm = () => {
         />
         {errors.nickname && focusedField !== 'nickname' && (
           <div className="mt-1.5 text-left text-xs text-red-500">{errors.nickname.message}</div>
+        )}
+      </div>
+      <div className="mb-3">
+        <Input
+          value={usernameValue}
+          label="이름"
+          placeholder="이름 입력"
+          {...register('username')}
+          maxLength={10}
+          offOutline
+          isInvalid={!!errors.username && focusedField !== 'username'}
+          onFocus={() => {
+            setFocusedField('username')
+            trigger('signname')
+          }}
+        />
+        {errors.username && focusedField !== 'username' && (
+          <div className="mt-1.5 text-left text-xs text-red-500">{errors.username.message}</div>
+        )}
+      </div>
+      <div className="mb-8">
+        <Input
+          value={phoneValue}
+          label="전화번호"
+          type="tel"
+          placeholder="전화번호 입력"
+          {...register('phone')}
+          onChange={handlePhoneChange}
+          maxLength={13}
+          offOutline
+          isInvalid={!!errors.phone && focusedField !== 'phone'}
+          onFocus={() => {
+            setFocusedField('phone')
+            trigger('signname')
+          }}
+        />
+        {errors.phone && focusedField !== 'phone' && (
+          <div className="mt-1.5 text-left text-xs text-red-500">{errors.phone.message}</div>
         )}
       </div>
       <Button
