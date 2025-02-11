@@ -56,20 +56,25 @@ const SignupForm = () => {
     setValue,
   } = useForm({
     defaultValues: {
-      email: '',
+      signname: '',
       password: '',
       nickname: '',
+      username: '',
+      phone: '',
+      address: null,
     },
     resolver: zodResolver(signupFormSchema),
     mode: 'onBlur',
   })
 
-  const emailValue = watch('email')
+  const signnameValue = watch('signname')
   const passwordValue = watch('password')
   const nicknameValue = watch('nickname')
-  const isButtonDisabled = !emailValue || !passwordValue || !nicknameValue
+  const isButtonDisabled = !signnameValue || !passwordValue || !nicknameValue
 
-  const [focusedField, setFocusedField] = useState<'email' | 'password' | 'nickname' | null>(null)
+  const [focusedField, setFocusedField] = useState<'signname' | 'password' | 'nickname' | null>(
+    null,
+  )
 
   const onSubmit = handleSubmit((formData) => {
     // TODO: 회원가입 로직 추가
@@ -83,19 +88,19 @@ const SignupForm = () => {
     <form onSubmit={onSubmit}>
       <div className="mb-3">
         <Input
-          value={emailValue}
+          value={signnameValue}
           label="이메일 주소"
           placeholder="이메일 주소 입력"
-          {...register('email')}
+          {...register('signname')}
           offOutline
-          isInvalid={!!errors.email && focusedField !== 'email'}
-          onFocus={() => setFocusedField('email')}
+          isInvalid={!!errors.signname && focusedField !== 'signname'}
+          onFocus={() => setFocusedField('signname')}
           onReset={() => {
-            setValue('email', '')
+            setValue('signname', '')
           }}
         />
-        {errors.email && focusedField !== 'email' && (
-          <div className="mt-1.5 text-left text-xs text-red-500">{errors.email.message}</div>
+        {errors.signname && focusedField !== 'signname' && (
+          <div className="mt-1.5 text-left text-xs text-red-500">{errors.signname.message}</div>
         )}
       </div>
       <div className="mb-3">
@@ -109,7 +114,7 @@ const SignupForm = () => {
           isInvalid={!!errors.password && focusedField !== 'password'}
           onFocus={() => {
             setFocusedField('password')
-            trigger('email')
+            trigger('signname')
           }}
         />
         {errors.password && focusedField !== 'password' && (
@@ -126,7 +131,7 @@ const SignupForm = () => {
           isInvalid={!!errors.nickname && focusedField !== 'nickname'}
           onFocus={() => {
             setFocusedField('nickname')
-            trigger('email')
+            trigger('signname')
           }}
           onReset={() => {
             setValue('nickname', '')
