@@ -1,6 +1,8 @@
+import usePostSignup from '@/api/usePostSignup'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Input from '@/components/Input'
+import { useToast } from '@/hooks/useToast'
 import { formatPhoneNumber, unformatPhoneNumber } from '@/lib/format'
 import { modalStore } from '@/store/modal'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -43,8 +45,10 @@ const signupFormSchema = z.object({
   phone: z.string().min(1, '전화번호를 입력해주세요.').max(13, '전화번호는 13자 이내여야 합니다.'),
 })
 
-const SignupForm = () => {
+const SignupForm = () => {  
   const { hideModal } = modalStore()
+  const { mutate: signup } = usePostSignup()
+  const { toast } = useToast()
   const {
     register,
     formState: { errors },
@@ -76,15 +80,25 @@ const SignupForm = () => {
   )
 
   const onSubmit = handleSubmit((formData) => {
-    // TODO: 회원가입 로직 추가
     const processedFormData = {
       ...formData,
       phone: unformatPhoneNumber(formData.phone),
     }
-    console.log('Form submitted:', processedFormData)
-    // TODO: 회원가입 실패 시 에러 토스트 띄우기
-    // 회원가입 성공 시 모달 닫기
-    hideModal()
+    signup(processedFormData, {
+      onSuccess: () => {
+        hideModal()
+        toast({
+          title: '회원가입에 성공했습니다.',
+          description: '로그인을 진행해주세요.',
+        })
+      },
+      onError: (error) => {
+        toast({
+          title: '회원가입에 실패했습니다.',
+          description: error.message || <span className='whitespace-pre-line'>{`알수 없는 오류가 발생했습니다.\n 다시 시도하거나 고객센터로 문의해주세요.`}</span>,
+        })
+      }
+    })
   })
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
