@@ -25,7 +25,7 @@ const SignupModal = () => {
 export default SignupModal
 
 const signupFormSchema = z.object({
-  email: z.string().min(1, '이메일을 입력해주세요.').email('유효한 이메일 주소를 입력해주세요.'),
+  signname: z.string().min(1, '이메일을 입력해주세요.').email('유효한 이메일 주소를 입력해주세요.'),
   password: z
     .string()
     .min(8, '비밀번호는 8자 이상이어야 합니다.')
@@ -34,6 +34,15 @@ const signupFormSchema = z.object({
       '비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.',
     ),
   nickname: z.string().min(1, '닉네임을 입력해주세요.').max(10, '닉네임은 10자 이내여야 합니다.'),
+  username: z.string(),
+  phone: z.string(),
+  address: z.object({
+    roadAddress: z.string().min(1, '도로명 주소를 입력해주세요.'),
+    jibunAddress: z.string().min(1, '지번 주소를 입력해주세요.'),
+    detailAddress: z.string().min(1, '상세 주소를 입력해주세요.'),
+    latitude: z.number().min(1, '위도를 입력해주세요.'),
+    longitude: z.number().min(1, '경도를 입력해주세요.'),
+  }),
 })
 
 const SignupForm = () => {
