@@ -63,14 +63,14 @@ const LoginForm = () => {
     login(formData, {
       onError: async (error: Error) => {
         const httpError = error as HTTPError
-        const errorData = await httpError.response?.json() as { data: { error: string } }
+        const errorData = (await httpError.response?.json()) as { data: { error: string } }
         toast({
-          title: "로그인 실패",
-          description: errorData?.data.error || "로그인에 실패했습니다.",
-          variant: "destructive",
-          position: "center",
+          title: '로그인 실패',
+          description: errorData?.data.error || '로그인에 실패했습니다.',
+          variant: 'destructive',
+          position: 'center',
         })
-      }
+      },
     })
   })
 
@@ -82,22 +82,22 @@ const LoginForm = () => {
 
   return (
     <>
-    <form onSubmit={onSubmit}>
-      <div className="mb-3">
-        <Input placeholder="이메일 주소 입력" {...register('signname')} offOutline />
-      </div>
-      <div className="mb-8">
-        <Input type="password" placeholder="비밀번호 입력" {...register('password')} offOutline />
-      </div>
-      <Button
-        className="mb-2 disabled:bg-slate-400"
-        type="submit"
-        size="m"
-        disabled={isButtonDisabled}
-      >
-        {isPending ? <span className="loading loading-dots loading-sm"></span> : '로그인'}
-      </Button>
-    </form>
+      <form onSubmit={onSubmit}>
+        <div className="mb-3">
+          <Input placeholder="이메일 주소 입력" {...register('signname')} offOutline />
+        </div>
+        <div className="mb-8">
+          <Input type="password" placeholder="비밀번호 입력" {...register('password')} offOutline />
+        </div>
+        <Button
+          className="mb-2 disabled:bg-slate-400"
+          type="submit"
+          size="m"
+          disabled={isButtonDisabled}
+        >
+          {isPending ? <span className="loading loading-dots loading-sm"></span> : '로그인'}
+        </Button>
+      </form>
     </>
   )
 }

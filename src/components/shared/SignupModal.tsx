@@ -34,18 +34,25 @@ const signupFormSchema = z.object({
     .min(8, '비밀번호는 8자 이상이어야 합니다.')
     .regex(
       /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[^a-zA-Z0-9]).+$/,
-      '비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.',
+      '비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다.'
     ),
-  nickname: z.string().min(1, '닉네임을 입력해주세요.')
+  nickname: z
+    .string()
+    .min(1, '닉네임을 입력해주세요.')
     .max(10, '닉네임은 10자 이내여야 합니다.')
     .regex(/^[a-zA-Z가-힣0-9]+$/, '닉네임은 영문, 한글, 숫자만 가능합니다.'),
-  username: z.string().min(1, '이름을 입력해주세요.')
+  username: z
+    .string()
+    .min(1, '이름을 입력해주세요.')
     .max(10, '이름은 10자 이내여야 합니다.')
     .regex(/^[a-zA-Z가-힣]+$/, '이름은 영문, 한글만 가능합니다.'),
-  phone: z.string().min(10, '전화번호는 8자 이상이어야 합니다.').max(13, '전화번호는 11자 이내여야 합니다.'),
+  phone: z
+    .string()
+    .min(10, '전화번호는 8자 이상이어야 합니다.')
+    .max(13, '전화번호는 11자 이내여야 합니다.'),
 })
 
-const SignupForm = () => {  
+const SignupForm = () => {
   const { hideModal } = modalStore()
   const { mutate: signup } = usePostSignup()
   const { toast } = useToast()
@@ -74,10 +81,9 @@ const SignupForm = () => {
   const usernameValue = watch('username')
   const phoneValue = watch('phone')
 
-
-  const [focusedField, setFocusedField] = useState<'signname' | 'password' | 'nickname' | 'username' | 'phone' | null>(
-    null,
-  )
+  const [focusedField, setFocusedField] = useState<
+    'signname' | 'password' | 'nickname' | 'username' | 'phone' | null
+  >(null)
 
   const onSubmit = handleSubmit((formData) => {
     const processedFormData = {
@@ -95,9 +101,11 @@ const SignupForm = () => {
       onError: (error) => {
         toast({
           title: '회원가입에 실패했습니다.',
-          description: error.message || <span className='whitespace-pre-line'>{`알수 없는 오류가 발생했습니다.\n 다시 시도하거나 고객센터로 문의해주세요.`}</span>,
+          description: error.message || (
+            <span className="whitespace-pre-line">{`알수 없는 오류가 발생했습니다.\n 다시 시도하거나 고객센터로 문의해주세요.`}</span>
+          ),
         })
-      }
+      },
     })
   })
 
@@ -202,12 +210,7 @@ const SignupForm = () => {
           <div className="mt-1.5 text-left text-xs text-red-500">{errors.phone.message}</div>
         )}
       </div>
-      <Button
-        className="mb-2 disabled:bg-slate-400"
-        type="submit"
-        size="m"
-        disabled={!isValid}
-      >
+      <Button className="mb-2 disabled:bg-slate-400" type="submit" size="m" disabled={!isValid}>
         가입하기
       </Button>
     </form>
