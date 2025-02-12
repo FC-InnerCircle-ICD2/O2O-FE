@@ -6,7 +6,7 @@ const menuItems = [
   {
     icon: <Icon name="Building" size={24} />,
     label: '주소관리',
-    href: '',
+    href: '/mypage/address',
   },
   {
     icon: <Icon name="CreditCard" size={24} />,
