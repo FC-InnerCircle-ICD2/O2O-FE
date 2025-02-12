@@ -1,12 +1,13 @@
 import Icon from '@/components/Icon'
 import RippleeEffect from '@/components/RippleeEffect'
+import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
 
 const menuItems = [
   {
     icon: <Icon name="Building" size={24} />,
     label: '주소관리',
-    href: '/mypage/address',
+    href: `${ROUTE_PATHS.ADDRESS}`,
   },
   {
     icon: <Icon name="CreditCard" size={24} />,

@@ -12,4 +12,6 @@ export const ROUTE_PATHS = {
   STORE_DETAIL: '/store/detail',
   MYPAGE_EDIT_PROFILE: '/mypage/edit-profile',
   REVIEW: '/review',
+  ADDRESS: '/mypage/address',
+  ADDRESS_DETAIL: '/mypage/address/detail',
 }

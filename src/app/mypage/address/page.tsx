@@ -1,7 +1,7 @@
-import EditProfile from './_components/EditProfile'
+import AddressOption from './_components/AddressOption'
 
 const Address = () => {
-  return <EditProfile />
+  return <AddressOption />
 }
 
 export default Address
