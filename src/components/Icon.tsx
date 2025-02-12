@@ -1,5 +1,6 @@
 import {
   Bike,
+  Briefcase,
   Building,
   Check,
   ChevronDown,
@@ -12,9 +13,11 @@ import {
   CreditCard,
   Ellipsis,
   Heart,
+  Home,
   House,
   Link,
   Loader,
+  LocateFixed,
   MapPin,
   Megaphone,
   MessageCircleQuestion,
@@ -67,6 +70,9 @@ const ICONS = {
   MapPin,
   Plus,
   UtensilsCrossed,
+  LocateFixed,
+  Home,
+  Briefcase,
 } as const
 
 export type IconName = keyof typeof ICONS // 아이콘 목록
