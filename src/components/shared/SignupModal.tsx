@@ -98,13 +98,25 @@ const SignupForm = () => {
           description: '로그인을 진행해주세요.',
         })
       },
-      onError: (error) => {
-        toast({
-          title: '회원가입에 실패했습니다.',
-          description: error.message || (
-            <span className="whitespace-pre-line">{`알수 없는 오류가 발생했습니다.\n 다시 시도하거나 고객센터로 문의해주세요.`}</span>
-          ),
-        })
+      onError: (error: any) => {
+        const response = error.response
+        if (response.status === 400) {
+          toast({
+            title: '회원가입에 실패했습니다.',
+            description: (
+              <span className="whitespace-pre-line">{'사용할 수 없는 이메일 주소입니다.'}</span>
+            ),
+            variant: 'destructive',
+          })
+        } else {
+          toast({
+            title: '회원가입에 실패했습니다.',
+            description: (
+              <span className="whitespace-pre-line">{`알수 없는 오류가 발생했습니다.\n 다시 시도하거나 고객센터로 문의해주세요.`}</span>
+            ),
+            variant: 'destructive',
+          })
+        }
       },
     })
   })
