@@ -28,6 +28,7 @@ const AddressOption = () => {
         <Icon name="LocateFixed" size={20} />
         <div className="content-center">현재 위치로 주소 찾기</div>
       </div>
+
       <Separator ignoreMobileSafe className="h-2" />
       <div className="flex flex-row gap-2">
         <Icon name="MapPin" size={20} />
@@ -39,6 +40,7 @@ const AddressOption = () => {
           <div className="text-xs text-gray-500">[지번] 서울특별시 강동구 성내동</div>
         </div>
       </div>
+
       <Separator ignoreMobileSafe className="h-2" />
       <Link href={ROUTE_PATHS.ADDRESS_DETAIL}>
         <div className="flex flex-row gap-2">
