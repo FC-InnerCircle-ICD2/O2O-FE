@@ -1,17 +1,17 @@
 'use client'
 
 import Input from '@/components/Input'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import Icon from '@/components/Icon'
 import { Button } from '@/components/button'
 
-const MapInfo = () => {
+const MapInfo = ({ address }) => {
   const [word, setWord] = useState('')
 
   return (
     <div className="flex flex-col gap-4 px-mobile_safe">
       <div className="flex flex-col gap-2">
-        <div>서울특별시 강동구 풍성로 87-3</div>
+        <div>{address}</div>
         <div className="text-xs text-gray-500">[지번] 성내동 111-42</div>
       </div>
       <Input

@@ -9,21 +9,41 @@ const center = {
   lng: 126.570667,
 }
 
-const KakaoMap = () => {
+const KakaoMap = ({ onAddressChange }) => {
   const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_APP_KEY
   const [scriptLoad, setScriptLoad] = useState<boolean>(false)
   const [position, setPosition] = useState<{ lat: number; lng: number }>()
+  const [address, setAddress] = useState('')
 
   useEffect(() => {
     const script: HTMLScriptElement = document.createElement('script')
     script.async = true
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&libraries=services&autoload=false`
     document.head.appendChild(script)
 
     script.addEventListener('load', () => {
       setScriptLoad(true)
+
+      // kakao.maps가 정의되었는지 확인
+      if (window.kakao && window.kakao.maps) {
+        window.kakao.maps.load(() => {
+          const geocoder = new window.kakao.maps.services.Geocoder()
+          geocoder.coord2Address(center.lng, center.lat, (result, status) => {
+            const addr = result[0].address
+            setAddress(addr.address_name) // 주소를 상태에 저장
+            onAddressChange(addr.address_name)
+          })
+        })
+      } else {
+        console.error('Kakao Maps API가 로드되지 않았습니다.')
+      }
     })
-  }, [])
+
+    // Cleanup function to remove the script
+    return () => {
+      document.head.removeChild(script)
+    }
+  }, [center, apiKey])
   return (
     <>
       <Map // 지도를 표시할 Container
@@ -44,12 +64,6 @@ const KakaoMap = () => {
       >
         <MapMarker position={position ?? center} />
       </Map>
-      {/*<p>*/}
-      {/*  <em>지도를 클릭해주세요!</em>*/}
-      {/*</p>*/}
-      {/*<div id="clickLatlng">*/}
-      {/*  {position && `클릭한 위치의 위도는 ${position.lat} 이고, 경도는 ${position.lng} 입니다`}*/}
-      {/*</div>*/}
     </>
   )
 }
