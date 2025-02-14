@@ -64,7 +64,7 @@ const OrderList = ({ ordersData }: OrderDataList) => {
         <div className="flex flex-col gap-3">
           <div className="flex flex-row justify-between gap-8">
             <div className="min-w-[50px] text-sm text-gray-500">주문번호</div>
-            <div className="text-sm text-gray-500 truncate">{ordersData.orderId}</div>
+            <div className="truncate text-sm text-gray-500">{ordersData.orderId}</div>
           </div>
           <div className="flex flex-row justify-between gap-8">
             <div className="text-sm text-gray-500">주문시간</div>
@@ -79,48 +79,22 @@ const OrderList = ({ ordersData }: OrderDataList) => {
         <div className="text-lg font-bold">주문내역</div>
         {ordersData.orderMenus.map((menu) => (
           <div key={uuidv4()}>
-            <p className='text-base font-semibold'>{`${menu.menuName} ${menu.menuQuantity}개`}</p>
-            <ul className='pt-1 list-disc pl-4 space-y-0.5 [&>li]:pl-0 [&>li]:-indent-1 text-gray-500'>
-              <li className='text-sm'>{`기본 : ${(menu.menuPrice * menu.menuQuantity).toLocaleString()}원`}</li>
-              {menu.orderMenuOptionGroups.map((menuGroup) => (
+            <p className="text-base font-semibold">{`${menu.menuName} ${menu.menuQuantity}개`}</p>
+            <ul className="list-disc space-y-0.5 pl-4 pt-1 text-gray-500 [&>li]:pl-0 [&>li]:-indent-1">
+              <li className="text-sm">{`기본 : ${(menu.menuPrice * menu.menuQuantity).toLocaleString()}원`}</li>
+              {menu.orderMenuOptionGroups.map((menuGroup) =>
                 menuGroup.orderMenuOptions.map((menuOption) => {
-                  return <li key={uuidv4()} className='text-sm'>{`${menuGroup.orderMenuOptionGroupName} : ${menuOption.menuOptionName} (${(menuOption.menuOptionPrice * menu.menuQuantity).toLocaleString()}원)`}</li>
+                  return (
+                    <li
+                      key={uuidv4()}
+                      className="text-sm"
+                    >{`${menuGroup.orderMenuOptionGroupName} : ${menuOption.menuOptionName} (${(menuOption.menuOptionPrice * menu.menuQuantity).toLocaleString()}원)`}</li>
+                  )
                 })
-              ))}
+              )}
             </ul>
           </div>
         ))}
-
-        {/* <div className="grid grid-cols-2 gap-3">
-          {ordersData.orderMenus.map((menu) => (
-            <React.Fragment key={uuidv4()}>
-              <div className="text-[14px]" key={uuidv4()}>
-                {`${menu.menuName} ${menu.menuQuantity}개`}
-              </div>
-              <div
-                className="justify-self-end text-[14px]"
-                key={uuidv4()}
-              >{`${(menu.menuPrice * menu.menuQuantity).toLocaleString()}원`}</div>
-              {menu.orderMenuOptionGroups.map((menuDetail) => (
-                <React.Fragment key={uuidv4()}>
-                  <div className="max-w-48 text-xs text-gray-500" key={uuidv4()}>
-                    {menuDetail.orderMenuOptionGroupName}
-                  </div>
-                  <div>
-                  {menuDetail.orderMenuOptions.map((menuOption) => (
-                    <React.Fragment key={uuidv4()}>
-                      <div
-                        className="justify-self-end text-xs text-gray-500"
-                        key={uuidv4()}
-                      >{`${menuOption.menuOptionPrice.toLocaleString()}원`}</div>
-                    </React.Fragment>
-                  ))}
-                  </div>
-                </React.Fragment>
-              ))}
-            </React.Fragment>
-          ))}
-        </div> */}
       </div>
 
       <Separator className="my-5" />
@@ -156,7 +130,7 @@ const OrderList = ({ ordersData }: OrderDataList) => {
 
       <Separator className="my-5" />
 
-      <div className="text-lg font-bold pb-5">주문자 정보</div>
+      <div className="pb-5 text-lg font-bold">주문자 정보</div>
       <div className="flex flex-col gap-3 pb-16">
         <div className="flex flex-row justify-between">
           <div className="max-w-48 text-sm text-gray-500">연락처</div>
