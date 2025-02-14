@@ -2,10 +2,18 @@
 
 import Icon from '@/components/Icon'
 import Input from '@/components/Input'
-import { useState } from 'react'
+import React, { useState } from 'react'
 
-const OrderSearch = () => {
+interface OrderSearchProps {
+  onSearch: (searchValue: string) => void
+}
+
+const OrderSearch: React.FC<OrderSearchProps> = ({ onSearch }) => {
   const [word, setWord] = useState('')
+
+  const handleSearch = () => {
+    onSearch(word)
+  }
 
   return (
     <div className="flex w-full flex-col gap-7">
@@ -18,6 +26,11 @@ const OrderSearch = () => {
           onReset={() => setWord('')}
           icon={<Icon name="Search" size={18} />}
           offOutline
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSearch()
+            }
+          }}
         />
       </div>
     </div>
