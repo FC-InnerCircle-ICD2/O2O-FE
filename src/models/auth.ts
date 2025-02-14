@@ -2,6 +2,8 @@ export interface SignupData {
   signname: string
   password: string
   nickname: string
+  username: string
+  phone: string
 }
 
 export interface LoginData {
@@ -15,7 +17,6 @@ export interface LoginResponse {
   accessTokenExpiresIn: string
   refreshTokenExpiresIn: string
 }
-
 
 export interface Member {
   id: number

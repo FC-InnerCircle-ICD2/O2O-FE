@@ -116,12 +116,18 @@ const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
                 type="button"
                 onClick={() => setShowPassword((prev) => !prev)}
                 className="z-10 mr-2 text-xs font-semibold text-gray-500"
+                tabIndex={-1}
               >
                 {showPassword ? '가리기' : '보기'}
               </button>
             )}
             {props.value && onReset && (
-              <button type="button" onClick={onReset} className="z-10">
+              <button
+                type="button"
+                onClick={onReset}
+                className="z-10"
+                tabIndex={-1}
+              >
                 <Icon
                   name="CircleX"
                   size={resetIconSizes[inputSize ?? 'default']}
