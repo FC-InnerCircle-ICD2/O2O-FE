@@ -1,4 +1,4 @@
-import ky from 'ky';
+import ky from 'ky'
 
 export const kyClient = ky.create({
   prefixUrl: process.env.NEXT_PUBLIC_API_URL, // Base URL 설정
@@ -8,9 +8,9 @@ export const kyClient = ky.create({
       (request) => {
         const accessToken = localStorage.getItem('accessToken')
         if (accessToken) {
-            request.headers.set('Authorization', accessToken);
+          request.headers.set('Authorization', accessToken)
         }
-      },  
+      },
     ],
     afterResponse: [
       (_request, _options, response) => {
@@ -28,7 +28,8 @@ export const kyClient = ky.create({
 })
 
 export const mockClient = kyClient.extend({
-  prefixUrl: process.env.NODE_ENV === 'development' 
-    ? `http://localhost:3000/api/v1`
-    : process.env.NEXT_PUBLIC_API_URL,
+  prefixUrl:
+    process.env.NODE_ENV === 'development'
+      ? `http://localhost:3000/api/v1`
+      : process.env.NEXT_PUBLIC_API_URL,
 })
