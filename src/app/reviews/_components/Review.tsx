@@ -1,10 +1,10 @@
 'use client'
 
-import CompletedReviews from '@/app/review/_components/CompletedReviews'
-import NoPendingReview from '@/app/review/_components/NoPendingReview'
-import PedingReviewSkeleton from '@/app/review/_components/PedingReviewSkeleton'
-import PendingReview from '@/app/review/_components/PendingReview'
-import ReviewTab from '@/app/review/_components/ReviewTab'
+import CompletedReviews from '@/app/reviews/_components/CompletedReviews'
+import NoPendingReview from '@/app/reviews/_components/NoPendingReview'
+import PedingReviewSkeleton from '@/app/reviews/_components/PedingReviewSkeleton'
+import PendingReview from '@/app/reviews/_components/PendingReview'
+import ReviewTab from '@/app/reviews/_components/ReviewTab'
 import { usePendingReviews } from '@/models/review'
 import { motion } from 'motion/react'
 import { useState } from 'react'
@@ -50,7 +50,7 @@ const Review = () => {
               />
             ))
           ) : (
-                <NoPendingReview />
+            <NoPendingReview />
           )}
         </motion.div>
 

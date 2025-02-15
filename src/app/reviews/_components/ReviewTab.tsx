@@ -1,4 +1,4 @@
-import { ReviewTabType } from '@/app/review/_components/Review'
+import { ReviewTabType } from '@/app/reviews/_components/Review'
 import { motion } from 'motion/react'
 
 interface ReviewTabProps {
