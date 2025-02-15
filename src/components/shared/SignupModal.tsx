@@ -123,7 +123,10 @@ const SignupForm = () => {
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formattedNumber = formatPhoneNumber(e.target.value)
-    setValue('phone', formattedNumber)
+    setValue('phone', formattedNumber, {
+      shouldValidate: true, // 값이 변경될 때마다 유효성 검사하는 옵션
+      shouldDirty: true, // 사용자가 입력하는 값이라는 것을 알려주는 옵션
+    })
   }
 
   return (
