@@ -17,19 +17,19 @@ const ReviewTab = ({ tab, onChangeTab, pendingReviewsCount }: ReviewTabProps) =>
       <button
         onClick={handleClickTab}
         value="작성가능"
-        className={`w-1/2 ${tab === '작성가능' ? 'text-white' : 'text-gray-700'}`}
+        className={`z-10 w-1/2 ${tab === '작성가능' ? 'text-white' : 'text-gray-700'}`}
       >
         {`작성 가능한 리뷰 (${pendingReviewsCount})`}
       </button>
       <button
         onClick={handleClickTab}
         value="작성완료"
-        className={`w-1/2 ${tab === '작성완료' ? 'text-white' : 'text-gray-700'}`}
+        className={`z-10 w-1/2 ${tab === '작성완료' ? 'text-white' : 'text-gray-700'}`}
       >
         {`작성한 리뷰 (${2})`}
       </button>
       <motion.div
-        className="absolute left-1 top-1 -z-10 h-[32px] w-[calc(50%-4px)] rounded-sm bg-primary"
+        className="absolute left-1 top-1 z-0 h-[32px] w-[calc(50%-4px)] rounded-sm bg-primary"
         animate={{
           x: tab === '작성가능' ? '0%' : '100%',
         }}
