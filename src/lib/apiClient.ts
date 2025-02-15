@@ -7,6 +7,9 @@ const refreshClient = ky.create({
   timeout: 10000,
 })
 
+// 토큰 갱신 중임을 나타내는 Promise를 저장
+let refreshTokenPromise: Promise<RefreshResponse['data']> | null = null
+
 export const kyClient = ky.create({
   prefixUrl: process.env.NEXT_PUBLIC_API_URL, // Base URL 설정
   timeout: 10000, // 타임아웃 설정
@@ -22,37 +25,44 @@ export const kyClient = ky.create({
     afterResponse: [
       async (request, options, response) => {
         if (response.status === 511) {
-          console.log('토큰 만료 감지, 리프레시 토큰 요청 시작')
-
-          const accessToken = localStorage.getItem('accessToken')
-          const refreshToken = localStorage.getItem('refreshToken')
-
           try {
-            // refreshClient를 사용하여 리프레시 토큰 요청
-            const response = await refreshClient
-              .post('auth/refresh', {
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                json: { accessToken, refreshToken },
-              })
-              .json<RefreshResponse>()
+            // 이미 진행 중인 토큰 갱신이 있다면 그 Promise를 재사용
+            if (!refreshTokenPromise) {
+              refreshTokenPromise = (async () => {
+                const accessToken = localStorage.getItem('accessToken')
+                const refreshToken = localStorage.getItem('refreshToken')
 
-            // 새로운 액세스 토큰 저장
-            localStorage.setItem('accessToken', response.data.accessToken)
-            localStorage.setItem('refreshToken', response.data.refreshToken)
+                const response = await refreshClient
+                  .post('auth/refresh', {
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    json: { accessToken, refreshToken },
+                  })
+                  .json<RefreshResponse>()
+
+                localStorage.setItem('accessToken', response.data.accessToken)
+                localStorage.setItem('refreshToken', response.data.refreshToken)
+
+                return response.data
+              })()
+            }
+
+            // 토큰 갱신 완료 대기
+            const newTokens = await refreshTokenPromise
+            refreshTokenPromise = null // 갱신 완료 후 초기화
 
             // 원래 요청을 새 토큰으로 재시도
             return ky(request, {
               ...options,
               headers: {
                 ...options.headers,
-                Authorization: response.data.accessToken,
+                Authorization: newTokens.accessToken,
               },
             })
           } catch (error) {
+            refreshTokenPromise = null // 에러 발생 시에도 초기화
             console.error('리프레시 토큰 갱신 실패:', error)
-            // 로컬 스토리지의 토큰 제거
             localStorage.removeItem('accessToken')
             localStorage.removeItem('refreshToken')
             throw new Error('리프레시 토큰 만료')
