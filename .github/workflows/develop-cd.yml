@@ -3,11 +3,11 @@ name: Deploy Client to Docker Hub
 on:
   push:
     branches:
-      - main
+      - develop
   workflow_dispatch:
 
 jobs:
   client-build:
-    uses: ./.github/workflows/main-deploy-v1.yml
+    uses: ./.github/workflows/develop-deploy-v1.yml
     name: "Build and Deploy for Client"
     secrets: inherit
