@@ -5,9 +5,9 @@ import Input from '@/components/Input'
 import Separator from '@/components/Separator'
 import SignupModal from '@/components/shared/SignupModal'
 import { useToast } from '@/hooks/useToast'
+import { ApiErrorResponse } from '@/lib/api'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
-import { HTTPError } from 'ky'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -61,12 +61,11 @@ const LoginForm = () => {
 
   const onSubmit = handleSubmit((formData) => {
     login(formData, {
-      onError: async (error: Error) => {
-        const httpError = error as HTTPError
-        const errorData = (await httpError.response?.json()) as { data: { error: string } }
+      onError: async (error) => {
+        const apiError = error as unknown as ApiErrorResponse
         toast({
           title: '로그인 실패',
-          description: errorData?.data.error || '로그인에 실패했습니다.',
+          description: apiError.message || '알 수 없는 이유로 로그인에 실패했습니다.',
           variant: 'destructive',
           position: 'center',
         })
