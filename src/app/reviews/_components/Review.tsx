@@ -1,11 +1,11 @@
 'use client'
 
+import useGetWritableReviews from '@/api/useGetWritableReviews'
 import CompletedReviews from '@/app/reviews/_components/CompletedReviews'
 import NoPendingReview from '@/app/reviews/_components/NoPendingReview'
 import PedingReviewSkeleton from '@/app/reviews/_components/PedingReviewSkeleton'
-import PendingReview from '@/app/reviews/_components/PendingReview'
 import ReviewTab from '@/app/reviews/_components/ReviewTab'
-import { usePendingReviews } from '@/models/review'
+import WritableReview from '@/app/reviews/_components/WritableReview'
 import { motion } from 'motion/react'
 import { useState } from 'react'
 
@@ -13,7 +13,7 @@ export type ReviewTabType = '작성가능' | '작성완료'
 
 const Review = () => {
   const [tab, setTab] = useState<ReviewTabType>('작성가능')
-  const { data: pendingReviews, isLoading } = usePendingReviews()
+  const { data: writableReviews, isLoading } = useGetWritableReviews()
 
   const handleChangeTab = (tab: ReviewTabType) => {
     setTab(tab)
@@ -25,7 +25,7 @@ const Review = () => {
         <ReviewTab
           tab={tab}
           onChangeTab={handleChangeTab}
-          pendingReviewsCount={pendingReviews?.length ?? 0}
+          pendingReviewsCount={writableReviews?.content.length ?? 0}
         />
       </div>
       <div className="relative mt-2 h-[calc(100vh-190px)] overflow-y-auto overflow-x-hidden">
@@ -41,12 +41,12 @@ const Review = () => {
             Array.from({ length: 5 }).map((_, i) => (
               <PedingReviewSkeleton key={i} offSeparator={i === 4} />
             ))
-          ) : pendingReviews ? (
-            pendingReviews.map((review, index) => (
-              <PendingReview
+          ) : writableReviews?.content ? (
+            writableReviews.content.map((review, index) => (
+              <WritableReview
                 key={review.orderId}
                 review={review}
-                offSeparator={index === pendingReviews.length - 1}
+                offSeparator={index === writableReviews.content.length - 1}
               />
             ))
           ) : (
