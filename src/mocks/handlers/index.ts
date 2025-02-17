@@ -1,5 +1,4 @@
 import BANNER_MOCK_DATA from '@/constants/banners'
-import { PENDING_REVIEWS_MOCK_DATA } from '@/constants/pendingReviews'
 import STORE_MOCK_DATA from '@/constants/stores'
 import { delay, http, HttpResponse, passthrough } from 'msw'
 
@@ -9,17 +8,17 @@ export const handlers = [
   http.get('/_next/static/webpack/*', () => {
     return passthrough()
   }),
-  
+
   // Next.js 정적 미디어 파일 요청 무시
   http.get('/_next/static/media/*', () => {
     return passthrough()
   }),
-  
+
   // Next.js 청크 파일 요청 무시
   http.get('/_next/static/chunks/*', () => {
     return passthrough()
   }),
-  
+
   // 카카오 이미지 요청 처리
   http.get('https://t1.kakaocdn.net/*', async ({ request }) => {
     try {
@@ -57,7 +56,7 @@ export const handlers = [
       return passthrough()
     }
   }),
-  
+
   http.get('/_next/image', async ({ request }) => {
     const originalUrl = new URL(request.url)
     const imageUrl = originalUrl.searchParams.get('url')
@@ -67,10 +66,7 @@ export const handlers = [
     }
 
     // 외부 이미지 URL인 경우 passthrough
-    if (
-      imageUrl.startsWith('https://images.unsplash.com') ||
-      imageUrl.includes('kakaocdn.net')
-    ) {
+    if (imageUrl.startsWith('https://images.unsplash.com') || imageUrl.includes('kakaocdn.net')) {
       return passthrough()
     }
 
@@ -187,21 +183,10 @@ export const handlers = [
     // })
   }),
 
-  // Get Pending Reviews
-  http.get('/api/reviews/pending', async () => {
-    return HttpResponse.json({
-      status: 200,
-      message: 'success',
-      data: PENDING_REVIEWS_MOCK_DATA,
-    })
-  }),
-
   // trend API는 실제 API로 통과
   http.get('*/api/v1/stores/trend', () => {
     return passthrough()
   }),
-
- 
 
   // trend API는 실제 API로 통과
   http.get('*/api/v1/stores/:id', () => {
