@@ -1,8 +1,10 @@
 'use client'
 
+import useGetCarts from '@/api/useGetCarts'
 import useGetStoreDetail from '@/api/useGetStoreDetail'
 import useGetStoreMenuCategory from '@/api/useGetStoreMenuCategory'
 import MenuBottomSheet from '@/app/store/detail/[id]/_components/MenuBottomSheet'
+import CartButton from '@/components/CartButton'
 import Icon from '@/components/Icon'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
 import Separator from '@/components/Separator'
@@ -13,10 +15,12 @@ import { useThrottle } from '@/hooks/useThrottle'
 import { useToast } from '@/hooks/useToast'
 import { orderDetailStore } from '@/store/orderDetail'
 import { COLORS } from '@/styles/color'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import MenuCategory from './MenuCategory'
 import MenuItemSkeleton from './MenuItemSkeleton'
+import { OrderButton } from './OrderButton'
 import StoreDetailMenuItem from './StoreDetailMenuItem'
 import StoreHeader from './StoreHeader'
 import StoreImage, { IMAGE_HEIGHT } from './StoreImage'
@@ -30,6 +34,8 @@ export const HEADER_HEIGHT = 50
 const MENU_CATEGORIES = ['대표메뉴', '메인 메뉴', '세트 메뉴', '사이드 메뉴', '음료', '패키지']
 
 const StoreDetail = ({ storeId }: { storeId: number }) => {
+  const router = useRouter()
+
   const [pullHeight, setPullHeight] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
@@ -41,6 +47,13 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
 
   const { storeDetail, resetStoreDetail, isSuccess } = useGetStoreDetail(storeId)
   const { storeMenuCategory } = useGetStoreMenuCategory(storeId)
+  const { carts } = useGetCarts()
+  const isCartEmpty = useMemo(() => {
+    return carts?.orderMenus.length === 0
+  }, [])
+  const isSameStoreForCart = useMemo(() => {
+    return carts ? Number.parseInt(carts.storeId) === storeId : false
+  }, [carts, storeId])
 
   const { orderDetail } = orderDetailStore()
   const { BottomSheet, hide } = useBottomSheet()
@@ -52,12 +65,14 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
         behavior: 'smooth',
       })
     },
-    dependencies: [storeMenuCategory]
+    dependencies: [storeMenuCategory],
   })
 
   useEffect(() => {
     if (storeMenuCategory && storeMenuCategory.length > 0) {
-      const firstCategoryElement = document.querySelector(`[data-category="${storeMenuCategory[0].categoryId}"] p`)
+      const firstCategoryElement = document.querySelector(
+        `[data-category="${storeMenuCategory[0].categoryId}"] p`
+      )
       if (firstCategoryElement && topRef.current !== firstCategoryElement) {
         topRef.current = firstCategoryElement as HTMLParagraphElement
       }
@@ -123,10 +138,15 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
 
   const openBottomSheet = () => {
     BottomSheet({
-      title: '전체 메뉴', content: <MenuBottomSheet
-        menuList={storeMenuCategory?.map((category) => category.categoryName) || []} activeCategoryIndex={activeCategoryIndex} setActiveCategoryIndex={setActiveCategoryIndex}
-        callback={scrollToMenuTop}
-      />
+      title: '전체 메뉴',
+      content: (
+        <MenuBottomSheet
+          menuList={storeMenuCategory?.map((category) => category.categoryName) || []}
+          activeCategoryIndex={activeCategoryIndex}
+          setActiveCategoryIndex={setActiveCategoryIndex}
+          callback={scrollToMenuTop}
+        />
+      ),
     })
   }
 
@@ -154,7 +174,9 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
     const timeoutId = setTimeout(() => {
       if (!menuContainerRef.current) return
 
-      const activeItem = menuContainerRef.current.querySelector(`[data-index="${activeCategoryIndex}"]`)
+      const activeItem = menuContainerRef.current.querySelector(
+        `[data-index="${activeCategoryIndex}"]`
+      )
       if (!activeItem) return
 
       const container = menuContainerRef.current
@@ -170,8 +192,6 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
       })
     }, 100) // 100ms 지연
 
-
-
     return () => clearTimeout(timeoutId)
   }, [activeCategoryIndex])
 
@@ -180,15 +200,23 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
       resetStoreDetail()
     }
   }, [])
-
+  if (!storeDetail) return <></>
   return (
     <div
       ref={containerRef}
       className="relative size-full overflow-auto"
       style={{ WebkitOverflowScrolling: 'touch' }}
     >
-      <StoreHeader isHeaderOpaque={isHeaderOpaque} isSuccess={isSuccess} title={storeDetail?.name || ''} />
-      <StoreImage pullHeight={pullHeight} isSuccess={isSuccess} imageMain={storeDetail?.imageMain || ''} />
+      <StoreHeader
+        isHeaderOpaque={isHeaderOpaque}
+        isSuccess={isSuccess}
+        title={storeDetail?.name || ''}
+      />
+      <StoreImage
+        pullHeight={pullHeight}
+        isSuccess={isSuccess}
+        imageMain={storeDetail?.imageMain || ''}
+      />
 
       <div
         className="relative z-10 w-full bg-white"
@@ -200,57 +228,79 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
       >
         {/* 가게 정보 */}
         <div className="flex flex-col items-center gap-2 pb-4 pt-6">
-          {!storeDetail ? <Skeleton className="w-[200px] h-[40px] pb-2" /> : <p className="text-2xl font-bold pb-2">{storeDetail.name}</p>}
+          {!storeDetail ? (
+            <Skeleton className="h-navigation w-[200px] pb-2" />
+          ) : (
+            <p className="pb-2 text-2xl font-bold">{storeDetail.name}</p>
+          )}
           <div className="flex items-center gap-2">
-            {!storeDetail ? <Skeleton className='w-[123px] h-[26px] rounded-full py-1 pl-2 pr-1' /> :
-              <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs" onClick={() => {
-                toast({
-                  description: '준비중입니다.',
-                  position: 'center'
-                })
-              }}>
+            {!storeDetail ? (
+              <Skeleton className="h-[26px] w-[123px] rounded-full py-1 pl-2 pr-1" />
+            ) : (
+              <div
+                className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs"
+                onClick={() => {
+                  toast({
+                    description: '준비중입니다.',
+                    position: 'center',
+                  })
+                  }}
+                >
                 <Icon name="Star" size={12} color={COLORS.primary} fill={COLORS.primary} />
                 <div>
                   <span className="mr-1 font-semibold">리뷰 {storeDetail.rating}</span>
                   <span className="text-gray-600">({storeDetail.reviewCount})</span>
                 </div>
                 <Icon name="ChevronRight" size={16} />
-              </div>}
-            {!storeDetail ? <Skeleton className='w-[123px] h-[26px] rounded-full py-1 pl-2 pr-1' /> :
-              <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs" onClick={() => {
-                toast({
-                  description: '준비중입니다.',
-                  position: 'center'
-                })
-              }}>
+              </div>
+            )}
+            {!storeDetail ? (
+              <Skeleton className="h-[26px] w-[123px] rounded-full py-1 pl-2 pr-1" />
+            ) : (
+              <div
+                className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs"
+                onClick={() => {
+                  toast({
+                    description: '준비중입니다.',
+                    position: 'center',
+                  })
+                  }}
+                >
                 <Icon name="Store" size={12} />
                 <div className="flex">
                   <span className="mr-1 font-bold">가게</span>
                   <span className="text-gray-600">(2.1km)</span>
                 </div>
                 <Icon name="ChevronRight" size={16} />
-              </div>}
+              </div>
+            )}
           </div>
         </div>
 
         {/* 메뉴 카테고리 */}
-        <div className="top-detail_header sticky z-20 flex items-center justify-between border-b border-solid border-gray-200 bg-white py-2 shadow-sm">
+        <div className="sticky top-detail_header z-20 flex items-center justify-between border-b border-solid border-gray-200 bg-white py-2 shadow-sm">
           <div
             ref={menuContainerRef}
             className="flex flex-1 items-center gap-2 overflow-x-auto px-mobile_safe"
           >
-            {!storeMenuCategory ? new Array(7).fill(0).map((dummy, index) => <Skeleton key={index} className='min-w-[65px] h-[28px] rounded-full' />) : storeMenuCategory.map((category, index) => (
-              <MenuCategory
-                key={category.categoryId}
-                category={category.categoryName}
-                index={index}
-                isActive={activeCategoryIndex === index}
-                onClick={() => {
-                  setActiveCategoryIndex(index)
-                  scrollToMenuTop(index)
-                }}
-              />
-            ))}
+            {!storeMenuCategory
+              ? new Array(7)
+                .fill(0)
+                .map((dummy, index) => (
+                  <Skeleton key={index} className="h-[28px] min-w-[65px] rounded-full" />
+                ))
+              : storeMenuCategory.map((category, index) => (
+                <MenuCategory
+                  key={category.categoryId}
+                  category={category.categoryName}
+                  index={index}
+                  isActive={activeCategoryIndex === index}
+                  onClick={() => {
+                    setActiveCategoryIndex(index)
+                    scrollToMenuTop(index)
+                  }}
+                />
+              ))}
           </div>
           <div className="flex items-center gap-1 pr-1" onClick={openBottomSheet}>
             <Separator className="h-4" orientation="vertical" />
@@ -260,31 +310,36 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
 
         {/* 메뉴 */}
         <div className="flex flex-col gap-[10px] px-mobile_safe py-4">
-          {!storeMenuCategory ? new Array(7).fill(0).map((dummy, index) => (
-            <MenuItemSkeleton key={index} />
-          )) : storeMenuCategory.map((category, index) => (
-            <div
-              key={category.categoryId}
-              ref={(el) => {
-                menuRefs.current[index] = el
-              }}
-              data-category={category.categoryId}
-            >
-              <p
-                className="pt-1 pb-2 text-lg font-bold"
+          {!storeMenuCategory
+            ? new Array(7).fill(0).map((dummy, index) => <MenuItemSkeleton key={index} />)
+            : storeMenuCategory.map((category, index) => (
+              <div
+                key={category.categoryId}
                 ref={(el) => {
-                  if (index === 0) {
-                    topRef.current = el
-                  }
+                  menuRefs.current[index] = el
                 }}
+                data-category={category.categoryId}
               >
-                {category.categoryName}
-              </p>
-              {category.menus.map((menu) => (
-                <StoreDetailMenuItem key={menu.id} storeName={storeDetail?.name || ''} storeId={storeDetail?.id || ''} menu={menu} />
-              ))}
-            </div>
-          ))}
+                <p
+                  className="pb-2 pt-1 text-lg font-bold"
+                  ref={(el) => {
+                    if (index === 0) {
+                      topRef.current = el
+                    }
+                  }}
+                >
+                  {category.categoryName}
+                </p>
+                {category.menus.map((menu) => (
+                    <StoreDetailMenuItem
+                      key={menu.id}
+                      storeName={storeDetail?.name || ''}
+                      storeId={storeDetail?.id || ''}
+                      menu={menu}
+                    />
+                  ))}
+              </div>
+            ))}
         </div>
 
         {/* 경고 문구 */}
@@ -295,14 +350,18 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
         </div>
 
         {orderDetail && createPortal(<StoreOrderDetail />, document.body)}
-        {showScrollButton && <ScrollToTopButton onClick={scrollToTop} hasBottomNavigation={false} />}
+        {showScrollButton && (
+          <ScrollToTopButton onClick={scrollToTop} hasBottomNavigation={false} />
+        )}
+        {!isCartEmpty &&
+          (isSameStoreForCart ? (
+            <OrderButton minimumOrderAmount={storeDetail.minimumOrderAmount} />
+          ) : (
+            <CartButton />
+          ))}
       </div>
     </div>
   )
 }
 
 export default StoreDetail
-
-
-
-
