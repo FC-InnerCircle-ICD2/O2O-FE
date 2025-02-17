@@ -18,6 +18,13 @@ export interface LoginResponse {
   refreshTokenExpiresIn: string
 }
 
+export interface RefreshResponse {
+  data: {
+    accessToken: string
+    refreshToken: string
+  }
+}
+
 export interface Member {
   id: number
   signname: string
