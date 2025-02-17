@@ -1,13 +1,31 @@
-import { WritableReviews } from '@/api/useGetWritableReviews'
+import type { WritableReview } from '@/api/useGetWritableReviews'
+import ReviewEditorModal from '@/app/reviews/_components/ReviewEditorModal'
 import { Button } from '@/components/button'
 import Separator from '@/components/Separator'
+import { modalStore } from '@/store/modal'
 
 interface WritableReviewProps {
-  review: WritableReviews['content'][number]
+  review: WritableReview
   offSeparator?: boolean
 }
 
 const WritableReview = ({ review, offSeparator = false }: WritableReviewProps) => {
+  const { showModal } = modalStore()
+
+  const handleClickReviewButton = () => {
+    showModal({
+      content: (
+        <ReviewEditorModal
+          orderId={review.orderId}
+          storeName={review.storeName}
+          orderSummary={review.orderSummary}
+          storeId={review.storeId}
+        />
+      ),
+      useAnimation: true,
+    })
+  }
+
   return (
     <>
       <div className="flex gap-4 px-mobile_safe py-5">
@@ -30,7 +48,12 @@ const WritableReview = ({ review, offSeparator = false }: WritableReviewProps) =
             <div className="font-semibold">{review.storeName}</div>
             <ul className="whitespace-pre-wrap">{review.orderSummary}</ul>
           </div>
-          <Button variant="primaryFit" size="s" className="size-fit py-0.5">
+          <Button
+            variant="primaryFit"
+            size="s"
+            className="size-fit py-0.5"
+            onClick={handleClickReviewButton}
+          >
             리뷰 작성
           </Button>
         </div>
