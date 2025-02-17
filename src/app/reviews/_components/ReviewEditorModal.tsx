@@ -47,8 +47,10 @@ const ReviewEditorModal = ({
       <div className="mb-4 text-sm">{orderSummary}</div>
 
       <RatingInput value={totalScore} onChange={setTotalScore} size={40} />
-      <RatingInput label="맛" value={tasteScore} onChange={setTasteScore} />
-      <RatingInput label="양" value={quantityScore} onChange={setQuantityScore} />
+      <div className="ml-1.5">
+        <RatingInput label="맛" value={tasteScore} onChange={setTasteScore} />
+        <RatingInput label="양" value={quantityScore} onChange={setQuantityScore} />
+      </div>
       <div className="mb-4">
         <textarea
           className="w-full rounded-lg border border-gray-300 p-2 leading-tight"
