@@ -1,16 +1,15 @@
 import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 
+export interface WritableReview {
+  storeId: string
+  storeName: string
+  orderId: string
+  orderSummary: string
+  orderTime: string
+}
 export interface WritableReviews {
-  content: [
-    {
-      storeId: string
-      storeName: string
-      orderId: string
-      orderSummary: string
-      orderTime: string
-    },
-  ]
+  content: WritableReview[]
   nextCursor: string | null
 }
 
