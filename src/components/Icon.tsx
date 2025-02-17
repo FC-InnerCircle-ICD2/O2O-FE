@@ -1,6 +1,7 @@
 import {
   Bike,
   Building,
+  Camera,
   Check,
   ChevronDown,
   ChevronLeft,
@@ -67,6 +68,7 @@ const ICONS = {
   MapPin,
   Plus,
   UtensilsCrossed,
+  Camera,
 } as const
 
 export type IconName = keyof typeof ICONS // 아이콘 목록
