@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Map, MapMarker } from 'react-kakao-maps-sdk'
+import { useEffect, useState, useRef } from 'react'
+import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk'
 
 const center = {
   // 지도의 중심좌표
@@ -14,36 +14,28 @@ const KakaoMap = ({ onAddressChange }) => {
   const [scriptLoad, setScriptLoad] = useState<boolean>(false)
   const [position, setPosition] = useState<{ lat: number; lng: number }>()
   const [address, setAddress] = useState('')
+  const [roadAddr, setRoadAddr] = useState('')
+  const [isMapLoading] = useKakaoLoader({
+    appkey: apiKey,
+    libraries: ['services']
+  })
+
 
   useEffect(() => {
-    const script: HTMLScriptElement = document.createElement('script')
-    script.async = true
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&libraries=services&autoload=false`
-    document.head.appendChild(script)
+    if(isMapLoading) return;
 
-    script.addEventListener('load', () => {
-      setScriptLoad(true)
-
-      // kakao.maps가 정의되었는지 확인
-      if (window.kakao && window.kakao.maps) {
-        window.kakao.maps.load(() => {
-          const geocoder = new window.kakao.maps.services.Geocoder()
-          geocoder.coord2Address(center.lng, center.lat, (result, status) => {
-            const addr = result[0].address
-            setAddress(addr.address_name) // 주소를 상태에 저장
-            onAddressChange(addr.address_name)
-          })
-        })
-      } else {
-        console.error('Kakao Maps API가 로드되지 않았습니다.')
-      }
+    const geocoder = new window.kakao.maps.services.Geocoder();
+    geocoder.coord2Address(center.lng, center.lat, (result, status) => {
+      const addr = result[0]
+      setAddress(addr.address.address_name)
+      setRoadAddr(addr.road_address.address_name)
+      onAddressChange(addr.address.address_name, addr.road_address.address_name)
     })
 
-    // Cleanup function to remove the script
-    return () => {
-      document.head.removeChild(script)
-    }
-  }, [center, apiKey])
+  }, [isMapLoading, position])
+
+
+
   return (
     <>
       <Map // 지도를 표시할 Container
@@ -59,6 +51,14 @@ const KakaoMap = ({ onAddressChange }) => {
           setPosition({
             lat: latlng.getLat(),
             lng: latlng.getLng(),
+          })
+
+          const geocoder = new window.kakao.maps.services.Geocoder();
+          geocoder.coord2Address(latlng.getLng(), latlng.getLat(), (result, status) => {
+            const addr = result[0]
+            setAddress(addr.address.address_name)
+            setRoadAddr(addr.road_address.address_name)
+            onAddressChange(addr.address.address_name, addr.road_address.address_name)
           })
         }}
       >

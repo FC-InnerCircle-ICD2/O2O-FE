@@ -6,15 +6,17 @@ import { useState } from 'react'
 
 const Address = () => {
   const [address, setAddress] = useState('')
+  const [loadAddr, setRoadAddr] = useState('')
 
-  const handleAddressChange = (newAddress) => {
-    setAddress(newAddress)
+  const handleAddressChange = (address, loadAddr) => {
+    setAddress(address)
+    setRoadAddr(loadAddr)
   }
 
   return (
     <div className="flex flex-col gap-4 pb-5 pt-5">
       <KakaoMap onAddressChange={handleAddressChange} />
-      <MapInfo address={address} />
+      <MapInfo address={address} loadAddr={loadAddr} />
     </div>
   )
 }

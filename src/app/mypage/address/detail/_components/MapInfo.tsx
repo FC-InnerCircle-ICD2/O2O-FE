@@ -5,14 +5,14 @@ import { useCallback, useState } from 'react'
 import Icon from '@/components/Icon'
 import { Button } from '@/components/button'
 
-const MapInfo = ({ address }) => {
+const MapInfo = ({ address, loadAddr }) => {
   const [word, setWord] = useState('')
 
   return (
     <div className="flex flex-col gap-4 px-mobile_safe">
       <div className="flex flex-col gap-2">
-        <div>{address}</div>
-        <div className="text-xs text-gray-500">[지번] 성내동 111-42</div>
+        <div>{loadAddr}</div>
+        <div className="text-xs text-gray-500">[지번] {address}</div>
       </div>
       <Input
         placeholder="상세주소를 입력하세요 (건물명, 동/호수 등)"
