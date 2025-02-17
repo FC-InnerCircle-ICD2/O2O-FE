@@ -23,6 +23,7 @@ export function MockProvider({ children }: { children: React.ReactNode }) {
       init()
     }
   }, [mswReady])
+  if (isMockingMode && !mswReady) return null
 
   return <MockContext.Provider value={mswReady}>{children}</MockContext.Provider>
 }
