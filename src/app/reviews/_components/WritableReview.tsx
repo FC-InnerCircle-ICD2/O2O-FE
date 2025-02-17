@@ -30,7 +30,7 @@ const WritableReview = ({ review, offSeparator = false }: WritableReviewProps) =
             <div className="font-semibold">{review.storeName}</div>
             <ul className="whitespace-pre-wrap">{review.orderSummary}</ul>
           </div>
-          <Button variant="primaryFit" size="s" className="h-fit py-0.5">
+          <Button variant="primaryFit" size="s" className="size-fit py-0.5">
             리뷰 작성
           </Button>
         </div>
