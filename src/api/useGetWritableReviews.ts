@@ -22,7 +22,6 @@ const useGetWritableReviews = () => {
       const today = new Date()
       const formattedDate = today.toLocaleString('sv', { timeZone: 'Asia/Seoul' }).replace(' ', 'T')
       params.cursor = formattedDate
-      console.log('🚀  formattedDate:', formattedDate)
       params.size = '11'
       return await api.get<WritableReviews>(`reviews/writable`, {
         searchParams: params,
