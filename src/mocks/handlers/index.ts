@@ -213,7 +213,7 @@ export const handlers = [
             cartId: 5,
             menuId: '9e15c3da-cae8-4c25-8b4e-ae21a926f072',
             name: '아메리카노',
-            imageUrl: 'https://~~',
+            imageUrl: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec',
             totalPrice: 10000, // 메뉴당 총합(옵션가격포함)
             quantity: 2,
             orderMenuOptionGroups: [
@@ -233,7 +233,7 @@ export const handlers = [
             cartId: 6,
             menuId: '~~~',
             name: '카페라떼',
-            imageUrl: 'https://~~',
+            imageUrl: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec',
             totalPrice: 5000,
             quantity: 1,
             orderMenuOptionGroups: [
@@ -260,11 +260,14 @@ export const handlers = [
       data: null,
     })
   }),
-  http.patch('*/api/v1/carts', async () => {
+  http.patch('*/api/v1/carts', async ({request}) => {
     return HttpResponse.json({
       status: 200,
       message: 'success',
-      data: null,
+      data: {
+        cartId: 1,
+        quantity: 2
+      },
     })
   }),
   http.delete('*/api/v1/carts', async () => {

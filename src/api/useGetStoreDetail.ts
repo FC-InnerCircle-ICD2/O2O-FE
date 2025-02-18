@@ -16,10 +16,11 @@ interface StoreDetail {
   minimumOrderAmount: number
 }
 
-const useGetStoreDetail = (id: number) => {
+const useGetStoreDetail = (id: number | null) => {
   const qc = useQueryClient()
 
   const { data: storeDetail, isSuccess } = useQuery({
+    enabled: id !== null,
     queryKey: ['storeDetail', id],
     queryFn: async () =>
       await api.get<StoreDetail>(`stores/${id}`, {

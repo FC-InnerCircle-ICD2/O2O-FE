@@ -1,15 +1,23 @@
+import { CartItem } from '@/api/useGetCarts'
 import Icon from '@/components/Icon'
 import UpDownBtn from '@/components/UpDownBtn'
-import { OrderMenu } from '@/store/orderList'
 import Image from 'next/image'
-import { useState } from 'react'
 
-const MenuItem = ({ menu, handlePriceAndCount }: { menu: OrderMenu, handlePriceAndCount: (id: string, count: number) => void }) => {
-  const [count, setCount] = useState(1)
+type MenuItemProps = {
+  menu: CartItem,
+  onIncrease: (menuId: string) => void,
+  onDecrease: (menuId: string) => void,
+  onRemove: (menuId: string) => void
+}
+const MenuItem = ({ menu, onIncrease, onDecrease, onRemove }: MenuItemProps) => {
+  const handleChangeCount = (count: number) => {
+    if (count === 0) onRemove(menu.menuId)
+    else if (count < menu.quantity) onDecrease(menu.menuId)
+    else onIncrease(menu.menuId)
+  }
 
-  const handlerCount = (count: number) => {
-    setCount(count)
-    handlePriceAndCount(menu.menuId, count)
+  const handleRemove = () => {
+    onRemove(menu.menuId)
   }
 
   return (
@@ -18,7 +26,7 @@ const MenuItem = ({ menu, handlePriceAndCount }: { menu: OrderMenu, handlePriceA
         <div className="flex flex-row gap-3">
           <Image
             className="size-[60px] rounded-xl object-cover object-center"
-            src={menu.imgUrl}
+            src={menu.imageUrl}
             alt="음식점 대표 이미지"
             width={60}
             height={60}
@@ -26,19 +34,16 @@ const MenuItem = ({ menu, handlePriceAndCount }: { menu: OrderMenu, handlePriceA
           />
           <div className="flex flex-col place-content-center">
             <div className="text-base font-medium">{menu.name}</div>
-            <div className="text-sm text-gray-700 pb-3">{menu.optionNames}</div>
-            <div className="font-bold">{(menu.price * count).toLocaleString()}원</div>
+            {/* TODO: 선택한 옵션 */}
+            <div className="font-bold">{(menu.totalPrice * menu.quantity).toLocaleString()}원</div>
           </div>
         </div>
-        <div className="">
-          <Icon name="X" size={20} className="text-gray-700" />
+        <div className="" onClick={handleRemove}>
+          <Icon name="X" size={20} className="text-gray-700 cursor-pointer" />
         </div>
       </div>
-      <div className="flex flex-row justify-end gap-2">
-        {/*<Button variant="grayFit" size="s" className="text-black">*/}
-        {/*  옵션변경*/}
-        {/*</Button>*/}
-        <UpDownBtn value={count} handlerCount={handlerCount} />
+      <div className="flex flex-row justify-end gap-2"> 
+        <UpDownBtn value={menu.quantity} onChange={handleChangeCount} /> {/**TODO: */}
       </div>
     </div>
   )

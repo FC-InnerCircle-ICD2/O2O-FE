@@ -1,6 +1,6 @@
 import { api } from '@/lib/api'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-interface CartItem {
+export interface CartItem {
   cartId: number
   menuId: string
   name: string
