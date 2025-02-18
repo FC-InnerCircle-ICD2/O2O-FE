@@ -2,10 +2,10 @@
 
 import useGetWritableReviews from '@/api/useGetWritableReviews'
 import CompletedReviews from '@/app/reviews/_components/CompletedReviews'
-import NoPendingReview from '@/app/reviews/_components/NoPendingReview'
-import PedingReviewSkeleton from '@/app/reviews/_components/PedingReviewSkeleton'
+import NoWritableReview from '@/app/reviews/_components/NoWritableReview'
 import ReviewTab from '@/app/reviews/_components/ReviewTab'
 import WritableReview from '@/app/reviews/_components/WritableReview'
+import WritableReviewSkeleton from '@/app/reviews/_components/WritableReviewSkeleton'
 import { motion } from 'motion/react'
 import { useState } from 'react'
 
@@ -39,7 +39,7 @@ const Review = () => {
         >
           {isLoading ? (
             Array.from({ length: 5 }).map((_, i) => (
-              <PedingReviewSkeleton key={i} offSeparator={i === 4} />
+              <WritableReviewSkeleton key={i} offSeparator={i === 4} />
             ))
           ) : writableReviews?.content ? (
             writableReviews.content.map((review, index) => (
@@ -50,7 +50,7 @@ const Review = () => {
               />
             ))
           ) : (
-            <NoPendingReview />
+                <NoWritableReview />
           )}
         </motion.div>
 
