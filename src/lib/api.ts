@@ -25,7 +25,10 @@ export const api = {
   post: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
     try {
       const response = await kyClient
-        .post(endpoint, { json: body, ...options })
+        .post(endpoint, {
+          ...(body instanceof FormData ? { body } : { json: body }),
+          ...options,
+        })
         .json<ApiResponse<T>>()
       return response.data
     } catch (error) {
@@ -35,7 +38,10 @@ export const api = {
   put: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
     try {
       const response = await kyClient
-        .put(endpoint, { json: body, ...options })
+        .put(endpoint, {
+          ...(body instanceof FormData ? { body } : { json: body }),
+          ...options,
+        })
         .json<ApiResponse<T>>()
       return response.data
     } catch (error) {
@@ -64,7 +70,10 @@ export const mockApi = {
   post: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
     try {
       const response = await mockClient
-        .post(endpoint, { json: body, ...options })
+        .post(endpoint, {
+          ...(body instanceof FormData ? { body } : { json: body }),
+          ...options,
+        })
         .json<ApiResponse<T>>()
       return response.data
     } catch (error) {
@@ -74,7 +83,10 @@ export const mockApi = {
   put: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
     try {
       const response = await mockClient
-        .put(endpoint, { json: body, ...options })
+        .put(endpoint, {
+          ...(body instanceof FormData ? { body } : { json: body }),
+          ...options,
+        })
         .json<ApiResponse<T>>()
       return response.data
     } catch (error) {
