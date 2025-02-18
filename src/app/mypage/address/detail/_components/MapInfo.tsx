@@ -7,6 +7,7 @@ import { Button } from '@/components/button'
 
 const MapInfo = ({ address, loadAddr }) => {
   const [word, setWord] = useState('')
+  const flag = false
 
   return (
     <div className="flex flex-col gap-4 px-mobile_safe">
@@ -22,28 +23,33 @@ const MapInfo = ({ address, loadAddr }) => {
         onReset={() => setWord('')}
         offOutline
       />
-      <div className="flex flex-row gap-2">
-        <div className="flex w-1/3 flex-col items-center justify-center rounded-md border border-solid border-gray-500 py-3">
-          <Icon name="Home" size={20} />
-          <div className="text-sm">집</div>
+      {flag && (
+        <div>
+          <div className="flex flex-row gap-2">
+            <div className="flex w-1/3 flex-col items-center justify-center rounded-md border border-solid border-gray-500 py-3">
+              <Icon name="Home" size={20} />
+              <div className="text-sm">집</div>
+            </div>
+            <div className="flex w-1/3 flex-col items-center justify-center rounded-md border border-solid border-gray-500 py-3">
+              <Icon name="Briefcase" size={20} />
+              <div className="text-sm">회사</div>
+            </div>
+            <div className="flex w-1/3 flex-col items-center justify-center rounded-md border border-solid border-gray-500 py-3">
+              <Icon name="MapPin" size={20} />
+              <div className="text-sm">기타</div>
+            </div>
+          </div>
+          <Input
+            placeholder="별명을 지어주세요"
+            value={word}
+            inputSize="sm"
+            onChange={(e) => setWord(e.target.value)}
+            onReset={() => setWord('')}
+            offOutline
+          />
         </div>
-        <div className="flex w-1/3 flex-col items-center justify-center rounded-md border border-solid border-gray-500 py-3">
-          <Icon name="Briefcase" size={20} />
-          <div className="text-sm">회사</div>
-        </div>
-        <div className="flex w-1/3 flex-col items-center justify-center rounded-md border border-solid border-gray-500 py-3">
-          <Icon name="MapPin" size={20} />
-          <div className="text-sm">기타</div>
-        </div>
-      </div>
-      <Input
-        placeholder="주소와 별명을 지어주세요"
-        value={word}
-        inputSize="sm"
-        onChange={(e) => setWord(e.target.value)}
-        onReset={() => setWord('')}
-        offOutline
-      />
+      )}
+
       <Button>요기로 배달</Button>
     </div>
   )
