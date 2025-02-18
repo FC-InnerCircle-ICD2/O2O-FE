@@ -22,7 +22,7 @@ jobs:
           tags: yong7317/o2o-fe:latest
           build-args: |
             NEXT_PUBLIC_API_MOCKING=${{ secrets.NEXT_PUBLIC_API_MOCKING }}
-            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
+            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_PROD_API_URL }}
             NEXT_PUBLIC_KAKAO_APP_KEY=${{ secrets.NEXT_PUBLIC_KAKAO_APP_KEY }}
 
       - name: Configure AWS credentials
