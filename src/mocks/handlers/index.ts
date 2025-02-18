@@ -86,7 +86,7 @@ export const handlers = [
     }
   }),
   // Get Store
-  http.get('/api/v1/stores', async ({ request }) => {
+  http.get('*/api/v1/stores', async ({ request }) => {
     // 1초 지연 추가
     await delay(1000)
 
@@ -173,7 +173,7 @@ export const handlers = [
   }),
 
   // Get Menu Options
-  http.get('/api/v1/stores/:id/menus/:menuId/options', async ({ request }) => {
+  http.get('*/api/v1/stores/:id/menus/:menuId/options', async ({ request }) => {
     return passthrough()
 
     // await delay(2000)
