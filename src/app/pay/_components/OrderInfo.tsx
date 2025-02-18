@@ -239,6 +239,12 @@ const OrderInfo = () => {
     }
   }, [paymentSuccess])
 
+  useEffect(() => {
+    if (cartsState && cartsState.orderMenus.length === 0) {
+      setCartsState(undefined)
+    }
+  }, [cartsState])
+
   if (!cartsState || !storeDetail) {
     return (
       <div className='text-center mt-[30vh]'>
