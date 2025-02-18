@@ -3,9 +3,7 @@ import usePostReview from '@/api/usePostReview'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import { modalStore } from '@/store/modal'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
 interface ReviewEditorModalProps {
   orderId: WritableReview['orderId']
@@ -19,16 +17,8 @@ interface ReviewFormData {
   tasteScore: number
   quantityScore: number
   content: string
-  deliveryQuality?: 'GOOD' | 'BAD'
+  deliveryQuality: 'GOOD' | 'BAD' | ''
 }
-
-const ReviewFromSchema = z.object({
-  totalScore: z.number().min(1).max(5),
-  tasteScore: z.number().min(1).max(5),
-  quantityScore: z.number().min(1).max(5),
-  content: z.string().min(5).max(1000),
-  deliveryQuality: z.enum(['GOOD', 'BAD']),
-})
 
 const ReviewEditorModal = ({
   orderId,
@@ -39,24 +29,28 @@ const ReviewEditorModal = ({
   const { hideModal } = modalStore()
   const { mutate: postReview } = usePostReview()
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { isValid },
-  } = useForm<ReviewFormData>({
+  const { register, handleSubmit, watch, setValue } = useForm<ReviewFormData>({
     defaultValues: {
       totalScore: 0,
       tasteScore: 0,
       quantityScore: 0,
       content: '',
-      deliveryQuality: undefined,
+      deliveryQuality: '',
     },
-    resolver: zodResolver(ReviewFromSchema),
   })
 
+  const totalScore = watch('totalScore')
+  const tasteScore = watch('tasteScore')
+  const quantityScore = watch('quantityScore')
   const content = watch('content')
+  const deliveryQuality = watch('deliveryQuality')
+
+  const isFormValid =
+    totalScore > 0 &&
+    tasteScore > 0 &&
+    quantityScore > 0 &&
+    content.length >= 5 &&
+    (deliveryQuality === 'GOOD' || deliveryQuality === 'BAD')
 
   const onSubmit = (data: ReviewFormData) => {
     postReview({
@@ -129,7 +123,7 @@ const ReviewEditorModal = ({
           </div>
         </div>
       </div>
-      <Button onClick={handleSubmit(onSubmit)} disabled={!isValid}>
+      <Button onClick={handleSubmit(onSubmit)} disabled={!isFormValid}>
         리뷰 등록하기
       </Button>
     </div>
