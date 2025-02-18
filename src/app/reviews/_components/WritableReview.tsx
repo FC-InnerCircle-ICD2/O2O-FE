@@ -1,11 +1,11 @@
-import type { WritableReview } from '@/api/useGetWritableReviews'
+import type { WritableReviewType } from '@/api/useGetWritableReviews'
 import ReviewEditorModal from '@/app/reviews/_components/ReviewEditorModal'
 import { Button } from '@/components/button'
 import Separator from '@/components/Separator'
 import { modalStore } from '@/store/modal'
 
 interface WritableReviewProps {
-  review: WritableReview
+  review: WritableReviewType
   offSeparator?: boolean
 }
 

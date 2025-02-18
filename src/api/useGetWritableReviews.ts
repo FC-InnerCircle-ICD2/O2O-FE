@@ -1,7 +1,7 @@
 import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 
-export interface WritableReview {
+export interface WritableReviewType {
   storeId: string
   storeName: string
   orderId: string
@@ -9,7 +9,7 @@ export interface WritableReview {
   orderTime: string
 }
 export interface WritableReviews {
-  content: WritableReview[]
+  content: WritableReviewType[]
   nextCursor: string | null
 }
 

@@ -1,4 +1,4 @@
-import { WritableReview } from '@/api/useGetWritableReviews'
+import { WritableReviewType } from '@/api/useGetWritableReviews'
 import usePostReview from '@/api/usePostReview'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
@@ -8,10 +8,10 @@ import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 
 interface ReviewEditorModalProps {
-  orderId: WritableReview['orderId']
-  storeId: WritableReview['storeId']
-  storeName: WritableReview['storeName']
-  orderSummary: WritableReview['orderSummary']
+  orderId: WritableReviewType['orderId']
+  storeId: WritableReviewType['storeId']
+  storeName: WritableReviewType['storeName']
+  orderSummary: WritableReviewType['orderSummary']
 }
 
 interface ReviewFormData {
