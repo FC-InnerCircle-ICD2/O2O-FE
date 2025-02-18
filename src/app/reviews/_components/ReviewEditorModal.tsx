@@ -3,13 +3,21 @@ import usePostReview from '@/api/usePostReview'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import { modalStore } from '@/store/modal'
-import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 
 interface ReviewEditorModalProps {
   orderId: WritableReview['orderId']
   storeId: WritableReview['storeId']
   storeName: WritableReview['storeName']
   orderSummary: WritableReview['orderSummary']
+}
+
+interface ReviewFormData {
+  totalScore: number
+  tasteScore: number
+  quantityScore: number
+  content: string
+  deliveryQuality?: 'GOOD' | 'BAD'
 }
 
 const ReviewEditorModal = ({
@@ -20,23 +28,28 @@ const ReviewEditorModal = ({
 }: ReviewEditorModalProps) => {
   const { hideModal } = modalStore()
   const { mutate: postReview } = usePostReview()
-  const [totalScore, setTotalScore] = useState(0)
-  const [tasteScore, setTasteScore] = useState(0)
-  const [quantityScore, setQuantityScore] = useState(0)
-  const [content, setContent] = useState('')
-  const [deliveryQuality, setDeliveryQuality] = useState<'GOOD' | 'BAD'>('GOOD')
 
-  const handlePostReview = () => {
+  const { register, handleSubmit, watch, setValue } = useForm<ReviewFormData>({
+    defaultValues: {
+      totalScore: 0,
+      tasteScore: 0,
+      quantityScore: 0,
+      content: '',
+      deliveryQuality: undefined,
+    },
+  })
+
+  const content = watch('content')
+
+  const onSubmit = (data: ReviewFormData) => {
     postReview({
       orderId,
       storeId,
-      content,
-      totalScore,
-      tasteScore,
-      quantityScore,
-      deliveryQuality,
+      ...data,
+      deliveryQuality: data.deliveryQuality as 'GOOD' | 'BAD',
     })
   }
+
   return (
     <div className="size-full bg-white p-mobile_safe">
       <div className="relative mb-3 mt-6 flex items-center gap-3">
@@ -46,17 +59,31 @@ const ReviewEditorModal = ({
       <div className="mb-1 text-lg font-bold">이 가게를 추천하시겠어요?</div>
       <div className="mb-4 text-sm">{orderSummary}</div>
 
-      <RatingInput value={totalScore} onChange={setTotalScore} size={40} />
+      <RatingInput
+        value={watch('totalScore')}
+        onChange={(value) => setValue('totalScore', value)}
+        size={40}
+      />
       <div className="ml-1.5">
-        <RatingInput label="맛" value={tasteScore} onChange={setTasteScore} />
-        <RatingInput label="양" value={quantityScore} onChange={setQuantityScore} />
+        <RatingInput
+          label="맛"
+          value={watch('tasteScore')}
+          onChange={(value) => setValue('tasteScore', value)}
+        />
+        <RatingInput
+          label="양"
+          value={watch('quantityScore')}
+          onChange={(value) => setValue('quantityScore', value)}
+        />
       </div>
       <div className="mb-4">
         <textarea
           className="w-full rounded-lg border border-gray-300 p-2 leading-tight"
           placeholder="최소 5자 이상 작성해야 등록이 가능해요."
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
+          {...register('content', {
+            required: true,
+            minLength: 5,
+          })}
           maxLength={1000}
           rows={4}
         />
@@ -71,11 +98,21 @@ const ReviewEditorModal = ({
       <div className="mb-7">
         <div className="mb-2 text-lg font-bold">배달은 어떠셨어요?</div>
         <div className="flex gap-2">
-          <div className="rounded-full border border-solid border-gray-400 p-2.5">좋아요</div>
-          <div className="rounded-full border border-solid border-gray-400 p-2.5">아쉬워요</div>
+          <div
+            className={`rounded-full border border-solid border-gray-400 p-2.5 ${watch('deliveryQuality') === 'GOOD' ? 'bg-primary text-white' : ''}`}
+            onClick={() => setValue('deliveryQuality', 'GOOD')}
+          >
+            좋아요
+          </div>
+          <div
+            className={`rounded-full border border-solid border-gray-400 p-2.5 ${watch('deliveryQuality') === 'BAD' ? 'bg-primary text-white' : ''}`}
+            onClick={() => setValue('deliveryQuality', 'BAD')}
+          >
+            아쉬워요
+          </div>
         </div>
       </div>
-      <Button onClick={handlePostReview}>리뷰 등록하기</Button>
+      <Button onClick={handleSubmit(onSubmit)}>리뷰 등록하기</Button>
     </div>
   )
 }
