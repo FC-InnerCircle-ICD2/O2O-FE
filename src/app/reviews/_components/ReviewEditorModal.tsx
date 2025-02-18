@@ -3,7 +3,9 @@ import usePostReview from '@/api/usePostReview'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import { modalStore } from '@/store/modal'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 interface ReviewEditorModalProps {
   orderId: WritableReview['orderId']
@@ -20,6 +22,14 @@ interface ReviewFormData {
   deliveryQuality?: 'GOOD' | 'BAD'
 }
 
+const ReviewFromSchema = z.object({
+  totalScore: z.number().min(1).max(5),
+  tasteScore: z.number().min(1).max(5),
+  quantityScore: z.number().min(1).max(5),
+  content: z.string().min(5).max(1000),
+  deliveryQuality: z.enum(['GOOD', 'BAD']),
+})
+
 const ReviewEditorModal = ({
   orderId,
   storeId,
@@ -29,7 +39,13 @@ const ReviewEditorModal = ({
   const { hideModal } = modalStore()
   const { mutate: postReview } = usePostReview()
 
-  const { register, handleSubmit, watch, setValue } = useForm<ReviewFormData>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { isValid },
+  } = useForm<ReviewFormData>({
     defaultValues: {
       totalScore: 0,
       tasteScore: 0,
@@ -37,6 +53,7 @@ const ReviewEditorModal = ({
       content: '',
       deliveryQuality: undefined,
     },
+    resolver: zodResolver(ReviewFromSchema),
   })
 
   const content = watch('content')
@@ -112,7 +129,9 @@ const ReviewEditorModal = ({
           </div>
         </div>
       </div>
-      <Button onClick={handleSubmit(onSubmit)}>리뷰 등록하기</Button>
+      <Button onClick={handleSubmit(onSubmit)} disabled={!isValid}>
+        리뷰 등록하기
+      </Button>
     </div>
   )
 }
