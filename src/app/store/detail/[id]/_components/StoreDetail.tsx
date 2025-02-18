@@ -348,7 +348,7 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
           </p>
         </div>
 
-        {orderDetail && createPortal(<StoreOrderDetail minimumOrderAmount={storeDetail?.minimumOrderAmount} />, document.body)}
+        {orderDetail && storeDetail && createPortal(<StoreOrderDetail minimumOrderAmount={storeDetail?.minimumOrderAmount} />, document.body)}
         {showScrollButton && (
           <ScrollToTopButton onClick={scrollToTop} hasBottomNavigation={false} />
         )}

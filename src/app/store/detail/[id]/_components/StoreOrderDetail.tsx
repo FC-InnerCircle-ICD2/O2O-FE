@@ -16,7 +16,6 @@ import { MenuGroupOption } from "@/models/menu"
 import { modalStore } from "@/store/modal"
 import { orderDetailStore } from "@/store/orderDetail"
 import { COLORS } from "@/styles/color"
-import { ROUTE_PATHS } from "@/utils/routes"
 import { motion } from "motion/react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
@@ -118,18 +117,14 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
                     })
                 }
             }, {
-                onSuccess: () => {
-                    console.log("asdf")
+                onSuccess: () => { 
                     toast({
                         description: "메뉴를 담았습니다",
                         position: "bottom"
                     })
-                    hideOrderDetail()
-                    router.push(ROUTE_PATHS.PAY)
+                    hideOrderDetail() 
                 },
-                onError: (error) => {
-                    console.log("qwer")
-
+                onError: (error) => {  
                     toast({
                         description: error.message,
                         position: "bottom"
