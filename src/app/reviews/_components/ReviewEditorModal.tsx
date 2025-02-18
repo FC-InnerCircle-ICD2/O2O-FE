@@ -4,6 +4,7 @@ import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import { useToast } from '@/hooks/useToast'
 import { modalStore } from '@/store/modal'
+import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 
 interface ReviewEditorModalProps {
@@ -19,6 +20,8 @@ interface ReviewFormData {
   quantityScore: number
   content: string
   deliveryQuality: 'GOOD' | 'BAD' | ''
+  image: File | null
+  imagePreview: string | null
 }
 
 const ReviewEditorModal = ({
@@ -38,6 +41,8 @@ const ReviewEditorModal = ({
       quantityScore: 0,
       content: '',
       deliveryQuality: '',
+      image: null,
+      imagePreview: null,
     },
   })
 
@@ -47,6 +52,8 @@ const ReviewEditorModal = ({
   const content = watch('content')
   const deliveryQuality = watch('deliveryQuality')
 
+  const imagePreview = watch('imagePreview')
+
   const isFormValid =
     totalScore > 0 &&
     tasteScore > 0 &&
@@ -54,13 +61,29 @@ const ReviewEditorModal = ({
     content.length >= 5 &&
     (deliveryQuality === 'GOOD' || deliveryQuality === 'BAD')
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setValue('image', file)
+    setValue('imagePreview', URL.createObjectURL(file))
+  }
+
+  const handleImageDelete = () => {
+    setValue('image', null)
+    setValue('imagePreview', null)
+  }
+
   const onSubmit = (data: ReviewFormData) => {
     postReview(
       {
         orderId,
         storeId,
-        ...data,
+        totalScore: data.totalScore,
+        tasteScore: data.tasteScore,
+        quantityScore: data.quantityScore,
+        content: data.content,
         deliveryQuality: data.deliveryQuality as 'GOOD' | 'BAD',
+        image: data.image,
       },
       {
         onSuccess: () => {
@@ -119,8 +142,29 @@ const ReviewEditorModal = ({
       </div>
       <div className="mb-10">
         <div className="mb-2 text-sm font-bold">사진 등록하기 (선택)</div>
-        <div className="flex size-16 items-center justify-center gap-2 rounded-lg border border-solid border-gray-400 p-2">
-          <Icon name="Camera" size={24} />
+        <div className="flex gap-2">
+          {!imagePreview ? (
+            <label className="flex size-16 cursor-pointer items-center justify-center rounded-lg border border-solid border-gray-400 p-2">
+              <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+              <Icon name="Camera" size={24} />
+            </label>
+          ) : (
+            <div className="relative size-16">
+              <Image
+                src={imagePreview}
+                alt="리뷰 이미지"
+                className="size-16 rounded-lg object-cover"
+                width={64}
+                height={64}
+              />
+              <button
+                onClick={handleImageDelete}
+                className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-gray-800 text-white"
+              >
+                <Icon name="X" size={16} />
+              </button>
+            </div>
+          )}
         </div>
       </div>
       <div className="mb-7">

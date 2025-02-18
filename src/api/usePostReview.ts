@@ -9,7 +9,7 @@ interface PostReviewData {
   tasteScore: number
   quantityScore: number
   deliveryQuality: 'GOOD' | 'BAD'
-  image?: File
+  image: File | null
 }
 
 const usePostReview = () => {
