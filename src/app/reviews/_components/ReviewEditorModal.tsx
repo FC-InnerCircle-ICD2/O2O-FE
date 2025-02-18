@@ -2,6 +2,7 @@ import { WritableReview } from '@/api/useGetWritableReviews'
 import usePostReview from '@/api/usePostReview'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
+import { useToast } from '@/hooks/useToast'
 import { modalStore } from '@/store/modal'
 import { useForm } from 'react-hook-form'
 
@@ -28,6 +29,7 @@ const ReviewEditorModal = ({
 }: ReviewEditorModalProps) => {
   const { hideModal } = modalStore()
   const { mutate: postReview } = usePostReview()
+  const { toast } = useToast()
 
   const { register, handleSubmit, watch, setValue } = useForm<ReviewFormData>({
     defaultValues: {
@@ -53,12 +55,27 @@ const ReviewEditorModal = ({
     (deliveryQuality === 'GOOD' || deliveryQuality === 'BAD')
 
   const onSubmit = (data: ReviewFormData) => {
-    postReview({
-      orderId,
-      storeId,
-      ...data,
-      deliveryQuality: data.deliveryQuality as 'GOOD' | 'BAD',
-    })
+    postReview(
+      {
+        orderId,
+        storeId,
+        ...data,
+        deliveryQuality: data.deliveryQuality as 'GOOD' | 'BAD',
+      },
+      {
+        onSuccess: () => {
+          hideModal()
+          toast({
+            title: '리뷰가 등록되었어요.',
+          })
+        },
+        onError: () => {
+          toast({
+            title: '리뷰 등록에 실패했어요.',
+          })
+        },
+      }
+    )
   }
 
   return (
