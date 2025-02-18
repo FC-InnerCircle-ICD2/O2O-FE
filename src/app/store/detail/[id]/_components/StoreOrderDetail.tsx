@@ -1,16 +1,20 @@
 'use client'
 
+import useDeleteCart from "@/api/useDeleteCarts"
+import useGetCarts from "@/api/useGetCarts"
 import useGetStoreMenuOptions from "@/api/useGetStoreMenuOptions"
+import usePostCarts from "@/api/usePostCarts"
 import Badge from "@/components/Badge"
 import { Button } from "@/components/button"
+import Confirm from "@/components/Confirm"
 import Icon from "@/components/Icon"
 import { Skeleton } from "@/components/shadcn/skeleton"
 import { useThrottle } from "@/hooks/useThrottle"
 import { toast } from "@/hooks/useToast"
 import { cn } from "@/lib/utils"
 import { MenuGroupOption } from "@/models/menu"
+import { modalStore } from "@/store/modal"
 import { orderDetailStore } from "@/store/orderDetail"
-import { orderListStore } from "@/store/orderList"
 import { COLORS } from "@/styles/color"
 import { ROUTE_PATHS } from "@/utils/routes"
 import { motion } from "motion/react"
@@ -24,10 +28,13 @@ import { HEADER_HEIGHT } from "./StoreDetail"
 import StoreHeader from "./StoreHeader"
 import { IMAGE_HEIGHT } from "./StoreImage"
 
-const StoreOrderDetail = () => {
+const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }) => {
     const { orderDetail, hideOrderDetail } = orderDetailStore()
-    const { setOrderList } = orderListStore()
 
+    const { showModal, hideModal, modals } = modalStore()
+    const { carts } = useGetCarts()
+    const { mutate: addToCart } = usePostCarts()
+    const { mutate: deleteCart } = useDeleteCart()
     const containerRef = useRef<HTMLDivElement>(null)
     const descriptionRef = useRef<HTMLParagraphElement>(null)
     const priceRef = useRef<number>(0)
@@ -42,6 +49,7 @@ const StoreOrderDetail = () => {
     const { storeMenuOptions, isSuccess } = useGetStoreMenuOptions(orderDetail?.storeId ?? '', orderDetail?.menuId ?? '')
 
     const router = useRouter()
+
 
     const onChangeOption = (id: string, action: 'add' | 'remove' | 'change', option: MenuGroupOption) => {
         setSelectedOptions(prev => {
@@ -86,7 +94,7 @@ const StoreOrderDetail = () => {
 
     const handleScroll = useThrottle(updateActiveCategory, 50)
 
-    const handleOrder = () => {
+    const handleAddToCart = () => {
         if (!isValid) {
             toast({
                 description: '필수 옵션을 선택해주세요.',
@@ -94,22 +102,62 @@ const StoreOrderDetail = () => {
             })
             return
         }
+        if (!orderDetail || !storeMenuOptions) return
 
-        setOrderList({
-            storeId: orderDetail?.storeId.toString() ?? 'aa',
-            storeName: orderDetail?.storeName ?? '',
-            price: price,
-            menu: [{
-                menuId: storeMenuOptions?.menuId ?? '',
-                name: storeMenuOptions?.name ?? '',
-                imgUrl: storeMenuOptions?.imgUrl ?? '',
-                optionNames: Object.values(selectedOptions).map(options => options.map(option => option.name).join(', ')).join(', '),
-                price: price,
-                selectedOptions
-            }],
-        })
+        const updateCart = () => {
+            addToCart({
+                storeId: orderDetail.storeId.toString(),
+                orderMenu: {
+                    menuId: storeMenuOptions.menuId,
+                    quantity: 1,
+                    orderMenuOptionGroups: Object.entries(selectedOptions).map(([groupId, group]) => {
+                        return {
+                            id: groupId,
+                            orderMenuOptionIds: group.map(option => option.id)
+                        }
+                    })
+                }
+            }, {
+                onSuccess: () => {
+                    console.log("asdf")
+                    toast({
+                        description: "메뉴를 담았습니다",
+                        position: "bottom"
+                    })
+                    hideOrderDetail()
+                    router.push(ROUTE_PATHS.PAY)
+                },
+                onError: (error) => {
+                    console.log("qwer")
 
-        router.push(ROUTE_PATHS.PAY)
+                    toast({
+                        description: error.message,
+                        position: "bottom"
+                    })
+                }
+            })
+        }
+        const emptyCart = (onSuccess: () => void) => {
+            if (!carts) return
+            const cartIds = carts.orderMenus.map(menu => menu.cartId)
+            deleteCart({ cartIds }, { onSuccess })
+        }
+
+        if (carts?.storeId !== orderDetail.storeId) {
+            // TODO: portal 위에 모달이 뜨도록 수정
+            showModal({
+                content:
+                    <Confirm
+                        title="개발의 민족"
+                        message="장바구니에 담긴 메뉴를 취소하고 <br/>새로운 가게에서 주문하시겠어요?"
+                        confirmText="예" cancelText="아니요"
+                        onConfirmClick={() => { emptyCart(updateCart) }}
+                        onCancelClick={hideModal}
+                    />
+            })
+        } else {
+            updateCart()
+        } 
     }
 
     useEffect(() => {
@@ -283,8 +331,8 @@ const StoreOrderDetail = () => {
                         delay: 0.2
                     }}
                 >
-                    <p className="text-sm text-center text-red-600 font-bold py-4">5,000원부터 배달 가능해요</p>
-                    <Button className={cn("text-base font-semibold", !isValid && "bg-gray-400 hover:bg-gray-400")} onClick={handleOrder} >{price.toLocaleString()}원 주문하기</Button>
+                    <p className="text-sm text-center text-red-600 font-bold py-4">{minimumOrderAmount.toLocaleString()}원부터 주문 가능해요</p>
+                    <Button className={cn("text-base font-semibold", !isValid && "bg-gray-400 hover:bg-gray-400")} onClick={handleAddToCart} >{price.toLocaleString()}원 담기</Button>
                 </motion.div>
             </div>,
             document.body

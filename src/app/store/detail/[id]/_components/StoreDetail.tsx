@@ -199,8 +199,7 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
     return () => {
       resetStoreDetail()
     }
-  }, [])
-  if (!storeDetail) return <></>
+  }, []) 
   return (
     <div
       ref={containerRef}
@@ -349,11 +348,11 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
           </p>
         </div>
 
-        {orderDetail && createPortal(<StoreOrderDetail />, document.body)}
+        {orderDetail && createPortal(<StoreOrderDetail minimumOrderAmount={storeDetail?.minimumOrderAmount} />, document.body)}
         {showScrollButton && (
           <ScrollToTopButton onClick={scrollToTop} hasBottomNavigation={false} />
         )}
-        {!isCartEmpty &&
+        {!isCartEmpty && storeDetail && 
           (isSameStoreForCart ? (
             <OrderButton minimumOrderAmount={storeDetail.minimumOrderAmount} />
           ) : (
