@@ -1,12 +1,12 @@
 'use client'
 
 import { api, mockApi } from '@/lib/api'
-import { useMockReady } from '@/providers/MockProvider'
+import { isMockingMode, useMockReady } from '@/providers/MockProvider'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef } from 'react'
 
 interface PaginatedResponse<T> {
-  data: T[]
+  content: T[]
   nextCursor?: number
 }
 
@@ -62,7 +62,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
           )),
       }
 
-      const API = isMockReady ? mockApi : api
+      const API = isMockingMode ? mockApi : api
 
       const res = await API.get<PaginatedResponse<TData>>(endpoint, {
         headers: {
@@ -71,12 +71,11 @@ export const useInfiniteScroll = <TData, TFilter = void>({
         },
         searchParams,
       })
-
       return res
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
     initialPageParam: 1,
-    enabled: isMockReady,
+    enabled: isMockingMode ? isMockReady : true,
   })
 
   const handleObserver = useCallback(
@@ -112,7 +111,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
   }, [handleObserver, root, rootMargin, threshold])
 
   return {
-    data: data?.pages.flatMap((page) => page.data) ?? [],
+    data: data?.pages.flatMap((page) => page.content) ?? [],
     isLoading,
     isFetching,
     isError,
@@ -123,4 +122,3 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     refetch: refetch,
   }
 }
-

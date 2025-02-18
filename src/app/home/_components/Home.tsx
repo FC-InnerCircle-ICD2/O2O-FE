@@ -17,9 +17,10 @@ const Home = () => {
     { category: string | undefined }
   >({
     queryKey: 'stores',
-    endpoint: 'stores',
+    endpoint: 'stores/list',
     filter: { category: undefined },
     size: 10,
+    location: { lat: 37.5177, lng: 127.0473 },
   })
 
   const handleRefresh = async (): Promise<void> => {

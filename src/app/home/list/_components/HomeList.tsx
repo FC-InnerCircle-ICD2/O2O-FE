@@ -18,9 +18,10 @@ const HomeList = () => {
     { category: string; order: OrderType }
   >({
     queryKey: 'stores',
-    endpoint: 'stores',
+    endpoint: 'stores/list',
     filter: { category, order },
     size: 10,
+    location: { lat: 37.5177, lng: 127.0473 },
   })
 
   const scrollRef = useRef<HTMLDivElement>(null)

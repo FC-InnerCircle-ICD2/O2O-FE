@@ -30,7 +30,7 @@ const StoreListItem = ({ store }: StoreListItemProps) => {
           className={`size-[100px] rounded-xl object-cover object-center ${
             isImageLoading ? 'invisible' : ''
           }`}
-          src={store.imageUrl}
+          src={store.imageMain}
           alt="음식점 대표 이미지"
           width={100}
           height={100}
