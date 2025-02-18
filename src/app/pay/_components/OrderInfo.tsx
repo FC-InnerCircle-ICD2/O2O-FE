@@ -14,6 +14,7 @@ import Icon from '@/components/Icon'
 import Separator from '@/components/Separator'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Label } from '@/components/shadcn/label'
+import { cn } from '@/lib/utils'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
 import { ROUTE_PATHS } from '@/utils/routes'
@@ -172,6 +173,7 @@ const OrderInfo = () => {
       { onSuccess: updateCartsState }
     )
   }
+
   const handleOrderPay = () => {
     if (!cartsState || !member) {
       showModal({
@@ -206,7 +208,7 @@ const OrderInfo = () => {
   const totalMenuPrice = useMemo(() => {
     if (!cartsState) return 0
     return Object.values(cartsState.orderMenus).reduce((acc, menu) => {
-      return acc + menu.totalPrice * menu.quantity
+      return acc + menu.totalPrice
     }, 0)
   }, [cartsState])
 
@@ -244,6 +246,12 @@ const OrderInfo = () => {
       setCartsState(undefined)
     }
   }, [cartsState])
+
+  const isUnderMinOrder = useMemo(() => {
+    if (!storeDetail) return true
+    return totalMenuPrice < storeDetail.minimumOrderAmount
+  }, [storeDetail, cartsState])
+
 
   if (!cartsState || !storeDetail) {
     return (
@@ -348,7 +356,19 @@ const OrderInfo = () => {
         <div className="text-lg font-bold">총 결재금액</div>
         <div className="text-lg font-bold">{(totalMenuPrice + deliveryPrice).toLocaleString()}원</div>
       </div>
-      <Button onClick={handleOrderPay}>{(totalMenuPrice + deliveryPrice).toLocaleString()}원 배달 결제하기</Button>
+      {isUnderMinOrder && (
+        <p className="pb-2 text-center text-sm font-bold text-red-600">
+          {(storeDetail.minimumOrderAmount - totalMenuPrice).toLocaleString()}원 더 담으면 배달 가능해요
+        </p>
+      )}
+      <Button
+        onClick={handleOrderPay}
+        className={cn(
+          'text-base font-semibold',
+          isUnderMinOrder && 'bg-gray-400 hover:bg-gray-400'
+        )}
+        disabled={isUnderMinOrder}
+      >{(totalMenuPrice + deliveryPrice).toLocaleString()}원 배달 결제하기</Button>
     </div>
   )
 }

@@ -43,7 +43,7 @@ const MenuItem = ({ menu, onIncrease, onDecrease, onRemove }: MenuItemProps) => 
         </div>
       </div>
       <div className="flex flex-row justify-end gap-2"> 
-        <UpDownBtn value={menu.quantity} onChange={handleChangeCount} /> {/**TODO: */}
+        <UpDownBtn value={menu.quantity} onChange={handleChangeCount} />  
       </div>
     </div>
   )

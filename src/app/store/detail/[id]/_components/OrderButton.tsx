@@ -13,9 +13,15 @@ export const OrderButton = ({ minimumOrderAmount }: { minimumOrderAmount: number
 
     return carts?.orderMenus.reduce((sum, cur) => cur.totalPrice + sum, 0)
   }, [carts])
+
+
+  const isUnderMinOrder = useMemo(() => {
+    return totalPrice < minimumOrderAmount
+  }, [totalPrice, minimumOrderAmount])
+
   return (
     <div className="sticky bottom-0 z-10 rounded-t-lg bg-white px-mobile_safe py-4 shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.1)]">
-      {totalPrice < minimumOrderAmount && (
+      {isUnderMinOrder && (
         <p className="pb-2 text-center text-sm font-bold text-red-600">
           {(minimumOrderAmount - totalPrice).toLocaleString()}원 더 담으면 배달 가능해요
         </p>
@@ -24,8 +30,9 @@ export const OrderButton = ({ minimumOrderAmount }: { minimumOrderAmount: number
         <Button
           className={cn(
             'text-base font-semibold',
-            totalPrice < 6000 && 'bg-gray-400 hover:bg-gray-400'
+            isUnderMinOrder && 'bg-gray-400 hover:bg-gray-400'  
           )}
+          disabled={isUnderMinOrder}
         >
           {totalPrice.toLocaleString()}원 주문하기
         </Button>

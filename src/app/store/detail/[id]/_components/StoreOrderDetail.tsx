@@ -138,8 +138,7 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
             deleteCart({ cartIds }, { onSuccess })
         }
 
-        if (carts?.storeId !== orderDetail.storeId) {
-            // TODO: portal 위에 모달이 뜨도록 수정
+        if (carts?.storeId !== orderDetail.storeId) { 
             showModal({
                 content:
                     <Confirm
