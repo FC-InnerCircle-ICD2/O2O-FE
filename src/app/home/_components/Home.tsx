@@ -12,7 +12,7 @@ import CategoryDrawer from './CategoryDrawer'
 const Home = () => {
   const scrollRef = useRef<HTMLDivElement>(null)
 
-  const { data, isFetching, targetRef, refetch } = useInfiniteScroll<
+  const { data, isFetching, targetRef, refetch, hasNextPage } = useInfiniteScroll<
     Store,
     { category: string | undefined }
   >({
@@ -32,8 +32,7 @@ const Home = () => {
       <div ref={scrollRef} className="flex flex-col gap-[26px] pb-4 pt-9">
         <CategoryDrawer />
         <BannerSlide />
-        <HomeStoreList data={data} isLoading={isFetching} />
-
+        <HomeStoreList data={data} isLoading={isFetching} hasNextPage={hasNextPage} />
         <div ref={targetRef} />
       </div>
       <CartButton />

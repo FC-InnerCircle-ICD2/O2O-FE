@@ -13,7 +13,7 @@ import HomeSearchFoodList from './HomeSearchFoodList'
 const HomeList = () => {
   const { category, order } = useFoodSearchFilterStore()
   const [isCategoryHide, setIsCategoryHide] = useState(false)
-  const { data, isFetching, targetRef, refetch } = useInfiniteScroll<
+  const { data, isFetching, targetRef, refetch, hasNextPage } = useInfiniteScroll<
     Store,
     { category: string; order: OrderType }
   >({
@@ -55,6 +55,7 @@ const HomeList = () => {
         <CategorySlide isHide={isCategoryHide} />
         <HomeSearchFoodList
           data={data}
+          hasNextPage={hasNextPage}
           isLoading={isFetching}
           targetRef={targetRef}
           scrollRef={scrollRef}
