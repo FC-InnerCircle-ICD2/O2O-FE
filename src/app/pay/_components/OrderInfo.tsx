@@ -280,7 +280,7 @@ const OrderInfo = () => {
       </div> 
       <div className="rounded-xl border border-solid border-gray-400">
         <div className="flex flex-row justify-between px-3 py-3 border-b border-solid border-gray-300">
-          <div className="text-base font-extrabold">{storeDetail.name}</div>
+          <div className="text-base font-extrabold cursor-pointer" onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${storeDetail.id}`)}>{storeDetail.name}</div>
           <div className="place-content-center text-xs text-gray-700 cursor-pointer" onClick={handleEmptyCart}>전체삭제</div>
         </div>
 
