@@ -1,5 +1,5 @@
+import { api } from '@/lib/api'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import ky from 'ky'
 
 interface PostReviewData {
   orderId: string
@@ -25,31 +25,21 @@ const usePostReview = () => {
         content: postReviewData.content,
         totalScore: postReviewData.totalScore,
         tasteScore: postReviewData.tasteScore,
-        quantityScore: postReviewData.quantityScore,
+        amountScore: postReviewData.quantityScore,
         deliveryQuality: postReviewData.deliveryQuality,
       }
 
       // review 데이터를 문자열로 변환하여 추가
-      formData.append('review', 'gg')
+      const reviewBlob = new Blob([JSON.stringify(reviewData)], {
+        type: 'application/json',
+      })
+      formData.append('review', reviewBlob)
 
       if (postReviewData.image) {
         formData.append('image', postReviewData.image)
       }
 
-      formData.append('orderId', postReviewData.orderId.toString())
-
-      return await ky.post(`${process.env.NEXT_PUBLIC_API_URL}/reviews`, {
-        body: formData,
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-
-      // return await ky.post(`${process.env.NEXT_PUBLIC_API_URL}/v1/reviews`, {
-      //   headers: { 'Content-Type': 'multipart/form-data' },
-      //   json: formData,
-      // })
+      return await api.post('reviews', formData)
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['writable-reviews'] })
