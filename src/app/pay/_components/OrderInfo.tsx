@@ -48,6 +48,7 @@ const OrderInfo = () => {
   }
   const handleIncreaseQuantity = (menuId: string) => {
 
+    // TODO: 테스트용 -> 배포 시 아래걸로 바꾸기
     const updateCartsState = (newQuantity: number) => {
       setCartsState((prev) => {
         if (!prev) return
@@ -57,15 +58,35 @@ const OrderInfo = () => {
             if (menu.menuId !== menuId) return menu
 
             const unitPrice = menu.totalPrice / menu.quantity
+            console.log(unitPrice, menu.quantity)
             return {
               ...menu,
-              quantity: newQuantity,
-              totalPrice: Math.round(unitPrice * (newQuantity))
+              quantity: menu.quantity + 1,
+              totalPrice: Math.round(unitPrice * (menu.quantity + 1))
             }
           })
         }
       })
     }
+
+    // const updateCartsState = (newQuantity: number) => {
+    //   setCartsState((prev) => {
+    //     if (!prev) return
+    //     return {
+    //       storeId: prev.storeId,
+    //       orderMenus: prev.orderMenus.map(menu => {
+    //         if (menu.menuId !== menuId) return menu
+
+    //         const unitPrice = menu.totalPrice / menu.quantity
+    //         return {
+    //           ...menu,
+    //           quantity: newQuantity,
+    //           totalPrice: Math.round(unitPrice * (newQuantity))
+    //         }
+    //       })
+    //     }
+    //   })
+    // }
 
 
     if (!storeDetail) return
@@ -83,6 +104,7 @@ const OrderInfo = () => {
   }
 
   const handleDecreaseQuantity = (menuId: string) => {
+    // TODO: 테스트용 -> 배포 시 아래걸로 바꾸기
     const updateCartsState = (newQuantity: number) => {
       setCartsState((prev) => {
         if (!prev) return
@@ -92,15 +114,36 @@ const OrderInfo = () => {
             if (menu.menuId !== menuId) return menu
 
             const unitPrice = menu.totalPrice / menu.quantity
+            console.log(unitPrice, menu.quantity)
             return {
               ...menu,
-              quantity: newQuantity,
-              totalPrice: Math.round(unitPrice * (newQuantity))
+              quantity: menu.quantity - 1,
+              totalPrice: Math.round(unitPrice * (menu.quantity - 1))
             }
           })
         }
       })
     }
+    // const updateCartsState = (newQuantity: number) => {
+    //   setCartsState((prev) => {
+    //     if (!prev) return
+    //     return {
+    //       storeId: prev.storeId,
+    //       orderMenus: prev.orderMenus.map(menu => {
+    //         if (menu.menuId !== menuId) return menu
+
+    //         const unitPrice = menu.totalPrice / menu.quantity
+    //         console.log(unitPrice, menu.quantity)
+    //         return {
+    //           ...menu,
+    //           quantity: menu.quantity + 1,
+    //           totalPrice: Math.round(unitPrice * (menu.quantity + 1))
+    //         }
+    //       })
+    //     }
+    //   })
+    // }
+
     if (!storeDetail) return
     const targetMenu = cartsState?.orderMenus.find(menu => menu.menuId === menuId)
     if (!targetMenu) return

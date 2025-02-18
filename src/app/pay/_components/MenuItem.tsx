@@ -35,7 +35,7 @@ const MenuItem = ({ menu, onIncrease, onDecrease, onRemove }: MenuItemProps) => 
           <div className="flex flex-col place-content-center">
             <div className="text-base font-medium">{menu.name}</div>
             {/* TODO: 선택한 옵션 */}
-            <div className="font-bold">{(menu.totalPrice * menu.quantity).toLocaleString()}원</div>
+            <div className="font-bold">{(menu.totalPrice).toLocaleString()}원</div>
           </div>
         </div>
         <div className="" onClick={handleRemove}>
