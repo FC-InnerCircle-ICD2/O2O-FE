@@ -26,7 +26,7 @@ const AddressOption = () => {
       </div>
       <div className="flex flex-row justify-center gap-2">
         <Icon name="LocateFixed" size={20} />
-        <Link href={ROUTE_PATHS.ADDRESS_DETAIL}>
+        <Link href={{pathname: ROUTE_PATHS.ADDRESS_DETAIL, query: {flag: false}}}>
           <div className="content-center">현재 위치로 주소 찾기</div>
         </Link>
       </div>
@@ -44,7 +44,7 @@ const AddressOption = () => {
       </div>
 
       <Separator ignoreMobileSafe className="h-2" />
-      <Link href={ROUTE_PATHS.ADDRESS_DETAIL}>
+      <Link href={{pathname: ROUTE_PATHS.ADDRESS_DETAIL, query: {flag: true}}}>
         <div className="flex flex-row gap-2">
           <Icon name="Home" size={20} />
           <div className="content-center">집 추가</div>
@@ -52,7 +52,7 @@ const AddressOption = () => {
       </Link>
 
       <Separator />
-      <Link href={ROUTE_PATHS.ADDRESS_DETAIL}>
+      <Link href={{pathname: ROUTE_PATHS.ADDRESS_DETAIL, query: {flag: true}}}>
         <div className="flex flex-row gap-2">
           <Icon name="Briefcase" size={20} />
           <div className="content-center">회사 추가</div>

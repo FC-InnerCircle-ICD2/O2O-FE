@@ -1,13 +1,24 @@
 'use client'
 
 import Input from '@/components/Input'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Icon from '@/components/Icon'
 import { Button } from '@/components/button'
+import { useSearchParams } from 'next/navigation'
 
 const MapInfo = ({ address, loadAddr }) => {
   const [word, setWord] = useState('')
-  const flag = false
+  const searchParams = useSearchParams()
+
+  const [flag, setFlag] = useState(true)
+
+  useEffect(() => {
+    if (searchParams.get('flag') === 'false') {
+      setFlag(false)
+    } else {
+      setFlag(true)
+    }
+  }, [searchParams.get('flag')])
 
   return (
     <div className="flex flex-col gap-4 px-mobile_safe">
