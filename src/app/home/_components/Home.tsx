@@ -5,12 +5,14 @@ import CartButton from '@/components/CartButton'
 import PullToRefresh from '@/components/PullToRefresh'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { Store } from '@/models/store'
+import { useGeoLocationStore } from '@/store/geoLocation'
 import { useRef } from 'react'
 import BannerSlide from './BannerSlide'
 import CategoryDrawer from './CategoryDrawer'
 
 const Home = () => {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const { coordinates: location } = useGeoLocationStore()
 
   const { data, isFetching, targetRef, refetch, hasNextPage } = useInfiniteScroll<
     Store,
@@ -19,8 +21,8 @@ const Home = () => {
     queryKey: 'stores',
     endpoint: 'stores/list',
     filter: { category: undefined },
-    size: 10,
-    location: { lat: 37.5177, lng: 127.0473 }, // TODO: 동적으로 바꾸기
+    size: 10, 
+    ...(location && { location }),  
   })
 
   const handleRefresh = async (): Promise<void> => {

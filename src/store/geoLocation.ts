@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 
 interface Coordinates {
-  latitude: number
-  longitude: number
+  lat: number
+  lng: number
 }
 
 interface Address {

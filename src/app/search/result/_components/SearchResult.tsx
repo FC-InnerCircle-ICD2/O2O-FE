@@ -5,12 +5,14 @@ import FoodOrderFilter from '@/components/shared/FoodOrderFilter'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { OrderType } from '@/models/orderType'
 import { Store } from '@/models/store'
+import { useGeoLocationStore } from '@/store/geoLocation'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { useRef } from 'react'
 import SearchFoodList from './SearchFoodList'
 
 const SearchResult = () => {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const { coordinates: location } = useGeoLocationStore()
   const { keyword, order } = useFoodSearchFilterStore()
   const { data, isFetching, targetRef, refetch } = useInfiniteScroll<
     Store,
@@ -20,7 +22,7 @@ const SearchResult = () => {
     endpoint: 'stores/list',
     filter: { keyword, order },
     size: 10,
-    location: { lat: 37.5177, lng: 127.0473 }, // TODO: 동적으로 바꾸기
+    ...(location && { location }),  
   })
 
   const handleRefresh = async (): Promise<void> => {

@@ -29,7 +29,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
   threshold = 0.1,
   root = null,
   rootMargin = '0px',
-  location,
+  location = { lat: 37.5177, lng: 127.0473 },
 }: InfiniteScrollOptions<TFilter>) => {
   const observerRef = useRef<IntersectionObserver | null>(null)
   const targetRef = useRef<HTMLDivElement | null>(null)

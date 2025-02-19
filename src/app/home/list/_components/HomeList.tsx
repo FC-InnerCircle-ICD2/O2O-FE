@@ -5,12 +5,14 @@ import PullToRefresh from '@/components/PullToRefresh'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { OrderType } from '@/models/orderType'
 import { Store } from '@/models/store'
+import { useGeoLocationStore } from '@/store/geoLocation'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { useEffect, useRef, useState } from 'react'
 import CategorySlide from './CategorySlide'
 import HomeSearchFoodList from './HomeSearchFoodList'
 
 const HomeList = () => {
+  const { coordinates: location } = useGeoLocationStore()
   const { category, order } = useFoodSearchFilterStore()
   const [isCategoryHide, setIsCategoryHide] = useState(false)
   const { data, isFetching, targetRef, refetch, hasNextPage } = useInfiniteScroll<
@@ -21,7 +23,7 @@ const HomeList = () => {
     endpoint: 'stores/list',
     filter: { category, order },
     size: 10,
-    location: { lat: 37.5177, lng: 127.0473 }, // TODO: 동적으로 바꾸기
+    ...(location && { location }),  
   })
 
   const scrollRef = useRef<HTMLDivElement>(null)
