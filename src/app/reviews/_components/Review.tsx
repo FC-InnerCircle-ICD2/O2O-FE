@@ -49,14 +49,17 @@ const Review = () => {
           pendingReviewsCount={writableReviews?.content.length ?? 0}
         />
       </div>
-      <div className="relative mt-2 h-[calc(100vh-190px)] overflow-y-auto overflow-x-hidden">
+      <div className="relative mt-2">
         <motion.div
           initial={{ x: 0 }}
           animate={{
             x: tab === '작성가능' ? 0 : '-110%',
           }}
           transition={{ duration: 0.3 }}
-          className="absolute w-full"
+          className="absolute w-full overflow-y-auto overflow-x-hidden"
+          style={{
+            height: 'calc(100vh - 190px)',
+          }}
         >
           {isLoading ? (
             Array.from({ length: 5 }).map((_, i) => (
@@ -81,7 +84,10 @@ const Review = () => {
             x: tab === '작성가능' ? '110%' : 0,
           }}
           transition={{ duration: 0.3 }}
-          className="absolute w-full"
+          className="absolute w-full overflow-y-auto overflow-x-hidden"
+          style={{
+            height: 'calc(100vh - 190px)',
+          }}
         >
           {isLoadingCompleted ? (
             Array.from({ length: 5 }).map((_, i) => (
