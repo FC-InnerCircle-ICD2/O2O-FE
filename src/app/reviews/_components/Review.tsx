@@ -3,6 +3,7 @@
 import useGetCompletedReviews from '@/api/useGetCompletedReviews'
 import useGetWritableReviews from '@/api/useGetWritableReviews'
 import CompletedReview from '@/app/reviews/_components/CompletedReview'
+import CompletedReviewSkeleton from '@/app/reviews/_components/CompletedReviewSkeleton'
 import NoWritableReview from '@/app/reviews/_components/NoWritableReview'
 import ReviewTab from '@/app/reviews/_components/ReviewTab'
 import WritableReview from '@/app/reviews/_components/WritableReview'
@@ -84,7 +85,7 @@ const Review = () => {
         >
           {isLoadingCompleted ? (
             Array.from({ length: 5 }).map((_, i) => (
-              <WritableReviewSkeleton key={i} offSeparator={i === 4} />
+              <CompletedReviewSkeleton key={i} offSeparator={i === 4} />
             ))
           ) : (
             <>
