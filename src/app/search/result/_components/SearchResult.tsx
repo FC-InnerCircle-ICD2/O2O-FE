@@ -22,7 +22,7 @@ const SearchResult = () => {
     endpoint: 'stores/list',
     filter: { keyword, order },
     size: 10,
-    ...(location && { location }),  
+    ...(location && { location: { lat: location.latitude, lng: location.latitude } }),  
   })
 
   const handleRefresh = async (): Promise<void> => {

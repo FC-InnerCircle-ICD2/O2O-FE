@@ -23,7 +23,7 @@ const HomeList = () => {
     endpoint: 'stores/list',
     filter: { category, order },
     size: 10,
-    ...(location && { location }),  
+    ...(location && { location: { lat: location.latitude, lng: location.latitude } }),  
   })
 
   const scrollRef = useRef<HTMLDivElement>(null)
