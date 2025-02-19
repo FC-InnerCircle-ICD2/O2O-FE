@@ -24,7 +24,7 @@ import { useEffect, useMemo, useState } from 'react'
 const OrderInfo = () => {
   const router = useRouter()
 
-  const { carts } = useGetCarts()
+  const { carts, resetCarts } = useGetCarts()
   const [cartsState, setCartsState] = useState(carts)
   const { mutate: deleteCarts } = useDeleteCart()
   const { mutate: updateCarts } = usePatchCarts()
@@ -50,81 +50,6 @@ const OrderInfo = () => {
   const handleIncreaseQuantity = (menuId: string) => {
 
     // TODO: 테스트용 -> 배포 시 아래걸로 바꾸기
-    const updateCartsState = (newQuantity: number) => {
-      setCartsState((prev) => {
-        if (!prev) return
-        return {
-          storeId: prev.storeId,
-          orderMenus: prev.orderMenus.map(menu => {
-            if (menu.menuId !== menuId) return menu
-
-            const unitPrice = menu.totalPrice / menu.quantity
-            console.log(unitPrice, menu.quantity)
-            return {
-              ...menu,
-              quantity: menu.quantity + 1,
-              totalPrice: Math.round(unitPrice * (menu.quantity + 1))
-            }
-          })
-        }
-      })
-    }
-
-    // const updateCartsState = (newQuantity: number) => {
-    //   setCartsState((prev) => {
-    //     if (!prev) return
-    //     return {
-    //       storeId: prev.storeId,
-    //       orderMenus: prev.orderMenus.map(menu => {
-    //         if (menu.menuId !== menuId) return menu
-
-    //         const unitPrice = menu.totalPrice / menu.quantity
-    //         return {
-    //           ...menu,
-    //           quantity: newQuantity,
-    //           totalPrice: Math.round(unitPrice * (newQuantity))
-    //         }
-    //       })
-    //     }
-    //   })
-    // }
-
-
-    if (!storeDetail) return
-    const targetMenu = cartsState?.orderMenus.find(menu => menu.menuId === menuId)
-    if (!targetMenu) return
-    updateCarts(
-      {
-        cartId: targetMenu.cartId,
-        quantity: targetMenu.quantity - 1
-      },
-      {
-        onSuccess: (data) => updateCartsState(data.quantity)
-      }
-    )
-  }
-
-  const handleDecreaseQuantity = (menuId: string) => {
-    // TODO: 테스트용 -> 배포 시 아래걸로 바꾸기
-    const updateCartsState = (newQuantity: number) => {
-      setCartsState((prev) => {
-        if (!prev) return
-        return {
-          storeId: prev.storeId,
-          orderMenus: prev.orderMenus.map(menu => {
-            if (menu.menuId !== menuId) return menu
-
-            const unitPrice = menu.totalPrice / menu.quantity
-            console.log(unitPrice, menu.quantity)
-            return {
-              ...menu,
-              quantity: menu.quantity - 1,
-              totalPrice: Math.round(unitPrice * (menu.quantity - 1))
-            }
-          })
-        }
-      })
-    }
     // const updateCartsState = (newQuantity: number) => {
     //   setCartsState((prev) => {
     //     if (!prev) return
@@ -145,6 +70,80 @@ const OrderInfo = () => {
     //   })
     // }
 
+    const updateCartsState = (newQuantity: number) => {
+      setCartsState((prev) => {
+        if (!prev) return
+        return {
+          storeId: prev.storeId,
+          orderMenus: prev.orderMenus.map(menu => {
+            if (menu.menuId !== menuId) return menu
+
+            const unitPrice = menu.totalPrice / menu.quantity
+            return {
+              ...menu,
+              quantity: newQuantity,
+              totalPrice: Math.round(unitPrice * (newQuantity))
+            }
+          })
+        }
+      })
+    }
+
+
+    if (!storeDetail) return
+    const targetMenu = cartsState?.orderMenus.find(menu => menu.menuId === menuId)
+    if (!targetMenu) return
+    updateCarts(
+      {
+        cartId: targetMenu.cartId,
+        quantity: targetMenu.quantity + 1
+      },
+      {
+        onSuccess: (data) => updateCartsState(data.quantity)
+      }
+    )
+  }
+
+  const handleDecreaseQuantity = (menuId: string) => {
+  // TODO: 테스트용 -> 배포 시 아래걸로 바꾸기
+    // const updateCartsState = (newQuantity: number) => {
+    //   setCartsState((prev) => {
+    //     if (!prev) return
+    //     return {
+    //       storeId: prev.storeId,
+    //       orderMenus: prev.orderMenus.map(menu => {
+    //         if (menu.menuId !== menuId) return menu
+
+    //         const unitPrice = menu.totalPrice / menu.quantity
+    //         console.log(unitPrice, menu.quantity)
+    //         return {
+    //           ...menu,
+    //           quantity: menu.quantity - 1,
+    //           totalPrice: Math.round(unitPrice * (menu.quantity - 1))
+    //         }
+    //       })
+    //     }
+    //   })
+    // }
+    const updateCartsState = (newQuantity: number) => {
+      setCartsState((prev) => {
+        if (!prev) return
+        return {
+          storeId: prev.storeId,
+          orderMenus: prev.orderMenus.map(menu => {
+            if (menu.menuId !== menuId) return menu
+
+            const unitPrice = menu.totalPrice / menu.quantity
+            return {
+              ...menu,
+              quantity: newQuantity,
+              totalPrice: Math.round(unitPrice * (newQuantity))
+            }
+          })
+        }
+      })
+    }
+
     if (!storeDetail) return
     const targetMenu = cartsState?.orderMenus.find(menu => menu.menuId === menuId)
     if (!targetMenu) return
@@ -158,18 +157,18 @@ const OrderInfo = () => {
       }
     )
   }
-  const handleRemoveItem = (menuId: string) => {
+  const handleRemoveItem = (cartId: number) => {
     const updateCartsState = () => {
       setCartsState((prev) => {
         if (!prev) return
         return {
           storeId: prev.storeId,
-          orderMenus: prev.orderMenus.filter((item) => item.menuId !== menuId),
+          orderMenus: prev.orderMenus.filter((item) => item.cartId !== cartId),
         }
       })
     }
     deleteCarts(
-      { cartIds: [Number.parseInt(menuId)] },
+      { cartIds: [cartId] },
       { onSuccess: updateCartsState }
     )
   }
@@ -212,7 +211,11 @@ const OrderInfo = () => {
     }, 0)
   }, [cartsState])
 
-
+  useEffect(() => {
+    return () => {
+      resetCarts()
+    }
+  }, [])
   useEffect(() => {
     setCartsState(carts)
   }, [carts])
@@ -244,6 +247,7 @@ const OrderInfo = () => {
   useEffect(() => {
     if (cartsState && cartsState.orderMenus.length === 0) {
       setCartsState(undefined)
+      resetCarts()
     }
   }, [cartsState])
 
@@ -257,7 +261,7 @@ const OrderInfo = () => {
     return (
       <div className='text-center mt-[30vh]'>
         <div className='text-gray-500 mb-8'>장바구니가 비어있어요</div>
-        <Button className='w-auto px-10' variant={'grayFit'} onClick={() => router.back()}>가게 구경하기</Button>
+        <Button className='w-auto px-10' variant={'grayFit'} onClick={() => router.push(ROUTE_PATHS.HOME_LIST)}>가게 구경하기</Button>
       </div>
     )
   }
