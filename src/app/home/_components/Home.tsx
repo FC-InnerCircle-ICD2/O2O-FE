@@ -20,7 +20,7 @@ const Home = () => {
     endpoint: 'stores/list',
     filter: { category: undefined },
     size: 10,
-    location: { lat: 37.5177, lng: 127.0473 },
+    location: { lat: 37.5177, lng: 127.0473 }, // TODO: 동적으로 바꾸기
   })
 
   const handleRefresh = async (): Promise<void> => {

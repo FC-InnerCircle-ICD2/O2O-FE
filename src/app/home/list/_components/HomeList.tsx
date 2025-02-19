@@ -21,7 +21,7 @@ const HomeList = () => {
     endpoint: 'stores/list',
     filter: { category, order },
     size: 10,
-    location: { lat: 37.5177, lng: 127.0473 },
+    location: { lat: 37.5177, lng: 127.0473 }, // TODO: 동적으로 바꾸기
   })
 
   const scrollRef = useRef<HTMLDivElement>(null)
