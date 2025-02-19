@@ -15,18 +15,23 @@ export interface CompletedReviewType {
   clientReviewContent: string
   editDeadline: number
 }
+
 export interface CompletedReviews {
   content: CompletedReviewType[]
   nextCursor: string | null
 }
 
-const useGetCompletedReviews = () => {
+interface Props {
+  page?: number
+}
+
+const useGetCompletedReviews = ({ page = 1 }: Props) => {
   return useQuery({
-    queryKey: ['completed-reviews'],
+    queryKey: ['completed-reviews', page],
     queryFn: async () => {
       const params: Record<string, string> = {}
-      params.page = '1'
-      params.size = '11'
+      params.page = page.toString()
+      params.size = '2'
       return await api.get<CompletedReviews>(`reviews`, {
         searchParams: params,
       })
