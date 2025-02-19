@@ -1,7 +1,8 @@
 'use client'
 
+import useGetCompletedReviews from '@/api/useGetCompletedReviews'
 import useGetWritableReviews from '@/api/useGetWritableReviews'
-import CompletedReviews from '@/app/reviews/_components/CompletedReviews'
+import CompletedReview from '@/app/reviews/_components/CompletedReview'
 import NoWritableReview from '@/app/reviews/_components/NoWritableReview'
 import ReviewTab from '@/app/reviews/_components/ReviewTab'
 import WritableReview from '@/app/reviews/_components/WritableReview'
@@ -14,6 +15,7 @@ export type ReviewTabType = '작성가능' | '작성완료'
 const Review = () => {
   const [tab, setTab] = useState<ReviewTabType>('작성가능')
   const { data: writableReviews, isLoading } = useGetWritableReviews()
+  const { data: completedReviews } = useGetCompletedReviews()
 
   const handleChangeTab = (tab: ReviewTabType) => {
     setTab(tab)
@@ -62,7 +64,13 @@ const Review = () => {
           transition={{ duration: 0.3 }}
           className="absolute w-full"
         >
-          <CompletedReviews />
+          {completedReviews?.content.map((review, index) => (
+            <CompletedReview
+              key={review.reviewId}
+              review={review}
+              offSeparator={index === completedReviews.content.length - 1}
+            />
+          ))}
         </motion.div>
       </div>
     </section>
