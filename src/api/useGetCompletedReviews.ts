@@ -31,7 +31,7 @@ const useGetCompletedReviews = ({ page = 1 }: Props) => {
     queryFn: async () => {
       const params: Record<string, string> = {}
       params.page = page.toString()
-      params.size = '2'
+      params.size = '5'
       return await api.get<CompletedReviews>(`reviews`, {
         searchParams: params,
       })
