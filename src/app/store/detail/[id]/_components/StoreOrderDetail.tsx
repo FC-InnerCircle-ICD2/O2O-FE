@@ -9,6 +9,8 @@ import { Button } from "@/components/button"
 import Confirm from "@/components/Confirm"
 import Icon from "@/components/Icon"
 import { Skeleton } from "@/components/shadcn/skeleton"
+import LoginModal from "@/components/shared/LoginModal"
+import { useLocalStorage } from "@/hooks/useLocalStorage"
 import { useThrottle } from "@/hooks/useThrottle"
 import { toast } from "@/hooks/useToast"
 import { cn } from "@/lib/utils"
@@ -29,9 +31,9 @@ import { IMAGE_HEIGHT } from "./StoreImage"
 
 const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }) => {
     const { orderDetail, hideOrderDetail } = orderDetailStore()
-
+    const { storedValue: accessToken } = useLocalStorage('accessToken')
     const { showModal, hideModal, modals } = modalStore()
-    const { carts } = useGetCarts()
+    const { carts, resetCarts } = useGetCarts()
     const { mutate: addToCart } = usePostCarts()
     const { mutate: deleteCart } = useDeleteCart()
     const containerRef = useRef<HTMLDivElement>(null)
@@ -102,7 +104,10 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
             return
         }
         if (!orderDetail || !storeMenuOptions) return
-
+        if (!accessToken) {
+            showModal({ content: <LoginModal />, useAnimation: true })
+            return
+        }
         const updateCart = () => {
             addToCart({
                 storeId: orderDetail.storeId.toString(),
@@ -123,6 +128,7 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
                         position: "bottom"
                     })
                     hideOrderDetail() 
+                    resetCarts()
                 },
                 onError: (error) => {  
                     toast({
@@ -138,7 +144,8 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
             deleteCart({ cartIds }, { onSuccess })
         }
 
-        if (carts?.storeId !== orderDetail.storeId) { 
+
+        if (carts && carts.orderMenus.length > 0 && carts.storeId !== orderDetail.storeId) { 
             showModal({
                 content:
                     <Confirm
