@@ -4,10 +4,16 @@ import { motion } from 'motion/react'
 interface ReviewTabProps {
   tab: ReviewTabType
   onChangeTab: (tab: ReviewTabType) => void
-  pendingReviewsCount: number
+  writableReviewsCount: number
+  completedReviewsCount: number
 }
 
-const ReviewTab = ({ tab, onChangeTab, pendingReviewsCount }: ReviewTabProps) => {
+const ReviewTab = ({
+  tab,
+  onChangeTab,
+  writableReviewsCount,
+  completedReviewsCount,
+}: ReviewTabProps) => {
   const handleClickTab = (e: React.MouseEvent<HTMLButtonElement>) => {
     onChangeTab(e.currentTarget.value as ReviewTabType)
   }
@@ -19,14 +25,14 @@ const ReviewTab = ({ tab, onChangeTab, pendingReviewsCount }: ReviewTabProps) =>
         value="작성가능"
         className={`z-10 w-1/2 ${tab === '작성가능' ? 'text-white' : 'text-gray-700'}`}
       >
-        {`작성 가능한 리뷰 (${pendingReviewsCount})`}
+        {`작성 가능한 리뷰 (${writableReviewsCount})`}
       </button>
       <button
         onClick={handleClickTab}
         value="작성완료"
         className={`z-10 w-1/2 ${tab === '작성완료' ? 'text-white' : 'text-gray-700'}`}
       >
-        {`작성한 리뷰 (${2})`}
+        {`작성한 리뷰 (${completedReviewsCount})`}
       </button>
       <motion.div
         className="absolute left-1 top-1 z-0 h-[32px] w-[calc(50%-4px)] rounded-sm bg-primary"

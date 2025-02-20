@@ -19,6 +19,7 @@ export interface CompletedReviewType {
 export interface CompletedReviews {
   content: CompletedReviewType[]
   nextCursor: string | null
+  totalCount: number
 }
 
 interface Props {

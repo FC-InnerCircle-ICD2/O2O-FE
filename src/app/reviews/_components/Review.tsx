@@ -46,7 +46,8 @@ const Review = () => {
         <ReviewTab
           tab={tab}
           onChangeTab={handleChangeTab}
-          pendingReviewsCount={writableReviews?.content.length ?? 0}
+          writableReviewsCount={writableReviews?.length ?? 0}
+          completedReviewsCount={completedReviews?.totalCount ?? 0}
         />
       </div>
       <div className="relative mt-2">
@@ -65,12 +66,12 @@ const Review = () => {
             Array.from({ length: 5 }).map((_, i) => (
               <WritableReviewSkeleton key={i} offSeparator={i === 4} />
             ))
-          ) : writableReviews?.content ? (
-            writableReviews.content.map((review, index) => (
+          ) : writableReviews ? (
+            writableReviews.map((review, index) => (
               <WritableReview
                 key={review.orderId}
                 review={review}
-                offSeparator={index === writableReviews.content.length - 1}
+                offSeparator={index === writableReviews.length - 1}
               />
             ))
           ) : (
