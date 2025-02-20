@@ -41,8 +41,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'img1.kakaocdn.net',
       },
+      {
+        protocol: 'https',
+        hostname: 'o2o-be-review-thumbnail-bucket.s3.amazonaws.com',
+      },
     ],
-    domains: ['o2o-be-review-thumbnail-bucket.s3.amazonaws.com'],
   },
   eslint: {
     ignoreDuringBuilds: true,
