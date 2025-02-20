@@ -11,12 +11,19 @@ import { RefObject, useEffect } from 'react'
 
 interface HomeSearchFoodListProps {
   data: Store[]
+  hasNextPage: boolean
   isLoading: boolean
   targetRef: RefObject<HTMLDivElement | null>
   scrollRef: RefObject<HTMLDivElement | null>
 }
 
-const HomeSearchFoodList = ({ data, isLoading, targetRef, scrollRef }: HomeSearchFoodListProps) => {
+const HomeSearchFoodList = ({
+  data,
+  isLoading,
+  targetRef,
+  scrollRef,
+  hasNextPage,
+}: HomeSearchFoodListProps) => {
   const { order, category } = useFoodSearchFilterStore()
   const { topRef, showScrollButton, scrollToTop } = useScrollToTop<HTMLParagraphElement>({})
 
@@ -34,6 +41,9 @@ const HomeSearchFoodList = ({ data, isLoading, targetRef, scrollRef }: HomeSearc
         {data.map((store) => (
           <StoreListItem key={store.id} store={store} />
         ))}
+        {data.length === 0 && !hasNextPage && !isLoading && (
+          <div className="mt-4 text-center text-gray-500">등록된 매장이 없어요</div>
+        )}
         {isLoading && Array.from({ length: 5 }).map((_, i) => <StoreListItemSkeleton key={i} />)}
         <div ref={targetRef} />
       </div>

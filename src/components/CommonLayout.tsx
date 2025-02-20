@@ -94,7 +94,6 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   }, [isMounted])
 
   useEffect(() => {
-    return
     if (!isLoaded) return
 
     const requestGeolocation = async () => {

@@ -2,7 +2,7 @@ import useGetCarts from '@/api/useGetCarts'
 import { cn } from '@/lib/utils'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import Icon from './Icon'
 
 interface CartButtonProps {
@@ -11,8 +11,8 @@ interface CartButtonProps {
 }
 
 const CartButton = ({ className = '', hasBottomNavigation = true }: CartButtonProps) => {
-  const { carts } = useGetCarts()
-  const cartItems = useMemo(() => carts?.orderMenus.length || 0, [carts])
+  const { carts, resetCarts } = useGetCarts()
+  const cartItems = useMemo(() => carts?.orderMenus.map(menu => menu.quantity).reduce((acc, cur) => cur + acc, 0) || 0, [carts])
 
   // 배지 위치
   const getBadgePosition = (count: number) => {
@@ -26,6 +26,11 @@ const CartButton = ({ className = '', hasBottomNavigation = true }: CartButtonPr
 
   const { top, right } = getBadgePosition(cartItems)
   const formattedCartItems = formatCartCount(cartItems)
+  useEffect(() => {
+    return () => {
+      resetCarts()
+    }
+  }, [])
 
   if (cartItems === 0) return <></>
 

@@ -3,7 +3,7 @@ export interface Store {
   name: string
   address: string
   rating: number
-  imageUrl: string
+  imageMain: string
   category: string
   isOpen: boolean
   deliveryTime: string // 예: "30-40분"

@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
 const MockContext = createContext<boolean>(false)
-const isMockingMode = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled'
+export const isMockingMode = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled'
 
 export const useMockReady = () => useContext(MockContext)
 

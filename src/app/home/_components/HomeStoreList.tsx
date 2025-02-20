@@ -9,9 +9,10 @@ import { Store } from '@/models/store'
 interface HomeStoreListProps {
   data: Store[]
   isLoading: boolean
+  hasNextPage: boolean
 }
 
-const HomeStoreList = ({ data, isLoading }: HomeStoreListProps) => {
+const HomeStoreList = ({ data, isLoading, hasNextPage }: HomeStoreListProps) => {
   const { topRef, showScrollButton, scrollToTop } = useScrollToTop<HTMLParagraphElement>({})
 
   return (
@@ -23,6 +24,9 @@ const HomeStoreList = ({ data, isLoading }: HomeStoreListProps) => {
         {data.map((store) => (
           <StoreListItem key={store.id} store={store} />
         ))}
+        {data.length === 0 && !hasNextPage && !isLoading && (
+          <div className="mt-4 text-center text-gray-500">등록된 매장이 없어요</div>
+        )}
         {isLoading && Array.from({ length: 5 }).map((_, i) => <StoreListItemSkeleton key={i} />)}
         {showScrollButton && <ScrollToTopButton onClick={scrollToTop} />}
       </div>

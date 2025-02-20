@@ -20,7 +20,7 @@ import { Category } from '@/models/category'
 const CATEGORY_LIST: Category[] = [
   { id: 1, name: '전체', value: '', icon: Dish },
   { id: 2, name: '카페/디저트', value: 'CAFE', icon: Cup },
-  { id: 3, name: '치킨', value: 'CHICHEN', icon: FriedChicken },
+  { id: 3, name: '치킨', value: 'CHICKEN', icon: FriedChicken },
   { id: 4, name: '한식', value: 'KOREAN_CUISINE', icon: Bibimbap },
   { id: 5, name: '중국집', value: 'CHINESE_CUISINE', icon: ZhaJiangMian },
   { id: 6, name: '분식', value: 'SNACK_FOOD', icon: Tteokbokki },

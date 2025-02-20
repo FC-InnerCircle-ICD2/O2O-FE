@@ -50,10 +50,12 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
   const { carts } = useGetCarts()
   const isCartEmpty = useMemo(() => {
     return carts?.orderMenus.length === 0
-  }, [])
+  }, [carts])
   const isSameStoreForCart = useMemo(() => {
     return carts ? Number.parseInt(carts.storeId) === storeId : false
   }, [carts, storeId])
+
+
 
   const { orderDetail } = orderDetailStore()
   const { BottomSheet, hide } = useBottomSheet()
@@ -348,11 +350,17 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
           </p>
         </div>
 
-        {orderDetail && storeDetail && createPortal(<StoreOrderDetail minimumOrderAmount={storeDetail?.minimumOrderAmount} />, document.body)}
+        {orderDetail &&
+          storeDetail &&
+          createPortal(
+            <StoreOrderDetail minimumOrderAmount={storeDetail?.minimumOrderAmount} />,
+            document.body
+          )}
         {showScrollButton && (
           <ScrollToTopButton onClick={scrollToTop} hasBottomNavigation={false} />
         )}
-        {!isCartEmpty && storeDetail && 
+        {!isCartEmpty &&
+          storeDetail &&
           (isSameStoreForCart ? (
             <OrderButton minimumOrderAmount={storeDetail.minimumOrderAmount} />
           ) : (

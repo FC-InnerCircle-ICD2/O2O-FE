@@ -19,8 +19,8 @@ const StoreListItem = ({ store }: StoreListItemProps) => {
   return (
     <div
       className="flex flex-1 items-center gap-[10px]"
-      // onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${store.id}`)}
-      onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${1006816630}`)}
+      onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${store.id}`)}
+      // onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${1006816630}`)}
     >
       <div className="relative size-[100px]">
         {isImageLoading && (
@@ -30,7 +30,7 @@ const StoreListItem = ({ store }: StoreListItemProps) => {
           className={`size-[100px] rounded-xl object-cover object-center ${
             isImageLoading ? 'invisible' : ''
           }`}
-          src={store.imageUrl}
+          src={store.imageMain}
           alt="음식점 대표 이미지"
           width={100}
           height={100}
