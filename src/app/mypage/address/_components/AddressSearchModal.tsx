@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react'
 import Icon from '@/components/Icon'
-import { modalStore } from '@/store/modal'
 
 interface ModalProps {
   isOpen: boolean
