@@ -9,17 +9,17 @@ export const handlers = [
   http.get('/_next/static/webpack/*', () => {
     return passthrough()
   }),
-  
+
   // Next.js 정적 미디어 파일 요청 무시
   http.get('/_next/static/media/*', () => {
     return passthrough()
   }),
-  
+
   // Next.js 청크 파일 요청 무시
   http.get('/_next/static/chunks/*', () => {
     return passthrough()
   }),
-  
+
   // 카카오 이미지 요청 처리
   http.get('https://t1.kakaocdn.net/*', async ({ request }) => {
     try {
@@ -57,7 +57,7 @@ export const handlers = [
       return passthrough()
     }
   }),
-  
+
   http.get('/_next/image', async ({ request }) => {
     const originalUrl = new URL(request.url)
     const imageUrl = originalUrl.searchParams.get('url')
@@ -67,10 +67,7 @@ export const handlers = [
     }
 
     // 외부 이미지 URL인 경우 passthrough
-    if (
-      imageUrl.startsWith('https://images.unsplash.com') ||
-      imageUrl.includes('kakaocdn.net')
-    ) {
+    if (imageUrl.startsWith('https://images.unsplash.com') || imageUrl.includes('kakaocdn.net')) {
       return passthrough()
     }
 
@@ -89,7 +86,7 @@ export const handlers = [
     }
   }),
   // Get Store
-  http.get('/api/v1/stores', async ({ request }) => {
+  http.get('*/api/v1/stores', async ({ request }) => {
     // 1초 지연 추가
     await delay(1000)
 
@@ -176,7 +173,7 @@ export const handlers = [
   }),
 
   // Get Menu Options
-  http.get('/api/v1/stores/:id/menus/:menuId/options', async ({ request }) => {
+  http.get('*/api/v1/stores/:id/menus/:menuId/options', async ({ request }) => {
     return passthrough()
 
     // await delay(2000)
@@ -201,10 +198,83 @@ export const handlers = [
     return passthrough()
   }),
 
- 
-
   // trend API는 실제 API로 통과
   http.get('*/api/v1/stores/:id', () => {
     return passthrough()
+  }),
+  http.get('*/api/v1/carts', async () => {
+    return HttpResponse.json({
+      status: 200,
+      message: 'success',
+      data: {
+        storeId: '26466355',
+        orderMenus: [
+          {
+            cartId: 5,
+            menuId: '9e15c3da-cae8-4c25-8b4e-ae21a926f072',
+            name: '아메리카노',
+            imageUrl: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec',
+            totalPrice: 10000, // 메뉴당 총합(옵션가격포함)
+            quantity: 2,
+            orderMenuOptionGroups: [
+              {
+                id: '62f5ab82-6f9f-4344-964c-9a09a568df62',
+                name: '사이즈 선택',
+                orderMenuOptionIds: [
+                  {
+                    id: 'c5d18e3d-e643-49d6-b089-3dbb5a148800',
+                    name: '소',
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            cartId: 6,
+            menuId: '~~~',
+            name: '카페라떼',
+            imageUrl: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec',
+            totalPrice: 5000,
+            quantity: 1,
+            orderMenuOptionGroups: [
+              {
+                id: '~~~',
+                name: '사이즈 선택',
+                orderMenuOptionIds: [
+                  {
+                    id: '~~~',
+                    name: '중',
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    })
+  }),
+  http.post('*/api/v1/carts', async () => {
+    return HttpResponse.json({
+      status: 200,
+      message: 'success',
+      data: null,
+    })
+  }),
+  http.patch('*/api/v1/carts', async ({request}) => {
+    return HttpResponse.json({
+      status: 200,
+      message: 'success',
+      data: {
+        cartId: 1,
+        quantity: 2
+      },
+    })
+  }),
+  http.delete('*/api/v1/carts', async () => {
+    return HttpResponse.json({
+      status: 200,
+      message: 'success',
+      data: null,
+    })
   }),
 ]
