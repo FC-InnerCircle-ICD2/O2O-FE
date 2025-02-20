@@ -125,7 +125,7 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
                 onSuccess: () => { 
                     toast({
                         description: "메뉴를 담았습니다",
-                        position: "bottom"
+                        position: "center"
                     })
                     hideOrderDetail() 
                     resetCarts()
