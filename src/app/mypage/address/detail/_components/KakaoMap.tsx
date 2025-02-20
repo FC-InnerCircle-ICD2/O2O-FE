@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from 'react'
 import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk'
 import useGeolocation from '@/app/mypage/address/detail/_components/useGeolocation'
+import { useSearchParams } from 'next/navigation'
 
 declare global {
   interface Window {
@@ -12,11 +13,13 @@ declare global {
 
 const KakaoMap = ({ onAddressChange }) => {
   const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_APP_KEY
-  const [scriptLoad, setScriptLoad] = useState<boolean>(false)
   const [position, setPosition] = useState<{ lat: number; lng: number }>()
   const [address, setAddress] = useState('')
   const [roadAddr, setRoadAddr] = useState('')
+  const [lng, setLng] = useState(0)
+  const [lat, setLat] = useState(0)
   const { coordinates, currentAddr, error, isLoading } = useGeolocation()
+  const searchParams = useSearchParams()
   const [isMapLoading] = useKakaoLoader({
     appkey: apiKey,
     libraries: ['services'],
@@ -25,25 +28,44 @@ const KakaoMap = ({ onAddressChange }) => {
   useEffect(() => {
     if (isMapLoading || isLoading || !coordinates) return
 
-    const geocoder = new window.kakao.maps.services.Geocoder()
-    geocoder.coord2Address(coordinates?.longitude, coordinates?.latitude, (result, status) => {
-      const addr = result[0]
-      setAddress(addr.address.address_name)
-      setRoadAddr(addr.road_address.address_name)
-      onAddressChange(
-        addr.address.address_name,
-        addr.road_address.address_name,
-        coordinates?.longitude,
-        coordinates?.latitude
-      )
-    })
+    if (searchParams.get('addr')?.toString() != null) {
+      const geocoder = new window.kakao.maps.services.Geocoder()
+      geocoder.addressSearch(searchParams.get('addr')?.toString(), (result, status) => {
+        setLng(result[0].x)
+        setLat(result[0].y)
+        setAddress(result[0].address.address_name)
+        setRoadAddr(result[0].road_address.address_name)
+        onAddressChange(
+          result[0].address.address_name,
+          result[0].road_address.address_name,
+          result[0].x,
+          result[0].y
+        )
+      })
+    } else {
+      // 기본 좌표로 주소 변환 후 작업
+      const geocoder = new window.kakao.maps.services.Geocoder()
+      geocoder.coord2Address(coordinates?.longitude, coordinates?.latitude, (result, status) => {
+        const addr = result[0]
+        setAddress(addr.address.address_name)
+        setRoadAddr(addr.road_address.address_name)
+        setLng(coordinates?.longitude)
+        setLat(coordinates?.latitude)
+        onAddressChange(
+          addr.address.address_name,
+          addr.road_address.address_name,
+          coordinates?.longitude,
+          coordinates?.latitude
+        )
+      })
+    }
   }, [isMapLoading, isLoading, coordinates])
 
   return (
     <>
       <Map // 지도를 표시할 Container
         id="map"
-        center={{ lat: coordinates?.latitude || 37.5665, lng: coordinates?.longitude || 126.978 }}
+        center={{ lat: lat || 37.5665, lng: lng || 126.978 }}
         style={{
           width: '100%',
           height: '350px',
@@ -70,9 +92,7 @@ const KakaoMap = ({ onAddressChange }) => {
           })
         }}
       >
-        <MapMarker
-          position={position ?? { lat: coordinates?.latitude, lng: coordinates?.longitude }}
-        />
+        <MapMarker position={position ?? { lat: lat, lng: lng }} />
       </Map>
     </>
   )

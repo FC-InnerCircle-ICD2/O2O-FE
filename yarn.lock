@@ -5868,6 +5868,7 @@ __metadata:
     prettier: "npm:^3.4.2"
     prettier-plugin-tailwindcss: "npm:^0.6.9"
     react: "npm:^19.0.0"
+    react-daum-postcode: "npm:^3.2.0"
     react-dom: "npm:^19.0.0"
     react-hook-form: "npm:^7.54.2"
     react-kakao-maps-sdk: "npm:^1.1.27"
@@ -6373,6 +6374,15 @@ __metadata:
   version: 1.2.3
   resolution: "queue-microtask@npm:1.2.3"
   checksum: 10c0/900a93d3cdae3acd7d16f642c29a642aea32c2026446151f0778c62ac089d4b8e6c986811076e1ae180a694cedf077d453a11b58ff0a865629a4f82ab558e102
+  languageName: node
+  linkType: hard
+
+"react-daum-postcode@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "react-daum-postcode@npm:3.2.0"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 10c0/3ddb92430d6b8590a05e3938c7c26a29c4cf9ba5e8f35e5c30f0433e7d46b77863d6c7ee3a06f66ba6c2bee4bee389be75b62dae23339bb54cd7fe09c372904c
   languageName: node
   linkType: hard
 

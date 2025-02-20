@@ -7,10 +7,21 @@ import Separator from '@/components/Separator'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
 import Badge from '@/components/Badge'
+import DaumPostcode from 'react-daum-postcode'
+import AddressSearchModal from '@/app/mypage/address/_components/AddressSearchModal'
+import { useRouter } from 'next/navigation'
 
 const AddressOption = () => {
   const [word, setWord] = useState('')
+  const [popup, setPopup] = useState(false)
+  const router = useRouter()
 
+  const handleComplete = (data) => {
+    setPopup(!popup)
+    router.push(`${ROUTE_PATHS.ADDRESS_DETAIL}?addr=${data.roadAddress}`)
+  }
+
+  // todo: input를 readonly 할 수는 없는지
   return (
     <div className="flex w-full flex-col gap-4 px-mobile_safe pt-5">
       <div className="w-full bg-white">
@@ -22,7 +33,11 @@ const AddressOption = () => {
           onReset={() => setWord('')}
           icon={<Icon name="Search" size={18} />}
           offOutline
+          onClick={() => setPopup(true)}
         />
+        <AddressSearchModal isOpen={popup} onClose={() => setPopup(false)}>
+          <DaumPostcode onComplete={handleComplete} />
+        </AddressSearchModal>
       </div>
       <div className="flex flex-row justify-center gap-2">
         <Icon name="LocateFixed" size={20} />
