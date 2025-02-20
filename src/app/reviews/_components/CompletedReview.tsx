@@ -16,6 +16,8 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
   const [representativeImageErrors, setRepresentativeImageErrors] = useState<
     Record<string, boolean>
   >({})
+  const isEditable = review.editDeadline > 0
+
   const handleClickStore = () => {
     router.push(`/store/detail/${review.storeId}`)
   }
@@ -42,38 +44,49 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
       </div>
       <Separator />
       {/* 메뉴 정보 & 점수 */}
-      <div className="flex items-center gap-2.5">
-        {menuImageErrors[review.reviewId] || !review.menuImage ? (
-          <div className="mt-1 flex size-[72px] items-center justify-center rounded-sm bg-primary/15 text-xl font-extrabold text-primary">
-            {review.storeName.slice(0, 3)}
-          </div>
-        ) : (
-          <Image
-            src={review.menuImage}
-            alt="pending-review "
-            width={72}
-            height={72}
-            className="mt-1 size-[72px] rounded-sm"
-            onError={() => {
-              setMenuImageErrors((prev) => ({ ...prev, [review.reviewId]: true }))
-            }}
-          />
-        )}
-        <div className="flex flex-col gap-1">
-          <div>{review.menuName}</div>
-          <TotalRating score={review.totalScore} />
-          <div className="flex gap-2.5">
-            <div className="flex gap-1 text-xs font-extrabold">
-              <div>맛</div>
-              <Icon name="Star" size={16} className="fill-primary stroke-primary" />
-              <div className="font-medium text-primary">{review.tasteScore}</div>
+      <div className="flex justify-between">
+        <div className="flex items-center gap-2.5">
+          {menuImageErrors[review.reviewId] || !review.menuImage ? (
+            <div className="mt-1 flex size-[72px] items-center justify-center rounded-sm bg-primary/15 text-xl font-extrabold text-primary">
+              {review.storeName.slice(0, 3)}
             </div>
-            <div className="flex gap-1 text-xs font-extrabold">
-              <div>양</div>
-              <Icon name="Star" size={16} className="fill-primary stroke-primary" />
-              <div className="font-medium text-primary">{review.amountScore}</div>
+          ) : (
+            <Image
+              src={review.menuImage}
+              alt="pending-review "
+              width={72}
+              height={72}
+              className="mt-1 size-[72px] rounded-sm"
+              onError={() => {
+                setMenuImageErrors((prev) => ({ ...prev, [review.reviewId]: true }))
+              }}
+            />
+          )}
+          <div className="flex flex-col gap-1">
+            <div>{review.menuName}</div>
+            <TotalRating score={review.totalScore} />
+            <div className="flex gap-2.5">
+              <div className="flex gap-1 text-xs font-extrabold">
+                <div>맛</div>
+                <Icon name="Star" size={16} className="fill-primary stroke-primary" />
+                <div className="font-medium text-primary">{review.tasteScore}</div>
+              </div>
+              <div className="flex gap-1 text-xs font-extrabold">
+                <div>양</div>
+                <Icon name="Star" size={16} className="fill-primary stroke-primary" />
+                <div className="font-medium text-primary">{review.amountScore}</div>
+              </div>
             </div>
           </div>
+        </div>
+        <div className="flex items-center gap-2 self-start text-sm text-gray-400">
+          {isEditable && (
+            <>
+              <button>수정</button>
+              <Separator orientation="vertical" className="h-4" />
+            </>
+          )}
+          <button>삭제</button>
         </div>
       </div>
       {/* 메뉴 이미지 */}
@@ -94,10 +107,14 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
       {/* 리뷰 내용 */}
       <div className="whitespace-pre-line">{review.clientReviewContent}</div>
       {/* 리뷰 수정 기간 */}
-      <Separator />
-      <div className="text-xs text-gray-400">
-        리뷰 수정 기간 <span className="text-pink-500">{review.editDeadline}일 남음</span>
-      </div>
+      {isEditable && (
+        <>
+          <Separator />
+          <div className="text-xs text-gray-400">
+            리뷰 수정 기간 <span className="text-pink-500">{review.editDeadline}일 남음</span>
+          </div>
+        </>
+      )}
       {!offSeparator && <Separator ignoreMobileSafe className="h-3" />}
     </section>
   )
