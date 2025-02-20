@@ -5,12 +5,29 @@ import { useCallback, useEffect, useState } from 'react'
 import Icon from '@/components/Icon'
 import { Button } from '@/components/button'
 import { useSearchParams } from 'next/navigation'
+import usePostAddress, { Address } from '@/api/usePostAddress'
 
-const MapInfo = ({ address, loadAddr }) => {
+const MapInfo = ({ address, roadAddr, lng, lat }) => {
   const [word, setWord] = useState('')
   const searchParams = useSearchParams()
-
+  const { mutate: addressApi, data: addressResponse } = usePostAddress()
   const [flag, setFlag] = useState(true)
+
+  const handleAddress = () => {
+    const addressData: Address = {
+      address: {
+        addressType: searchParams.get('type')?.toString(),
+        roadAddress: roadAddr,
+        jibunAddress: address,
+        detailAddress: word,
+        alias: '대표주소',
+        latitude: lat,
+        longitude: lng,
+      },
+    }
+
+    addressApi(addressData)
+  }
 
   useEffect(() => {
     if (searchParams.get('flag') === 'false') {
@@ -23,7 +40,7 @@ const MapInfo = ({ address, loadAddr }) => {
   return (
     <div className="flex flex-col gap-4 px-mobile_safe">
       <div className="flex flex-col gap-2">
-        <div>{loadAddr}</div>
+        <div>{roadAddr}</div>
         <div className="text-xs text-gray-500">[지번] {address}</div>
       </div>
       <Input
@@ -61,7 +78,7 @@ const MapInfo = ({ address, loadAddr }) => {
         </div>
       )}
 
-      <Button>요기로 배달</Button>
+      <Button onClick={handleAddress}>요기로 배달</Button>
     </div>
   )
 }
