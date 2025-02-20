@@ -38,9 +38,9 @@ const CartButton = ({ className = '', hasBottomNavigation = true }: CartButtonPr
     <Link href={ROUTE_PATHS.PAY}>
       <div
         className={cn(
-          'hover:bg-primary-dark border-primary-300 fixed bottom-[5rem] right-5 z-50 cursor-pointer rounded-full border border-solid border-primary-foreground bg-primary p-[12px] transition-colors',
+          'hover:bg-primary-dark border-primary-300 fixed bottom-[3rem] right-5 z-50 cursor-pointer rounded-full border border-solid border-primary-foreground bg-primary p-[12px] transition-colors',
           'shadow-[0_4px_6px_rgba(var(--color-primary-rgb),0.5)]', // primary 색상의 그림자 추가
-          hasBottomNavigation && 'bottom-[4.5rem]',
+          hasBottomNavigation && 'bottom-[6.5rem]',
           className
         )}
       >

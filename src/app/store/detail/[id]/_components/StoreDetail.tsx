@@ -364,7 +364,7 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
           (isSameStoreForCart ? (
             <OrderButton minimumOrderAmount={storeDetail.minimumOrderAmount} />
           ) : (
-            <CartButton />
+            <CartButton hasBottomNavigation={false} />
           ))}
       </div>
     </div>
