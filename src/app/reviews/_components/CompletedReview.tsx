@@ -1,7 +1,11 @@
+import useDeleteReview from '@/api/useDeleteReview'
 import { CompletedReviewType } from '@/api/useGetCompletedReviews'
+import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Separator from '@/components/Separator'
+import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
+import { modalStore } from '@/store/modal'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -17,10 +21,42 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
     Record<string, boolean>
   >({})
   const isEditable = review.editDeadline > 0
+  const { mutate: deleteReview, isPending: isDeleting } = useDeleteReview()
+  const { showModal, hideModal } = modalStore()
+  const { toast } = useToast()
 
   const handleClickStore = () => {
     router.push(`/store/detail/${review.storeId}`)
   }
+
+  const handleDeleteReview = () => {
+    deleteReview(review.reviewId, {
+      onSuccess: () => {
+        toast({
+          title: '리뷰가 삭제되었습니다.',
+          position: 'center',
+        })
+        hideModal()
+      },
+      onError: () => {
+        toast({
+          title: '리뷰 삭제에 실패했습니다.',
+          description: '다시 시도해주세요.',
+          variant: 'destructive',
+          position: 'center',
+        })
+      },
+    })
+  }
+
+  const handleClickDeleteButton = () => {
+    showModal({
+      content: <DeleteConfirmModal onDelete={handleDeleteReview} isDeleting={isDeleting} />,
+      useAnimation: true,
+      useDimmedClickClose: true,
+    })
+  }
+
   return (
     <section className="flex flex-col gap-4 px-mobile_safe py-5">
       {/* 가게 정보 */}
@@ -86,7 +122,7 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
               <Separator orientation="vertical" className="h-4" />
             </>
           )}
-          <button>삭제</button>
+          <button onClick={handleClickDeleteButton}>삭제</button>
         </div>
       </div>
       {/* 메뉴 이미지 */}
@@ -136,6 +172,33 @@ const TotalRating = ({ score }: { score: number }) => {
           )}
         />
       ))}
+    </div>
+  )
+}
+
+const DeleteConfirmModal = ({
+  onDelete,
+  isDeleting,
+}: {
+  onDelete: () => void
+  isDeleting: boolean
+}) => {
+  const { hideModal } = modalStore()
+
+  return (
+    <div className="absolute left-1/2 top-1/2 w-4/5 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-7">
+      <div className="mb-4 text-center leading-tight">
+        리뷰 삭제 시 복구가 불가능합니다.
+        <div>그래도 삭제하시겠습니까?</div>
+      </div>
+      <div className="flex gap-2">
+        <Button variant="primaryFit" onClick={hideModal}>
+          아니요
+        </Button>
+        <Button onClick={onDelete} disabled={isDeleting}>
+          {isDeleting ? <span className="loading loading-spinner loading-xs" /> : <span>삭제</span>}
+        </Button>
+      </div>
     </div>
   )
 }
