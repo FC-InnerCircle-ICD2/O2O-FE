@@ -43,6 +43,7 @@ const usePostReview = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['writable-reviews'] })
+      queryClient.invalidateQueries({ queryKey: ['completed-reviews'] })
     },
   })
 }
