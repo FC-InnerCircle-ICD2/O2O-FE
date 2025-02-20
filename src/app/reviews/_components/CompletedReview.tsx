@@ -22,8 +22,11 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
   return (
     <section className="flex flex-col gap-4 px-mobile_safe py-5">
       {/* 가게 정보 */}
-      <div className="cursor-pointer" onClick={handleClickStore}>
-        <div className="mb-0.5 flex items-center gap-1 font-bold">
+      <div>
+        <div
+          className="mb-0.5 flex w-fit cursor-pointer items-center gap-1 font-bold"
+          onClick={handleClickStore}
+        >
           {review.storeName} <Icon name="ChevronRight" size={20} className="stroke-2" />
         </div>
         <div className="text-xs text-gray-400">
