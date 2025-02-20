@@ -4,6 +4,7 @@ import Separator from '@/components/Separator'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 interface CompletedReviewProps {
   review: CompletedReviewType
   offSeparator: boolean
@@ -11,6 +12,10 @@ interface CompletedReviewProps {
 
 const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
   const router = useRouter()
+  const [menuImageErrors, setMenuImageErrors] = useState<Record<string, boolean>>({})
+  const [representativeImageErrors, setRepresentativeImageErrors] = useState<
+    Record<string, boolean>
+  >({})
   const handleClickStore = () => {
     router.push(`/store/detail/${review.storeId}`)
   }
@@ -35,9 +40,22 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
       <Separator />
       {/* 메뉴 정보 & 점수 */}
       <div className="flex items-center gap-2.5">
-        <div className="mt-1 flex size-[66px] items-center justify-center rounded-sm bg-primary/15 text-xl font-extrabold text-primary">
-          {review.storeName.slice(0, 3)}
-        </div>
+        {menuImageErrors[review.reviewId] || !review.menuImage ? (
+          <div className="mt-1 flex size-[72px] items-center justify-center rounded-sm bg-primary/15 text-xl font-extrabold text-primary">
+            {review.storeName.slice(0, 3)}
+          </div>
+        ) : (
+          <Image
+            src={review.menuImage}
+            alt="pending-review "
+            width={72}
+            height={72}
+            className="mt-1 size-[72px] rounded-sm"
+            onError={() => {
+              setMenuImageErrors((prev) => ({ ...prev, [review.reviewId]: true }))
+            }}
+          />
+        )}
         <div className="flex flex-col gap-1">
           <div>{review.menuName}</div>
           <TotalRating score={review.totalScore} />
@@ -57,13 +75,18 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
       </div>
       {/* 메뉴 이미지 */}
       <div>
-        <Image
-          className="aspect-video w-full rounded-sm object-cover"
-          src={review.menuImage}
-          alt={review.menuName}
-          width={359}
-          height={202}
-        />
+        {!representativeImageErrors[review.reviewId] && review.representativeImageUri && (
+          <Image
+            className="aspect-video w-full rounded-sm object-cover"
+            src={review.representativeImageUri}
+            alt="리뷰 사진"
+            width={359}
+            height={202}
+            onError={() => {
+              setRepresentativeImageErrors((prev) => ({ ...prev, [review.reviewId]: true }))
+            }}
+          />
+        )}
       </div>
       {/* 리뷰 내용 */}
       <div className="whitespace-pre-line">{review.clientReviewContent}</div>

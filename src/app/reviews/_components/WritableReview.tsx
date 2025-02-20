@@ -3,6 +3,8 @@ import ReviewEditorModal from '@/app/reviews/_components/ReviewEditorModal'
 import { Button } from '@/components/button'
 import Separator from '@/components/Separator'
 import { modalStore } from '@/store/modal'
+import Image from 'next/image'
+import { useState } from 'react'
 
 interface WritableReviewProps {
   review: WritableReviewType
@@ -11,7 +13,7 @@ interface WritableReviewProps {
 
 const WritableReview = ({ review, offSeparator = false }: WritableReviewProps) => {
   const { showModal } = modalStore()
-
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({})
   const handleClickReviewButton = () => {
     showModal({
       content: (
@@ -28,22 +30,25 @@ const WritableReview = ({ review, offSeparator = false }: WritableReviewProps) =
 
   return (
     <>
-      <div className="flex gap-4 px-mobile_safe py-5">
-        {/* <Image
-          src={review.storeName}
-          alt="pending-review"
-          width={76}
-          height={76}
-          className="mt-1 size-[76px] rounded-sm bg-gray-300"
-          onError={() => {
-            setImageErrors((prev) => ({ ...prev, [review.orderId]: true }))
-          }}
-        /> */}
-        <div className="mt-1 flex size-[76px] items-center justify-center rounded-sm bg-primary/15 text-xl font-extrabold text-primary">
-          {review.storeName.slice(0, 3)}
-        </div>
+      <div className="flex gap-3 px-mobile_safe py-5">
+        {imageErrors[review.orderId] || !review.storeImageThumbnail ? (
+          <div className="mt-1 flex size-[72px] items-center justify-center rounded-sm bg-primary/15 text-xl font-extrabold text-primary">
+            {review.storeName.slice(0, 3)}
+          </div>
+        ) : (
+          <Image
+            src={review.storeImageThumbnail}
+            alt="pending-review "
+            width={72}
+            height={72}
+            className="mt-1 size-[72px] rounded-sm"
+            onError={() => {
+              setImageErrors((prev) => ({ ...prev, [review.orderId]: true }))
+            }}
+          />
+        )}
 
-        <div className="flex flex-col justify-between gap-2 text-sm">
+        <div className="flex flex-col justify-between py-0.5 text-sm">
           <div>
             <div className="font-semibold">{review.storeName}</div>
             <ul className="whitespace-pre-wrap">{review.orderSummary}</ul>

@@ -6,12 +6,12 @@ export interface CompletedReviewType {
   storeId: string
   storeName: string
   createTime: string
-  menuImage: string
+  menuImage: string | null
   menuName: string
   totalScore: number
   tasteScore: number
   amountScore: number
-  representativeImageUri: string
+  representativeImageUri: string | null
   clientReviewContent: string
   editDeadline: number
 }

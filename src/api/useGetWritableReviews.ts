@@ -7,6 +7,7 @@ export interface WritableReviewType {
   orderId: string
   orderSummary: string
   orderTime: string
+  storeImageThumbnail: string | null
 }
 export interface WritableReviews {
   content: WritableReviewType[]
