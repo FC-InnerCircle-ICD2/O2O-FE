@@ -15,15 +15,13 @@ const MapInfo = ({ address, roadAddr, lng, lat }) => {
 
   const handleAddress = () => {
     const addressData: Address = {
-      address: {
-        addressType: searchParams.get('type')?.toString(),
-        roadAddress: roadAddr,
-        jibunAddress: address,
-        detailAddress: word,
-        alias: '대표주소',
-        latitude: lat,
-        longitude: lng,
-      },
+      memberAddressType: searchParams.get('type')?.toString(),
+      roadAddress: roadAddr,
+      jibunAddress: address,
+      detailAddress: word,
+      alias: '대표주소',
+      latitude: lat,
+      longitude: lng,
     }
 
     addressApi(addressData)
