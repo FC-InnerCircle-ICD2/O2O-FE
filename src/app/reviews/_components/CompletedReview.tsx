@@ -1,5 +1,6 @@
 import useDeleteReview from '@/api/useDeleteReview'
 import { CompletedReviewType } from '@/api/useGetCompletedReviews'
+import ReviewEditorModal from '@/app/reviews/_components/ReviewEditorModal'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Separator from '@/components/Separator'
@@ -54,6 +55,20 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
       content: <DeleteConfirmModal onDelete={handleDeleteReview} isDeleting={isDeleting} />,
       useAnimation: true,
       useDimmedClickClose: true,
+    })
+  }
+
+  const handleClickEditButton = () => {
+    showModal({
+      content: (
+        <ReviewEditorModal
+          storeName={review.storeName}
+          orderSummary={review.menuName}
+          storeId={review.storeId}
+          prevData={review}
+        />
+      ),
+      useAnimation: true,
     })
   }
 
@@ -118,7 +133,7 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
         <div className="flex items-center gap-2 self-start text-sm text-gray-400">
           {isEditable && (
             <>
-              <button>수정</button>
+              <button onClick={handleClickEditButton}>수정</button>
               <Separator orientation="vertical" className="h-4" />
             </>
           )}

@@ -14,6 +14,7 @@ export interface CompletedReviewType {
   representativeImageUri: string | null
   clientReviewContent: string
   editDeadline: number
+  deliveryQuality?: 'GOOD' | 'BAD'
 }
 
 export interface CompletedReviews {

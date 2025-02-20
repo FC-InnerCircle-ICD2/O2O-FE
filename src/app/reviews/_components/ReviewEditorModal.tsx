@@ -1,4 +1,6 @@
+import { CompletedReviewType } from '@/api/useGetCompletedReviews'
 import { WritableReviewType } from '@/api/useGetWritableReviews'
+import usePatchReview from '@/api/usePatchReview'
 import usePostReview from '@/api/usePostReview'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
@@ -8,10 +10,11 @@ import Image from 'next/image'
 import { useForm } from 'react-hook-form'
 
 interface ReviewEditorModalProps {
-  orderId: WritableReviewType['orderId']
   storeId: WritableReviewType['storeId']
   storeName: WritableReviewType['storeName']
   orderSummary: WritableReviewType['orderSummary']
+  orderId?: WritableReviewType['orderId']
+  prevData?: CompletedReviewType
 }
 
 interface ReviewFormData {
@@ -25,24 +28,26 @@ interface ReviewFormData {
 }
 
 const ReviewEditorModal = ({
-  orderId,
   storeId,
   storeName,
   orderSummary,
+  orderId,
+  prevData,
 }: ReviewEditorModalProps) => {
   const { hideModal } = modalStore()
   const { mutate: postReview } = usePostReview()
+  const { mutate: patchReview } = usePatchReview()
   const { toast } = useToast()
 
   const { register, handleSubmit, watch, setValue } = useForm<ReviewFormData>({
     defaultValues: {
-      totalScore: 0,
-      tasteScore: 0,
-      quantityScore: 0,
-      content: '',
-      deliveryQuality: '',
+      totalScore: prevData?.totalScore || 0,
+      tasteScore: prevData?.tasteScore || 0,
+      quantityScore: prevData?.amountScore || 0,
+      content: prevData?.clientReviewContent || '',
+      deliveryQuality: prevData?.deliveryQuality || '',
       image: null,
-      imagePreview: null,
+      imagePreview: prevData?.representativeImageUri || null,
     },
   })
 
@@ -74,35 +79,68 @@ const ReviewEditorModal = ({
   }
 
   const onSubmit = (data: ReviewFormData) => {
-    postReview(
-      {
-        orderId,
-        storeId,
-        totalScore: data.totalScore,
-        tasteScore: data.tasteScore,
-        quantityScore: data.quantityScore,
-        content: data.content,
-        deliveryQuality: data.deliveryQuality as 'GOOD' | 'BAD',
-        image: data.image,
-      },
-      {
-        onSuccess: () => {
-          hideModal()
-          toast({
-            title: '리뷰가 등록되었어요.',
-            position: 'center',
-          })
+    if (orderId) {
+      postReview(
+        {
+          orderId,
+          storeId,
+          totalScore: data.totalScore,
+          tasteScore: data.tasteScore,
+          quantityScore: data.quantityScore,
+          content: data.content,
+          deliveryQuality: data.deliveryQuality as 'GOOD' | 'BAD',
+          image: data.image,
         },
-        onError: () => {
-          toast({
-            title: '리뷰 등록에 실패했어요.',
-            description: '다시 시도해주세요.',
-            variant: 'destructive',
-            position: 'center',
-          })
+        {
+          onSuccess: () => {
+            hideModal()
+            toast({
+              title: '리뷰가 등록되었어요.',
+              position: 'center',
+            })
+          },
+          onError: () => {
+            toast({
+              title: '리뷰 등록에 실패했어요.',
+              description: '다시 시도해주세요.',
+              variant: 'destructive',
+              position: 'center',
+            })
+          },
+        }
+      )
+    }
+    if (prevData) {
+      patchReview(
+        {
+          reviewId: prevData.reviewId,
+          content: data.content,
+          totalScore: data.totalScore,
+          tasteScore: data.tasteScore,
+          amountScore: data.quantityScore,
+          deliveryQuality: data.deliveryQuality as 'GOOD' | 'BAD',
+          image: data.image,
         },
-      }
-    )
+        {
+          onSuccess: () => {
+            hideModal()
+            toast({
+              title: '리뷰가 수정되었어요.',
+              position: 'center',
+            })
+          },
+          onError: () => {
+            toast({
+              title: '리뷰 수정에 실패했어요.',
+              description: '다시 시도해주세요.',
+              variant: 'destructive',
+              position: 'center',
+            })
+          },
+        }
+      )
+      console.log('🚀  data.image:', data.image)
+    }
   }
 
   return (
