@@ -35,10 +35,10 @@ export const api = {
       return handleError(error)
     }
   },
-  put: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
+  patch: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
     try {
       const response = await kyClient
-        .put(endpoint, {
+        .patch(endpoint, {
           ...(body instanceof FormData ? { body } : { json: body }),
           ...options,
         })
@@ -80,10 +80,10 @@ export const mockApi = {
       return handleError(error)
     }
   },
-  put: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
+  patch: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
     try {
       const response = await mockClient
-        .put(endpoint, {
+        .patch(endpoint, {
           ...(body instanceof FormData ? { body } : { json: body }),
           ...options,
         })
