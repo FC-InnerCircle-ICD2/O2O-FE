@@ -90,11 +90,15 @@ const ReviewEditorModal = ({
           hideModal()
           toast({
             title: '리뷰가 등록되었어요.',
+            position: 'center',
           })
         },
         onError: () => {
           toast({
             title: '리뷰 등록에 실패했어요.',
+            description: '다시 시도해주세요.',
+            variant: 'destructive',
+            position: 'center',
           })
         },
       }
