@@ -42,6 +42,7 @@ const nextConfig: NextConfig = {
         hostname: 'img1.kakaocdn.net',
       },
     ],
+    domains: ['o2o-be-review-thumbnail-bucket.s3.amazonaws.com'],
   },
   eslint: {
     ignoreDuringBuilds: true,
