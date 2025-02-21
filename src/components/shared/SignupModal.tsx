@@ -3,6 +3,7 @@ import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Input from '@/components/Input'
 import { useToast } from '@/hooks/useToast'
+import { ApiErrorResponse } from '@/lib/api'
 import { formatPhoneNumber, unformatPhoneNumber } from '@/lib/format'
 import { modalStore } from '@/store/modal'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -107,9 +108,9 @@ const SignupForm = () => {
           description: '로그인을 진행해주세요.',
         })
       },
-      onError: (error: any) => {
-        const response = error.response
-        if (response.status === 400) {
+      onError: (error) => {
+        const errorResponse = error as unknown as ApiErrorResponse
+        if (errorResponse.status === 400) {
           toast({
             title: '회원가입에 실패했습니다.',
             description: (
