@@ -27,16 +27,20 @@ const Navigation = ({
   const { address } = useGeoLocationStore()
 
   return (
-    <nav className={`mt-3 flex h-navigation items-center justify-center gap-[8px] bg-white px-mobile_safe`}>
+    <nav
+      className={`mt-3 flex h-navigation items-center justify-center gap-[8px] bg-white px-mobile_safe`}
+    >
       <div className="flex h-full w-[24px] items-center justify-center">
         {hasBackButton && (
-          <button onClick={() => {
-            if (redirectPath) {
-              router.push(redirectPath)
-            } else {
-              router.back()
-            }
-          }}>
+          <button
+            onClick={() => {
+              if (redirectPath) {
+                router.push(redirectPath)
+              } else {
+                router.back()
+              }
+            }}
+          >
             <Icon name="ChevronLeft" size={24} />
           </button>
         )}

@@ -1,18 +1,20 @@
-import { mockApi } from '@/lib/api'
+import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 
 export interface PendingReview {
   orderId: string
   storeId: string
-  storeImageUrl: string
+  storeImageThumbnail: string
   storeName: string
-  menus: { menuName: string; menuCount: number }[]
+  orderSummary: string
+  orderTime: string
+  // menus: { menuName: string; menuCount: number }[]
 }
 
 export const usePendingReviews = () => {
   const res = useQuery<PendingReview[]>({
     queryKey: ['pendingReviews'],
-    queryFn: () => mockApi.get('api/reviews/pending'),
+    queryFn: async () => await api.get('reviews/writable'),
   })
 
   return res
