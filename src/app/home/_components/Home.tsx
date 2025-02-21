@@ -1,6 +1,7 @@
 'use client'
 
 import HomeStoreList from '@/app/home/_components/HomeStoreList'
+import CartButton from '@/components/CartButton'
 import PullToRefresh from '@/components/PullToRefresh'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { Store } from '@/models/store'
@@ -34,6 +35,7 @@ const Home = () => {
 
         <div ref={targetRef} />
       </div>
+      <CartButton />
     </PullToRefresh>
   )
 }

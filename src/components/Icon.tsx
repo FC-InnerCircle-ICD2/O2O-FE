@@ -25,6 +25,7 @@ import {
   Plus,
   Search,
   Share2,
+  ShoppingCart,
   Star,
   Store,
   TriangleAlert,
@@ -67,6 +68,7 @@ const ICONS = {
   MapPin,
   Plus,
   UtensilsCrossed,
+  ShoppingCart,
 } as const
 
 export type IconName = keyof typeof ICONS // 아이콘 목록

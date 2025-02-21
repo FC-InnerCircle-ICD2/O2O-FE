@@ -1,5 +1,6 @@
 'use client'
 
+import CartButton from '@/components/CartButton'
 import PullToRefresh from '@/components/PullToRefresh'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { OrderType } from '@/models/orderType'
@@ -58,6 +59,7 @@ const HomeList = () => {
           scrollRef={scrollRef}
         />
       </div>
+      <CartButton />
     </PullToRefresh>
   )
 }

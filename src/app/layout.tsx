@@ -1,11 +1,11 @@
 import BottomSheet from '@/components/BottomSheet'
 import CommonLayout from '@/components/CommonLayout'
 import Modal from '@/components/Modal'
-
 import { Toaster } from '@/components/Toaster'
 import { MockProvider } from '@/providers/MockProvider'
 import QueryProvider from '@/providers/QueryProvider'
 import { bmjua, pretendard } from '@/styles/fonts'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import type { Metadata } from 'next'
 import './globals.css'
 
@@ -31,6 +31,7 @@ export default function RootLayout({
             <CommonLayout>{children}</CommonLayout>
             <Modal />
             <BottomSheet />
+            <ReactQueryDevtools initialIsOpen />
           </QueryProvider>
         </MockProvider>
         <Toaster />
