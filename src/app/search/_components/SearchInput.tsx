@@ -20,7 +20,7 @@ const SearchInput = () => {
 
   const { keyword, setKeyword } = useFoodSearchFilterStore()
   const { setValue, storedValue } = useLocalStorage<string[]>('recentSearches', [])
-  const { setSuggestion, resetSuggestion, setSuggestionWord } = suggestionStore()
+  const { setSuggestion, resetSuggestion, setSuggestionWord, setIsFocus } = suggestionStore()
 
   const { storeSuggestion, refetch, resetStoreSuggestion } = useGetStoreSuggestion(word)
   const debouncedRefetch = useDebounce(refetch, 200)
@@ -62,6 +62,12 @@ const SearchInput = () => {
       placeholder="무엇을 배달, 포장할까요?"
       inputSize="sm"
       value={word}
+      onFocus={() => setIsFocus(true)}
+      onBlur={() => {
+        setTimeout(() => {
+          setIsFocus(false)
+        }, 200)
+      }}
       onChange={(e) => setWord(e.target.value)}
       onKeyDown={(e) => {
         if (e.nativeEvent.isComposing) return // 한글 입력 중일 때는 이벤트 처리하지 않음

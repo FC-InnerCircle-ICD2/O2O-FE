@@ -21,8 +21,8 @@ const Home = () => {
     queryKey: 'stores',
     endpoint: 'stores/list-cursor',
     filter: { category: undefined },
-    size: 10, 
-    ...(location && { location: { lat: location.latitude, lng: location.latitude } }),  
+    size: 10,
+    ...(location && { location: { lat: location.latitude, lng: location.longitude } }),
   })
 
   const handleRefresh = async (): Promise<void> => {

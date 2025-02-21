@@ -15,7 +15,6 @@ import { useThrottle } from '@/hooks/useThrottle'
 import { useToast } from '@/hooks/useToast'
 import { orderDetailStore } from '@/store/orderDetail'
 import { COLORS } from '@/styles/color'
-import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import MenuCategory from './MenuCategory'
@@ -31,11 +30,7 @@ const BLUE_BOX_MAX_PULL = 300
 const STICKY_HEADER_HEIGHT = 50 // 메뉴 카테고리 헤더의 높이
 export const HEADER_HEIGHT = 50
 
-const MENU_CATEGORIES = ['대표메뉴', '메인 메뉴', '세트 메뉴', '사이드 메뉴', '음료', '패키지']
-
 const StoreDetail = ({ storeId }: { storeId: number }) => {
-  const router = useRouter()
-
   const [pullHeight, setPullHeight] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
@@ -55,10 +50,8 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
     return carts ? Number.parseInt(carts.storeId) === storeId : false
   }, [carts, storeId])
 
-
-
   const { orderDetail } = orderDetailStore()
-  const { BottomSheet, hide } = useBottomSheet()
+  const { BottomSheet } = useBottomSheet()
   const { toast } = useToast()
   const { topRef, scrollToTop, showScrollButton } = useScrollToTop<HTMLDivElement>({
     callBack: () => {
@@ -201,7 +194,7 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
     return () => {
       resetStoreDetail()
     }
-  }, []) 
+  }, [])
   return (
     <div
       ref={containerRef}
