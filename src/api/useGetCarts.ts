@@ -36,7 +36,11 @@ const useGetCarts = () => {
     qc.refetchQueries({ queryKey: ['carts'] })
   }
 
-  return { carts, resetCarts }
+  const removeCarts = () => {
+    qc.removeQueries({ queryKey: ['carts'] })
+  }
+
+  return { carts, resetCarts, removeCarts }
 }
 
 export default useGetCarts

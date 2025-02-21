@@ -1,4 +1,5 @@
 'use client'
+import useGetCarts from '@/api/useGetCarts'
 import usePostLogout from '@/api/usePostLogout'
 import Icon from '@/components/Icon'
 import memberStore from '@/store/user'
@@ -10,9 +11,11 @@ const EditProfile = () => {
   const router = useRouter()
   const { mutate: logout } = usePostLogout()
   const { member } = memberStore()
+  const { removeCarts } = useGetCarts()
 
 
   const handleLogout = () => {
+    removeCarts()
     logout()
     router.back()
   }
