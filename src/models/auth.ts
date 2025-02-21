@@ -4,6 +4,15 @@ export interface SignupData {
   nickname: string
   username: string
   phone: string
+  address: {
+    memberAddressType: string
+    roadAddress: string
+    jibunAddress: string
+    detailAddress: string
+    alias: string
+    latitude: number
+    longitude: number
+  }
 }
 
 export interface LoginData {
