@@ -94,6 +94,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   }, [isMounted])
 
   useEffect(() => {
+    return
     if (!isLoaded) return
 
     const requestGeolocation = async () => {
@@ -116,7 +117,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
               }
-              console.log({ coords })
+
               const geocoder = new window.kakao.maps.services.Geocoder()
               geocoder.coord2Address(
                 coords.longitude,
