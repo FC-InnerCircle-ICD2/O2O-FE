@@ -27,7 +27,7 @@ interface GeoLocationStore {
 }
 
 export const useGeoLocationStore = create<GeoLocationStore>((set) => ({
-  coordinates: null,
+  coordinates: { latitude: 37.5177, longitude: 127.0473 },
   address: null,
   isLoading: true,
   error: null,
