@@ -86,7 +86,7 @@ export const handlers = [
     }
   }),
   // Get Store
-  http.get('*/api/v1/stores', async ({ request }) => {
+  http.get('*/api/v1/stores/list-cursor', async ({ request }) => {
     // 1초 지연 추가
     await delay(1000)
 
@@ -260,13 +260,13 @@ export const handlers = [
       data: null,
     })
   }),
-  http.patch('*/api/v1/carts', async ({request}) => {
+  http.patch('*/api/v1/carts', async ({ request }) => {
     return HttpResponse.json({
       status: 200,
       message: 'success',
       data: {
         cartId: 1,
-        quantity: 2
+        quantity: 2,
       },
     })
   }),
