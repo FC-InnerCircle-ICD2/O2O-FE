@@ -89,6 +89,15 @@ const SignupForm = () => {
     const processedFormData = {
       ...formData,
       phone: unformatPhoneNumber(formData.phone),
+      address: {
+        memberAddressType: 'HOME',
+        roadAddress: '도로명주소(집)',
+        jibunAddress: '지번주소(집)',
+        detailAddress: '',
+        alias: '',
+        latitude: 0.01,
+        longitude: 0.01,
+      },
     }
     signup(processedFormData, {
       onSuccess: () => {
