@@ -116,7 +116,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
               }
-
+              console.log({ coords })
               const geocoder = new window.kakao.maps.services.Geocoder()
               geocoder.coord2Address(
                 coords.longitude,
@@ -178,8 +178,8 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   return (
     <div className="mx-auto flex h-full min-w-[320px] max-w-[480px] flex-col bg-white">
       {!pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) && (
-          <Navigation {...getNavigationProps(pathname)} />
-        )}
+        <Navigation {...getNavigationProps(pathname)} />
+      )}
       {children}
       {!HIDDEN_BOTTOM_NAV_PATHS.some((path) => pathname.startsWith(path)) && <BottomNavigation />}
     </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { api, mockApi } from '@/lib/api'
+import { api } from '@/lib/api'
 import { isMockingMode, useMockReady } from '@/providers/MockProvider'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef } from 'react'
@@ -62,7 +62,8 @@ export const useInfiniteScroll = <TData, TFilter = void>({
           )),
       }
 
-      const API = isMockingMode ? mockApi : api
+      // const API = isMockingMode ? mockApi : api
+      const API = api
 
       const res = await API.get<PaginatedResponse<TData>>(endpoint, {
         headers: {

@@ -26,7 +26,7 @@ const ReviewTab = ({ tab, onChangeTab, pendingReviewsCount }: ReviewTabProps) =>
         value="작성완료"
         className={`w-1/2 ${tab === '작성완료' ? 'text-white' : 'text-gray-700'}`}
       >
-        {`작성한 리뷰 (${2})`}
+        {`작성한 리뷰`}
       </button>
       <motion.div
         className="absolute left-1 top-1 -z-10 h-[32px] w-[calc(50%-4px)] rounded-sm bg-primary"

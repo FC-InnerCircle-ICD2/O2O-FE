@@ -1,4 +1,5 @@
 import { api } from '@/lib/api'
+import { useGeoLocationStore } from '@/store/geoLocation'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 interface StoreDetail {
@@ -18,15 +19,16 @@ interface StoreDetail {
 
 const useGetStoreDetail = (id: number | null) => {
   const qc = useQueryClient()
+  const { coordinates: location } = useGeoLocationStore()
 
   const { data: storeDetail, isSuccess } = useQuery({
-    enabled: id !== null,
+    enabled: Boolean(id && location && location.latitude && location.longitude),
     queryKey: ['storeDetail', id],
     queryFn: async () =>
       await api.get<StoreDetail>(`stores/${id}`, {
         headers: {
-          'X-User-Lat': '37.71936226550588',
-          'X-User-Lng': '126.9780',
+          'X-User-Lat': location?.latitude.toString() || '',
+          'X-User-Lng': location?.longitude.toString() || '',
         },
       }),
   })
