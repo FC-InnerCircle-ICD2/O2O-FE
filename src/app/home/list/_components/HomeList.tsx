@@ -20,7 +20,7 @@ const HomeList = () => {
     { category: string; order: OrderType }
   >({
     queryKey: 'stores',
-    endpoint: 'stores/list',
+    endpoint: 'stores/list-cursor',
     filter: { category, order },
     size: 10,
     ...(location && { location: { lat: location.latitude, lng: location.latitude } }),  

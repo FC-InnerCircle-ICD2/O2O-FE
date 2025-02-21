@@ -86,7 +86,7 @@ export const handlers = [
     }
   }),
   // Get Store
-  http.get('*/api/v1/stores/list', async ({ request }) => {
+  http.get('*/api/v1/stores/list-cursor', async ({ request }) => {
     // 1초 지연 추가
     await delay(1000)
 

@@ -19,7 +19,7 @@ const Home = () => {
     { category: string | undefined }
   >({
     queryKey: 'stores',
-    endpoint: 'stores/list',
+    endpoint: 'stores/list-cursor',
     filter: { category: undefined },
     size: 10, 
     ...(location && { location: { lat: location.latitude, lng: location.latitude } }),  

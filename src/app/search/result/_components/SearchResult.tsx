@@ -19,7 +19,7 @@ const SearchResult = () => {
     { keyword: string | undefined; order: OrderType }
   >({
     queryKey: 'stores',
-    endpoint: 'stores/list',
+    endpoint: 'stores/list-cursor',
     filter: { keyword, order },
     size: 10,
     ...(location && { location: { lat: location.latitude, lng: location.latitude } }),  
