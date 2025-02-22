@@ -239,7 +239,10 @@ const OrderInfo = () => {
             handleEmptyCart()
             router.push(`${ROUTE_PATHS.ORDERS_DETAIL}/${orderResponse?.orderId}`) 
           }}
-          cancelText='홈으로' onCancelClick={() => router.push(ROUTE_PATHS.HOME)} />,
+          cancelText='홈으로' onCancelClick={() => {
+            handleEmptyCart();
+            router.push(ROUTE_PATHS.HOME)
+          }} />,
       })
     }
   }, [paymentSuccess])
