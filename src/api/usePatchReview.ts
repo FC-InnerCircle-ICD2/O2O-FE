@@ -25,6 +25,7 @@ const usePatchReview = () => {
         tasteScore: patchReviewData.tasteScore,
         amountScore: patchReviewData.amountScore,
         deliveryQuality: patchReviewData.deliveryQuality,
+        isImageChanged: patchReviewData.isImageChanged,
       }
 
       // review 데이터를 문자열로 변환하여 추가
