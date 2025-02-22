@@ -6,15 +6,15 @@ import Image from 'next/image'
 
 type MenuItemProps = {
   menu: CartItem
-  onIncrease: (menuId: string) => void
-  onDecrease: (menuId: string) => void
+  onIncrease: (menuId: number) => void
+  onDecrease: (menuId: number) => void
   onRemove: (cartId: number) => void
 }
 const MenuItem = ({ menu, onIncrease, onDecrease, onRemove }: MenuItemProps) => {
   const handleChangeCount = (count: number) => {
-    if (count === 0) onRemove(menu.cartId)
-    else if (count < menu.quantity) onDecrease(menu.menuId)
-    else onIncrease(menu.menuId)
+    if (count === 0) return // onRemove(menu.cartId)
+    else if (count < menu.quantity) onDecrease(menu.cartId)
+    else onIncrease(menu.cartId)
   }
 
   const handleRemove = () => {
