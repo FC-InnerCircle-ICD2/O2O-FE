@@ -6,7 +6,7 @@ const StoreDetailPage = async ({ params }: { params: Promise<{ id: string }> }) 
   if (!id) {
     return <div>스토어 아이디가 없습니다.</div>
   }
-  return <StoreDetail storeId={Number(id)} />
+  return <StoreDetail storeId={id} />
 }
 
 export default StoreDetailPage

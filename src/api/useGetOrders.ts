@@ -1,3 +1,4 @@
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { api } from '@/lib/api'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
@@ -24,6 +25,7 @@ export interface OrdersList {
 
 const useGetOrders = (searchParams?: string) => {
   const qc = useQueryClient()
+  const { storedValue: accessToken } = useLocalStorage<string>('accessToken')
 
   const { data: orders, isSuccess } = useQuery({
     queryKey: ['orders', searchParams],
@@ -38,6 +40,7 @@ const useGetOrders = (searchParams?: string) => {
         searchParams: params,
       })
     },
+    enabled: !!accessToken,
   })
 
   const resetGetOrders = () => {

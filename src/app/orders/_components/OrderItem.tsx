@@ -1,6 +1,7 @@
 import { OrdersList } from '@/api/useGetOrders'
 import Badge from '@/components/Badge'
 import { Button } from '@/components/button'
+import { Skeleton } from '@/components/shadcn/skeleton'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -9,14 +10,18 @@ const OrderItem = ({ order }: OrdersList) => {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-row">
-        <Image
-          className="size-[100px] rounded-xl object-cover object-center"
-          src={order.imageThumbnail}
-          alt="음식점 대표 이미지"
-          width={100}
-          height={100}
-          loading="lazy"
-        />
+        {order.imageThumbnail ? (
+          <Image
+            className="size-[100px] rounded-xl object-cover object-center"
+            src={order.imageThumbnail}
+            alt="음식점 대표 이미지"
+            width={100}
+            height={100}
+            loading="lazy"
+          />
+        ) : (
+          <Skeleton className="size-[100px] rounded-xl" />
+        )}
         <div className="flex w-[calc(100%-1rem-100px)] flex-col gap-4 pl-4">
           <div className="flex flex-row justify-between">
             <Badge variant="complete">{order.status.desc}</Badge>
