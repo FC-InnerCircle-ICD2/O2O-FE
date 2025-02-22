@@ -21,8 +21,8 @@ const HomeStoreList = ({ data, isLoading, hasNextPage }: HomeStoreListProps) => 
         새로 오픈했어요!!
       </p>
       <div className="flex flex-col gap-3">
-        {data.map((store) => (
-          <StoreListItem key={store.id} store={store} />
+        {data.map((store, index) => (
+          <StoreListItem key={`${store.id}-${index}`} store={store} />
         ))}
         {data.length === 0 && !hasNextPage && !isLoading && (
           <div className="mt-4 text-center text-gray-500">등록된 매장이 없어요</div>

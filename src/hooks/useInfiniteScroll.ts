@@ -31,6 +31,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
   rootMargin = '0px',
   location = { lat: 37.5177, lng: 127.0473 },
 }: InfiniteScrollOptions<TFilter>) => {
+  console.log({ location })
   const observerRef = useRef<IntersectionObserver | null>(null)
   const targetRef = useRef<HTMLDivElement | null>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -47,7 +48,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     error,
     refetch,
   } = useInfiniteQuery({
-    queryKey: [queryKey, filter],
+    queryKey: [queryKey, filter, location],
     queryFn: async ({ pageParam }) => {
       const searchParams = {
         ...(pageParam !== 1 && { cursor: String(pageParam) }),

@@ -239,8 +239,8 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
                     description: '준비중입니다.',
                     position: 'center',
                   })
-                  }}
-                >
+                }}
+              >
                 <Icon name="Star" size={12} color={COLORS.primary} fill={COLORS.primary} />
                 <div>
                   <span className="mr-1 font-semibold">리뷰 {storeDetail.rating}</span>
@@ -259,14 +259,14 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
                     description: '준비중입니다.',
                     position: 'center',
                   })
-                  }}
-                >
+                }}
+              >
                 <Icon name="Store" size={12} />
                 <div className="flex">
                   <span className="mr-1 font-bold">가게</span>
-                    <span className="text-gray-600">
-                      ({formatDistance(storeDetail.deliveryDistance)})
-                    </span>
+                  <span className="text-gray-600">
+                    ({formatDistance(storeDetail.deliveryDistance)})
+                  </span>
                 </div>
                 <Icon name="ChevronRight" size={16} />
               </div>
@@ -282,22 +282,22 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
           >
             {!storeMenuCategory
               ? new Array(7)
-                .fill(0)
-                .map((dummy, index) => (
-                  <Skeleton key={index} className="h-[28px] min-w-[65px] rounded-full" />
-                ))
+                  .fill(0)
+                  .map((dummy, index) => (
+                    <Skeleton key={index} className="h-[28px] min-w-[65px] rounded-full" />
+                  ))
               : storeMenuCategory.map((category, index) => (
-                <MenuCategory
-                  key={category.categoryId}
-                  category={category.categoryName}
-                  index={index}
-                  isActive={activeCategoryIndex === index}
-                  onClick={() => {
-                    setActiveCategoryIndex(index)
-                    scrollToMenuTop(index)
-                  }}
-                />
-              ))}
+                  <MenuCategory
+                    key={category.categoryId}
+                    category={category.categoryName}
+                    index={index}
+                    isActive={activeCategoryIndex === index}
+                    onClick={() => {
+                      setActiveCategoryIndex(index)
+                      scrollToMenuTop(index)
+                    }}
+                  />
+                ))}
           </div>
           <div className="flex items-center gap-1 pr-1" onClick={openBottomSheet}>
             <Separator className="h-4" orientation="vertical" />
@@ -310,24 +310,24 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
           {!storeMenuCategory
             ? new Array(7).fill(0).map((dummy, index) => <MenuItemSkeleton key={index} />)
             : storeMenuCategory.map((category, index) => (
-              <div
-                key={category.categoryId}
-                ref={(el) => {
-                  menuRefs.current[index] = el
-                }}
-                data-category={category.categoryId}
-              >
-                <p
-                  className="pb-2 pt-1 text-lg font-bold"
+                <div
+                  key={category.categoryId}
                   ref={(el) => {
-                    if (index === 0) {
-                      topRef.current = el
-                    }
+                    menuRefs.current[index] = el
                   }}
+                  data-category={category.categoryId}
                 >
-                  {category.categoryName}
-                </p>
-                {category.menus.map((menu) => (
+                  <p
+                    className="pb-2 pt-1 text-lg font-bold"
+                    ref={(el) => {
+                      if (index === 0) {
+                        topRef.current = el
+                      }
+                    }}
+                  >
+                    {category.categoryName}
+                  </p>
+                  {category.menus.map((menu) => (
                     <StoreDetailMenuItem
                       key={menu.id}
                       storeName={storeDetail?.name || ''}
@@ -335,8 +335,8 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
                       menu={menu}
                     />
                   ))}
-              </div>
-            ))}
+                </div>
+              ))}
         </div>
 
         {/* 경고 문구 */}
