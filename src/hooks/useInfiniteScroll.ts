@@ -31,7 +31,6 @@ export const useInfiniteScroll = <TData, TFilter = void>({
   rootMargin = '0px',
   location = { lat: 37.5177, lng: 127.0473 },
 }: InfiniteScrollOptions<TFilter>) => {
-  console.log({ location })
   const observerRef = useRef<IntersectionObserver | null>(null)
   const targetRef = useRef<HTMLDivElement | null>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)

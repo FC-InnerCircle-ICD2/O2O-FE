@@ -18,11 +18,15 @@ interface StoreDetail {
   deliveryDistance: number
 }
 
-const useGetStoreDetail = (id: number | null) => {
+const useGetStoreDetail = (id: string | null) => {
   const qc = useQueryClient()
   const { coordinates: location } = useGeoLocationStore()
 
-  const { data: storeDetail, isSuccess } = useQuery({
+  const {
+    data: storeDetail,
+    isSuccess,
+    isError,
+  } = useQuery({
     enabled: Boolean(id && location && location.latitude && location.longitude),
     queryKey: ['storeDetail', id],
     queryFn: async () =>
@@ -38,7 +42,7 @@ const useGetStoreDetail = (id: number | null) => {
     qc.removeQueries({ queryKey: ['storeDetail', id] })
   }
 
-  return { storeDetail, resetStoreDetail, isSuccess }
+  return { storeDetail, resetStoreDetail, isSuccess, isError }
 }
 
 export default useGetStoreDetail

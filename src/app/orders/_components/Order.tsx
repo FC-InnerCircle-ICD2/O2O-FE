@@ -10,7 +10,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 const Order = () => {
   const [searchValue, setSearchValue] = useState<string>('')
-  const { orders, resetGetOrders, isSuccess } = useGetOrders(searchValue)
+  const { orders } = useGetOrders(searchValue)
 
   const handelSearch = useCallback((value: string) => {
     setSearchValue(value)

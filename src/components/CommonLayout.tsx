@@ -46,8 +46,8 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   const { storedValue: accessToken } = useLocalStorage('accessToken')
   const { data: memberData, isFetching, refetch } = useGetMember()
   const { mutate: logout } = usePostLogout()
-  const { member, setMember } = memberStore()
-  const { isGlobalLoading, setIsGlobalLoading } = globalLoaderStore()
+  const { setMember } = memberStore()
+  const { setIsGlobalLoading } = globalLoaderStore()
 
   useEffect(() => {
     if (accessToken) {
@@ -98,7 +98,6 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
               }
-              console.log({ coords })
               setCoordinatesState(coords)
               setCoordinates(coords)
               setIsLoading(false)
