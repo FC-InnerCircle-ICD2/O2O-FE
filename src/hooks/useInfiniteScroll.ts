@@ -51,7 +51,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     queryKey: [queryKey, filter],
     queryFn: async ({ pageParam }) => {
       const searchParams = {
-        ...(pageParam !== 1 && { cursor: String(pageParam) }),
+        ...(pageParam !== 1 && { cursor: String(pageParam), page: String(pageParam) }),
         size: String(size),
         ...(filter &&
           Object.entries(filter).reduce(
