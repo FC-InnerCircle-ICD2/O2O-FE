@@ -18,10 +18,12 @@ import { cn } from '@/lib/utils'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
 import { ROUTE_PATHS } from '@/utils/routes'
+import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 
 const OrderInfo = () => {
+  const queryClient = useQueryClient()
   const router = useRouter()
 
   const { carts, resetCarts } = useGetCarts()
@@ -34,21 +36,22 @@ const OrderInfo = () => {
   const { showModal, hideModal, modals } = modalStore()
 
   const [isExcludingSpoon, setIsExcludingSpoon] = useState(false)
-  const [deliveryPrice, setDeliveryPrice] = useState(0) 
-
+  const [deliveryPrice, setDeliveryPrice] = useState(0)
 
   const { mutate: orderPay, isSuccess, data: orderResponse } = usePostOrderPay()
   const { mutate: payment, isSuccess: paymentSuccess } = usePostPayment()
 
   const handleEmptyCart = () => {
     if (!cartsState) return
-    const cartIds = cartsState.orderMenus.map(menu => menu.cartId)
-    deleteCarts({ cartIds }, {
-      onSuccess: () => setCartsState(undefined)
-    })
+    const cartIds = cartsState.orderMenus.map((menu) => menu.cartId)
+    deleteCarts(
+      { cartIds },
+      {
+        onSuccess: () => setCartsState(undefined),
+      }
+    )
   }
   const handleIncreaseQuantity = (cartId: number) => {
-
     // TODO: 테스트용 -> 배포 시 아래걸로 바꾸기
     // const updateCartsState = (newQuantity: number) => {
     //   setCartsState((prev) => {
@@ -75,37 +78,36 @@ const OrderInfo = () => {
         if (!prev) return
         return {
           storeId: prev.storeId,
-          orderMenus: prev.orderMenus.map(menu => {
+          orderMenus: prev.orderMenus.map((menu) => {
             if (menu.cartId !== cartId) return menu
 
             const unitPrice = menu.totalPrice / menu.quantity
             return {
               ...menu,
               quantity: newQuantity,
-              totalPrice: Math.round(unitPrice * (newQuantity))
+              totalPrice: Math.round(unitPrice * newQuantity),
             }
-          })
+          }),
         }
       })
     }
 
-
     if (!storeDetail) return
-    const targetMenu = cartsState?.orderMenus.find(menu => menu.cartId === cartId)
+    const targetMenu = cartsState?.orderMenus.find((menu) => menu.cartId === cartId)
     if (!targetMenu) return
     updateCarts(
       {
         cartId: targetMenu.cartId,
-        quantity: targetMenu.quantity + 1
+        quantity: targetMenu.quantity + 1,
       },
       {
-        onSuccess: (data) => updateCartsState(data.quantity)
+        onSuccess: (data) => updateCartsState(data.quantity),
       }
     )
   }
 
   const handleDecreaseQuantity = (cartId: number) => {
-  // TODO: 테스트용 -> 배포 시 아래걸로 바꾸기
+    // TODO: 테스트용 -> 배포 시 아래걸로 바꾸기
     // const updateCartsState = (newQuantity: number) => {
     //   setCartsState((prev) => {
     //     if (!prev) return
@@ -130,30 +132,30 @@ const OrderInfo = () => {
         if (!prev) return
         return {
           storeId: prev.storeId,
-          orderMenus: prev.orderMenus.map(menu => {
+          orderMenus: prev.orderMenus.map((menu) => {
             if (menu.cartId !== cartId) return menu
 
             const unitPrice = menu.totalPrice / menu.quantity
             return {
               ...menu,
               quantity: newQuantity,
-              totalPrice: Math.round(unitPrice * (newQuantity))
+              totalPrice: Math.round(unitPrice * newQuantity),
             }
-          })
+          }),
         }
       })
     }
 
     if (!storeDetail) return
-    const targetMenu = cartsState?.orderMenus.find(menu => menu.cartId === cartId)
+    const targetMenu = cartsState?.orderMenus.find((menu) => menu.cartId === cartId)
     if (!targetMenu) return
     updateCarts(
       {
         cartId: targetMenu.cartId,
-        quantity: targetMenu.quantity - 1
+        quantity: targetMenu.quantity - 1,
       },
       {
-        onSuccess: (data) => updateCartsState(data.quantity)
+        onSuccess: (data) => updateCartsState(data.quantity),
       }
     )
   }
@@ -167,21 +169,24 @@ const OrderInfo = () => {
         }
       })
     }
-    deleteCarts(
-      { cartIds: [cartId] },
-      { onSuccess: updateCartsState }
-    )
+    deleteCarts({ cartIds: [cartId] }, { onSuccess: updateCartsState })
   }
 
   const handleOrderPay = () => {
     if (!cartsState || !member) {
       showModal({
-        content: <Alert title="주문 오류" message="주문에 필요한 정보가 없습니다." onClick={() => router.back()} />,
+        content: (
+          <Alert
+            title="주문 오류"
+            message="주문에 필요한 정보가 없습니다."
+            onClick={() => router.back()}
+          />
+        ),
       })
       return
     }
 
-    let orderData: OrderPay = {
+    const orderData: OrderPay = {
       storeId: cartsState.storeId,
       roadAddress: member.roadAddress || '',
       jibunAddress: member.jibunAddress || '',
@@ -193,9 +198,9 @@ const OrderInfo = () => {
         return {
           id: item.menuId,
           quantity: item.quantity,
-          orderMenuOptionGroups: item.orderMenuOptionGroups.map(group => ({
+          orderMenuOptionGroups: item.orderMenuOptionGroups.map((group) => ({
             id: group.id,
-            orderMenuOptionIds: group.orderMenuOptionIds.map(option => option.id),
+            orderMenuOptionIds: group.orderMenuOptionIds.map((option) => option.id),
           })),
         }
       }),
@@ -220,7 +225,6 @@ const OrderInfo = () => {
     setCartsState(carts)
   }, [carts])
 
-
   useEffect(() => {
     if (orderResponse) {
       payment({
@@ -233,16 +237,25 @@ const OrderInfo = () => {
 
   useEffect(() => {
     if (paymentSuccess) {
+      queryClient.invalidateQueries({ queryKey: ['orders'] })
+
       showModal({
-        content: <Confirm title="주문 완료" message="주문이 완료되었습니다.<br />주문 내역을 확인하러갈까요?"
-          confirmText='확인하러 가기' onConfirmClick={() => {
-            handleEmptyCart()
-            router.push(`${ROUTE_PATHS.ORDERS_DETAIL}/${orderResponse?.orderId}`) 
-          }}
-          cancelText='홈으로' onCancelClick={() => {
-            handleEmptyCart();
-            router.push(ROUTE_PATHS.HOME)
-          }} />,
+        content: (
+          <Confirm
+            title="주문 완료"
+            message="주문이 완료되었습니다.<br />주문 내역을 확인하러갈까요?"
+            confirmText="확인하러 가기"
+            onConfirmClick={() => {
+              handleEmptyCart()
+              router.push(`${ROUTE_PATHS.ORDERS_DETAIL}/${orderResponse?.orderId}`)
+            }}
+            cancelText="홈으로"
+            onCancelClick={() => {
+              handleEmptyCart()
+              router.push(ROUTE_PATHS.HOME)
+            }}
+          />
+        ),
       })
     }
   }, [paymentSuccess])
@@ -259,12 +272,17 @@ const OrderInfo = () => {
     return totalMenuPrice < storeDetail.minimumOrderAmount
   }, [storeDetail, cartsState])
 
-
   if (!cartsState || !storeDetail) {
     return (
-      <div className='text-center mt-[30vh]'>
-        <div className='text-gray-500 mb-8'>장바구니가 비어있어요</div>
-        <Button className='w-auto px-10' variant={'grayFit'} onClick={() => router.push(ROUTE_PATHS.HOME_LIST)}>가게 구경하기</Button>
+      <div className="mt-[30vh] text-center">
+        <div className="mb-8 text-gray-500">장바구니가 비어있어요</div>
+        <Button
+          className="w-auto px-10"
+          variant={'grayFit'}
+          onClick={() => router.push(ROUTE_PATHS.HOME_LIST)}
+        >
+          가게 구경하기
+        </Button>
       </div>
     )
   }
@@ -292,42 +310,60 @@ const OrderInfo = () => {
       </div>
       <div>
         <div className="ml-7 text-xs text-gray-700">{member?.jibunAddress}</div>
-      </div> 
+      </div>
       <div className="rounded-xl border border-solid border-gray-400">
-        <div className="flex flex-row justify-between px-3 py-3 border-b border-solid border-gray-300">
-          <div className="text-base font-extrabold cursor-pointer" onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${storeDetail.id}`)}>{storeDetail.name}</div>
-          <div className="place-content-center text-xs text-gray-700 cursor-pointer" onClick={handleEmptyCart}>전체삭제</div>
+        <div className="flex flex-row justify-between border-b border-solid border-gray-300 p-3">
+          <div
+            className="cursor-pointer text-base font-extrabold"
+            onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${storeDetail.id}`)}
+          >
+            {storeDetail.name}
+          </div>
+          <div
+            className="cursor-pointer place-content-center text-xs text-gray-700"
+            onClick={handleEmptyCart}
+          >
+            전체삭제
+          </div>
         </div>
 
         <div className="flex flex-col gap-1 py-4">
-          {cartsState.orderMenus.map((menu) =>
+          {cartsState.orderMenus.map((menu, index) => (
             <MenuItem
-              key={menu.menuId}
+              key={`${menu.menuId}-${index}`}
               menu={menu}
               onIncrease={handleIncreaseQuantity}
               onDecrease={handleDecreaseQuantity}
               onRemove={handleRemoveItem}
             />
-          )}          
+          ))}
         </div>
 
-        <div className="flex flex-row items-center justify-center gap-1 px-3 py-3 border-t border-solid border-gray-300">
+        <div className="flex flex-row items-center justify-center gap-1 border-t border-solid border-gray-300 p-3">
           <Icon name="Plus" size={20} />
-          <div className="font-bold cursor-pointer" onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${storeDetail.id}`)}>메뉴 추가하기</div>
+          <div
+            className="cursor-pointer font-bold"
+            onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${storeDetail.id}`)}
+          >
+            메뉴 추가하기
+          </div>
         </div>
       </div>
       <div className="flex flex-col gap-4 rounded-xl border border-solid border-gray-400 p-5">
         <div className="text-base font-extrabold">가게 요청사항</div>
         {/* <Input placeholder="예) 견과류 빼주세요" /> */}
         <div className="items-top flex items-center space-x-2">
-          <Checkbox id="terms1" className="h-5 w-5 border-solid data-[state=checked]:bg-white data-[state=checked]:border-primary border-gray-300 outline-none"
+          <Checkbox
+            id="terms1"
+            className="size-5 border-solid border-gray-300 outline-none data-[state=checked]:border-primary data-[state=checked]:bg-white"
             checked={isExcludingSpoon}
-            onCheckedChange={(checked: boolean) => setIsExcludingSpoon(checked)} />
+            onCheckedChange={(checked: boolean) => setIsExcludingSpoon(checked)}
+          />
           <Label
-              htmlFor="terms1"
+            htmlFor="terms1"
             className="text-sm font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              일회용 수저, 포크는 빼주세요
+          >
+            일회용 수저, 포크는 빼주세요
           </Label>
         </div>
         <Separator />
@@ -341,9 +377,9 @@ const OrderInfo = () => {
       </div>
       <div className="flex flex-col gap-4 rounded-xl border border-solid border-gray-400 p-5">
         <div className="flex flex-row justify-between">
-          <div className="place-content-center text-base font-extrabold">결재수단</div>
+          <div className="place-content-center text-base font-extrabold">결제수단</div>
           <div className="flex flex-row gap-1">
-            <div className="place-content-center text-sm text-primary">결재수단을 선택해주세요</div>
+            <div className="place-content-center text-sm text-primary">결제수단을 선택해주세요</div>
             <Icon name="ChevronRight" size={24} />
           </div>
         </div>
@@ -360,12 +396,15 @@ const OrderInfo = () => {
       </div>
       <Separator />
       <div className="flex flex-row justify-between px-1">
-        <div className="text-lg font-bold">총 결재금액</div>
-        <div className="text-lg font-bold">{(totalMenuPrice + deliveryPrice).toLocaleString()}원</div>
+        <div className="text-lg font-bold">총 결제금액</div>
+        <div className="text-lg font-bold">
+          {(totalMenuPrice + deliveryPrice).toLocaleString()}원
+        </div>
       </div>
       {isUnderMinOrder && (
         <p className="pb-2 text-center text-sm font-bold text-red-600">
-          {(storeDetail.minimumOrderAmount - totalMenuPrice).toLocaleString()}원 더 담으면 배달 가능해요
+          {(storeDetail.minimumOrderAmount - totalMenuPrice).toLocaleString()}원 더 담으면 배달
+          가능해요
         </p>
       )}
       <Button
@@ -375,7 +414,9 @@ const OrderInfo = () => {
           isUnderMinOrder && 'bg-gray-400 hover:bg-gray-400'
         )}
         disabled={isUnderMinOrder}
-      >{(totalMenuPrice + deliveryPrice).toLocaleString()}원 배달 결제하기</Button>
+      >
+        {(totalMenuPrice + deliveryPrice).toLocaleString()}원 배달 결제하기
+      </Button>
     </div>
   )
 }

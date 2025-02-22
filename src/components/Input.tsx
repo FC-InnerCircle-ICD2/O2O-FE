@@ -11,7 +11,7 @@ const inputVariants = cva('', {
   variants: {
     inputSize: {
       default: 'h-12 text-base',
-      sm: 'h-navigation text-sm',
+      sm: 'h-navigation text-base',
     },
     offOutline: {
       true: 'focus-visible:ring-0 focus-visible:ring-offset-0',
@@ -28,7 +28,7 @@ const labelVariants = cva('mb-1.5 block font-medium', {
   variants: {
     inputSize: {
       default: 'text-base',
-      sm: 'text-sm',
+      sm: 'text-base',
     },
   },
   defaultVariants: {
@@ -106,7 +106,7 @@ const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
               isInvalid && 'border-red-500 focus-visible:ring-red-500',
               props.value && type === 'password' && onReset && 'pr-20', // 패스워드 토글과 x 버튼 공간
               props.value && type === 'password' && !onReset && 'pr-14', // 패스워드 토글 공간만
-              props.value && type !== 'password' && onReset && 'pr-10', // x 버튼 공간만
+              props.value && type !== 'password' && onReset && 'pr-10' // x 버튼 공간만
             )}
             {...props}
           />
@@ -122,12 +122,7 @@ const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
               </button>
             )}
             {props.value && onReset && (
-              <button
-                type="button"
-                onClick={onReset}
-                className="z-10"
-                tabIndex={-1}
-              >
+              <button type="button" onClick={onReset} className="z-10" tabIndex={-1}>
                 <Icon
                   name="CircleX"
                   size={resetIconSizes[inputSize ?? 'default']}
@@ -141,7 +136,7 @@ const Input = React.forwardRef<HTMLInputElement, CommonInputProps>(
         </div>
       </div>
     )
-  },
+  }
 )
 
 Input.displayName = 'CommonInput'

@@ -29,7 +29,7 @@ if (typeof window !== 'undefined') {
 
 export function useLocalStorage<T>(
   key: string,
-  initialValue: T | undefined = undefined,
+  initialValue: T | undefined = undefined
 ): {
   storedValue: T | undefined
   setValue: (value: T) => void
@@ -51,7 +51,8 @@ export function useLocalStorage<T>(
         }
 
         setStoredValue(valueToStore)
-        const stringifiedValue = typeof valueToStore === 'string' ? valueToStore : JSON.stringify(valueToStore)
+        const stringifiedValue =
+          typeof valueToStore === 'string' ? valueToStore : JSON.stringify(valueToStore)
         localStorage.setItem(key, stringifiedValue)
 
         // 같은 창에서의 변경사항도 감지하기 위한 커스텀 이벤트 발생
@@ -59,13 +60,13 @@ export function useLocalStorage<T>(
           new StorageEvent('storage', {
             key: key,
             newValue: stringifiedValue,
-          }),
+          })
         )
       } catch (error) {
         console.error('localStorage 저장 에러:', error)
       }
     },
-    [key],
+    [key]
   )
 
   const resetValue = useMemo(
@@ -73,7 +74,7 @@ export function useLocalStorage<T>(
       setStoredValue(initialValue)
       localStorage.removeItem(key)
     },
-    [key, initialValue],
+    [key, initialValue]
   )
 
   // 클라이언트 사이드에서만 localStorage 값을 읽어옴
@@ -82,6 +83,7 @@ export function useLocalStorage<T>(
 
     try {
       const item = localStorage.getItem(key)
+
       if (item) {
         try {
           // 첫 번째로 JSON 파싱을 시도

@@ -4,6 +4,7 @@ import useGetCarts from '@/api/useGetCarts'
 import useGetStoreDetail from '@/api/useGetStoreDetail'
 import useGetStoreMenuCategory from '@/api/useGetStoreMenuCategory'
 import MenuBottomSheet from '@/app/store/detail/[id]/_components/MenuBottomSheet'
+import Alert from '@/components/Alert'
 import CartButton from '@/components/CartButton'
 import Icon from '@/components/Icon'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
@@ -14,8 +15,10 @@ import { useScrollToTop } from '@/hooks/useScrollToTop'
 import { useThrottle } from '@/hooks/useThrottle'
 import { useToast } from '@/hooks/useToast'
 import { formatDistance } from '@/lib/format'
+import { modalStore } from '@/store/modal'
 import { orderDetailStore } from '@/store/orderDetail'
 import { COLORS } from '@/styles/color'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import MenuCategory from './MenuCategory'
@@ -31,7 +34,7 @@ const BLUE_BOX_MAX_PULL = 300
 const STICKY_HEADER_HEIGHT = 50 // 메뉴 카테고리 헤더의 높이
 export const HEADER_HEIGHT = 50
 
-const StoreDetail = ({ storeId }: { storeId: number }) => {
+const StoreDetail = ({ storeId }: { storeId: string }) => {
   const [pullHeight, setPullHeight] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
@@ -41,14 +44,16 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
   const menuContainerRef = useRef<HTMLDivElement>(null)
   const menuRefs = useRef<(HTMLDivElement | null)[]>([])
 
-  const { storeDetail, resetStoreDetail, isSuccess } = useGetStoreDetail(storeId)
+  const { storeDetail, resetStoreDetail, isSuccess, isError } = useGetStoreDetail(storeId)
   const { storeMenuCategory } = useGetStoreMenuCategory(storeId)
   const { carts } = useGetCarts()
+  const { showModal } = modalStore()
+
   const isCartEmpty = useMemo(() => {
     return carts?.orderMenus.length === 0
   }, [carts])
   const isSameStoreForCart = useMemo(() => {
-    return carts ? Number.parseInt(carts.storeId) === storeId : false
+    return carts ? carts.storeId === storeId : false
   }, [carts, storeId])
 
   const { orderDetail } = orderDetailStore()
@@ -63,6 +68,8 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
     },
     dependencies: [storeMenuCategory],
   })
+
+  const router = useRouter()
 
   useEffect(() => {
     if (storeMenuCategory && storeMenuCategory.length > 0) {
@@ -196,6 +203,23 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
       resetStoreDetail()
     }
   }, [])
+
+  useEffect(() => {
+    if (isError) {
+      showModal({
+        content: (
+          <Alert
+            title="오류"
+            message="잘못된 접근입니다."
+            onClick={() => {
+              router.back()
+            }}
+          />
+        ),
+      })
+    }
+  }, [isError])
+
   return (
     <div
       ref={containerRef}
@@ -205,6 +229,7 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
       <StoreHeader
         isHeaderOpaque={isHeaderOpaque}
         isSuccess={isSuccess}
+        storeId={storeId}
         title={storeDetail?.name || ''}
       />
       <StoreImage
