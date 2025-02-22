@@ -15,6 +15,7 @@ interface StoreDetail {
   rating: number
   reviewCount: number
   minimumOrderAmount: number
+  deliveryDistance: number
 }
 
 const useGetStoreDetail = (id: number | null) => {
