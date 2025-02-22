@@ -47,7 +47,7 @@ const OrderInfo = () => {
       onSuccess: () => setCartsState(undefined)
     })
   }
-  const handleIncreaseQuantity = (menuId: string) => {
+  const handleIncreaseQuantity = (cartId: number) => {
 
     // TODO: 테스트용 -> 배포 시 아래걸로 바꾸기
     // const updateCartsState = (newQuantity: number) => {
@@ -76,7 +76,7 @@ const OrderInfo = () => {
         return {
           storeId: prev.storeId,
           orderMenus: prev.orderMenus.map(menu => {
-            if (menu.menuId !== menuId) return menu
+            if (menu.cartId !== cartId) return menu
 
             const unitPrice = menu.totalPrice / menu.quantity
             return {
@@ -91,7 +91,7 @@ const OrderInfo = () => {
 
 
     if (!storeDetail) return
-    const targetMenu = cartsState?.orderMenus.find(menu => menu.menuId === menuId)
+    const targetMenu = cartsState?.orderMenus.find(menu => menu.cartId === cartId)
     if (!targetMenu) return
     updateCarts(
       {
@@ -104,7 +104,7 @@ const OrderInfo = () => {
     )
   }
 
-  const handleDecreaseQuantity = (menuId: string) => {
+  const handleDecreaseQuantity = (cartId: number) => {
   // TODO: 테스트용 -> 배포 시 아래걸로 바꾸기
     // const updateCartsState = (newQuantity: number) => {
     //   setCartsState((prev) => {
@@ -131,7 +131,7 @@ const OrderInfo = () => {
         return {
           storeId: prev.storeId,
           orderMenus: prev.orderMenus.map(menu => {
-            if (menu.menuId !== menuId) return menu
+            if (menu.cartId !== cartId) return menu
 
             const unitPrice = menu.totalPrice / menu.quantity
             return {
@@ -145,7 +145,7 @@ const OrderInfo = () => {
     }
 
     if (!storeDetail) return
-    const targetMenu = cartsState?.orderMenus.find(menu => menu.menuId === menuId)
+    const targetMenu = cartsState?.orderMenus.find(menu => menu.cartId === cartId)
     if (!targetMenu) return
     updateCarts(
       {
