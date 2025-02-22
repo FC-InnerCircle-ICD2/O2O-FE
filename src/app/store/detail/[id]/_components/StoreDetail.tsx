@@ -263,7 +263,7 @@ const StoreDetail = ({ storeId }: { storeId: number }) => {
                 <Icon name="Store" size={12} />
                 <div className="flex">
                   <span className="mr-1 font-bold">가게</span>
-                  <span className="text-gray-600">(2.1km)</span>
+                    <span className="text-gray-600">({Math.floor(storeDetail.deliveryDistance)}m)</span>
                 </div>
                 <Icon name="ChevronRight" size={16} />
               </div>
