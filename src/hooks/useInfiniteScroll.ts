@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef } from 'react'
 interface PaginatedResponse<T> {
   content: T[]
   nextCursor?: number
+  totalCount?: number
 }
 
 interface InfiniteScrollOptions<TFilter> {
@@ -121,5 +122,6 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     hasNextPage,
     targetRef,
     refetch: refetch,
+    totalCount: data?.pages[0]?.totalCount,
   }
 }
