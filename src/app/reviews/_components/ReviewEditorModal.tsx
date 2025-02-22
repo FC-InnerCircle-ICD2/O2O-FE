@@ -25,6 +25,7 @@ interface ReviewFormData {
   deliveryQuality: 'GOOD' | 'BAD' | ''
   image: File | null
   imagePreview: string | null
+  isImageChanged?: boolean // 수정시에만 사용
 }
 
 const ReviewEditorModal = ({
@@ -48,6 +49,7 @@ const ReviewEditorModal = ({
       deliveryQuality: prevData?.deliveryQuality || '',
       image: null,
       imagePreview: prevData?.representativeImageUri || null,
+      isImageChanged: false,
     },
   })
 
@@ -71,11 +73,13 @@ const ReviewEditorModal = ({
     if (!file) return
     setValue('image', file)
     setValue('imagePreview', URL.createObjectURL(file))
+    setValue('isImageChanged', true)
   }
 
   const handleImageDelete = () => {
     setValue('image', null)
     setValue('imagePreview', null)
+    setValue('isImageChanged', true)
   }
 
   const onSubmit = (data: ReviewFormData) => {
@@ -120,6 +124,7 @@ const ReviewEditorModal = ({
           amountScore: data.quantityScore,
           deliveryQuality: data.deliveryQuality as 'GOOD' | 'BAD',
           image: data.image,
+          isImageChanged: data.isImageChanged ?? false,
         },
         {
           onSuccess: () => {
