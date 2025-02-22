@@ -41,7 +41,7 @@ const SearchFoodList = ({ data, isLoading, targetRef, scrollRef }: SearchFoodLis
         {isLoading && Array.from({ length: 5 }).map((_, i) => <StoreListItemSkeleton key={i} />)}
         <div ref={targetRef} />
       </div>
-      {showScrollButton && <ScrollToTopButton onClick={scrollToTop} />}
+      {showScrollButton && <ScrollToTopButton onClick={scrollToTop} hasBottomNavigation={false} />}
     </div>
   )
 }

@@ -1,11 +1,12 @@
 'use client'
 
-import OrderSearch from '@/app/orders/_components/OrderSearch'
-import OrderItem from '@/app/orders/_components/OrderItem'
-import Separator from '@/components/Separator'
 import useGetOrders from '@/api/useGetOrders'
+import OrderItem from '@/app/orders/_components/OrderItem'
+import OrderSearch from '@/app/orders/_components/OrderSearch'
+import CartButton from '@/components/CartButton'
+import Separator from '@/components/Separator'
+import React, { useCallback, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import React, { useCallback, useEffect, useState } from 'react'
 
 const Order = () => {
   const [searchValue, setSearchValue] = useState<string>('')
@@ -30,6 +31,7 @@ const Order = () => {
           ))}
         </div>
       </div>
+      <CartButton />
     </>
   )
 }

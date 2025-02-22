@@ -4,8 +4,11 @@ import { create } from "zustand";
 export interface OrderMenu {
     menuId: string
     name: string
-    imgUrl: string
-    optionNames: string
+    imageUrl: string
+    orderMenuOptionGroups: {
+        id: string;
+        orderMenuOptionIds: string[];
+    }
     selectedOptions: Record<string, MenuGroupOption[]>
     price: number
 }
