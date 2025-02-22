@@ -1,7 +1,7 @@
 import { Button } from '@/components/button'
 import { Separator } from '@/components/shadcn/separator'
 
-const PedingReviewSkeleton = ({ offSeparator = false }: { offSeparator: boolean }) => {
+const WritableReviewSkeleton = ({ offSeparator = false }: { offSeparator: boolean }) => {
   return (
     <>
       <div className="flex animate-pulse-custom gap-4 px-mobile_safe py-5">
@@ -23,4 +23,4 @@ const PedingReviewSkeleton = ({ offSeparator = false }: { offSeparator: boolean 
   )
 }
 
-export default PedingReviewSkeleton
+export default WritableReviewSkeleton

@@ -1,4 +1,3 @@
-
 import { RefreshResponse } from '@/models/auth'
 import ky from 'ky'
 
@@ -35,9 +34,6 @@ export const kyClient = ky.create({
 
                 const response = await refreshClient
                   .post('auth/refresh', {
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
                     json: { accessToken, refreshToken },
                   })
                   .json<RefreshResponse>()

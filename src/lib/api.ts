@@ -25,17 +25,10 @@ export const api = {
   post: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
     try {
       const response = await kyClient
-        .post(endpoint, { json: body, ...options })
-        .json<ApiResponse<T>>()
-      return response.data
-    } catch (error) {
-      return handleError(error)
-    }
-  },
-  put: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
-    try {
-      const response = await kyClient
-        .put(endpoint, { json: body, ...options })
+        .post(endpoint, {
+          ...(body instanceof FormData ? { body } : { json: body }),
+          ...options,
+        })
         .json<ApiResponse<T>>()
       return response.data
     } catch (error) {
@@ -45,7 +38,10 @@ export const api = {
   patch: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
     try {
       const response = await kyClient
-        .patch(endpoint, { json: body, ...options })
+        .patch(endpoint, {
+          ...(body instanceof FormData ? { body } : { json: body }),
+          ...options,
+        })
         .json<ApiResponse<T>>()
       return response.data
     } catch (error) {
@@ -74,17 +70,10 @@ export const mockApi = {
   post: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
     try {
       const response = await mockClient
-        .post(endpoint, { json: body, ...options })
-        .json<ApiResponse<T>>()
-      return response.data
-    } catch (error) {
-      return handleError(error)
-    }
-  },
-  put: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
-    try {
-      const response = await mockClient
-        .put(endpoint, { json: body, ...options })
+        .post(endpoint, {
+          ...(body instanceof FormData ? { body } : { json: body }),
+          ...options,
+        })
         .json<ApiResponse<T>>()
       return response.data
     } catch (error) {
@@ -94,7 +83,10 @@ export const mockApi = {
   patch: async <T>(endpoint: string, body: unknown, options?: Options): Promise<T> => {
     try {
       const response = await mockClient
-        .patch(endpoint, { json: body, ...options })
+        .patch(endpoint, {
+          ...(body instanceof FormData ? { body } : { json: body }),
+          ...options,
+        })
         .json<ApiResponse<T>>()
       return response.data
     } catch (error) {

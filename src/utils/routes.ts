@@ -11,5 +11,5 @@ export const ROUTE_PATHS = {
   MYPAGE: '/mypage',
   STORE_DETAIL: '/store/detail',
   MYPAGE_EDIT_PROFILE: '/mypage/edit-profile',
-  REVIEW: '/review',
+  REVIEW: '/reviews',
 }

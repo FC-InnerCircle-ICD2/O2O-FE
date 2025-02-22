@@ -1,5 +1,5 @@
 import { api } from '@/lib/api'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export interface OrderPay {
   storeId: string // 가게ID
@@ -25,10 +25,14 @@ export interface OrderPayResponse {
   totalPrice: number
 }
 const usePostOrderPay = () => {
+  const qc = useQueryClient()
   return useMutation({
     mutationKey: ['orderPay'],
     mutationFn: async (data: OrderPay) => {
       return await api.post<OrderPayResponse>(`orders`, data)
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['writable-reviews'] })
     },
   })
 }
