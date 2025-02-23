@@ -1,7 +1,7 @@
 import { api } from '@/lib/api'
 import { useMutation } from '@tanstack/react-query'
 interface Cart {
-  cartId: number,
+  cartId: number
   quantity: number
 }
 const usePatchCarts = () => {

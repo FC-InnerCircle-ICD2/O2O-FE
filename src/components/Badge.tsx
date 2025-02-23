@@ -8,15 +8,17 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: 'border-transparent bg-primary/10 text-primary font-medium border border-primary/20 border-solid',
+        default:
+          'border-transparent bg-primary/10 text-primary font-medium border border-primary/20 border-solid',
         complete: 'border-transparent bg-gray-400 text-white',
-        essential: 'border-transparent bg-secondary/10 text-secondary font-medium border border-secondary/20 border-solid',
+        essential:
+          'border-transparent bg-secondary/10 text-secondary font-medium border border-secondary/20 border-solid',
       },
     },
     defaultVariants: {
       variant: 'default',
     },
-  },
+  }
 )
 
 export interface BadgeProps

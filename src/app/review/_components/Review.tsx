@@ -50,7 +50,7 @@ const Review = () => {
               />
             ))
           ) : (
-                <NoPendingReview />
+            <NoPendingReview />
           )}
         </motion.div>
 

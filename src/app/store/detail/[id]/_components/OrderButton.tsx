@@ -27,7 +27,6 @@ export const OrderButton = ({ minimumOrderAmount }: { minimumOrderAmount: number
   const handleButtonClick = () => {
     if (accessToken) router.push(ROUTE_PATHS.PAY)
     else showModal({ content: <LoginModal />, useAnimation: true })
-
   }
 
   return (
@@ -39,13 +38,13 @@ export const OrderButton = ({ minimumOrderAmount }: { minimumOrderAmount: number
       )}
       <Button
         onClick={handleButtonClick}
-          className={cn(
-            'text-base font-semibold',
-            isUnderMinOrder && 'bg-gray-400 hover:bg-gray-400'
-          )}
-          disabled={isUnderMinOrder}
-        >
-          {totalPrice.toLocaleString()}원 주문하기
+        className={cn(
+          'text-base font-semibold',
+          isUnderMinOrder && 'bg-gray-400 hover:bg-gray-400'
+        )}
+        disabled={isUnderMinOrder}
+      >
+        {totalPrice.toLocaleString()}원 주문하기
       </Button>
     </div>
   )

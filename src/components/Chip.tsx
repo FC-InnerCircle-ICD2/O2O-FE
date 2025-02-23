@@ -14,7 +14,7 @@ const Chip = ({ text, className, rightIcon, onClick, ...props }: ChipProps) => {
     <ShadcnLabel
       className={cn(
         'inline-flex min-w-fit items-center rounded-[16px] border border-solid border-gray-300 px-[10px] py-[4px] text-sm font-normal text-gray-600',
-        className,
+        className
       )}
       {...props}
       onClick={onClick}
