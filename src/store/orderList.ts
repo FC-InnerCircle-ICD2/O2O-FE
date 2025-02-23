@@ -1,33 +1,33 @@
-import { MenuGroupOption } from "@/models/menu";
-import { create } from "zustand";
+import { MenuGroupOption } from '@/models/menu'
+import { create } from 'zustand'
 
 export interface OrderMenu {
-    menuId: string
-    name: string
-    imageUrl: string
-    orderMenuOptionGroups: {
-        id: string;
-        orderMenuOptionIds: string[];
-    }
-    selectedOptions: Record<string, MenuGroupOption[]>
-    price: number
+  menuId: string
+  name: string
+  imageUrl: string
+  orderMenuOptionGroups: {
+    id: string
+    orderMenuOptionIds: string[]
+  }
+  selectedOptions: Record<string, MenuGroupOption[]>
+  price: number
 }
 
 interface Order {
-    storeId: string
-    storeName: string
-    price: number
-    menu: OrderMenu[]
+  storeId: string
+  storeName: string
+  price: number
+  menu: OrderMenu[]
 }
 
 interface OrderList {
-    orderList: Order | undefined
-    setOrderList: (orderList: Order) => void
-    removeOrderList: () => void
+  orderList: Order | undefined
+  setOrderList: (orderList: Order) => void
+  removeOrderList: () => void
 }
 
 export const orderListStore = create<OrderList>((set) => ({
-    orderList: undefined,
-    setOrderList: (orderList) => set({ orderList }),
-    removeOrderList: () => set({ orderList: undefined }),
+  orderList: undefined,
+  setOrderList: (orderList) => set({ orderList }),
+  removeOrderList: () => set({ orderList: undefined }),
 }))

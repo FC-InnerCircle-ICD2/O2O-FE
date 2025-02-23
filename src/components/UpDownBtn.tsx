@@ -6,8 +6,6 @@ interface UpDownProps {
 }
 
 const UpDownBtn = ({ value = 0, onChange }: UpDownProps) => {
-
-
   return (
     <div className="flex h-8 flex-row items-center rounded-lg border border-solid border-gray-300 px-2">
       <button className="flex items-center justify-center" onClick={() => onChange(value - 1)}>

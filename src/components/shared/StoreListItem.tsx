@@ -7,7 +7,6 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Dot from '../Dot'
 import Icon from '../Icon'
-
 interface StoreListItemProps {
   store: Store
 }
@@ -16,20 +15,21 @@ const StoreListItem = ({ store }: StoreListItemProps) => {
   const [isImageLoading, setIsImageLoading] = useState(true)
   const router = useRouter()
 
+  const handleClick = () => {
+    router.push(`${ROUTE_PATHS.STORE_DETAIL}/${store.id}`)
+  }
+
   return (
-    <div
-      className="flex flex-1 items-center gap-[10px]"
-      onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${store.id}`)}
-      // onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${1006816630}`)}
-    >
+    <div className="flex flex-1 cursor-pointer items-center gap-[10px]" onClick={handleClick}>
       <div className="relative size-[100px]">
         {isImageLoading && (
           <div className="absolute inset-0 animate-pulse rounded-xl bg-gray-200" />
         )}
         {store.imageMain && (
           <Image
-            className={`size-[100px] rounded-xl object-cover object-center ${isImageLoading ? 'invisible' : ''
-              }`}
+            className={`size-[100px] rounded-xl object-cover object-center ${
+              isImageLoading ? 'invisible' : ''
+            }`}
             src={store.imageMain}
             alt="음식점 대표 이미지"
             width={100}

@@ -12,7 +12,8 @@ type MenuItemProps = {
 }
 const MenuItem = ({ menu, onIncrease, onDecrease, onRemove }: MenuItemProps) => {
   const handleChangeCount = (count: number) => {
-    if (count === 0) return // onRemove(menu.cartId)
+    if (count === 0)
+      return // onRemove(menu.cartId)
     else if (count < menu.quantity) onDecrease(menu.cartId)
     else onIncrease(menu.cartId)
   }

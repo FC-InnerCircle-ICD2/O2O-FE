@@ -10,16 +10,23 @@ interface Modal {
 
 interface ModalState {
   modals: Modal[]
-  showModal: (options: Pick<Modal, 'content' | 'useAnimation' | 'useDimmedClickClose' | 'useDimmed'>) => void
+  showModal: (
+    options: Pick<Modal, 'content' | 'useAnimation' | 'useDimmedClickClose' | 'useDimmed'>
+  ) => void
   hideModal: () => void
   allHideModal: () => void
 }
 
 export const modalStore = create<ModalState>((set) => ({
   modals: [],
-  showModal: (options: Pick<Modal, 'content' | 'useAnimation' | 'useDimmedClickClose' | 'useDimmed'>) =>
+  showModal: (
+    options: Pick<Modal, 'content' | 'useAnimation' | 'useDimmedClickClose' | 'useDimmed'>
+  ) =>
     set((state) => ({
-      modals: [...state.modals, { type: 'modal', useDimmed: options.useDimmed ?? true, ...options }],
+      modals: [
+        ...state.modals,
+        { type: 'modal', useDimmed: options.useDimmed ?? true, ...options },
+      ],
     })),
   hideModal: () =>
     set((state) => ({

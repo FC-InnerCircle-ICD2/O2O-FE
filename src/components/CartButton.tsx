@@ -12,7 +12,10 @@ interface CartButtonProps {
 
 const CartButton = ({ className = '', hasBottomNavigation = true }: CartButtonProps) => {
   const { carts, resetCarts } = useGetCarts()
-  const cartItems = useMemo(() => carts?.orderMenus.map(menu => menu.quantity).reduce((acc, cur) => cur + acc, 0) || 0, [carts])
+  const cartItems = useMemo(
+    () => carts?.orderMenus.map((menu) => menu.quantity).reduce((acc, cur) => cur + acc, 0) || 0,
+    [carts]
+  )
 
   // 배지 위치
   const getBadgePosition = (count: number) => {

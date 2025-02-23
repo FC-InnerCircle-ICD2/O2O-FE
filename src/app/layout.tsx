@@ -1,6 +1,7 @@
 import BottomSheet from '@/components/BottomSheet'
 import CommonLayout from '@/components/CommonLayout'
 import Modal from '@/components/Modal'
+import { NavigationTracker } from '@/components/NavigationTracker'
 import { Toaster } from '@/components/Toaster'
 import { MockProvider } from '@/providers/MockProvider'
 import QueryProvider from '@/providers/QueryProvider'
@@ -38,6 +39,7 @@ export default function RootLayout({
             <CommonLayout>{children}</CommonLayout>
             <Modal />
             <BottomSheet />
+            <NavigationTracker />
             <ReactQueryDevtools initialIsOpen />
           </QueryProvider>
         </MockProvider>

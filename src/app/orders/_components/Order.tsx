@@ -5,12 +5,14 @@ import OrderItem from '@/app/orders/_components/OrderItem'
 import OrderSearch from '@/app/orders/_components/OrderSearch'
 import CartButton from '@/components/CartButton'
 import Separator from '@/components/Separator'
+import memberStore from '@/store/user'
 import React, { useCallback, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 const Order = () => {
   const [searchValue, setSearchValue] = useState<string>('')
   const { orders } = useGetOrders(searchValue)
+  const { member } = memberStore()
 
   const handelSearch = useCallback((value: string) => {
     setSearchValue(value)
@@ -31,7 +33,7 @@ const Order = () => {
           ))}
         </div>
       </div>
-      <CartButton />
+      {member && <CartButton />}
     </>
   )
 }

@@ -1,4 +1,3 @@
-import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { api } from '@/lib/api'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 export interface CartItem {
@@ -24,12 +23,13 @@ export interface Cart {
 
 const useGetCarts = () => {
   const qc = useQueryClient()
-  const { storedValue: accessToken } = useLocalStorage<string>('accessToken')
+  // const { storedValue: accessToken } = useLocalStorage<string>('accessToken')
+  const accessToken = localStorage.getItem('accessToken')
 
   const { data: carts } = useQuery({
     queryKey: ['carts'],
     queryFn: async () => await api.get<Cart>(`carts`, {}),
-    enabled: accessToken !== undefined, // TODO: 로그인 한 경우에만 호출되도록
+    enabled: !!accessToken, // TODO: 로그인 한 경우에만 호출되도록
   })
 
   const resetCarts = () => {

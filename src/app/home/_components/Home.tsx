@@ -6,6 +6,7 @@ import PullToRefresh from '@/components/PullToRefresh'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { Store } from '@/models/store'
 import { useGeoLocationStore } from '@/store/geoLocation'
+import memberStore from '@/store/user'
 import { useRef } from 'react'
 import BannerSlide from './BannerSlide'
 import CategoryDrawer from './CategoryDrawer'
@@ -13,6 +14,7 @@ import CategoryDrawer from './CategoryDrawer'
 const Home = () => {
   const scrollRef = useRef<HTMLDivElement>(null)
   const { coordinates: location } = useGeoLocationStore()
+  const { member } = memberStore()
 
   const { data, isFetching, targetRef, refetch, hasNextPage } = useInfiniteScroll<
     Store,
@@ -37,7 +39,7 @@ const Home = () => {
         <HomeStoreList data={data} isLoading={isFetching} hasNextPage={hasNextPage} />
         <div ref={targetRef} />
       </div>
-      <CartButton />
+      {member && <CartButton />}
     </PullToRefresh>
   )
 }
