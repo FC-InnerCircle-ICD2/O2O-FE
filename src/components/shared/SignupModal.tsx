@@ -144,105 +144,115 @@ const SignupForm = () => {
   }
 
   return (
-    <form onSubmit={onSubmit}>
-      <div className="mb-3">
-        <Input
-          value={signnameValue}
-          label="이메일 주소"
-          placeholder="이메일 주소 입력"
-          maxLength={255}
-          {...register('signname')}
-          offOutline
-          isInvalid={!!errors.signname && focusedField !== 'signname'}
-          onFocus={() => setFocusedField('signname')}
-          onReset={() => {
-            setValue('signname', '')
-          }}
-        />
-        {errors.signname && focusedField !== 'signname' && (
-          <div className="mt-1.5 text-left text-xs text-red-500">{errors.signname.message}</div>
-        )}
+    <form
+      onSubmit={onSubmit}
+      className="flex flex-col"
+      style={{
+        height: 'calc(100vh - 94px)',
+      }}
+    >
+      <div className="grow overflow-y-auto">
+        <div className="mb-3">
+          <Input
+            value={signnameValue}
+            label="이메일 주소"
+            placeholder="이메일 주소 입력"
+            maxLength={255}
+            {...register('signname')}
+            offOutline
+            isInvalid={!!errors.signname && focusedField !== 'signname'}
+            onFocus={() => setFocusedField('signname')}
+            onReset={() => {
+              setValue('signname', '')
+            }}
+          />
+          {errors.signname && focusedField !== 'signname' && (
+            <div className="mt-1.5 text-left text-xs text-red-500">{errors.signname.message}</div>
+          )}
+        </div>
+        <div className="mb-3">
+          <Input
+            value={passwordValue}
+            label="비밀번호"
+            type="password"
+            placeholder="영문, 숫자, 특수문자를 모두 포함한, 8자리 이상"
+            {...register('password')}
+            offOutline
+            isInvalid={!!errors.password && focusedField !== 'password'}
+            onFocus={() => {
+              setFocusedField('password')
+              trigger('signname')
+            }}
+          />
+          {errors.password && focusedField !== 'password' && (
+            <div className="mt-1.5 text-left text-xs text-red-500">{errors.password.message}</div>
+          )}
+        </div>
+        <div className="mb-3">
+          <Input
+            value={nicknameValue}
+            label="닉네임"
+            placeholder="영문 혹은 한글만 가능, 10자이내"
+            {...register('nickname')}
+            maxLength={10}
+            offOutline
+            isInvalid={!!errors.nickname && focusedField !== 'nickname'}
+            onFocus={() => {
+              setFocusedField('nickname')
+              trigger('signname')
+            }}
+            onReset={() => {
+              setValue('nickname', '')
+            }}
+          />
+          {errors.nickname && focusedField !== 'nickname' && (
+            <div className="mt-1.5 text-left text-xs text-red-500">{errors.nickname.message}</div>
+          )}
+        </div>
+        <div className="mb-3">
+          <Input
+            value={usernameValue}
+            label="이름"
+            placeholder="이름 입력"
+            {...register('username')}
+            maxLength={10}
+            offOutline
+            isInvalid={!!errors.username && focusedField !== 'username'}
+            onFocus={() => {
+              setFocusedField('username')
+              trigger('signname')
+            }}
+          />
+          {errors.username && focusedField !== 'username' && (
+            <div className="mt-1.5 text-left text-xs text-red-500">{errors.username.message}</div>
+          )}
+        </div>
+        <div className="mb-3">
+          <Input
+            value={phoneValue}
+            label="전화번호"
+            type="tel"
+            placeholder="전화번호 입력"
+            {...register('phone')}
+            onChange={handlePhoneChange}
+            maxLength={13}
+            offOutline
+            isInvalid={!!errors.phone && focusedField !== 'phone'}
+            onFocus={() => {
+              setFocusedField('phone')
+              trigger('signname')
+            }}
+          />
+          {errors.phone && focusedField !== 'phone' && (
+            <div className="mt-1.5 text-left text-xs text-red-500">{errors.phone.message}</div>
+          )}
+        </div>
       </div>
-      <div className="mb-3">
-        <Input
-          value={passwordValue}
-          label="비밀번호"
-          type="password"
-          placeholder="영문, 숫자, 특수문자를 모두 포함한, 8자리 이상"
-          {...register('password')}
-          offOutline
-          isInvalid={!!errors.password && focusedField !== 'password'}
-          onFocus={() => {
-            setFocusedField('password')
-            trigger('signname')
-          }}
-        />
-        {errors.password && focusedField !== 'password' && (
-          <div className="mt-1.5 text-left text-xs text-red-500">{errors.password.message}</div>
-        )}
+      <div className="bg-white py-2">
+        <Button className="disabled:bg-slate-400" type="submit" size="m" disabled={!isValid}>
+          가입하기
+        </Button>
       </div>
-      <div className="mb-3">
-        <Input
-          value={nicknameValue}
-          label="닉네임"
-          placeholder="영문 혹은 한글만 가능, 10자이내"
-          {...register('nickname')}
-          maxLength={10}
-          offOutline
-          isInvalid={!!errors.nickname && focusedField !== 'nickname'}
-          onFocus={() => {
-            setFocusedField('nickname')
-            trigger('signname')
-          }}
-          onReset={() => {
-            setValue('nickname', '')
-          }}
-        />
-        {errors.nickname && focusedField !== 'nickname' && (
-          <div className="mt-1.5 text-left text-xs text-red-500">{errors.nickname.message}</div>
-        )}
-      </div>
-      <div className="mb-3">
-        <Input
-          value={usernameValue}
-          label="이름"
-          placeholder="이름 입력"
-          {...register('username')}
-          maxLength={10}
-          offOutline
-          isInvalid={!!errors.username && focusedField !== 'username'}
-          onFocus={() => {
-            setFocusedField('username')
-            trigger('signname')
-          }}
-        />
-        {errors.username && focusedField !== 'username' && (
-          <div className="mt-1.5 text-left text-xs text-red-500">{errors.username.message}</div>
-        )}
-      </div>
-      <div className="mb-8">
-        <Input
-          value={phoneValue}
-          label="전화번호"
-          type="tel"
-          placeholder="전화번호 입력"
-          {...register('phone')}
-          onChange={handlePhoneChange}
-          maxLength={13}
-          offOutline
-          isInvalid={!!errors.phone && focusedField !== 'phone'}
-          onFocus={() => {
-            setFocusedField('phone')
-            trigger('signname')
-          }}
-        />
-        {errors.phone && focusedField !== 'phone' && (
-          <div className="mt-1.5 text-left text-xs text-red-500">{errors.phone.message}</div>
-        )}
-      </div>
-      <Button className="mb-2 disabled:bg-slate-400" type="submit" size="m" disabled={!isValid}>
-        가입하기
-      </Button>
     </form>
   )
 }
