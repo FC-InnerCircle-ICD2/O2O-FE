@@ -129,8 +129,10 @@ const SignupForm = () => {
         if (errorResponse.status === 400) {
           toast({
             title: '회원가입에 실패했습니다.',
-            description: (
+            description: errorResponse.message.includes('이미 가입된') ? (
               <span className="whitespace-pre-line">{'사용할 수 없는 이메일 주소입니다.'}</span>
+            ) : (
+              errorResponse.message
             ),
             variant: 'destructive',
           })
