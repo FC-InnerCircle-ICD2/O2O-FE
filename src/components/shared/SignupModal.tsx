@@ -5,6 +5,7 @@ import Input from '@/components/Input'
 import { useToast } from '@/hooks/useToast'
 import { ApiErrorResponse } from '@/lib/api'
 import { formatPhoneNumber, unformatPhoneNumber } from '@/lib/format'
+import { SignupData } from '@/models/auth'
 import { modalStore } from '@/store/modal'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
@@ -55,10 +56,19 @@ const signupFormSchema = z.object({
     .string()
     .min(10, '전화번호는 8자 이상이어야 합니다.')
     .max(13, '전화번호는 11자 이내여야 합니다.'),
+  address: z.object({
+    memberAddressType: z.string().min(1, '주소를 입력해주세요.'),
+    roadAddress: z.string().min(1, '주소를 입력해주세요.'),
+    jibunAddress: z.string().min(1, '주소를 입력해주세요.'),
+    detailAddress: z.string(),
+    alias: z.string(),
+    latitude: z.number(),
+    longitude: z.number(),
+  }),
 })
 
 const SignupForm = () => {
-  const { hideModal } = modalStore()
+  const { showModal, hideModal } = modalStore()
   const { mutate: signup } = usePostSignup()
   const { toast } = useToast()
   const {
@@ -75,6 +85,15 @@ const SignupForm = () => {
       nickname: '',
       username: '',
       phone: '',
+      address: {
+        memberAddressType: '',
+        roadAddress: '',
+        jibunAddress: '',
+        detailAddress: '',
+        alias: '',
+        latitude: 0,
+        longitude: 0,
+      },
     },
     resolver: zodResolver(signupFormSchema),
     mode: 'onBlur',
@@ -85,24 +104,17 @@ const SignupForm = () => {
   const nicknameValue = watch('nickname')
   const usernameValue = watch('username')
   const phoneValue = watch('phone')
+  const addressValue = watch('address')
 
   const [focusedField, setFocusedField] = useState<
     'signname' | 'password' | 'nickname' | 'username' | 'phone' | null
   >(null)
+  const [isClickedAddressButton, setIsClickedAddressButton] = useState(false)
 
   const onSubmit = handleSubmit((formData) => {
     const processedFormData = {
       ...formData,
       phone: unformatPhoneNumber(formData.phone),
-      address: {
-        memberAddressType: 'HOME',
-        roadAddress: '도로명주소(집)',
-        jibunAddress: '지번주소(집)',
-        detailAddress: '',
-        alias: '',
-        latitude: 0.01,
-        longitude: 0.01,
-      },
     }
     signup(processedFormData, {
       onSuccess: () => {
@@ -141,6 +153,20 @@ const SignupForm = () => {
       shouldValidate: true, // 값이 변경될 때마다 유효성 검사하는 옵션
       shouldDirty: true, // 사용자가 입력하는 값이라는 것을 알려주는 옵션
     })
+  }
+
+  const handleAddressClick = () => {
+    showModal({
+      content: <AddressModal onInputAddress={handleChangeAddress} />,
+      useAnimation: true,
+    })
+    if (!isClickedAddressButton) {
+      setIsClickedAddressButton(true)
+    }
+  }
+
+  const handleChangeAddress = (address: SignupData['address']) => {
+    setValue('address', address)
   }
 
   return (
@@ -247,12 +273,95 @@ const SignupForm = () => {
             <div className="mt-1.5 text-left text-xs text-red-500">{errors.phone.message}</div>
           )}
         </div>
+        <div className="mb-3">
+          <label
+            htmlFor="address"
+            className="mb-1.5 block text-base font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            주소
+          </label>
+          <Button
+            id="address"
+            className="w-full"
+            variant="grayFit"
+            size="m"
+            type="button"
+            onClick={handleAddressClick}
+          >
+            주소 찾기
+          </Button>
+          {addressValue.roadAddress ? (
+            <div className="mt-2 text-left text-lg font-semibold">{addressValue.roadAddress}</div>
+          ) : (
+            isClickedAddressButton && (
+              <div className="mt-1.5 text-left text-xs text-red-500">주소를 입력해주세요.</div>
+            )
+          )}
+        </div>
       </div>
       <div className="bg-white py-2">
-        <Button className="disabled:bg-slate-400" type="submit" size="m" disabled={!isValid}>
+        <Button
+          className="disabled:bg-slate-400"
+          type="submit"
+          size="m"
+          disabled={!isValid && !addressValue.roadAddress}
+        >
           가입하기
         </Button>
       </div>
     </form>
+  )
+}
+
+const AddressModal = ({
+  onInputAddress,
+}: {
+  onInputAddress: (address: SignupData['address']) => void
+}) => {
+  const { hideModal } = modalStore()
+  const [address, setAddress] = useState<SignupData['address']>({
+    memberAddressType: '',
+    roadAddress: '',
+    jibunAddress: '',
+    detailAddress: '',
+    alias: '',
+    latitude: 0,
+    longitude: 0,
+  })
+
+  const handleAddressChange = (address: SignupData['address']) => {
+    setAddress(address)
+  }
+
+  const handleInputAddress = () => {
+    // 임시 로직 (시작)
+    address.roadAddress = '풍성로 115-8 2층 (맨 췻층)'
+    address.jibunAddress = '경남 함안군 칠원읍 풍성로 115-8 2층 (맨 췻층)'
+    address.memberAddressType = 'HOME'
+    // 임시 로직 (끝)
+    onInputAddress(address)
+    hideModal()
+  }
+
+  return (
+    <div className="flex size-full flex-col bg-white p-mobile_safe">
+      <div className="relative my-2">
+        <Icon
+          name="ChevronLeft"
+          size={24}
+          onClick={hideModal}
+          className="cursor-pointer stroke-2"
+        />
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold">
+          주소 찾기
+        </div>
+      </div>
+      <div className="grow overflow-y-auto">주소 입력 UI</div>
+      <div className="pt-2">
+        <Button variant="primaryFit" size="m" className="w-full" onClick={handleInputAddress}>
+          주소 입력
+        </Button>
+      </div>
+    </div>
   )
 }
