@@ -1,5 +1,6 @@
 import {
     Bike,
+    Briefcase,
     Building,
     Camera,
     Check,
@@ -16,6 +17,7 @@ import {
     House,
     Link,
     Loader,
+    LocateFixed,
     MapPin,
     Megaphone,
     MessageCircleQuestion,
@@ -69,6 +71,9 @@ const ICONS = {
   MapPin,
   Plus,
   UtensilsCrossed,
+  LocateFixed,
+  Home,
+  Briefcase,
   Camera,
   ShoppingCart,
 } as const
