@@ -10,11 +10,13 @@ import Badge from '@/components/Badge'
 import DaumPostcode from 'react-daum-postcode'
 import AddressSearchModal from '@/app/mypage/address/_components/AddressSearchModal'
 import { useRouter } from 'next/navigation'
+import useGetAddress from '@/api/useGetAddress'
 
 const AddressOption = () => {
   const [word, setWord] = useState('')
   const [popup, setPopup] = useState(false)
   const router = useRouter()
+  const { address } = useGetAddress()
 
   const handleComplete = (data) => {
     setPopup(!popup)
@@ -46,35 +48,93 @@ const AddressOption = () => {
         </Link>
       </div>
 
-      <Separator ignoreMobileSafe className="h-2" />
-      <div className="flex flex-row gap-2">
-        <Icon name="MapPin" size={20} />
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-2">
-            <div className="content-center">풍성로 115-8</div>
-            <Badge variant="essential">현재</Badge>
+      {address?.defaultAddress ? (
+        <>
+          <Separator ignoreMobileSafe className="h-2" />
+          <div className="flex flex-row gap-2">
+            <Icon name="MapPin" size={20} />
+            <div className="flex flex-col gap-4">
+              <div className="flex gap-2">
+                <div className="content-center">{address?.defaultAddress.roadAddress}</div>
+                <Badge variant="essential">현재</Badge>
+              </div>
+              <div className="text-xs text-gray-500">
+                [지번] {address?.defaultAddress.jibunAddress}
+              </div>
+            </div>
           </div>
-          <div className="text-xs text-gray-500">[지번] 서울특별시 강동구 성내동</div>
-        </div>
-      </div>
+        </>
+      ) : (
+        <>
+          <Separator ignoreMobileSafe className="h-2" />
+          <Link
+            href={{ pathname: ROUTE_PATHS.ADDRESS_DETAIL, query: { flag: true, type: 'DEFAULT' } }}
+          >
+            <div className="flex flex-row gap-2">
+              <Icon name="MapPin" size={20} />
+              <div className="content-center">주소 추가</div>
+            </div>
+          </Link>
+        </>
+      )}
 
-      <Separator ignoreMobileSafe className="h-2" />
-      <Link href={{ pathname: ROUTE_PATHS.ADDRESS_DETAIL, query: { flag: false, type: 'HOME' } }}>
-        <div className="flex flex-row gap-2">
-          <Icon name="Home" size={20} />
-          <div className="content-center">집 추가</div>
-        </div>
-      </Link>
+      {address?.house ? (
+        <>
+          <Separator ignoreMobileSafe className="h-2" />
+          <Link href={ROUTE_PATHS.HOME}>
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-row gap-2">
+                <Icon name="Home" size={20} />
+                <div className="content-center">집</div>
+              </div>
+              <div className="ml-7 text-xs text-gray-500">
+                {address.house.roadAddress} {address.house.detailAddress}
+              </div>
+            </div>
+          </Link>
+        </>
+      ) : (
+        <>
+          <Separator ignoreMobileSafe className="h-2" />
+          <Link
+            href={{ pathname: ROUTE_PATHS.ADDRESS_DETAIL, query: { flag: true, type: 'HOME' } }}
+          >
+            <div className="flex flex-row gap-2">
+              <Icon name="Home" size={20} />
+              <div className="content-center">집 추가</div>
+            </div>
+          </Link>
+        </>
+      )}
 
-      <Separator />
-      <Link
-        href={{ pathname: ROUTE_PATHS.ADDRESS_DETAIL, query: { flag: false, type: 'COMPANY' } }}
-      >
-        <div className="flex flex-row gap-2">
-          <Icon name="Briefcase" size={20} />
-          <div className="content-center">회사 추가</div>
-        </div>
-      </Link>
+      {address?.company ? (
+        <>
+          <Separator ignoreMobileSafe className="h-2" />
+          <Link href={ROUTE_PATHS.HOME}>
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-row gap-2">
+                <Icon name="Home" size={20} />
+                <div className="content-center">집</div>
+              </div>
+              <div className="ml-7 text-xs text-gray-500">
+                {address.company.roadAddress} {address.company.detailAddress}
+              </div>
+            </div>
+          </Link>
+        </>
+      ) : (
+        <>
+          <Separator />
+          <Link
+            href={{ pathname: ROUTE_PATHS.ADDRESS_DETAIL, query: { flag: true, type: 'COMPANY' } }}
+          >
+            <div className="flex flex-row gap-2">
+              <Icon name="Briefcase" size={20} />
+              <div className="content-center">회사 추가</div>
+            </div>
+          </Link>
+        </>
+      )}
     </div>
   )
 }
