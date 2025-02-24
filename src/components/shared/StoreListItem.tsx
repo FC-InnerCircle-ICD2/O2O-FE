@@ -19,25 +19,26 @@ const StoreListItem = ({ store }: StoreListItemProps) => {
   return (
     <div
       className="flex flex-1 items-center gap-[10px]"
-      // onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${store.id}`)}
-      onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${1006816630}`)}
+      onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${store.id}`)}
+      // onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${1006816630}`)}
     >
       <div className="relative size-[100px]">
         {isImageLoading && (
           <div className="absolute inset-0 animate-pulse rounded-xl bg-gray-200" />
         )}
-        <Image
-          className={`size-[100px] rounded-xl object-cover object-center ${
-            isImageLoading ? 'invisible' : ''
-          }`}
-          src={store.imageUrl}
-          alt="음식점 대표 이미지"
-          width={100}
-          height={100}
-          loading="lazy"
-          onLoad={() => setIsImageLoading(false)}
-          quality={60}
-        />
+        {store.imageMain && (
+          <Image
+            className={`size-[100px] rounded-xl object-cover object-center ${isImageLoading ? 'invisible' : ''
+              }`}
+            src={store.imageMain}
+            alt="음식점 대표 이미지"
+            width={100}
+            height={100}
+            loading="lazy"
+            onLoad={() => setIsImageLoading(false)}
+            quality={60}
+          />
+        )}
       </div>
       <div className="flex flex-1 flex-col gap-[6px] overflow-x-hidden">
         <p className="truncate text-base font-bold text-black">{store.name}</p>
@@ -51,10 +52,10 @@ const StoreListItem = ({ store }: StoreListItemProps) => {
           </div>
           <Dot />
           <span className="text-xs font-medium text-gray-600">
-            {store.distance ? formatDistance(store.distance) : ''}
+            {store.deliveryDistance ? formatDistance(store.deliveryDistance) : ''}
           </span>
           <Dot />
-          <span className="text-xs font-medium text-gray-600">{store.deliveryTime}</span>
+          <span className="text-xs font-medium text-gray-600">{store.deliveryTime}분</span>
         </div>
         <p className="text-xs font-medium text-gray-600">
           {!store.deliveryFee ? '배달비 무료' : store.deliveryFee.toLocaleString() + '원'}

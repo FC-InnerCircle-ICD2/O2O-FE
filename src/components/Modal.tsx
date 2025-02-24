@@ -10,7 +10,7 @@ const Modal = () => {
   if (modals.length === 0) return null
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center">
         {modals.map((modal, index) => {
           return (
             <div key={`modal-${index}`} className="fixed h-full w-full z-10">

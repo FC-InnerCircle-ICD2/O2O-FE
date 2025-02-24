@@ -77,7 +77,11 @@ const NAVIGATION_PROPS: Record<string, NavigationProps> = {
 
 export const getNavigationProps = (pathname: string): NavigationProps => {
   // UUID나 숫자 등 동적 라우팅 패턴 처리
-  const normalizedPath = pathname.replace(/\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|\/\d+/g, '')
+  const normalizedPath = pathname.replace(
+    /\/detail\/[^/]+|\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|\/\d+/g,
+    '/detail'
+  )
+
   return NAVIGATION_PROPS[normalizedPath] || NAVIGATION_PROPS[ROUTE_PATHS.HOME]
 }
 

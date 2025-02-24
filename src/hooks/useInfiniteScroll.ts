@@ -1,13 +1,14 @@
 'use client'
 
-import { api, mockApi } from '@/lib/api'
-import { useMockReady } from '@/providers/MockProvider'
+import { api } from '@/lib/api'
+import { isMockingMode, useMockReady } from '@/providers/MockProvider'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef } from 'react'
 
 interface PaginatedResponse<T> {
-  data: T[]
+  content: T[]
   nextCursor?: number
+  totalCount?: number
 }
 
 interface InfiniteScrollOptions<TFilter> {
@@ -29,7 +30,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
   threshold = 0.1,
   root = null,
   rootMargin = '0px',
-  location,
+  location = { lat: 37.5177, lng: 127.0473 },
 }: InfiniteScrollOptions<TFilter>) => {
   const observerRef = useRef<IntersectionObserver | null>(null)
   const targetRef = useRef<HTMLDivElement | null>(null)
@@ -47,10 +48,10 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     error,
     refetch,
   } = useInfiniteQuery({
-    queryKey: [queryKey, filter],
-    queryFn: async ({ pageParam = 1 }) => {
+    queryKey: [queryKey, filter, location],
+    queryFn: async ({ pageParam }) => {
       const searchParams = {
-        offset: String(pageParam),
+        ...(pageParam !== 1 && { cursor: String(pageParam), page: String(pageParam) }),
         size: String(size),
         ...(filter &&
           Object.entries(filter).reduce(
@@ -62,7 +63,8 @@ export const useInfiniteScroll = <TData, TFilter = void>({
           )),
       }
 
-      const API = isMockReady ? mockApi : api
+      // const API = isMockingMode ? mockApi : api
+      const API = api
 
       const res = await API.get<PaginatedResponse<TData>>(endpoint, {
         headers: {
@@ -71,12 +73,11 @@ export const useInfiniteScroll = <TData, TFilter = void>({
         },
         searchParams,
       })
-
       return res
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
     initialPageParam: 1,
-    enabled: isMockReady,
+    enabled: isMockingMode ? isMockReady : true,
   })
 
   const handleObserver = useCallback(
@@ -112,7 +113,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
   }, [handleObserver, root, rootMargin, threshold])
 
   return {
-    data: data?.pages.flatMap((page) => page.data) ?? [],
+    data: data?.pages.flatMap((page) => page.content) ?? [],
     isLoading,
     isFetching,
     isError,
@@ -121,6 +122,6 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     hasNextPage,
     targetRef,
     refetch: refetch,
+    totalCount: data?.pages[0]?.totalCount,
   }
 }
-

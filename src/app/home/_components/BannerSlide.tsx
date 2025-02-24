@@ -4,24 +4,32 @@ import { Autoplay, Pagination } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 // Swiper 스타일 import
-import { Skeleton } from '@/components/shadcn/skeleton'
-import { mockApi } from '@/lib/api'
+import BANNER_MOCK_DATA from '@/constants/banners'
+import { useToast } from '@/hooks/useToast'
 import { Banner } from '@/models/banner'
-import { useMockReady } from '@/providers/MockProvider'
-import { useQuery } from '@tanstack/react-query'
 import Image from 'next/image'
+import { useState } from 'react'
 import 'swiper/css'
 import 'swiper/css/autoplay'
 import 'swiper/css/pagination'
 
 const BannerSlide = () => {
-  const isMockReady = useMockReady()
+  const [banners, setBanners] = useState<Banner[]>(BANNER_MOCK_DATA)
+  const { toast } = useToast()
 
-  const { data, isFetching } = useQuery({
-    queryKey: ['banners'],
-    queryFn: () => mockApi.get<Banner[]>('banners'),
-    enabled: isMockReady,
-  })
+  const handleBannerClick = () => {
+    toast({
+      description: '준비중입니다ㅠ',
+      position: 'center',
+    })
+  }
+  // const isMockReady = useMockReady()
+
+  // const { data, isFetching } = useQuery({
+  //   queryKey: ['banners'],
+  //   queryFn: () => mockApi.get<Banner[]>('banners'),
+  //   enabled: isMockReady,
+  // })
 
   return (
     <div className="px-mobile_safe py-4">
@@ -34,10 +42,17 @@ const BannerSlide = () => {
         autoplay={{
           delay: 3000,
           disableOnInteraction: false,
-          pauseOnMouseEnter: false
+          pauseOnMouseEnter: false,
         }}
       >
-        {isFetching ? (
+        {banners?.map((banner) => (
+          <SwiperSlide key={banner.id} onClick={() => handleBannerClick()}>
+            <div className="relative aspect-[353/100] w-full">
+              <Image className="object-cover" src={banner.imageUrl} alt="banner" fill />
+            </div>
+          </SwiperSlide>
+        ))}
+        {/* {isFetching ? (
           <SwiperSlide>
             <div className="relative aspect-[353/100] w-full">
               <Skeleton className="aspect-[353/100] w-full" />
@@ -51,7 +66,7 @@ const BannerSlide = () => {
               </div>
             </SwiperSlide>
           ))
-        )}
+        )} */}
       </Swiper>
     </div>
   )

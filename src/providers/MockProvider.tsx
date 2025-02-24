@@ -3,7 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 
 const MockContext = createContext<boolean>(false)
-const isMockingMode = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled'
+export const isMockingMode = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled'
 
 export const useMockReady = () => useContext(MockContext)
 
@@ -23,6 +23,7 @@ export function MockProvider({ children }: { children: React.ReactNode }) {
       init()
     }
   }, [mswReady])
+  if (isMockingMode && !mswReady) return null
 
   return <MockContext.Provider value={mswReady}>{children}</MockContext.Provider>
 }

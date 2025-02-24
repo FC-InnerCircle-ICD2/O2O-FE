@@ -5,9 +5,9 @@ import Input from '@/components/Input'
 import Separator from '@/components/Separator'
 import SignupModal from '@/components/shared/SignupModal'
 import { useToast } from '@/hooks/useToast'
+import { ApiErrorResponse } from '@/lib/api'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
-import { HTTPError } from 'ky'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -61,16 +61,15 @@ const LoginForm = () => {
 
   const onSubmit = handleSubmit((formData) => {
     login(formData, {
-      onError: async (error: Error) => {
-        const httpError = error as HTTPError
-        const errorData = await httpError.response?.json() as { data: { error: string } }
+      onError: async (error) => {
+        const apiError = error as unknown as ApiErrorResponse
         toast({
-          title: "로그인 실패",
-          description: errorData?.data.error || "로그인에 실패했습니다.",
-          variant: "destructive",
-          position: "center",
+          title: '로그인 실패',
+          description: apiError.message || '알 수 없는 이유로 로그인에 실패했습니다.',
+          variant: 'destructive',
+          position: 'center',
         })
-      }
+      },
     })
   })
 
@@ -82,22 +81,22 @@ const LoginForm = () => {
 
   return (
     <>
-    <form onSubmit={onSubmit}>
-      <div className="mb-3">
-        <Input placeholder="이메일 주소 입력" {...register('signname')} offOutline />
-      </div>
-      <div className="mb-8">
-        <Input type="password" placeholder="비밀번호 입력" {...register('password')} offOutline />
-      </div>
-      <Button
-        className="mb-2 disabled:bg-slate-400"
-        type="submit"
-        size="m"
-        disabled={isButtonDisabled}
-      >
-        {isPending ? <span className="loading loading-dots loading-sm"></span> : '로그인'}
-      </Button>
-    </form>
+      <form onSubmit={onSubmit}>
+        <div className="mb-3">
+          <Input placeholder="이메일 주소 입력" {...register('signname')} offOutline />
+        </div>
+        <div className="mb-8">
+          <Input type="password" placeholder="비밀번호 입력" {...register('password')} offOutline />
+        </div>
+        <Button
+          className="mb-2 disabled:bg-slate-400"
+          type="submit"
+          size="m"
+          disabled={isButtonDisabled}
+        >
+          {isPending ? <span className="loading loading-dots loading-sm"></span> : '로그인'}
+        </Button>
+      </form>
     </>
   )
 }

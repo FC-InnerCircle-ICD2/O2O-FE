@@ -2655,6 +2655,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/query-devtools@npm:5.65.0":
+  version: 5.65.0
+  resolution: "@tanstack/query-devtools@npm:5.65.0"
+  checksum: 10c0/7d223e267d7d807d8d597edf08403dbd08e033079fe235e1a37e1449a9922a00cf68d4d1feeb2852f99e2efe386d0c3242856cb0568da0f574778a3187e67a38
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-query-devtools@npm:^5.66.3":
+  version: 5.66.3
+  resolution: "@tanstack/react-query-devtools@npm:5.66.3"
+  dependencies:
+    "@tanstack/query-devtools": "npm:5.65.0"
+  peerDependencies:
+    "@tanstack/react-query": ^5.66.3
+    react: ^18 || ^19
+  checksum: 10c0/c17d9d944bf1d882946a2af0bd6786a3e6d60e2cbe08f0260b68f68e9f493340ad7b4c96c3774a859be75d1e761c426007d0337014925c31c9fa5188afd60c1d
+  languageName: node
+  linkType: hard
+
 "@tanstack/react-query@npm:^5.64.1":
   version: 5.66.0
   resolution: "@tanstack/react-query@npm:5.66.0"
@@ -5845,6 +5864,7 @@ __metadata:
     "@radix-ui/react-toast": "npm:^1.2.5"
     "@svgr/webpack": "npm:^8.1.0"
     "@tanstack/react-query": "npm:^5.64.1"
+    "@tanstack/react-query-devtools": "npm:^5.66.3"
     "@types/eslint-plugin-tailwindcss": "npm:^3"
     "@types/node": "npm:^20"
     "@types/react": "npm:^19"

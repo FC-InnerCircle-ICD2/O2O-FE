@@ -20,13 +20,13 @@ const OrderStatus: React.FC<OrderStatusProps> = ({ orderStatus }) => {
         setSubTitle('다음에 다시 이용해 주세요')
         setValue(0)
         break
-      case '주문확인':
-        setTitle('주문을 확인하고 있습니다')
+      case '주문접수':
+        setTitle('주문이 접수되었습니다.')
         setSubTitle('확인 중입니다. 잠시만 기다려 주세요!')
-        setValue(3)
+        setValue(0)
         break
-      case '주문완료':
-        setTitle('주문을 완료했어요')
+      case '주문수락':
+        setTitle('주문을 수락했어요')
         setSubTitle('잠시 후 도착 예정 시간을 알려드릴게요.')
         setValue(20)
         break
@@ -58,8 +58,8 @@ const OrderStatus: React.FC<OrderStatusProps> = ({ orderStatus }) => {
         <div className="flex flex-col gap-2">
           <Progress value={value} />
           <div className="flex flex-row justify-evenly text-sm">
-            <div className={status === '주문완료' ? 'text-primary' : 'text-gray-400'}>
-              주문 완료
+            <div className={status === '주문수락' ? 'text-primary' : 'text-gray-400'}>
+              주문 수락
             </div>
             <div className={status === '배달진행중' ? 'text-primary' : 'text-gray-400'}>
               배달 진행중

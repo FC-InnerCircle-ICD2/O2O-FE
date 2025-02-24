@@ -1,5 +1,6 @@
 'use client'
 
+import usePostSearch from '@/api/usePostSearch'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import suggestionStore from '@/store/suggestion'
@@ -12,9 +13,11 @@ const Search = () => {
   const { setValue, storedValue } = useLocalStorage<string[]>('recentSearches', [])
   const { suggestion, suggestionWord } = suggestionStore()
   const { setKeyword } = useFoodSearchFilterStore()
+  const { mutate: postSearch } = usePostSearch()
   const router = useRouter()
 
   const handleSearch = (word: string) => {
+    postSearch(word)
     setKeyword(word)
     setValue([word, ...(storedValue || [])])
     router.push(ROUTE_PATHS.SEARCH_RESULT)
@@ -23,7 +26,7 @@ const Search = () => {
   return (
     <div className="relative flex flex-col gap-2">
       {suggestionWord && suggestion.length > 0 && (
-        <div className="absolute left-0 top-0 h-[calc(100dvh-40px-0.75rem)] w-full overflow-y-auto bg-white px-mobile_safe py-4">
+        <div className="absolute left-0 top-0 z-20 h-[calc(100dvh-40px-0.75rem)] w-full overflow-y-auto bg-white px-mobile_safe py-4">
           <ul className="">
             {suggestion.map((item) => (
               <li key={item} className="pb-4" onClick={() => handleSearch(item)}>

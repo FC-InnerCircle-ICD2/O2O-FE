@@ -27,6 +27,10 @@ interface CommonLayoutProps {
 const CommonLayout = ({ children }: CommonLayoutProps) => {
   const [isMounted, setIsMounted] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
+  const [coordinates, setCoordinatesState] = useState<{
+    latitude: number
+    longitude: number
+  } | null>(null)
   const { address, error, setCoordinates, setAddress, setError, setIsLoading } =
     useGeoLocationStore()
   const pathname = usePathname()
@@ -42,8 +46,8 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   const { storedValue: accessToken } = useLocalStorage('accessToken')
   const { data: memberData, isFetching, refetch } = useGetMember()
   const { mutate: logout } = usePostLogout()
-  const { member, setMember } = memberStore()
-  const { isGlobalLoading, setIsGlobalLoading } = globalLoaderStore()
+  const { setMember } = memberStore()
+  const { setIsGlobalLoading } = globalLoaderStore()
 
   useEffect(() => {
     if (accessToken) {
@@ -76,30 +80,8 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   useEffect(() => {
     if (!isMounted) return
 
-    // 카카오맵 스크립트가 로드되었는지 확인
-    const script = document.createElement('script')
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`
-    script.async = true
-
-    script.addEventListener('load', () => {
-      // 스크립트 로드 완료 후 카카오맵 초기화
-      window.kakao.maps.load(() => {
-        setIsLoaded(true)
-      })
-    })
-    document.head.appendChild(script)
-    return () => {
-      document.head.removeChild(script)
-    }
-  }, [isMounted])
-
-  useEffect(() => {
-    return
-    if (!isLoaded) return
-
     const requestGeolocation = async () => {
       try {
-        // 현재 권한 상태 확인
         const permissionStatus = await navigator.permissions.query({ name: 'geolocation' })
 
         if (permissionStatus.state === 'denied') {
@@ -109,7 +91,6 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
           return
         }
 
-        // 여기서 카카오맵 관련 코드 실행
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -117,37 +98,9 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
               }
-
-              const geocoder = new window.kakao.maps.services.Geocoder()
-              geocoder.coord2Address(
-                coords.longitude,
-                coords.latitude,
-                (result: any, status: any) => {
-                  if (status === window.kakao.maps.services.Status.OK) {
-                    const roadAddr = result[0].road_address
-                    const jibunAddr = result[0].address
-
-                    const address = roadAddr
-                      ? {
-                          roadAddress: roadAddr.address_name,
-                          jibunAddress: jibunAddr.address_name,
-                          sido: roadAddr.region_1depth_name,
-                          sigungu: roadAddr.region_2depth_name,
-                          addressName: roadAddr.address_name,
-                        }
-                      : {
-                          roadAddress: jibunAddr.address_name,
-                          jibunAddress: jibunAddr.address_name,
-                          sido: jibunAddr.region_1depth_name,
-                          sigungu: jibunAddr.region_2depth_name,
-                          addressName: jibunAddr.address_name,
-                        }
-                    setCoordinates(coords)
-                    setAddress(address)
-                    setIsLoading(false)
-                  }
-                }
-              )
+              setCoordinatesState(coords)
+              setCoordinates(coords)
+              setIsLoading(false)
             },
             (error) => {
               console.error('위치 정보 에러:', error)
@@ -162,7 +115,59 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
     }
 
     requestGeolocation()
-  }, [isLoaded])
+  }, [isMounted])
+
+  useEffect(() => {
+    if (!isMounted) return
+
+    // 카카오맵 스크립트 로드
+    const script = document.createElement('script')
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`
+    script.async = true
+
+    script.addEventListener('load', () => {
+      window.kakao.maps.load(() => {
+        setIsLoaded(true)
+      })
+    })
+    document.head.appendChild(script)
+    return () => {
+      document.head.removeChild(script)
+    }
+  }, [isMounted])
+
+  useEffect(() => {
+    if (!isLoaded || !coordinates) return
+
+    const geocoder = new window.kakao.maps.services.Geocoder()
+    geocoder.coord2Address(
+      coordinates.longitude,
+      coordinates.latitude,
+      (result: any, status: any) => {
+        if (status === window.kakao.maps.services.Status.OK) {
+          const roadAddr = result[0].road_address
+          const jibunAddr = result[0].address
+
+          const address = roadAddr
+            ? {
+              roadAddress: roadAddr.address_name,
+              jibunAddress: jibunAddr.address_name,
+              sido: roadAddr.region_1depth_name,
+              sigungu: roadAddr.region_2depth_name,
+              addressName: roadAddr.address_name,
+            }
+            : {
+              roadAddress: jibunAddr.address_name,
+              jibunAddress: jibunAddr.address_name,
+              sido: jibunAddr.region_1depth_name,
+              sigungu: jibunAddr.region_2depth_name,
+              addressName: jibunAddr.address_name,
+            }
+          setAddress(address)
+        }
+      }
+    )
+  }, [isLoaded, coordinates])
 
   // 클라이언트 사이드 렌더링 전에는 로딩 상태 표시
   if (!isMounted) return <Loading />
@@ -179,8 +184,8 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   return (
     <div className="mx-auto flex h-full min-w-[320px] max-w-[480px] flex-col bg-white">
       {!pathname.startsWith(ROUTE_PATHS.STORE_DETAIL) && (
-          <Navigation {...getNavigationProps(pathname)} />
-        )}
+        <Navigation {...getNavigationProps(pathname)} />
+      )}
       {children}
       {!HIDDEN_BOTTOM_NAV_PATHS.some((path) => pathname.startsWith(path)) && <BottomNavigation />}
     </div>

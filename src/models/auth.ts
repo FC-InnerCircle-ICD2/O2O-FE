@@ -2,6 +2,17 @@ export interface SignupData {
   signname: string
   password: string
   nickname: string
+  username: string
+  phone: string
+  address: {
+    memberAddressType: string
+    roadAddress: string
+    jibunAddress: string
+    detailAddress: string
+    alias: string
+    latitude: number
+    longitude: number
+  }
 }
 
 export interface LoginData {
@@ -16,6 +27,12 @@ export interface LoginResponse {
   refreshTokenExpiresIn: string
 }
 
+export interface RefreshResponse {
+  data: {
+    accessToken: string
+    refreshToken: string
+  }
+}
 
 export interface Member {
   id: number
