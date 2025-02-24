@@ -33,7 +33,7 @@ const signupFormSchema = z.object({
   signname: z
     .string()
     .min(1, '이메일을 입력해주세요.')
-    .max(255, '이메일은 255자 이내여야 합니다.')
+    .max(50, '이메일은 50자 이내여야 합니다.')
     .email('유효한 이메일 주소를 입력해주세요.'),
   password: z
     .string()
@@ -185,7 +185,7 @@ const SignupForm = () => {
             value={signnameValue}
             label="이메일 주소"
             placeholder="이메일 주소 입력"
-            maxLength={255}
+            maxLength={50}
             {...register('signname')}
             offOutline
             isInvalid={!!errors.signname && focusedField !== 'signname'}
