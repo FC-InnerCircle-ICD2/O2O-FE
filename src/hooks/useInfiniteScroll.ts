@@ -8,6 +8,7 @@ import { useCallback, useEffect, useRef } from 'react'
 interface PaginatedResponse<T> {
   content: T[]
   nextCursor?: number
+  totalCount?: number
 }
 
 interface InfiniteScrollOptions<TFilter> {
@@ -50,7 +51,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     queryKey: [queryKey, filter, location],
     queryFn: async ({ pageParam }) => {
       const searchParams = {
-        ...(pageParam !== 1 && { cursor: String(pageParam) }),
+        ...(pageParam !== 1 && { cursor: String(pageParam), page: String(pageParam) }),
         size: String(size),
         ...(filter &&
           Object.entries(filter).reduce(
@@ -121,5 +122,6 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     hasNextPage,
     targetRef,
     refetch: refetch,
+    totalCount: data?.pages[0]?.totalCount,
   }
 }
