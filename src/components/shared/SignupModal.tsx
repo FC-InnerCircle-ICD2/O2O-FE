@@ -29,7 +29,11 @@ const SignupModal = () => {
 export default SignupModal
 
 const signupFormSchema = z.object({
-  signname: z.string().min(1, '이메일을 입력해주세요.').email('유효한 이메일 주소를 입력해주세요.'),
+  signname: z
+    .string()
+    .min(1, '이메일을 입력해주세요.')
+    .max(255, '이메일은 255자 이내여야 합니다.')
+    .email('유효한 이메일 주소를 입력해주세요.'),
   password: z
     .string()
     .min(8, '비밀번호는 8자 이상이어야 합니다.')
@@ -146,6 +150,7 @@ const SignupForm = () => {
           value={signnameValue}
           label="이메일 주소"
           placeholder="이메일 주소 입력"
+          maxLength={255}
           {...register('signname')}
           offOutline
           isInvalid={!!errors.signname && focusedField !== 'signname'}
