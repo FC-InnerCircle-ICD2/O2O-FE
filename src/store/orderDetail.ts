@@ -39,7 +39,7 @@ export const orderDetailStore = create<OrderDetailState>((set) => ({
 // 브라우저 뒤로가기 이벤트 리스너
 if (typeof window !== 'undefined') {
   // 초기 페이지 state 설정
-  window.history.replaceState({ type: 'page' }, '', window.location.pathname)
+  // window.history.replaceState({ type: 'page' }, '', window.location.pathname)
 
   const handlePopState = (event: PopStateEvent) => {
     const currentState = orderDetailStore.getState()

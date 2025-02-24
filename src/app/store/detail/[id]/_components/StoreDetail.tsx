@@ -35,6 +35,7 @@ const STICKY_HEADER_HEIGHT = 50 // 메뉴 카테고리 헤더의 높이
 export const HEADER_HEIGHT = 50
 
 const StoreDetail = ({ storeId }: { storeId: string }) => {
+  console.log('storeDetail')
   const [pullHeight, setPullHeight] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
