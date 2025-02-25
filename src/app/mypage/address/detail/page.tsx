@@ -4,7 +4,7 @@ import KakaoMap from '@/app/mypage/address/detail/_components/KakaoMap'
 import MapInfo from '@/app/mypage/address/detail/_components/MapInfo'
 import { useState } from 'react'
 
-const Address = () => {
+const AddressDetail = () => {
   const [address, setAddress] = useState('')
   const [roadAddr, setRoadAddr] = useState('')
   const [lng, setLng] = useState(0)
@@ -25,4 +25,4 @@ const Address = () => {
   )
 }
 
-export default Address
+export default AddressDetail

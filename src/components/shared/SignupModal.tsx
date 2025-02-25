@@ -11,6 +11,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import Link from 'next/link'
+import { ROUTE_PATHS } from '@/utils/routes'
+import AddressOption from '@/app/mypage/address/_components/AddressOption'
+import Address from '@/app/mypage/address/page'
 
 const SignupModal = () => {
   const { hideModal } = modalStore()
@@ -292,6 +296,7 @@ const SignupForm = () => {
           >
             주소 찾기
           </Button>
+
           {addressValue.roadAddress ? (
             <div className="mt-2 text-left text-lg font-semibold">{addressValue.roadAddress}</div>
           ) : (
@@ -346,24 +351,14 @@ const AddressModal = ({
   }
 
   return (
-    <div className="flex size-full flex-col bg-white p-mobile_safe">
-      <div className="relative my-2">
-        <Icon
-          name="ChevronLeft"
-          size={24}
-          onClick={hideModal}
-          className="cursor-pointer stroke-2"
-        />
+    <div className="flex size-full flex-col bg-white">
+      <div className="relative flex justify-end p-mobile_safe">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold">
-          주소 찾기
+          주소 등록
         </div>
+        <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
       </div>
-      <div className="grow overflow-y-auto">주소 입력 UI</div>
-      <div className="pt-2">
-        <Button variant="primaryFit" size="m" className="w-full" onClick={handleInputAddress}>
-          주소 입력
-        </Button>
-      </div>
+      <Address singup={true} />
     </div>
   )
 }
