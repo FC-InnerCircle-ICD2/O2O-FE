@@ -22,6 +22,7 @@ const Confirm = ({
 
   const handleConfirmClick = () => {
     hideModal()
+    console.log({onConfirmClick})
     onConfirmClick()
   }
 

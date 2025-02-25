@@ -1,63 +1,36 @@
+import { OrdersDetail } from '@/api/useGetOrdersDetail'
+import usePatchOrderCancel from '@/api/usePatchOrderCancel'
 import Chip from '@/components/Chip'
+import Confirm from '@/components/Confirm'
 import Separator from '@/components/Separator'
+import { modalStore } from '@/store/modal'
 import { v4 as uuidv4 } from 'uuid'
 
-interface OrderDataList {
-  ordersData: {
-    orderId: string
-    status: {
-      code: string
-      desc: string
-    }
-    orderTime: string
-    storeName: string
-    tel: string
-    roadAddress: string
-    jibunAddress: string
-    detailAddress: string
-    excludingSpoonAndFork: boolean
-    requestToRider: string | null
-    orderPrice: number
-    deliveryPrice: number
-    deliveryCompleteTime: string | null
-    paymentPrice: number
-    paymentId: number
-    paymentType: {
-      code: string
-      desc: string
-    }
-    type: {
-      code: string
-      desc: string
-    }
-    orderMenus: {
-      id: number
-      menuId: string
-      menuName: string
-      menuQuantity: number
-      menuPrice: number
-      totalPrice: number
-      orderMenuOptionGroups: {
-        id: number
-        orderMenuId: number
-        orderMenuOptionGroupName: string
-        orderMenuOptions: {
-          id: number
-          orderMenuOptionGroupId: number
-          menuOptionName: string
-          menuOptionPrice: number
-        }[]
-      }[]
-    }[]
-  }
+interface OrderListProps {
+  ordersData: OrdersDetail
 }
 
-const OrderList = ({ ordersData }: OrderDataList) => {
+const OrderList = ({ ordersData }: OrderListProps) => {
+  const { mutate: patchOrderCancel } = usePatchOrderCancel()
+  const { showModal } = modalStore()
+
+  const handleOrderCancel = () => {
+    showModal({
+      content: (
+        <Confirm
+          title="주문 취소"
+          message="주문을 취소하시겠습니까?"
+          onConfirmClick={() => patchOrderCancel(ordersData.orderId)}
+        />
+      ),
+    })
+  }
+
   return (
     <div className="flex flex-col px-mobile_safe">
       <div className="flex flex-row items-center justify-between pb-6">
         <div className="text-xl font-bold">{ordersData.storeName}</div>
-        <Chip text="주문 취소" />
+        {ordersData.status.code === 'S2' && <Chip text="주문 취소" onClick={handleOrderCancel} />}
       </div>
       <div className="flex flex-col gap-5">
         <div className="text-lg font-bold">주문정보</div>
