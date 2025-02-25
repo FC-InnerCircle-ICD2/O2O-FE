@@ -18,6 +18,7 @@ import Address from '@/app/mypage/address/page'
 
 const SignupModal = () => {
   const { hideModal } = modalStore()
+
   return (
     <div className="size-full bg-white p-mobile_safe">
       <div className="relative my-6 flex justify-end">
@@ -72,7 +73,8 @@ const signupFormSchema = z.object({
 })
 
 const SignupForm = () => {
-  const { showModal, hideModal } = modalStore()
+  const { showModal, hideModal, addressData } = modalStore()
+
   const { mutate: signup } = usePostSignup()
   const { toast } = useToast()
   const {
@@ -163,16 +165,12 @@ const SignupForm = () => {
 
   const handleAddressClick = () => {
     showModal({
-      content: <AddressModal onInputAddress={handleChangeAddress} />,
+      content: <AddressModal />,
       useAnimation: true,
     })
     if (!isClickedAddressButton) {
       setIsClickedAddressButton(true)
     }
-  }
-
-  const handleChangeAddress = (address: SignupData['address']) => {
-    setValue('address', address)
   }
 
   return (
@@ -297,8 +295,8 @@ const SignupForm = () => {
             주소 찾기
           </Button>
 
-          {addressValue.roadAddress ? (
-            <div className="mt-2 text-left text-lg font-semibold">{addressValue.roadAddress}</div>
+          {addressData?.roadAddress ? (
+            <div className="mt-2 text-left text-lg font-semibold">{addressData?.roadAddress}</div>
           ) : (
             isClickedAddressButton && (
               <div className="mt-1.5 text-left text-xs text-red-500">주소를 입력해주세요.</div>
@@ -311,7 +309,7 @@ const SignupForm = () => {
           className="disabled:bg-slate-400"
           type="submit"
           size="m"
-          disabled={!isValid && !addressValue.roadAddress}
+          disabled={!isValid && !addressData?.roadAddress}
         >
           가입하기
         </Button>
@@ -320,41 +318,14 @@ const SignupForm = () => {
   )
 }
 
-const AddressModal = ({
-  onInputAddress,
-}: {
-  onInputAddress: (address: SignupData['address']) => void
-}) => {
+const AddressModal = () => {
   const { hideModal } = modalStore()
-  const [address, setAddress] = useState<SignupData['address']>({
-    memberAddressType: '',
-    roadAddress: '',
-    jibunAddress: '',
-    detailAddress: '',
-    alias: '',
-    latitude: 0,
-    longitude: 0,
-  })
-
-  const handleAddressChange = (address: SignupData['address']) => {
-    setAddress(address)
-  }
-
-  const handleInputAddress = () => {
-    // 임시 로직 (시작)
-    address.roadAddress = '풍성로 115-8 2층 (맨 췻층)'
-    address.jibunAddress = '경남 함안군 칠원읍 풍성로 115-8 2층 (맨 췻층)'
-    address.memberAddressType = 'HOME'
-    // 임시 로직 (끝)
-    onInputAddress(address)
-    hideModal()
-  }
 
   return (
     <div className="flex size-full flex-col bg-white">
       <div className="relative flex justify-end p-mobile_safe">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold">
-          주소 등록
+          대표주소 등록
         </div>
         <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
       </div>

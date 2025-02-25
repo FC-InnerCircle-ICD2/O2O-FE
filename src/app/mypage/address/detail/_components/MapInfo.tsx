@@ -6,16 +6,18 @@ import Icon from '@/components/Icon'
 import { Button } from '@/components/button'
 import { useSearchParams } from 'next/navigation'
 import usePostAddress, { Address } from '@/api/usePostAddress'
+import { modalStore } from '@/store/modal'
 
-const MapInfo = ({ address, roadAddr, lng, lat }) => {
+const MapInfo = ({ address, roadAddr, lng, lat, signup }) => {
   const [word, setWord] = useState('')
   const searchParams = useSearchParams()
-  const { mutate: addressApi, data: addressResponse } = usePostAddress()
+  const { mutate: addressApi, data: addressResponse, isPending: isAddress } = usePostAddress()
   const [flag, setFlag] = useState(true)
+  const { showModal, hideModal, setAddressData } = modalStore()
 
   const handleAddress = () => {
     const addressData: Address = {
-      memberAddressType: searchParams.get('type')?.toString(),
+      memberAddressType: signup ? 'HOME' : '',
       roadAddress: roadAddr,
       jibunAddress: address,
       detailAddress: word,
@@ -24,16 +26,19 @@ const MapInfo = ({ address, roadAddr, lng, lat }) => {
       longitude: lng,
     }
 
-    addressApi(addressData)
-  }
-
-  useEffect(() => {
-    if (searchParams.get('flag') === 'false') {
-      setFlag(false)
+    if (signup) {
+      setAddressData(addressData)
+      hideModal()
     } else {
-      setFlag(true)
+      showModal({
+        content: <AddressConfirmModal onAddress={addressData} isAddress={isAddress} />,
+        useAnimation: true,
+        useDimmedClickClose: true,
+      })
+
+      addressApi(addressData)
     }
-  }, [searchParams.get('flag')])
+  }
 
   return (
     <div className="flex flex-col gap-4 px-mobile_safe">
@@ -49,7 +54,7 @@ const MapInfo = ({ address, roadAddr, lng, lat }) => {
         onReset={() => setWord('')}
         offOutline
       />
-      {flag && (
+      {!signup && (
         <div>
           <div className="flex flex-row gap-2">
             <div className="flex w-1/3 flex-col items-center justify-center rounded-md border border-solid border-gray-500 py-3">
@@ -77,6 +82,24 @@ const MapInfo = ({ address, roadAddr, lng, lat }) => {
       )}
 
       <Button onClick={handleAddress}>요기로 배달</Button>
+    </div>
+  )
+}
+
+const AddressConfirmModal = ({ onAddress, isAddress }) => {
+  const { hideModal } = modalStore()
+
+  return (
+    <div className="absolute left-1/2 top-1/2 w-4/5 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-7">
+      <div className="mb-4 text-center leading-tight">주소를 등록하시겠습니까?</div>
+      <div className="flex gap-2">
+        <Button variant="primaryFit" onClick={hideModal}>
+          아니요
+        </Button>
+        <Button onClick={onAddress} disabled={isAddress}>
+          {isAddress ? <span className="loading loading-spinner loading-xs" /> : <span>등록</span>}
+        </Button>
+      </div>
     </div>
   )
 }

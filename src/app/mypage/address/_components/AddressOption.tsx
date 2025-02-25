@@ -30,12 +30,13 @@ const AddressOption = (signup) => {
 
   const handleComplete = (data) => {
     setPopup(!popup)
-    handleClickDetail()
+    hideModal()
+    handleClickDetail(data.roadAddress, signup)
   }
 
-  const handleClickDetail = () => {
+  const handleClickDetail = (address, signup) => {
     showModal({
-      content: <AddressDetailModal />,
+      content: <AddressDetailModal address={address} signup={signup} />,
       useAnimation: true,
       useDimmedClickClose: true,
     })
@@ -94,38 +95,39 @@ const AddressOption = (signup) => {
         </div>
       </div>
 
-      {address?.defaultAddress ? (
-        <>
-          <Separator ignoreMobileSafe className="h-2" />
-          <div className="flex flex-row gap-2">
-            <Icon name="MapPin" size={20} />
-            <div className="flex flex-col gap-4">
-              <div className="flex gap-2">
-                <div className="content-center">{address?.defaultAddress.roadAddress}</div>
-                <Badge variant="essential">현재</Badge>
-              </div>
-              <div className="text-xs text-gray-500">
-                [지번] {address?.defaultAddress.jibunAddress}
-              </div>
-            </div>
-          </div>
-        </>
-      ) : (
-        <>
-          <Separator ignoreMobileSafe className="h-2" />
-          <button onClick={handleClickDetail}>
-            <div className="flex flex-row gap-2">
-              <Icon name="MapPin" size={20} />
-              <div className="content-center">{signup ? '대표주소 추가' : '주소 추가'}</div>
-            </div>
-          </button>
-        </>
-      )}
-
       {signup ? (
-        <></>
+        <>
+          <Separator ignoreMobileSafe className="h-2" />
+        </>
       ) : (
         <>
+          {address?.defaultAddress ? (
+            <>
+              <Separator ignoreMobileSafe className="h-2" />
+              <div className="flex flex-row gap-2">
+                <Icon name="MapPin" size={20} />
+                <div className="flex flex-col gap-4">
+                  <div className="flex gap-2">
+                    <div className="content-center">{address?.defaultAddress.roadAddress}</div>
+                    <Badge variant="essential">현재</Badge>
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    [지번] {address?.defaultAddress.jibunAddress}
+                  </div>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <Separator ignoreMobileSafe className="h-2" />
+              <button onClick={handleClickDetail}>
+                <div className="flex flex-row gap-2">
+                  <Icon name="MapPin" size={20} />
+                  <div className="content-center">{signup ? '대표주소 추가' : '주소 추가'}</div>
+                </div>
+              </button>
+            </>
+          )}
           {address?.house ? (
             <>
               <Separator ignoreMobileSafe className="h-2" />
@@ -216,7 +218,7 @@ const DeleteConfirmModal = ({ onDelete, isDeleting }) => {
   )
 }
 
-const AddressDetailModal = () => {
+const AddressDetailModal = ({ address, signup }) => {
   const { hideModal } = modalStore()
 
   return (
@@ -227,7 +229,7 @@ const AddressDetailModal = () => {
         </div>
         <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
       </div>
-      <AddressDetail />
+      <AddressDetail data={address} signup={signup} />
     </div>
   )
 }
