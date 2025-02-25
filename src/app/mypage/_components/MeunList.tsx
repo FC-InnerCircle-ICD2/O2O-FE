@@ -42,7 +42,7 @@ const MenuList = () => {
           key="address-management"
           icon={<Icon name="Building" size={24} />}
           label="주소관리"
-          href={ROUTE_PATHS.ADDRESS}
+          href={{ pathname: ROUTE_PATHS.ADDRESS, state: { signup: false } }}
         />
       )}
       {menuItems.map((item) => (

@@ -19,7 +19,7 @@ import { SignupData } from '@/models/auth'
 import Address from '@/app/mypage/address/page'
 import AddressDetail from '@/app/mypage/address/detail/page'
 
-const AddressOption = (signup) => {
+const AddressOption = ({ signup }) => {
   const [word, setWord] = useState('')
   const [popup, setPopup] = useState(false)
   const router = useRouter()
@@ -27,6 +27,8 @@ const AddressOption = (signup) => {
   const { showModal, hideModal } = modalStore()
   const { toast } = useToast()
   const { mutate: deleteAddress, isPending: isDeleting } = useDeleteAddress()
+
+  console.log('signup', signup)
 
   const handleComplete = (data) => {
     setPopup(!popup)
