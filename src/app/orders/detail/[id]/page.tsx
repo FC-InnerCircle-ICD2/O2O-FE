@@ -5,21 +5,15 @@ import OrderStatus from '@/app/orders/detail/[id]/_components/OrderStatus'
 import OrderList from '@/app/orders/detail/[id]/_components/OrderList'
 import { usePathname } from 'next/navigation'
 import useGetOrdersDetail from '@/api/useGetOrdersDetail'
-import { useEffect, useState } from 'react'
+import useGetOrderStatus from '@/api/useGetOrderStatus'
 
 const OrderDetailPage = () => {
   const path = usePathname()
   const { ordersDetail, resetGetOrdersDetail, isSuccess } = useGetOrdersDetail(
     path.split('/').pop()
   )
+  const {status} = useGetOrderStatus(path.split('/').pop())
 
-  const [status, setStatus] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (ordersDetail) {
-      setStatus(ordersDetail.status.desc)
-    }
-  }, [ordersDetail])
 
   return (
     <div className="flex flex-col gap-5">

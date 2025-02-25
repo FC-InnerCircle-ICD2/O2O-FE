@@ -1,6 +1,7 @@
 import BANNER_MOCK_DATA from '@/constants/banners'
 import STORE_MOCK_DATA from '@/constants/stores'
 import { delay, http, HttpResponse, passthrough } from 'msw'
+import { DUMMY_ORDER_LIST } from './orders'
 
 // API 엔드포인트 예시
 export const handlers = [
@@ -171,6 +172,39 @@ export const handlers = [
     return passthrough()
   }),
 
+  http.get('*/api/v1/orders/:orderId', ({ request, params }) => {
+    const orderId = decodeURIComponent(params.orderId as string)
+
+    const orderList = DUMMY_ORDER_LIST.filter((order) => order.orderId === orderId)
+    return HttpResponse.json({
+      status: 200,
+      message: 'success',
+      data: orderList.length === 1 ? orderList[0] : DUMMY_ORDER_LIST[0],
+    })
+  }),
+
+  http.get('*/api/v1/orders/:orderId/status', ({ request, params }) => {
+    const orderId = params.orderId as string
+
+    const getNextStatus = (currentStatus: string): string => {
+      switch (currentStatus) {
+        case '신규':
+          return '진행중'
+        case '진행중':
+          return '완료'
+        case '완료':
+        case '취소':
+          return currentStatus
+        default:
+          return currentStatus
+      }
+    }
+    return HttpResponse.json({
+      status: 200,
+      message: 'success',
+      data: getNextStatus(orderId),
+    })
+  }),
   // Get Menu Options
   http.get('*/api/v1/stores/:id/menus/:menuId/options', async ({ request }) => {
     return passthrough()
