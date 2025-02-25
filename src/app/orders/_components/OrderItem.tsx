@@ -6,7 +6,7 @@ import { ROUTE_PATHS } from '@/utils/routes'
 import Image from 'next/image'
 import Link from 'next/link'
 
-const OrderItem = ({ order }: OrdersList) => {
+const OrderItem = ({ order }: { order: OrdersList }) => {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-row">

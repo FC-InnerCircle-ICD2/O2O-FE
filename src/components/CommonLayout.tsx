@@ -74,6 +74,8 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   }, [accessToken])
 
   useEffect(() => {
+    // 메인 페이지 스크롤 위치 제거
+    sessionStorage.removeItem('homeScrollPosition')
     setIsMounted(true)
   }, [])
 
