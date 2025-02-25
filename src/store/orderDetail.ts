@@ -3,7 +3,7 @@ import { create } from 'zustand'
 interface OrderDetail {
   storeId: string
   storeName: string
-  menuId: string  
+  menuId: string
   imageUrl: string
   originX: number
   originY: number
@@ -20,7 +20,7 @@ export const orderDetailStore = create<OrderDetailState>((set) => ({
   showOrderDetail: (options: OrderDetail) => {
     // 현재 히스토리에 orderDetail 타입이 있는지 확인
     const hasOrderDetailInHistory = window.history.state?.type === 'orderDetail'
-    
+
     if (!hasOrderDetailInHistory) {
       window.history.replaceState({ type: 'page' }, '', window.location.pathname)
       window.history.pushState({ type: 'orderDetail' }, '', window.location.pathname)
@@ -39,7 +39,7 @@ export const orderDetailStore = create<OrderDetailState>((set) => ({
 // 브라우저 뒤로가기 이벤트 리스너
 if (typeof window !== 'undefined') {
   // 초기 페이지 state 설정
-  window.history.replaceState({ type: 'page' }, '', window.location.pathname)
+  // window.history.replaceState({ type: 'page' }, '', window.location.pathname)
 
   const handlePopState = (event: PopStateEvent) => {
     const currentState = orderDetailStore.getState()
@@ -50,4 +50,3 @@ if (typeof window !== 'undefined') {
 
   window.addEventListener('popstate', handlePopState)
 }
-

@@ -33,11 +33,11 @@ const Mypage = () => {
         </>
       ) : (
         <div className="p-mobile_safe">
-              <LoginButtonSection />
-            </div>
+          <LoginButtonSection />
+        </div>
       )}
       <MenuList />
-      <CartButton />
+      {member && <CartButton />}
     </section>
   )
 }

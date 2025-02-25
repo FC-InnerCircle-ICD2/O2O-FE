@@ -17,7 +17,7 @@ const Separator = ({ ignoreMobileSafe = false, ...props }: SeparatorType) => {
       {...props}
       className={cn(
         ignoreMobileSafe && props.orientation !== 'vertical' && 'ignore-mobile-safe',
-        props.className,
+        props.className
       )}
     />
   )
