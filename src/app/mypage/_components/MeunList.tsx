@@ -1,13 +1,15 @@
 import Icon from '@/components/Icon'
 import RippleeEffect from '@/components/RippleeEffect'
+import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
+import memberStore from '@/store/user'
 
 const menuItems = [
-  {
-    icon: <Icon name="Building" size={24} />,
-    label: '주소관리',
-    href: '',
-  },
+  // {
+  //   icon: <Icon name="Building" size={24} />,
+  //   label: '주소관리',
+  //   href: `${ROUTE_PATHS.ADDRESS}`,
+  // },
   {
     icon: <Icon name="CreditCard" size={24} />,
     label: '결제수단',
@@ -31,8 +33,18 @@ const menuItems = [
 ]
 
 const MenuList = () => {
+  const { member } = memberStore()
+
   return (
     <section className="mt-8">
+      {member && (
+        <MenuItem
+          key="address-management"
+          icon={<Icon name="Building" size={24} />}
+          label="주소관리"
+          href={ROUTE_PATHS.ADDRESS}
+        />
+      )}
       {menuItems.map((item) => (
         <MenuItem key={item.label} icon={item.icon} label={item.label} href={item.href} />
       ))}

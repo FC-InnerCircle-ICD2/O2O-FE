@@ -197,6 +197,7 @@ const OrderInfo = () => {
       orderMenus: cartsState.orderMenus.map((item) => {
         return {
           id: item.menuId,
+
           quantity: item.quantity,
           orderMenuOptionGroups: item.orderMenuOptionGroups.map((group) => ({
             id: group.id,
@@ -208,6 +209,7 @@ const OrderInfo = () => {
 
     orderPay(orderData)
   }
+
 
   const totalMenuPrice = useMemo(() => {
     if (!cartsState) return 0
