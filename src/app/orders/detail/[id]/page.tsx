@@ -1,10 +1,10 @@
 'use client'
 
-import Separator from '@/components/Separator'
-import OrderStatus from '@/app/orders/detail/[id]/_components/OrderStatus'
-import OrderList from '@/app/orders/detail/[id]/_components/OrderList'
-import { usePathname } from 'next/navigation'
 import useGetOrdersDetail from '@/api/useGetOrdersDetail'
+import OrderList from '@/app/orders/detail/[id]/_components/OrderList'
+import OrderStatus from '@/app/orders/detail/[id]/_components/OrderStatus'
+import Separator from '@/components/Separator'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const OrderDetailPage = () => {
@@ -17,9 +17,12 @@ const OrderDetailPage = () => {
 
   useEffect(() => {
     if (ordersDetail) {
+      console.log(ordersDetail.status.desc)
       setStatus(ordersDetail.status.desc)
     }
   }, [ordersDetail])
+
+  if (!ordersDetail) return <div>주문 상세 정보를 불러오는 중입니다.</div>
 
   return (
     <div className="flex flex-col gap-5">
