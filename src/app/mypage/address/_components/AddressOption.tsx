@@ -28,8 +28,6 @@ const AddressOption = ({ signup }) => {
   const { toast } = useToast()
   const { mutate: deleteAddress, isPending: isDeleting } = useDeleteAddress()
 
-  console.log('signup', signup)
-
   const handleComplete = (data) => {
     setPopup(!popup)
     hideModal()
@@ -44,7 +42,7 @@ const AddressOption = ({ signup }) => {
     })
   }
 
-  const handleDeleteAddress = (id) => {
+  const handleClickDeleteButton = (id) => {
     deleteAddress(id, {
       onSuccess: () => {
         toast({
@@ -61,14 +59,6 @@ const AddressOption = ({ signup }) => {
           position: 'center',
         })
       },
-    })
-  }
-
-  const handleClickDeleteButton = (id) => {
-    showModal({
-      content: <DeleteConfirmModal onDelete={handleDeleteAddress(id)} isDeleting={isDeleting} />,
-      useAnimation: true,
-      useDimmedClickClose: true,
     })
   }
 
@@ -92,7 +82,7 @@ const AddressOption = ({ signup }) => {
       </div>
       <div className="flex flex-row justify-center gap-2">
         <Icon name="LocateFixed" size={20} />
-        <div className="content-center" onClick={handleClickDetail}>
+        <div className="content-center" onClick={() => handleClickDetail}>
           현재 위치로 주소 찾기
         </div>
       </div>
@@ -122,7 +112,7 @@ const AddressOption = ({ signup }) => {
           ) : (
             <>
               <Separator ignoreMobileSafe className="h-2" />
-              <button onClick={handleClickDetail}>
+              <button onClick={() => handleClickDetail}>
                 <div className="flex flex-row gap-2">
                   <Icon name="MapPin" size={20} />
                   <div className="content-center">{signup ? '대표주소 추가' : '주소 추가'}</div>
@@ -140,7 +130,7 @@ const AddressOption = ({ signup }) => {
                       <Icon name="Home" size={20} />
                       <div className="content-center">집</div>
                     </div>
-                    <button onClick={handleClickDeleteButton(address?.house.id)}>
+                    <button onClick={() => handleClickDeleteButton(address?.house.id)}>
                       <Icon className="text-gray-500" name="X" size={14} />
                     </button>
                   </div>
@@ -170,10 +160,16 @@ const AddressOption = ({ signup }) => {
               <Separator ignoreMobileSafe className="h-2" />
               <Link href={ROUTE_PATHS.HOME}>
                 <div className="flex flex-col gap-2">
-                  <div className="flex flex-row gap-2">
-                    <Icon name="Home" size={20} />
-                    <div className="content-center">집</div>
+                  <div className="flex flex-row justify-between">
+                    <div className="flex flex-row gap-2">
+                      <Icon name="Briefcase" size={20} />
+                      <div className="content-center">회사</div>
+                    </div>
+                    <button onClick={() => handleClickDeleteButton(address?.company.id)}>
+                      <Icon className="text-gray-500" name="X" size={14} />
+                    </button>
                   </div>
+
                   <div className="ml-7 text-xs text-gray-500">
                     {address.company.roadAddress} {address.company.detailAddress}
                   </div>
@@ -198,24 +194,6 @@ const AddressOption = ({ signup }) => {
           )}
         </>
       )}
-    </div>
-  )
-}
-
-const DeleteConfirmModal = ({ onDelete, isDeleting }) => {
-  const { hideModal } = modalStore()
-
-  return (
-    <div className="absolute left-1/2 top-1/2 w-4/5 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-7">
-      <div className="mb-4 text-center leading-tight">주소를 삭제하시겠습니까?</div>
-      <div className="flex gap-2">
-        <Button variant="primaryFit" onClick={hideModal}>
-          아니요
-        </Button>
-        <Button onClick={onDelete} disabled={isDeleting}>
-          {isDeleting ? <span className="loading loading-spinner loading-xs" /> : <span>삭제</span>}
-        </Button>
-      </div>
     </div>
   )
 }

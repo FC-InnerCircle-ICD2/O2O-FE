@@ -18,6 +18,10 @@ const AddressDetail = ({ data, signup }) => {
     setLat(lat)
   }
 
+  if (typeof data !== 'string') {
+    data = ''
+  }
+
   return (
     <div className="flex flex-col gap-4 pb-5 pt-5">
       <KakaoMap onAddressChange={handleAddressChange} data={data} />

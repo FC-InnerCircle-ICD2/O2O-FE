@@ -3,7 +3,9 @@
 import AddressOption from './_components/AddressOption'
 
 const Address = (signup) => {
-  console.log('signupPP', signup) // todo: 회원가입 아닐 시 singup 변수 못 가져옴
+  if (signup.signup !== true) {
+    signup = false
+  }
   return <AddressOption signup={signup} />
 }
 
