@@ -5,8 +5,10 @@ import usePostReview from '@/api/usePostReview'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import { useToast } from '@/hooks/useToast'
+import { cn } from '@/lib/utils'
 import { modalStore } from '@/store/modal'
 import Image from 'next/image'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface ReviewEditorModalProps {
@@ -58,7 +60,6 @@ const ReviewEditorModal = ({
   const quantityScore = watch('quantityScore')
   const content = watch('content')
   const deliveryQuality = watch('deliveryQuality')
-
   const imagePreview = watch('imagePreview')
 
   const isFormValid =
@@ -67,7 +68,18 @@ const ReviewEditorModal = ({
     quantityScore > 0 &&
     content.length >= 5 &&
     (deliveryQuality === 'GOOD' || deliveryQuality === 'BAD')
+  const [isContentValid, setIsContentValid] = useState(true)
 
+  const handleBlurContent = () => {
+    if (content.length < 5) {
+      setIsContentValid(false)
+    } else {
+      setIsContentValid(true)
+    }
+  }
+  const handleFocusContent = () => {
+    setIsContentValid(true)
+  }
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -185,8 +197,20 @@ const ReviewEditorModal = ({
             })}
             maxLength={1000}
             rows={4}
+            onBlur={handleBlurContent}
+            onFocus={handleFocusContent}
           />
-          <div className="mt-0.5 text-right text-sm text-gray-400">{content.length}/1000</div>
+          <div
+            className={cn(
+              'mt-0.5 flex items-center text-sm text-gray-400',
+              !isContentValid ? 'justify-between' : 'justify-end'
+            )}
+          >
+            {!isContentValid && (
+              <span className="ml-1 text-red-500">최소 5자 이상 작성해주세요.</span>
+            )}
+            <span>{content.length}/1000</span>
+          </div>
         </div>
         <div className="mb-10">
           <div className="mb-2 text-sm font-bold">사진 등록하기 (선택)</div>
