@@ -51,7 +51,7 @@ const ReviewEditorModal = ({
       content: prevData?.clientReviewContent || '',
       deliveryQuality: prevData?.deliveryQuality || '',
       image: null,
-      imagePreview: prevData?.representativeImageUri || null,
+      imagePreview: prevData?.representativeImageUri + `?v=${Date.now()}` || null,
       isImageChanged: false,
     },
   })

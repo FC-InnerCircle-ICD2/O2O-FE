@@ -143,7 +143,7 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
         {!representativeImageErrors[review.reviewId] && review.representativeImageUri && (
           <Image
             className="aspect-video w-full rounded-sm object-cover"
-            src={review.representativeImageUri}
+            src={review.representativeImageUri + `?v=${Date.now()}`}
             alt="리뷰 사진"
             width={359}
             height={202}
