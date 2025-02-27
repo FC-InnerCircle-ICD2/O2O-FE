@@ -23,7 +23,7 @@ const MenuItem = ({ menu, onIncrease, onDecrease, onRemove }: MenuItemProps) => 
   }
 
   return (
-    <div className="flex flex-col gap-2 px-3">
+    <div className="flex flex-col gap-2">
       <div className="flex flex-row justify-between">
         <div className="flex flex-row gap-3">
           {menu.imageUrl ? (

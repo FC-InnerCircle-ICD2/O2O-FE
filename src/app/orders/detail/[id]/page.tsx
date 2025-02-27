@@ -17,7 +17,6 @@ const OrderDetailPage = () => {
 
   useEffect(() => {
     if (ordersDetail) {
-      console.log(ordersDetail.status.desc)
       setStatus(ordersDetail.status.desc)
     }
   }, [ordersDetail])
