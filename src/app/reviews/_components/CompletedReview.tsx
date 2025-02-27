@@ -53,8 +53,6 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
   const handleClickDeleteButton = () => {
     showModal({
       content: <DeleteConfirmModal onDelete={handleDeleteReview} isDeleting={isDeleting} />,
-      useAnimation: true,
-      useDimmedClickClose: true,
     })
   }
 
