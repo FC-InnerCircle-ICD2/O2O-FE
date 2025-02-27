@@ -1,14 +1,31 @@
-import { OrdersList } from '@/api/useGetOrders'
 import Badge from '@/components/Badge'
 import { Button } from '@/components/button'
 import { Skeleton } from '@/components/shadcn/skeleton'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { OrdersList } from './Order'
 
-const OrderItem = ({ order }: { order: OrdersList }) => {
+const OrderItem = ({
+  order,
+  onBeforeNavigate,
+}: {
+  order: OrdersList
+  onBeforeNavigate?: () => void
+}) => {
+  const router = useRouter()
+
+  const handleNavigate = () => {
+    if (onBeforeNavigate) {
+      onBeforeNavigate()
+    }
+
+    router.push(`${ROUTE_PATHS.ORDERS_DETAIL}/${order.orderId}`)
+  }
+
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 px-mobile_safe">
       <div className="flex flex-row">
         {order.imageThumbnail ? (
           <Image
@@ -36,11 +53,11 @@ const OrderItem = ({ order }: { order: OrdersList }) => {
         </div>
       </div>
       <div className="flex flex-row gap-3">
-        <Link className="w-full" href={`${ROUTE_PATHS.ORDERS_DETAIL}/${order.orderId}`}>
-          <Button size="s" className="h-10">
+        <div className="w-full">
+          <Button size="s" className="h-10" onClick={handleNavigate}>
             주문 상세
           </Button>
-        </Link>
+        </div>
         {order.status.code === 'S5' && (
           <Link className="w-full" href={ROUTE_PATHS.REVIEW}>
             <Button variant="grayFit" size="s" className="h-10">
