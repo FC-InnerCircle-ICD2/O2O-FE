@@ -148,91 +148,102 @@ const ReviewEditorModal = ({
   }
 
   return (
-    <div className="size-full bg-white p-mobile_safe">
+    <div className="flex size-full flex-col bg-white p-mobile_safe">
       <div className="relative mb-3 mt-6 flex items-center gap-3">
         <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
         <div className="font-bold">{storeName}</div>
       </div>
-      <div className="mb-1 text-lg font-bold">이 가게를 추천하시겠어요?</div>
-      <div className="mb-4 text-sm">{orderSummary}</div>
 
-      <RatingInput
-        value={watch('totalScore')}
-        onChange={(value) => setValue('totalScore', value)}
-        size={40}
-      />
-      <div className="ml-1.5">
+      <div className="grow overflow-y-auto">
+        <div className="mb-1 text-lg font-bold">이 가게를 추천하시겠어요?</div>
+        <div className="mb-4 text-sm">{orderSummary}</div>
+
         <RatingInput
-          label="맛"
-          value={watch('tasteScore')}
-          onChange={(value) => setValue('tasteScore', value)}
+          value={watch('totalScore')}
+          onChange={(value) => setValue('totalScore', value)}
+          size={40}
         />
-        <RatingInput
-          label="양"
-          value={watch('quantityScore')}
-          onChange={(value) => setValue('quantityScore', value)}
-        />
-      </div>
-      <div className="mb-4">
-        <textarea
-          className="w-full rounded-lg border border-gray-300 p-2 leading-tight"
-          placeholder="최소 5자 이상 작성해야 등록이 가능해요."
-          {...register('content', {
-            required: true,
-            minLength: 5,
-          })}
-          maxLength={1000}
-          rows={4}
-        />
-        <div className="mt-0.5 text-right text-sm text-gray-400">{content.length}/1000</div>
-      </div>
-      <div className="mb-10">
-        <div className="mb-2 text-sm font-bold">사진 등록하기 (선택)</div>
-        <div className="flex gap-2">
-          {!imagePreview ? (
-            <label className="flex size-16 cursor-pointer items-center justify-center rounded-lg border border-solid border-gray-400 p-2">
-              <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-              <Icon name="Camera" size={24} />
-            </label>
-          ) : (
-            <div className="relative size-16">
-              <Image
-                src={imagePreview}
-                alt="리뷰 이미지"
-                className="size-16 rounded-lg object-cover"
-                width={64}
-                height={64}
-              />
-              <button
-                onClick={handleImageDelete}
-                className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-gray-800 text-white"
-              >
-                <Icon name="X" size={16} />
-              </button>
+        <div className="ml-1.5">
+          <RatingInput
+            label="맛"
+            value={watch('tasteScore')}
+            onChange={(value) => setValue('tasteScore', value)}
+          />
+          <RatingInput
+            label="양"
+            value={watch('quantityScore')}
+            onChange={(value) => setValue('quantityScore', value)}
+          />
+        </div>
+        <div className="mb-4">
+          <textarea
+            className="w-full rounded-lg border border-gray-300 p-2 leading-tight"
+            placeholder="최소 5자 이상 작성해야 등록이 가능해요."
+            {...register('content', {
+              required: true,
+              minLength: 5,
+            })}
+            maxLength={1000}
+            rows={4}
+          />
+          <div className="mt-0.5 text-right text-sm text-gray-400">{content.length}/1000</div>
+        </div>
+        <div className="mb-10">
+          <div className="mb-2 text-sm font-bold">사진 등록하기 (선택)</div>
+          <div className="flex gap-2">
+            {!imagePreview ? (
+              <label className="flex size-16 cursor-pointer items-center justify-center rounded-lg border border-solid border-gray-400 p-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                />
+                <Icon name="Camera" size={24} />
+              </label>
+            ) : (
+              <div className="relative size-16">
+                <Image
+                  src={imagePreview}
+                  alt="리뷰 이미지"
+                  className="size-16 rounded-lg object-cover"
+                  width={64}
+                  height={64}
+                />
+                <button
+                  onClick={handleImageDelete}
+                  className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-gray-800 text-white"
+                >
+                  <Icon name="X" size={16} />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="mb-7">
+          <div className="mb-2 text-lg font-bold">배달은 어떠셨어요?</div>
+          <div className="flex gap-2">
+            <div
+              className={`rounded-full border border-solid border-gray-400 p-2.5 ${watch('deliveryQuality') === 'GOOD' ? 'bg-primary text-white' : ''}`}
+              onClick={() => setValue('deliveryQuality', 'GOOD')}
+            >
+              좋아요
             </div>
-          )}
-        </div>
-      </div>
-      <div className="mb-7">
-        <div className="mb-2 text-lg font-bold">배달은 어떠셨어요?</div>
-        <div className="flex gap-2">
-          <div
-            className={`rounded-full border border-solid border-gray-400 p-2.5 ${watch('deliveryQuality') === 'GOOD' ? 'bg-primary text-white' : ''}`}
-            onClick={() => setValue('deliveryQuality', 'GOOD')}
-          >
-            좋아요
-          </div>
-          <div
-            className={`rounded-full border border-solid border-gray-400 p-2.5 ${watch('deliveryQuality') === 'BAD' ? 'bg-primary text-white' : ''}`}
-            onClick={() => setValue('deliveryQuality', 'BAD')}
-          >
-            아쉬워요
+            <div
+              className={`rounded-full border border-solid border-gray-400 p-2.5 ${watch('deliveryQuality') === 'BAD' ? 'bg-primary text-white' : ''}`}
+              onClick={() => setValue('deliveryQuality', 'BAD')}
+            >
+              아쉬워요
+            </div>
           </div>
         </div>
       </div>
-      <Button onClick={handleSubmit(onSubmit)} disabled={!isFormValid}>
-        리뷰 등록하기
-      </Button>
+
+      <div className="bg-white pt-2">
+        <Button onClick={handleSubmit(onSubmit)} disabled={!isFormValid}>
+          리뷰 등록하기
+        </Button>
+      </div>
     </div>
   )
 }
