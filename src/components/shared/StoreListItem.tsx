@@ -9,13 +9,17 @@ import Dot from '../Dot'
 import Icon from '../Icon'
 interface StoreListItemProps {
   store: Store
+  onBeforeNavigate?: () => void
 }
 
-const StoreListItem = ({ store }: StoreListItemProps) => {
+const StoreListItem = ({ store, onBeforeNavigate }: StoreListItemProps) => {
   const [isImageLoading, setIsImageLoading] = useState(true)
   const router = useRouter()
 
   const handleClick = () => {
+    if (onBeforeNavigate) {
+      onBeforeNavigate()
+    }
     router.push(`${ROUTE_PATHS.STORE_DETAIL}/${store.id}`)
   }
 

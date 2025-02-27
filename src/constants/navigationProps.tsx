@@ -82,7 +82,7 @@ export const getNavigationProps = (pathname: string): NavigationProps => {
     '/detail'
   )
 
-  return NAVIGATION_PROPS[normalizedPath] || NAVIGATION_PROPS[ROUTE_PATHS.HOME]
+  return NAVIGATION_PROPS[normalizedPath] || null
 }
 
 export default NAVIGATION_PROPS

@@ -33,10 +33,18 @@ const Home = () => {
 
   return (
     <PullToRefresh onRefresh={handleRefresh} scrollRef={scrollRef}>
-      <div ref={scrollRef} className="flex flex-col gap-[26px] pb-4 pt-9">
+      <div
+        ref={scrollRef}
+        className="flex h-[calc(100dvh-40px-85px)] flex-col gap-1 overflow-auto pb-4 pt-9"
+      >
         <CategoryDrawer />
         <BannerSlide />
-        <HomeStoreList data={data} isLoading={isFetching} hasNextPage={hasNextPage} />
+        <HomeStoreList
+          data={data}
+          isLoading={isFetching}
+          hasNextPage={hasNextPage}
+          parentRef={scrollRef}
+        />
         <div ref={targetRef} />
       </div>
       {member && <CartButton />}
