@@ -1,8 +1,8 @@
 'use client'
 
 import { OrderPayType } from '@/api/usePostOrderPay'
-import PayLogo from '@/assets/images/Pay200_logo.png'
-import Toss from '@/assets/images/Toss_Logo.png'
+import PayLogo from '@/assets/images/pay200_log_img.png'
+import Toss from '@/assets/images/toss_logo_img.png'
 import Separator from '@/components/Separator'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
