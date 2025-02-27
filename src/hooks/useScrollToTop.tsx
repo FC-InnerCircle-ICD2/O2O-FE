@@ -5,7 +5,10 @@ interface ScrollToTopProps {
   callBack?: () => void
 }
 
-export const useScrollToTop = <T extends HTMLElement>({ dependencies, callBack }: ScrollToTopProps) => {
+export const useScrollToTop = <T extends HTMLElement>({
+  dependencies,
+  callBack,
+}: ScrollToTopProps) => {
   const topRef = useRef<T>(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
 
@@ -29,7 +32,7 @@ export const useScrollToTop = <T extends HTMLElement>({ dependencies, callBack }
         // viewport 상단 근처에서 관찰
         rootMargin: '0px',
         threshold: 1,
-      },
+      }
     )
 
     if (topRef.current) {
@@ -41,7 +44,7 @@ export const useScrollToTop = <T extends HTMLElement>({ dependencies, callBack }
     }
   }, [dependencies])
 
-  const scrollToTop = () => {    
+  const scrollToTop = () => {
     if (callBack) {
       callBack()
     } else if (topRef.current) {

@@ -32,7 +32,7 @@ const StoreHeader = ({
 }: StoreHeaderProps) => {
   const router = useRouter()
   const { hideOrderDetail } = orderDetailStore()
-  const { data: favorites, isSuccess: isFavoritesSuccess } = useGetFavorites()
+  const { data: favorites } = useGetFavorites()
   const { postFavorites, deleteFavorites } = usePostFavorites()
   const { setValue } = useLocalStorage<string[]>('recentStore', [])
   const { storedValue: accessToken } = useLocalStorage('accessToken')
@@ -114,9 +114,16 @@ const StoreHeader = ({
   }
 
   useEffect(() => {
-    if (isFavoritesSuccess) {
-      const recentStores = JSON.parse(localStorage.getItem('recentStore') || '[]')
+    if (!storeId) return
+    const accessToken = localStorage.getItem('accessToken')
+    const recentStores = JSON.parse(localStorage.getItem('recentStore') || '[]')
 
+    if (!accessToken) {
+      const filteredStores = recentStores.filter((id: string) => id !== storeId)
+      // 현재 storeId를 배열 맨 앞에 추가
+      setValue([storeId, ...filteredStores].slice(0, 10))
+      return
+    } else if (favorites) {
       if (!favorites?.some((favorite) => favorite.id === storeId)) {
         // 현재 storeId를 제외한 기존 배열 생성
         const filteredStores = recentStores.filter((id: string) => id !== storeId)
@@ -124,7 +131,7 @@ const StoreHeader = ({
         setValue([storeId, ...filteredStores].slice(0, 10))
       }
     }
-  }, [isFavoritesSuccess])
+  }, [favorites])
 
   return (
     <div
@@ -143,10 +150,9 @@ const StoreHeader = ({
             if (isOrderDetail) {
               hideOrderDetail()
             } else {
-              const currentDomain = window.location.origin
-              const isPreviousPageSameDomain = document.referrer.startsWith(currentDomain)
+              const previousPath = sessionStorage.getItem('previousPath')
 
-              if (window.history.length > 1 && isPreviousPageSameDomain) {
+              if (previousPath) {
                 router.back()
               } else {
                 router.push(ROUTE_PATHS.HOME)
@@ -191,7 +197,7 @@ const StoreHeader = ({
             <Icon
               className={cn(
                 favorites?.some((favorite) => favorite.id === storeId) &&
-                'fill-red-500 text-red-500'
+                  'fill-red-500 text-red-500'
               )}
               name="Heart"
               size={20}

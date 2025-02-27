@@ -17,7 +17,7 @@ const menuItems = [
   {
     icon: <Icon name="MessageSquareMore" size={20} />,
     label: '리뷰관리',
-    href: '/review',
+    href: '/reviews',
   },
 ]
 

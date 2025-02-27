@@ -4,10 +4,18 @@
     "**/.pnp.*": true
   },
   "eslint.nodePath": ".yarn/sdks",
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs",
   "typescript.tsdk": ".yarn/sdks/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsdk": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "prettier.requireConfig": true,
+  "prettier.useEditorConfig": false,
+  "javascript.format.enable": false,
+  "typescript.format.enable": false,
   "editor.formatOnSaveTimeout": 1500,
   "[typescript]": {
     "editor.formatOnSave": true,
@@ -22,12 +30,6 @@
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
   "editor.formatOnSaveMode": "modifications",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
-    "source.organizeImports": "explicit"
-  },
-  "prettier.requireConfig": true,
-  "prettier.prettierPath": ".yarn/sdks/prettier/index.cjs",
   "tailwindCSS.validate": false,
   "files.watcherExclude": {
     "**/node_modules/**": true,

@@ -51,8 +51,8 @@ const CategoryDrawer = () => {
   return (
     <div
       className={cn(
-        'grid grid-cols-5 grid-rows-[66px] gap-y-[10px] overflow-hidden px-mobile_safe transition-all duration-300 ease-in-out',
-        !more ? 'max-h-[152px]' : 'max-h-[370px]',
+        'grid shrink-0 grid-cols-5 grid-rows-[66px] gap-y-[10px] overflow-hidden px-mobile_safe transition-all duration-300 ease-in-out',
+        !more ? 'max-h-[152px]' : 'max-h-[370px]'
       )}
     >
       {categoryList.map((cat) => (

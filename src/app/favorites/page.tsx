@@ -1,4 +1,4 @@
-import Favorites from "./_components/Favorites"
+import Favorites from './_components/Favorites'
 
 const FavoritesPage = () => {
   return <Favorites />

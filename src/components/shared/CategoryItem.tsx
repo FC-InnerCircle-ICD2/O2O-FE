@@ -24,7 +24,7 @@ const CategoryItem = ({
     <div
       className={cn(
         'relative flex min-w-[58px] flex-col items-center',
-        isActive && isBorder && 'border-b-[2px] border-solid border-primary',
+        isActive && isBorder && 'border-b-[2px] border-solid border-primary'
       )}
       onClick={onClick}
       data-active={isActive}
@@ -45,7 +45,7 @@ const CategoryItem = ({
         <AnimatePresence mode="wait">
           {!isHide && (
             <motion.div
-              className='z-10 relative'
+              className="relative z-10"
               initial={{ opacity: 0, y: -5 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
@@ -67,7 +67,7 @@ const CategoryItem = ({
       <p
         className={cn(
           'pb-1 text-xs',
-          isActive ? 'font-bold text-primary' : 'font-medium text-black',
+          isActive ? 'font-bold text-primary' : 'font-medium text-black'
         )}
       >
         {category.name}

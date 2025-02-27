@@ -18,7 +18,7 @@ const SplashPage = () => {
           </p>
         </div>
       </div>
-      <div className="pb-[40px]">
+      <div className="pb-detail_header">
         <Link href={ROUTE_PATHS.HOME}>
           <button className="h-bottom_navigation w-full rounded-[6px] bg-primary text-white">
             시작하기

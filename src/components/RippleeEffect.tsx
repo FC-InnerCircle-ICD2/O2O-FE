@@ -20,7 +20,7 @@ const RippleeEffect = ({
   const rippleRef = useRef<HTMLDivElement>(null)
 
   const handleRipplee = (
-    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
+    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>
   ) => {
     // 클릭한 위치의 좌표 가져오기
     const { clientX, clientY } = 'touches' in e ? e.touches[0] : e

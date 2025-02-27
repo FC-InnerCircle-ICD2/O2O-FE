@@ -65,6 +65,14 @@ const NAVIGATION_PROPS: Record<string, NavigationProps> = {
     hasBackButton: true,
     redirectPath: ROUTE_PATHS.ORDERS,
   },
+  [ROUTE_PATHS.ADDRESS]: {
+    title: '주소 설정',
+    hasBackButton: true,
+  },
+  [ROUTE_PATHS.ADDRESS_DETAIL]: {
+    title: '주소 상세 정보 입력',
+    hasBackButton: true,
+  },
 }
 
 export const getNavigationProps = (pathname: string): NavigationProps => {
@@ -74,7 +82,7 @@ export const getNavigationProps = (pathname: string): NavigationProps => {
     '/detail'
   )
 
-  return NAVIGATION_PROPS[normalizedPath] || NAVIGATION_PROPS[ROUTE_PATHS.HOME]
+  return NAVIGATION_PROPS[normalizedPath] || null
 }
 
 export default NAVIGATION_PROPS

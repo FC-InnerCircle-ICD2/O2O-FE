@@ -7,6 +7,7 @@ import { OrderType } from '@/models/orderType'
 import { Store } from '@/models/store'
 import { useGeoLocationStore } from '@/store/geoLocation'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
+import memberStore from '@/store/user'
 import { useEffect, useRef, useState } from 'react'
 import CategorySlide from './CategorySlide'
 import HomeSearchFoodList from './HomeSearchFoodList'
@@ -15,6 +16,7 @@ const HomeList = () => {
   const { coordinates: location } = useGeoLocationStore()
   const { category, order } = useFoodSearchFilterStore()
   const [isCategoryHide, setIsCategoryHide] = useState(false)
+  const { member } = memberStore()
   const { data, isFetching, targetRef, refetch, hasNextPage } = useInfiniteScroll<
     Store,
     { category: string; order: OrderType }
@@ -53,7 +55,7 @@ const HomeList = () => {
 
   return (
     <PullToRefresh onRefresh={handleRefresh} scrollRef={scrollRef}>
-      <div className="flex h-full flex-col gap-4 py-4">
+      <div className="flex h-[calc(100dvh-40px-85px)] flex-col gap-4 overflow-auto pt-4">
         <CategorySlide isHide={isCategoryHide} />
         <HomeSearchFoodList
           data={data}
@@ -63,7 +65,7 @@ const HomeList = () => {
           scrollRef={scrollRef}
         />
       </div>
-      <CartButton />
+      {member && <CartButton />}
     </PullToRefresh>
   )
 }

@@ -1,6 +1,8 @@
 import {
   Bike,
+  Briefcase,
   Building,
+  Camera,
   Check,
   ChevronDown,
   ChevronLeft,
@@ -15,6 +17,7 @@ import {
   House,
   Link,
   Loader,
+  LocateFixed,
   MapPin,
   Megaphone,
   MessageCircleQuestion,
@@ -32,6 +35,7 @@ import {
   User,
   UtensilsCrossed,
   X,
+  Home,
 } from 'lucide-react'
 import { HTMLAttributes } from 'react'
 
@@ -68,6 +72,10 @@ const ICONS = {
   MapPin,
   Plus,
   UtensilsCrossed,
+  LocateFixed,
+  Home,
+  Briefcase,
+  Camera,
   ShoppingCart,
 } as const
 

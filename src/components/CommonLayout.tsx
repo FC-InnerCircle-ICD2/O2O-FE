@@ -74,6 +74,8 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   }, [accessToken])
 
   useEffect(() => {
+    // 메인 페이지 스크롤 위치 제거
+    sessionStorage.removeItem('homeScrollPosition')
     setIsMounted(true)
   }, [])
 
@@ -150,19 +152,19 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
 
           const address = roadAddr
             ? {
-              roadAddress: roadAddr.address_name,
-              jibunAddress: jibunAddr.address_name,
-              sido: roadAddr.region_1depth_name,
-              sigungu: roadAddr.region_2depth_name,
-              addressName: roadAddr.address_name,
-            }
+                roadAddress: roadAddr.address_name,
+                jibunAddress: jibunAddr.address_name,
+                sido: roadAddr.region_1depth_name,
+                sigungu: roadAddr.region_2depth_name,
+                addressName: roadAddr.address_name,
+              }
             : {
-              roadAddress: jibunAddr.address_name,
-              jibunAddress: jibunAddr.address_name,
-              sido: jibunAddr.region_1depth_name,
-              sigungu: jibunAddr.region_2depth_name,
-              addressName: jibunAddr.address_name,
-            }
+                roadAddress: jibunAddr.address_name,
+                jibunAddress: jibunAddr.address_name,
+                sido: jibunAddr.region_1depth_name,
+                sigungu: jibunAddr.region_2depth_name,
+                addressName: jibunAddr.address_name,
+              }
           setAddress(address)
         }
       }

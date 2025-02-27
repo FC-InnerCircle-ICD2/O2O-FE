@@ -1,16 +1,17 @@
 'use client'
 
 import useGetOrders from '@/api/useGetOrders'
-import OrderItem from '@/app/orders/_components/OrderItem'
-import OrderSearch from '@/app/orders/_components/OrderSearch'
 import CartButton from '@/components/CartButton'
 import Separator from '@/components/Separator'
+import LoginButtonSection from '@/components/shared/LoginButtonSection'
+import memberStore from '@/store/user'
 import React, { useCallback, useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
-
+import OrderItem from './OrderItem'
+import OrderSearch from './OrderSearch'
 const Order = () => {
   const [searchValue, setSearchValue] = useState<string>('')
   const { orders } = useGetOrders(searchValue)
+  const { member } = memberStore()
 
   const handelSearch = useCallback((value: string) => {
     setSearchValue(value)
@@ -18,20 +19,32 @@ const Order = () => {
 
   return (
     <>
-      <div className="flex flex-col gap-10 pt-5">
-        <div className="px-mobile_safe">
-          <OrderSearch onSearch={handelSearch} />
+      {!member ? (
+        <div className="px-mobile_safe pb-4 pt-[calc(20px+1rem)]">
+          <LoginButtonSection
+            text={`주문 내역을 확인하려면 로그인이 필요해요.\n 지금 가입하고 행복에 가까워지세요!`}
+          />
         </div>
-        <div className="mb-10 flex flex-1 flex-col gap-10 overflow-y-auto px-mobile_safe">
-          {orders?.content.map((order) => (
-            <React.Fragment key={uuidv4()}>
-              <OrderItem order={order} />
-              <Separator ignoreMobileSafe className="h-2" />
-            </React.Fragment>
-          ))}
-        </div>
-      </div>
-      <CartButton />
+      ) : (
+        <>
+          <div className="flex flex-col gap-10 pt-5">
+            <div className="px-mobile_safe">
+              <OrderSearch onSearch={handelSearch} />
+            </div>
+            <div className="mb-10 flex flex-1 flex-col gap-7 overflow-y-auto px-mobile_safe">
+              {orders?.content.map((order, index) => (
+                <React.Fragment key={order.orderId}>
+                  <OrderItem order={order} />
+                  {index !== orders?.content.length - 1 && (
+                    <Separator ignoreMobileSafe className="h-2" />
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+          {member && <CartButton />}
+        </>
+      )}
     </>
   )
 }

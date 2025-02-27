@@ -3,24 +3,22 @@ import { api } from '@/lib/api'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 export interface Orders {
-  content: []
+  content: OrdersList[]
 }
 
 export interface OrdersList {
-  order: {
-    storeId: string
-    storeName: string
-    orderId: string
-    status: {
-      code: string
-      desc: string
-    }
-    orderTime: string
-    orderSummary: string
-    deliveryCompleteTime: string | null
-    imageThumbnail: string
-    paymentPrice: number
+  storeId: string
+  storeName: string
+  orderId: string
+  status: {
+    code: string
+    desc: string
   }
+  orderTime: string
+  orderSummary: string
+  deliveryCompleteTime: string | null
+  imageThumbnail: string
+  paymentPrice: number
 }
 
 const useGetOrders = (searchParams?: string) => {

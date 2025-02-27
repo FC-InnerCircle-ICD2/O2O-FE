@@ -57,7 +57,7 @@ const RealTimeSearchItem = ({
             }}
             className="flex w-full items-center justify-between"
           >
-            <span>{currentSearch.keyword}</span>
+            <span className="max-w-[110px] truncate">{currentSearch.keyword}</span>
             <RankChangeIcon rankChange={currentSearch.rankChange} />
           </motion.div>
         </AnimatePresence>
