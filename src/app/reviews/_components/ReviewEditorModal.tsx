@@ -144,7 +144,6 @@ const ReviewEditorModal = ({
           },
         }
       )
-      console.log('🚀  data.image:', data.image)
     }
   }
 
