@@ -11,7 +11,7 @@ declare global {
   }
 }
 
-const KakaoMap = ({ onAddressChange }) => {
+const KakaoMap = ({ onAddressChange, data }) => {
   const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_APP_KEY
   const [position, setPosition] = useState<{ lat: number; lng: number }>()
   const [address, setAddress] = useState('')
@@ -28,9 +28,9 @@ const KakaoMap = ({ onAddressChange }) => {
   useEffect(() => {
     if (isMapLoading || isLoading || !coordinates) return
 
-    if (searchParams.get('addr')?.toString() != null) {
+    if (data != '') {
       const geocoder = new window.kakao.maps.services.Geocoder()
-      geocoder.addressSearch(searchParams.get('addr')?.toString(), (result, status) => {
+      geocoder.addressSearch(data, (result, status) => {
         setLng(result[0].x)
         setLat(result[0].y)
         setAddress(result[0].address.address_name)
@@ -43,7 +43,6 @@ const KakaoMap = ({ onAddressChange }) => {
         )
       })
     } else {
-      // 기본 좌표로 주소 변환 후 작업
       const geocoder = new window.kakao.maps.services.Geocoder()
       geocoder.coord2Address(coordinates?.longitude, coordinates?.latitude, (result, status) => {
         const addr = result[0]
