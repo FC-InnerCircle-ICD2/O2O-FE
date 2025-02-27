@@ -105,13 +105,13 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
               setIsLoading(false)
             },
             (error) => {
-              console.error('위치 정보 에러:', error)
+              console.log('위치 정보 에러:', error)
               setError('위치 정보를 가져오는데 실패했습니다.')
             }
           )
         }
       } catch (error) {
-        console.error('위치 정보 권한 확인 에러:', error)
+        console.log('위치 정보 권한 확인 에러:', error)
         setError('위치 정보 권한을 확인하는데 실패했습니다.')
       }
     }

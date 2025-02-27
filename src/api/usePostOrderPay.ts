@@ -1,6 +1,11 @@
 import { api } from '@/lib/api'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
+export enum OrderPayType {
+  TOSS = 'TOSS',
+  PAY200 = 'PAY200',
+}
+
 export interface OrderPay {
   storeId: string // 가게ID
   roadAddress: string // 주문시점의 도로명주소
@@ -8,7 +13,7 @@ export interface OrderPay {
   detailAddress: string // 주문시점의 상세주소
   excludingSpoonAndFork: boolean // 스푼과 포크 제외 여부
   orderType: 'DELIVERY' | 'PACKING' // 주문타입
-  paymentType: 'TOSS_PAY' | 'KAKAO_PAY' // 결제타입
+  paymentType: OrderPayType // 결제타입
   orderMenus: {
     id: string // 주문할 메뉴ID
     quantity: number // 주문할 메뉴 구매수량

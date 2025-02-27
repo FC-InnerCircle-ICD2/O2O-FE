@@ -4,7 +4,7 @@ import useDeleteCart from '@/api/useDeleteCarts'
 import useGetCarts from '@/api/useGetCarts'
 import useGetStoreDetail from '@/api/useGetStoreDetail'
 import usePatchCarts from '@/api/usePatchCarts'
-import usePostOrderPay, { OrderPay } from '@/api/usePostOrderPay'
+import usePostOrderPay, { OrderPay, OrderPayResponse, OrderPayType } from '@/api/usePostOrderPay'
 import usePostPayment from '@/api/usePostPayment'
 import MenuItem from '@/app/pay/_components/MenuItem'
 import Alert from '@/components/Alert'
@@ -14,32 +14,42 @@ import Icon from '@/components/Icon'
 import Separator from '@/components/Separator'
 import { Checkbox } from '@/components/shadcn/checkbox'
 import { Label } from '@/components/shadcn/label'
+import useBottomSheet from '@/hooks/useBottomSheet'
+import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
 import { modalStore } from '@/store/modal'
+import { successPaymentStore } from '@/store/successPayment'
 import memberStore from '@/store/user'
 import { ROUTE_PATHS } from '@/utils/routes'
+import { pay200SDK } from '@pay200/sdk'
 import { useQueryClient } from '@tanstack/react-query'
+import { ANONYMOUS, loadTossPayments } from '@tosspayments/tosspayments-sdk'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
+import OrderPayBottomSheet from './OrderPayBottomSheet'
 
 const OrderInfo = () => {
   const queryClient = useQueryClient()
   const router = useRouter()
 
   const { carts, resetCarts } = useGetCarts()
-  const [cartsState, setCartsState] = useState(carts)
   const { mutate: deleteCarts } = useDeleteCart()
   const { mutate: updateCarts } = usePatchCarts()
+  const { storeDetail } = useGetStoreDetail(carts?.storeId || null)
+  const { mutate: orderPay, data: orderResponse } = usePostOrderPay()
+  const { mutate: payment } = usePostPayment()
 
-  const { storeDetail } = useGetStoreDetail(Number(carts?.storeId) || null)
-  const { member } = memberStore()
-  const { showModal, hideModal, modals } = modalStore()
-
+  const [cartsState, setCartsState] = useState(carts)
   const [isExcludingSpoon, setIsExcludingSpoon] = useState(false)
-  const [deliveryPrice, setDeliveryPrice] = useState(0)
+  const [paymentType, setPaymentType] = useState<OrderPayType | null>(null)
+  const [deliveryPrice] = useState(0)
 
-  const { mutate: orderPay, isSuccess, data: orderResponse } = usePostOrderPay()
-  const { mutate: payment, isSuccess: paymentSuccess } = usePostPayment()
+  const { member } = memberStore()
+  const { showModal } = modalStore()
+  const { payments, setPayments } = successPaymentStore()
+
+  const { BottomSheet, hide } = useBottomSheet()
+  const { toast } = useToast()
 
   const handleEmptyCart = () => {
     if (!cartsState) return
@@ -52,27 +62,6 @@ const OrderInfo = () => {
     )
   }
   const handleIncreaseQuantity = (cartId: number) => {
-    // TODO: 테스트용 -> 배포 시 아래걸로 바꾸기
-    // const updateCartsState = (newQuantity: number) => {
-    //   setCartsState((prev) => {
-    //     if (!prev) return
-    //     return {
-    //       storeId: prev.storeId,
-    //       orderMenus: prev.orderMenus.map(menu => {
-    //         if (menu.menuId !== menuId) return menu
-
-    //         const unitPrice = menu.totalPrice / menu.quantity
-    //         console.log(unitPrice, menu.quantity)
-    //         return {
-    //           ...menu,
-    //           quantity: menu.quantity + 1,
-    //           totalPrice: Math.round(unitPrice * (menu.quantity + 1))
-    //         }
-    //       })
-    //     }
-    //   })
-    // }
-
     const updateCartsState = (newQuantity: number) => {
       setCartsState((prev) => {
         if (!prev) return
@@ -107,26 +96,6 @@ const OrderInfo = () => {
   }
 
   const handleDecreaseQuantity = (cartId: number) => {
-    // TODO: 테스트용 -> 배포 시 아래걸로 바꾸기
-    // const updateCartsState = (newQuantity: number) => {
-    //   setCartsState((prev) => {
-    //     if (!prev) return
-    //     return {
-    //       storeId: prev.storeId,
-    //       orderMenus: prev.orderMenus.map(menu => {
-    //         if (menu.menuId !== menuId) return menu
-
-    //         const unitPrice = menu.totalPrice / menu.quantity
-    //         console.log(unitPrice, menu.quantity)
-    //         return {
-    //           ...menu,
-    //           quantity: menu.quantity - 1,
-    //           totalPrice: Math.round(unitPrice * (menu.quantity - 1))
-    //         }
-    //       })
-    //     }
-    //   })
-    // }
     const updateCartsState = (newQuantity: number) => {
       setCartsState((prev) => {
         if (!prev) return
@@ -172,7 +141,7 @@ const OrderInfo = () => {
     deleteCarts({ cartIds: [cartId] }, { onSuccess: updateCartsState })
   }
 
-  const handleOrderPay = () => {
+  const handleOrderPay = async () => {
     if (!cartsState || !member) {
       showModal({
         content: (
@@ -186,6 +155,14 @@ const OrderInfo = () => {
       return
     }
 
+    if (!paymentType) {
+      toast({
+        description: '결제수단을 선택해주세요.',
+        position: 'center',
+      })
+      return
+    }
+
     const orderData: OrderPay = {
       storeId: cartsState.storeId,
       roadAddress: member.roadAddress || '',
@@ -193,11 +170,11 @@ const OrderInfo = () => {
       detailAddress: member.detailAddress || '',
       excludingSpoonAndFork: isExcludingSpoon,
       orderType: 'DELIVERY',
+      // paymentType,
       paymentType: 'TOSS_PAY',
       orderMenus: cartsState.orderMenus.map((item) => {
         return {
           id: item.menuId,
-
           quantity: item.quantity,
           orderMenuOptionGroups: item.orderMenuOptionGroups.map((group) => ({
             id: group.id,
@@ -210,7 +187,6 @@ const OrderInfo = () => {
     orderPay(orderData)
   }
 
-
   const totalMenuPrice = useMemo(() => {
     if (!cartsState) return 0
     return Object.values(cartsState.orderMenus).reduce((acc, menu) => {
@@ -218,49 +194,152 @@ const OrderInfo = () => {
     }, 0)
   }, [cartsState])
 
+  const isUnderMinOrder = useMemo(() => {
+    if (!storeDetail) return true
+    return totalMenuPrice < storeDetail.minimumOrderAmount
+  }, [storeDetail, cartsState])
+
+  const handleSelectPaymentType = (type: OrderPayType) => {
+    setPaymentType(type)
+    hide()
+  }
+
+  const handleSelectOrderPay = () => {
+    BottomSheet({
+      title: '결제 수단',
+      content: (
+        <OrderPayBottomSheet
+          currentPaymentType={paymentType}
+          onSelectPaymentType={handleSelectPaymentType}
+        />
+      ),
+    })
+  }
+
+  async function requestPayment(orderResponse: OrderPayResponse) {
+    if (!process.env.NEXT_PUBLIC_TOSS_PAY_KEY || !process.env.NEXT_PUBLIC_PAY200_KEY) {
+      toast({
+        description: '결제 수단 설정에 문제가 있습니다.',
+        position: 'center',
+      })
+      return
+    }
+
+    if (paymentType === OrderPayType.PAY200) {
+      // SDK 초기화
+      const requestPayment = pay200SDK({
+        apiKey: process.env.NEXT_PUBLIC_PAY200_KEY,
+      })
+
+      try {
+        await requestPayment({
+          orderId: orderResponse.orderId,
+          amount: orderResponse.totalPrice,
+          orderName: '개발의 민족 주문',
+          successUrl: `${window.location.origin}/pay/success`,
+        })
+      } catch (error) {
+        console.error('결제 중 오류가 발생했습니다:', error)
+      }
+    } else if (paymentType === OrderPayType.TOSS) {
+      try {
+        const tossPayments = await loadTossPayments(process.env.NEXT_PUBLIC_TOSS_PAY_KEY)
+
+        const payment = tossPayments.payment({ customerKey: ANONYMOUS })
+
+        await payment.requestPayment({
+          method: 'CARD', // 카드 및 간편결제
+          amount: {
+            currency: 'KRW',
+            value: orderResponse.totalPrice,
+          },
+          orderId: orderResponse.orderId, // 고유 주문번호
+          orderName: '개발의 민족 주문',
+          successUrl: window.location.origin + '/pay/success', // 결제 요청이 성공하면 리다이렉트되는 URL
+          failUrl: window.location.origin + '/pay/fail', // 결제 요청이 실패하면 리다이렉트되는 URL
+          // 가상계좌 안내, 퀵계좌이체 휴대폰 번호 자동 완성에 사용되는 값입니다. 필요하다면 주석을 해제해 주세요.
+          // customerMobilePhone: "01012341234",
+          card: {
+            useEscrow: false,
+            flowMode: 'DIRECT',
+            cardCompany: 'TOSSBANK',
+            useCardPoint: false,
+            useAppCardOnly: false,
+          },
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
   useEffect(() => {
     return () => {
       resetCarts()
     }
   }, [])
+
   useEffect(() => {
     setCartsState(carts)
   }, [carts])
 
   useEffect(() => {
-    if (orderResponse) {
-      payment({
-        orderId: orderResponse.orderId,
-        paymentKey: '',
-        amount: orderResponse.totalPrice,
-      })
+    // payments가 있으면 결제 승인 상태
+    if (payments) {
+      payment(
+        {
+          orderId: payments.orderId,
+          paymentKey: payments.paymentKey,
+          amount: payments.amount,
+        },
+        {
+          onSuccess: () => {
+            showModal({
+              content: (
+                <Confirm
+                  title="주문 완료"
+                  message={`주문이 완료되었습니다.\n주문을 확인하러 갈까요?`}
+                  cancelText="홈으로"
+                  onCancelClick={() => {
+                    router.replace(ROUTE_PATHS.HOME)
+                  }}
+                  confirmText="주문 상세"
+                  onConfirmClick={() => {
+                    router.replace(`${ROUTE_PATHS.ORDERS_DETAIL}/${payments.orderId}`)
+                  }}
+                />
+              ),
+            })
+          },
+          onError: () => {
+            showModal({
+              content: (
+                <Alert
+                  title="결제 실패"
+                  message="결제 중 오류가 발생했습니다."
+                  onClick={() => {}}
+                />
+              ),
+            })
+          },
+          onSettled: () => {
+            setPayments(null)
+          },
+        }
+      )
     }
-  }, [orderResponse])
+  }, [payments])
 
   useEffect(() => {
-    if (paymentSuccess) {
-      queryClient.invalidateQueries({ queryKey: ['orders'] })
-
-      showModal({
-        content: (
-          <Confirm
-            title="주문 완료"
-            message="주문이 완료되었습니다.<br />주문 내역을 확인하러갈까요?"
-            confirmText="확인하러 가기"
-            onConfirmClick={() => {
-              handleEmptyCart()
-              router.push(`${ROUTE_PATHS.ORDERS_DETAIL}/${orderResponse?.orderId}`)
-            }}
-            cancelText="홈으로"
-            onCancelClick={() => {
-              handleEmptyCart()
-              router.push(ROUTE_PATHS.HOME)
-            }}
-          />
-        ),
-      })
+    if (orderResponse) {
+      requestPayment(orderResponse)
+      // payment({
+      //   orderId: orderResponse.orderId,
+      //   paymentKey: '',
+      //   amount: orderResponse.totalPrice,
+      // })
     }
-  }, [paymentSuccess])
+  }, [orderResponse])
 
   useEffect(() => {
     if (cartsState && cartsState.orderMenus.length === 0) {
@@ -268,11 +347,6 @@ const OrderInfo = () => {
       resetCarts()
     }
   }, [cartsState])
-
-  const isUnderMinOrder = useMemo(() => {
-    if (!storeDetail) return true
-    return totalMenuPrice < storeDetail.minimumOrderAmount
-  }, [storeDetail, cartsState])
 
   if (!cartsState || !storeDetail) {
     return (
@@ -290,7 +364,7 @@ const OrderInfo = () => {
   }
 
   return (
-    <div className="my-5 flex flex-col gap-5">
+    <div id="payment-method" className="my-5 flex flex-col gap-5">
       <div className="flex flex-row justify-between">
         <div className="flex flex-row gap-2">
           <Icon name="Bike" size={24} />
@@ -314,7 +388,7 @@ const OrderInfo = () => {
         <div className="ml-7 text-xs text-gray-700">{member?.jibunAddress}</div>
       </div>
       <div className="rounded-xl border border-solid border-gray-400">
-        <div className="flex flex-row justify-between border-b border-solid border-gray-300 p-3">
+        <div className="flex flex-row justify-between border-b border-solid border-gray-300 px-5 py-4">
           <div
             className="cursor-pointer text-base font-extrabold"
             onClick={() => router.push(`${ROUTE_PATHS.STORE_DETAIL}/${storeDetail.id}`)}
@@ -329,7 +403,7 @@ const OrderInfo = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-1 py-4">
+        <div className="flex flex-col gap-1 px-5 py-4">
           {cartsState.orderMenus.map((menu, index) => (
             <MenuItem
               key={`${menu.menuId}-${index}`}
@@ -341,7 +415,7 @@ const OrderInfo = () => {
           ))}
         </div>
 
-        <div className="flex flex-row items-center justify-center gap-1 border-t border-solid border-gray-300 p-3">
+        <div className="flex flex-row items-center justify-center gap-1 border-t border-solid border-gray-300 px-5 py-4">
           <Icon name="Plus" size={20} />
           <div
             className="cursor-pointer font-bold"
@@ -351,7 +425,7 @@ const OrderInfo = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-4 rounded-xl border border-solid border-gray-400 p-5">
+      <div className="flex flex-col gap-4 rounded-xl border border-solid border-gray-400 px-5 py-4">
         <div className="text-base font-extrabold">가게 요청사항</div>
         {/* <Input placeholder="예) 견과류 빼주세요" /> */}
         <div className="items-top flex items-center space-x-2">
@@ -377,11 +451,22 @@ const OrderInfo = () => {
           </div>
         </div>
       </div>
-      <div className="flex flex-col gap-4 rounded-xl border border-solid border-gray-400 p-5">
+      <div className="flex flex-col gap-4 rounded-xl border border-solid border-gray-400 px-5 py-4">
         <div className="flex flex-row justify-between">
           <div className="place-content-center text-base font-extrabold">결제수단</div>
-          <div className="flex flex-row gap-1">
-            <div className="place-content-center text-sm text-primary">결제수단을 선택해주세요</div>
+          <div className="flex flex-row items-center gap-1">
+            <div
+              className="place-content-center text-sm text-primary"
+              onClick={handleSelectOrderPay}
+            >
+              {!paymentType ? (
+                '결제수단을 선택해주세요'
+              ) : (
+                <span className="text-base font-semibold">
+                  {paymentType === OrderPayType.TOSS ? '토스페이' : 'PAY200'}
+                </span>
+              )}
+            </div>
             <Icon name="ChevronRight" size={24} />
           </div>
         </div>
