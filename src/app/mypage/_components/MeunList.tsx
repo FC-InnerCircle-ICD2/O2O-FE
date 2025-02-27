@@ -1,8 +1,8 @@
 import Icon from '@/components/Icon'
 import RippleeEffect from '@/components/RippleeEffect'
+import memberStore from '@/store/user'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
-import memberStore from '@/store/user'
 
 const menuItems = [
   // {
@@ -22,7 +22,7 @@ const menuItems = [
   },
   {
     icon: <Icon name="MessageCircleQuestion" size={24} />,
-    label: '자주 문는 질문',
+    label: '자주 묻는 질문',
     href: '',
   },
   {

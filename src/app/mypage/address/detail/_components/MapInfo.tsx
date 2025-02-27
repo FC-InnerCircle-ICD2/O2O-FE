@@ -1,13 +1,13 @@
 'use client'
 
-import Input from '@/components/Input'
-import { useCallback, useEffect, useState } from 'react'
-import Icon from '@/components/Icon'
-import { Button } from '@/components/button'
-import { useSearchParams } from 'next/navigation'
 import usePostAddress, { Address } from '@/api/usePostAddress'
-import { modalStore } from '@/store/modal'
+import Icon from '@/components/Icon'
+import Input from '@/components/Input'
+import { Button } from '@/components/button'
 import { toast } from '@/hooks/useToast'
+import { modalStore } from '@/store/modal'
+import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 
 const MapInfo = ({ address, roadAddr, lng, lat, signup }) => {
   const [word, setWord] = useState('')
@@ -52,7 +52,7 @@ const MapInfo = ({ address, roadAddr, lng, lat, signup }) => {
 
       addressApi(addressData)
 
-      console.log('data', addressResponse)
+      // console.log('data', addressResponse)
 
       toast({
         description: '주소 등록이 완료되었습니다.',

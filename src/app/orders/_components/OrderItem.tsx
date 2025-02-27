@@ -41,11 +41,13 @@ const OrderItem = ({ order }: { order: OrdersList }) => {
             주문 상세
           </Button>
         </Link>
-        <Link className="w-full" href={ROUTE_PATHS.REVIEW}>
-          <Button variant="grayFit" size="s" className="h-10">
-            리뷰 달기
-          </Button>
-        </Link>
+        {order.status.code === 'S5' && (
+          <Link className="w-full" href={ROUTE_PATHS.REVIEW}>
+            <Button variant="grayFit" size="s" className="h-10">
+              리뷰 달기
+            </Button>
+          </Link>
+        )}
       </div>
     </div>
   )

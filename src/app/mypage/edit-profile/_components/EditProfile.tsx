@@ -1,9 +1,9 @@
 'use client'
 import usePostLogout from '@/api/usePostLogout'
 import Icon from '@/components/Icon'
+import { useToast } from '@/hooks/useToast'
 import memberStore from '@/store/user'
 import { useQueryClient } from '@tanstack/react-query'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 
@@ -51,10 +51,19 @@ const EditProfile = () => {
 export default EditProfile
 
 const EditProfileItem = ({ title, value }: { title: string; value: string }) => {
+  const { toast } = useToast()
+
+  const handleEditProfile = () => {
+    toast({
+      description: '준비중입니다.',
+      position: 'center',
+    })
+  }
+
   return (
-    <Link
-      href="#"
+    <div
       className="flex items-center justify-between rounded-lg border border-solid border-gray-300 p-3"
+      onClick={handleEditProfile}
     >
       <div className="leading-tight">
         <div className="text-xs text-gray-400">{title}</div>
@@ -63,6 +72,6 @@ const EditProfileItem = ({ title, value }: { title: string; value: string }) => 
       <div>
         <Icon name="ChevronRight" size={24} />
       </div>
-    </Link>
+    </div>
   )
 }

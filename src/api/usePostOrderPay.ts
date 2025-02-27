@@ -2,7 +2,7 @@ import { api } from '@/lib/api'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export enum OrderPayType {
-  TOSS = 'TOSS',
+  TOSS = 'TOSS_PAY',
   PAY200 = 'PAY200',
 }
 

@@ -39,7 +39,7 @@ const EmptyFavorites = () => {
         </p>
         <button
           className="h-[44px] w-full rounded-md border border-solid border-gray-400 px-4 py-2 text-gray-700"
-          onClick={() => router.push(ROUTE_PATHS.HOME)}
+          onClick={() => router.push(ROUTE_PATHS.HOME_LIST)}
         >
           맛집 구경하러 가기
         </button>

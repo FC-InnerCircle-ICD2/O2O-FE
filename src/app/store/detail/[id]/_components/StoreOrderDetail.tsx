@@ -235,7 +235,7 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
 
   if (!orderDetail) return null
   return createPortal(
-    <div className="fixed inset-0 z-50 bg-black/50 transition-opacity duration-300">
+    <div className="fixed inset-0 z-50 m-auto max-w-[480px] bg-black/50 transition-opacity duration-300">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -250,10 +250,12 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
           isOrderDetail={true}
           isSuccess={isSuccess}
           title={storeMenuOptions?.name ?? ''}
+          storeId={orderDetail.storeId}
         />
       </motion.div>
       <motion.div
         initial={{
+          maxWidth: '480px',
           top: orderDetail.originY,
           left: orderDetail.originX,
           width: '100px',

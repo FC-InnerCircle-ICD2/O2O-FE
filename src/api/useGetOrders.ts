@@ -1,6 +1,7 @@
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { api } from '@/lib/api'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { ORDER_STATUS_CODE } from './useGetOrdersDetail'
 
 export interface Orders {
   content: OrdersList[]
@@ -11,7 +12,7 @@ export interface OrdersList {
   storeName: string
   orderId: string
   status: {
-    code: string
+    code: ORDER_STATUS_CODE
     desc: string
   }
   orderTime: string

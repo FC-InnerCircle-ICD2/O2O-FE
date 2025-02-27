@@ -6,7 +6,7 @@ const usePostSearch = () => {
     mutationFn: async (keyword: string) =>
       await api.post<{ keyword: string }>(`stores/search`, { keyword }),
     onSuccess: (data) => {
-      console.log(data)
+      // console.log(data)
     },
   })
 }

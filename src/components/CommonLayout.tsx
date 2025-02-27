@@ -100,6 +100,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
               }
+
               setCoordinatesState(coords)
               setCoordinates(coords)
               setIsLoading(false)
@@ -138,38 +139,38 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
     }
   }, [isMounted])
 
-  useEffect(() => {
-    if (!isLoaded || !coordinates) return
+  // useEffect(() => {
+  //   if (!isLoaded || !coordinates) return
 
-    const geocoder = new window.kakao.maps.services.Geocoder()
-    geocoder.coord2Address(
-      coordinates.longitude,
-      coordinates.latitude,
-      (result: any, status: any) => {
-        if (status === window.kakao.maps.services.Status.OK) {
-          const roadAddr = result[0].road_address
-          const jibunAddr = result[0].address
+  //   const geocoder = new window.kakao.maps.services.Geocoder()
+  //   geocoder.coord2Address(
+  //     coordinates.longitude,
+  //     coordinates.latitude,
+  //     (result: any, status: any) => {
+  //       if (status === window.kakao.maps.services.Status.OK) {
+  //         const roadAddr = result[0].road_address
+  //         const jibunAddr = result[0].address
 
-          const address = roadAddr
-            ? {
-                roadAddress: roadAddr.address_name,
-                jibunAddress: jibunAddr.address_name,
-                sido: roadAddr.region_1depth_name,
-                sigungu: roadAddr.region_2depth_name,
-                addressName: roadAddr.address_name,
-              }
-            : {
-                roadAddress: jibunAddr.address_name,
-                jibunAddress: jibunAddr.address_name,
-                sido: jibunAddr.region_1depth_name,
-                sigungu: jibunAddr.region_2depth_name,
-                addressName: jibunAddr.address_name,
-              }
-          setAddress(address)
-        }
-      }
-    )
-  }, [isLoaded, coordinates])
+  //         const address = roadAddr
+  //           ? {
+  //               roadAddress: roadAddr.address_name,
+  //               jibunAddress: jibunAddr.address_name,
+  //               sido: roadAddr.region_1depth_name,
+  //               sigungu: roadAddr.region_2depth_name,
+  //               addressName: roadAddr.address_name,
+  //             }
+  //           : {
+  //               roadAddress: jibunAddr.address_name,
+  //               jibunAddress: jibunAddr.address_name,
+  //               sido: jibunAddr.region_1depth_name,
+  //               sigungu: jibunAddr.region_2depth_name,
+  //               addressName: jibunAddr.address_name,
+  //             }
+  //         setAddress(address)
+  //       }
+  //     }
+  //   )
+  // }, [isLoaded, coordinates])
 
   // 클라이언트 사이드 렌더링 전에는 로딩 상태 표시
   if (!isMounted) return <Loading />

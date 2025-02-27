@@ -16,9 +16,7 @@ const OrderPayBottomSheet = ({
   currentPaymentType,
   onSelectPaymentType,
 }: OrderPayBottomSheetProps) => {
-  const [paymentType, setPaymentType] = useState<OrderPayType>(
-    currentPaymentType || OrderPayType.PAY200
-  )
+  const [paymentType, setPaymentType] = useState<OrderPayType | null>(currentPaymentType)
   const handleSelectPaymentType = (type: OrderPayType) => {
     setPaymentType(type)
     onSelectPaymentType(type)
@@ -61,7 +59,7 @@ const PayButton = ({
   onSelectPaymentType,
 }: {
   type: OrderPayType
-  paymentType: OrderPayType
+  paymentType: OrderPayType | null
   onSelectPaymentType: (type: OrderPayType) => void
 }) => {
   return (

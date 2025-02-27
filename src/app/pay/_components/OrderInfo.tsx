@@ -171,7 +171,7 @@ const OrderInfo = () => {
       excludingSpoonAndFork: isExcludingSpoon,
       orderType: 'DELIVERY',
       // paymentType,
-      paymentType: 'TOSS_PAY',
+      paymentType: OrderPayType.TOSS,
       orderMenus: cartsState.orderMenus.map((item) => {
         return {
           id: item.menuId,
@@ -213,6 +213,13 @@ const OrderInfo = () => {
           onSelectPaymentType={handleSelectPaymentType}
         />
       ),
+    })
+  }
+
+  const handleSelectRiderRequest = () => {
+    toast({
+      description: '준비중입니다.',
+      position: 'center',
     })
   }
 
@@ -261,8 +268,9 @@ const OrderInfo = () => {
           // customerMobilePhone: "01012341234",
           card: {
             useEscrow: false,
-            flowMode: 'DIRECT',
-            cardCompany: 'TOSSBANK',
+            // flowMode: 'DIRECT',
+            flowMode: 'DEFAULT',
+            // cardCompany: 'TOSSBANK',
             useCardPoint: false,
             useAppCardOnly: false,
           },
@@ -371,12 +379,12 @@ const OrderInfo = () => {
           <div className="place-content-center text-sm font-bold">가게배달</div>
           <div className="place-content-center text-xs">49~64분 후 도착</div>
         </div>
-        <div>
+        {/* <div>
           <Icon name="ChevronRight" size={24} />
-        </div>
+        </div> */}
       </div>
       <Separator />
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between" onClick={handleSelectRiderRequest}>
         <div className="flex flex-row gap-2">
           <Icon name="MapPin" size={24} />
           <div className="place-content-center text-sm font-bold">{member?.roadAddress}</div>
@@ -445,7 +453,7 @@ const OrderInfo = () => {
         <Separator />
         <div className="flex flex-row justify-between">
           <div className="place-content-center text-base font-extrabold">라이더 요청사항</div>
-          <div className="flex flex-row gap-1">
+          <div className="flex flex-row gap-1" onClick={handleSelectRiderRequest}>
             <div className="place-content-center text-sm">요청사항 없음</div>
             <Icon name="ChevronRight" size={24} />
           </div>
@@ -456,7 +464,7 @@ const OrderInfo = () => {
           <div className="place-content-center text-base font-extrabold">결제수단</div>
           <div className="flex flex-row items-center gap-1">
             <div
-              className="place-content-center text-sm text-primary"
+              className="place-content-center text-sm font-semibold text-primary"
               onClick={handleSelectOrderPay}
             >
               {!paymentType ? (

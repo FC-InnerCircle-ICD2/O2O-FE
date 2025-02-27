@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 const ToastProvider = ToastPrimitives.Provider
 
 const toastVariants = cva(
-  'absolute group pointer-events-auto flex size-fit items-center justify-between space-x-4 overflow-hidden rounded-2xl border py-3 px-4 shadow-lg data-[state=closed]:fade-out-30 data-[state=closed]:animate-fade-out',
+  'absolute group pointer-events-auto flex size-fit items-center justify-between space-x-4 overflow-hidden rounded-2xl border py-3 px-4 shadow-lg data-[state=closed]:fade-out-30 data-[state=closed]:animate-fade-out max-w-[480px] m-auto',
   {
     variants: {
       variant: {
@@ -40,7 +40,7 @@ const ToastViewport = React.forwardRef<
   <ToastPrimitives.Viewport
     ref={ref}
     className={cn(
-      'pointer-events-none fixed top-0 z-[100] flex h-full max-h-screen w-full flex-col items-center p-4 md:max-w-[420px]',
+      'pointer-events-none fixed top-0 z-[100] flex h-full max-h-screen w-full flex-col items-center p-4',
       className
     )}
     {...props}
