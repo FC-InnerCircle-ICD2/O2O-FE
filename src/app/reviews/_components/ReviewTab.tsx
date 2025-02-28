@@ -41,7 +41,7 @@ const ReviewTab = ({
         }}
         transition={{
           type: 'spring',
-          stiffness: 200,
+          stiffness: 400,
           damping: 40,
         }}
       />
