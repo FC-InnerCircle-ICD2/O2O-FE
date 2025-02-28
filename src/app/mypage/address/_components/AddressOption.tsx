@@ -1,23 +1,20 @@
 'use client'
 
-import Input from '@/components/Input'
-import { useState } from 'react'
+import useDeleteAddress from '@/api/useDeleteAddress'
+import useGetAddress from '@/api/useGetAddress'
+import AddressSearchModal from '@/app/mypage/address/_components/AddressSearchModal'
+import AddressDetail from '@/app/mypage/address/detail/page'
+import Badge from '@/components/Badge'
 import Icon from '@/components/Icon'
+import Input from '@/components/Input'
 import Separator from '@/components/Separator'
+import { useToast } from '@/hooks/useToast'
+import { modalStore } from '@/store/modal'
 import { ROUTE_PATHS } from '@/utils/routes'
 import Link from 'next/link'
-import Badge from '@/components/Badge'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import DaumPostcode from 'react-daum-postcode'
-import AddressSearchModal from '@/app/mypage/address/_components/AddressSearchModal'
-import { useRouter, useSearchParams } from 'next/navigation'
-import useGetAddress from '@/api/useGetAddress'
-import useDeleteAddress from '@/api/useDeleteAddress'
-import { modalStore } from '@/store/modal'
-import { useToast } from '@/hooks/useToast'
-import { Button } from '@/components/button'
-import { SignupData } from '@/models/auth'
-import Address from '@/app/mypage/address/page'
-import AddressDetail from '@/app/mypage/address/detail/page'
 
 const AddressOption = ({ signup }) => {
   const [word, setWord] = useState('')
@@ -75,6 +72,7 @@ const AddressOption = ({ signup }) => {
           icon={<Icon name="Search" size={18} />}
           offOutline
           onClick={() => setPopup(true)}
+          readOnly
         />
         <AddressSearchModal isOpen={popup} onClose={() => setPopup(false)}>
           <DaumPostcode onComplete={handleComplete} />

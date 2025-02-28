@@ -1,9 +1,8 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
-import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk'
 import useGeolocation from '@/app/mypage/address/detail/_components/useGeolocation'
-import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk'
 
 declare global {
   interface Window {
@@ -18,10 +17,9 @@ const KakaoMap = ({ onAddressChange, data }) => {
   const [roadAddr, setRoadAddr] = useState('')
   const [lng, setLng] = useState(0)
   const [lat, setLat] = useState(0)
-  const { coordinates, currentAddr, error, isLoading } = useGeolocation()
-  const searchParams = useSearchParams()
+  const { coordinates, isLoading } = useGeolocation()
   const [isMapLoading] = useKakaoLoader({
-    appkey: apiKey,
+    appkey: apiKey!,
     libraries: ['services'],
   })
 
@@ -81,10 +79,10 @@ const KakaoMap = ({ onAddressChange, data }) => {
           geocoder.coord2Address(latlng.getLng(), latlng.getLat(), (result, status) => {
             const addr = result[0]
             setAddress(addr.address.address_name)
-            setRoadAddr(addr.road_address.address_name)
+            setRoadAddr(addr.road_address?.address_name || '')
             onAddressChange(
               addr.address.address_name,
-              addr.road_address.address_name,
+              addr.road_address?.address_name || '',
               latlng.getLng(),
               latlng.getLat()
             )
