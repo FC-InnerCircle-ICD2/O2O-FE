@@ -4,11 +4,13 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 interface Address {
   id: number
+  isDefault: boolean
   roadAddress: string
   jibunAddress: string
   detailAddress: string
   latitude: number
   longitude: number
+  alias?: string
 }
 
 interface AddressData {

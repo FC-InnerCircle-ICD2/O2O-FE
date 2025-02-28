@@ -340,12 +340,12 @@ const OrderInfo = () => {
 
   useEffect(() => {
     if (orderResponse) {
-      requestPayment(orderResponse)
-      // payment({
-      //   orderId: orderResponse.orderId,
-      //   paymentKey: '',
-      //   amount: orderResponse.totalPrice,
-      // })
+      // requestPayment(orderResponse)
+      payment({
+        orderId: orderResponse.orderId,
+        paymentKey: '',
+        amount: orderResponse.totalPrice,
+      })
     }
   }, [orderResponse])
 

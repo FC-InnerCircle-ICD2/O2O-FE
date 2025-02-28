@@ -3,6 +3,7 @@
 import useDeleteAddress from '@/api/useDeleteAddress'
 import useGetAddress from '@/api/useGetAddress'
 import { AddressType } from '@/api/usePostAddress'
+import usePostDefaultAddress from '@/api/usePostDefaultAddress'
 import AddressSearchModal from '@/app/mypage/address/_components/AddressSearchModal'
 import Badge from '@/components/Badge'
 import Icon from '@/components/Icon'
@@ -10,8 +11,12 @@ import Input from '@/components/Input'
 import Separator from '@/components/Separator'
 import LoginButtonSection from '@/components/shared/LoginButtonSection'
 import { useToast } from '@/hooks/useToast'
+import { cn } from '@/lib/utils'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
+import { ROUTE_PATHS } from '@/utils/routes'
+import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import DaumPostcode from 'react-daum-postcode'
 import AddressDetail from '../detail/_components/AddressDetail'
@@ -23,10 +28,15 @@ const AddressOption = () => {
   const { member } = memberStore()
   const { showModal, hideModal } = modalStore()
 
-  const { mutate: deleteAddress, isPending: isDeleting } = useDeleteAddress()
+  const { mutate: deleteAddress, isPending: isPendingDeleting } = useDeleteAddress()
+  const { mutate: setDefaultAddress, isPending: isPendingSettingDefaultAddress } =
+    usePostDefaultAddress()
   const { address } = useGetAddress()
 
   const { toast } = useToast()
+  const router = useRouter()
+
+  const queryClient = useQueryClient()
 
   const handleComplete = () => {
     setPopup(!popup)
@@ -42,8 +52,23 @@ const AddressOption = () => {
     })
   }
 
+  const handleClickSetDefaultAddress = (id: number | undefined) => {
+    if (!id || isPendingSettingDefaultAddress) return
+    if (id === address?.defaultAddress?.id) {
+      router.push(ROUTE_PATHS.HOME)
+      return
+    }
+
+    setDefaultAddress(id, {
+      onSuccess: () => {
+        router.push(ROUTE_PATHS.HOME)
+        queryClient.invalidateQueries({ queryKey: ['address'] })
+      },
+    })
+  }
+
   const handleClickDeleteButton = (id: number | undefined) => {
-    if (!id) return
+    if (!id || isPendingDeleting) return
 
     deleteAddress(id, {
       onSuccess: () => {
@@ -51,7 +76,7 @@ const AddressOption = () => {
           title: '주소가 삭제되었습니다.',
           position: 'center',
         })
-        hideModal()
+        queryClient.invalidateQueries({ queryKey: ['address'] })
       },
       onError: () => {
         toast({
@@ -74,7 +99,7 @@ const AddressOption = () => {
   if (!address) return <></>
   else
     return (
-      <div className="flex w-full flex-col gap-4 pt-5">
+      <div className="flex w-full flex-col gap-4 pb-20 pt-5">
         <div className="w-full bg-white px-mobile_safe">
           <Input
             placeholder="건물명, 도로명 또는 지번으로 검색"
@@ -104,7 +129,7 @@ const AddressOption = () => {
           <>
             <div className="flex flex-row gap-2 px-mobile_safe">
               <Icon name="MapPin" size={20} className="mt-[2px]" />
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
                   <div className="max-w-[calc(100dvw-40px-20px-30px-1rem)] truncate text-base font-medium">
                     {address.defaultAddress.roadAddress || address.defaultAddress.jibunAddress}{' '}
@@ -112,9 +137,12 @@ const AddressOption = () => {
                   </div>
                   <Badge variant="essential">현재</Badge>
                 </div>
-                <div className="text-xs text-gray-500">
-                  [지번] {address?.defaultAddress.jibunAddress}
-                </div>
+                {address.defaultAddress.roadAddress && (
+                  <div className="text-xs text-gray-500">
+                    [지번] {address?.defaultAddress.jibunAddress}{' '}
+                    {address?.defaultAddress.detailAddress}
+                  </div>
+                )}
               </div>
             </div>
             <Separator ignoreMobileSafe className="h-2" />
@@ -127,11 +155,10 @@ const AddressOption = () => {
             <div
               className="flex flex-1 flex-col gap-1"
               onClick={() => {
-                if (address.house && address.defaultAddress?.id === address.house.id) {
-                  // router.push(ROUTE_PATHS.Home)
-                  console.log('홈으로 이동')
-                } else {
+                if (!address.house) {
                   handleClickDetail(AddressType.HOME)
+                } else {
+                  handleClickSetDefaultAddress(address.house.id)
                 }
               }}
             >
@@ -147,26 +174,28 @@ const AddressOption = () => {
             </div>
             {address.house && address.defaultAddress?.id !== address.house.id && (
               <button
-                className="flex size-[18px] items-center justify-center rounded-full bg-gray-100"
-                onClick={() => handleClickDeleteButton(address.house?.id)}
+                className="flex size-[16px] items-center justify-center rounded-full bg-gray-100"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleClickDeleteButton(address.house?.id)
+                }}
               >
-                <Icon className="text-gray-500" name="X" size={14} />
+                <Icon className="text-gray-500" name="X" size={12} />
               </button>
             )}
           </div>
 
           <Separator className="my-4 h-px bg-gray-200" />
 
-          <div className="flex items-start gap-2">
+          <div className="flex items-start justify-between gap-2">
             <Icon name="Briefcase" size={20} className="mt-[2px]" />
             <div
-              className="flex flex-col gap-1"
+              className="flex flex-1 flex-col gap-1"
               onClick={() => {
-                if (address.company && address.defaultAddress?.id === address.company.id) {
-                  // router.push(ROUTE_PATHS.Home)
-                  console.log('홈으로 이동')
-                } else {
+                if (!address.company) {
                   handleClickDetail(AddressType.COMPANY)
+                } else {
+                  handleClickSetDefaultAddress(address.company.id)
                 }
               }}
             >
@@ -182,15 +211,57 @@ const AddressOption = () => {
             </div>
             {address.company && address.defaultAddress?.id !== address.company.id && (
               <button
-                className="flex size-[18px] items-center justify-center rounded-full bg-gray-100"
-                onClick={() => handleClickDeleteButton(address.company?.id)}
+                className="flex size-[16px] items-center justify-center rounded-full bg-gray-100"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleClickDeleteButton(address.company?.id)
+                }}
               >
-                <Icon className="text-gray-500" name="X" size={14} />
+                <Icon className="text-gray-500" name="X" size={12} />
               </button>
             )}
           </div>
         </div>
+
         <Separator ignoreMobileSafe className="h-2" />
+
+        {address.others?.map((other, index) => (
+          <div key={other.id} className={'px-mobile_safe'}>
+            <div
+              className={cn(
+                'flex flex-row items-start justify-between gap-2',
+                index !== (address.others?.length ?? 0) - 1 &&
+                  'border-b border-solid border-gray-200 pb-4'
+              )}
+              onClick={() => {
+                handleClickSetDefaultAddress(other.id)
+              }}
+            >
+              <Icon name="MapPin" size={20} className="mt-[2px]" />
+              <div className="flex flex-1 flex-col gap-1">
+                <div className="text-base font-medium">
+                  {other.alias || '별명 보내주세요'}
+                  {/* {other.roadAddress || other.jibunAddress} {other.detailAddress} */}
+                </div>
+                <div className="text-xs text-gray-500">
+                  {other.roadAddress || other.jibunAddress} {other.detailAddress}
+                </div>
+              </div>
+              {address.defaultAddress?.id !== other.id && (
+                <button
+                  className="flex size-[16px] items-center justify-center rounded-full bg-gray-100"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleClickDeleteButton(other.id)
+                  }}
+                >
+                  <Icon className="text-gray-500" name="X" size={12} />
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+        {(address.others?.length || 0) > 0 && <Separator ignoreMobileSafe className="h-2" />}
       </div>
     )
 }
@@ -207,7 +278,7 @@ const AddressDetailModal = ({ type }: { type?: AddressType }) => {
         <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
       </div>
       <div className="h-[calc(100dvh-64px)] overflow-y-auto">
-        <AddressDetail signup={true} data={''} type={type} />
+        <AddressDetail type={type} />
       </div>
     </div>
   )
