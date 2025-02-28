@@ -101,7 +101,7 @@ const AddressOption = ({ signup }) => {
                 <div className="flex flex-col gap-4">
                   <div className="flex gap-2">
                     <div className="content-center">{address?.defaultAddress.roadAddress}</div>
-                    <Badge variant="essential">현재</Badge>
+                    {address?.defaultAddress.isDefault && <Badge variant="essential">현재</Badge>}
                   </div>
                   <div className="text-xs text-gray-500">
                     [지번] {address?.defaultAddress.jibunAddress}
@@ -129,6 +129,7 @@ const AddressOption = ({ signup }) => {
                     <div className="flex flex-row gap-2">
                       <Icon name="Home" size={20} />
                       <div className="content-center">집</div>
+                      {address?.house.isDefault && <Badge variant="essential">현재</Badge>}
                     </div>
                     <button onClick={() => handleClickDeleteButton(address?.house.id)}>
                       <Icon className="text-gray-500" name="X" size={14} />
@@ -164,6 +165,7 @@ const AddressOption = ({ signup }) => {
                     <div className="flex flex-row gap-2">
                       <Icon name="Briefcase" size={20} />
                       <div className="content-center">회사</div>
+                      {address?.company.isDefault && <Badge variant="essential">현재</Badge>}
                     </div>
                     <button onClick={() => handleClickDeleteButton(address?.company.id)}>
                       <Icon className="text-gray-500" name="X" size={14} />
