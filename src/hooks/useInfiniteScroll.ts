@@ -27,7 +27,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
   endpoint,
   filter,
   size = 10,
-  threshold = 0.1,
+  threshold = 0,
   root = null,
   rootMargin = '0px',
   location = { lat: 37.5177, lng: 127.0473 },

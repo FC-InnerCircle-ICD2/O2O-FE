@@ -21,7 +21,7 @@ const useGeolocation = () => {
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isMapLoading] = useKakaoLoader({
-    appkey: apiKey,
+    appkey: apiKey!,
     libraries: ['services'],
   })
 

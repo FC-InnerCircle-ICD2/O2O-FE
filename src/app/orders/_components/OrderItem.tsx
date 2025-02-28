@@ -1,4 +1,4 @@
-import Badge from '@/components/Badge'
+import Badge, { badgeVariants } from '@/components/Badge'
 import { Button } from '@/components/button'
 import { Skeleton } from '@/components/shadcn/skeleton'
 import { ROUTE_PATHS } from '@/utils/routes'
@@ -24,6 +24,15 @@ const OrderItem = ({
     router.push(`${ROUTE_PATHS.ORDERS_DETAIL}/${order.orderId}`)
   }
 
+  const variant = {
+    S1: 'waiting',
+    S2: 'received',
+    S3: 'accepted',
+    S4: 'rejected',
+    S5: 'completed',
+    S6: 'canceled',
+  }
+
   return (
     <div className="flex flex-col gap-5 px-mobile_safe">
       <div className="flex flex-row">
@@ -41,7 +50,9 @@ const OrderItem = ({
         )}
         <div className="flex w-[calc(100%-1rem-100px)] flex-col gap-4 pl-4">
           <div className="flex flex-row justify-between">
-            <Badge variant="complete">{order.status.desc}</Badge>
+            <Badge variant={variant[order.status.code as keyof typeof badgeVariants]}>
+              {order.status.desc}
+            </Badge>
             <div className="place-content-center text-xs text-gray-400">
               {new Date(order.orderTime).toLocaleString()}
             </div>
