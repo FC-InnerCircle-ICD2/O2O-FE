@@ -5,11 +5,11 @@ const useDeleteAddress = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (addressId: string) => {
+    mutationFn: async (addressId: number) => {
       return await api.delete(`members/address/${addressId}`)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['completed-addresses'] })
+      // queryClient.invalidateQueries({ queryKey: ['completed-addresses'] })
     },
   })
 }

@@ -14,12 +14,6 @@ import BottomNavigation from './BottomNavigation'
 import Loading from './Loading'
 import Navigation from './Navigation'
 
-declare global {
-  interface Window {
-    kakao: any
-  }
-}
-
 interface CommonLayoutProps {
   children: React.ReactNode
 }
@@ -31,8 +25,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
     latitude: number
     longitude: number
   } | null>(null)
-  const { address, error, setCoordinates, setAddress, setError, setIsLoading } =
-    useGeoLocationStore()
+  const { setCoordinates, setAddress, setError, setIsLoading } = useGeoLocationStore()
   const pathname = usePathname()
 
   const HIDDEN_BOTTOM_NAV_PATHS = [
@@ -41,10 +34,12 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
     ROUTE_PATHS.MYPAGE_EDIT_PROFILE,
     ROUTE_PATHS.PAY,
     ROUTE_PATHS.ORDERS_DETAIL,
+    ROUTE_PATHS.ADDRESS,
+    ROUTE_PATHS.ADDRESS_DETAIL,
   ]
 
   const { storedValue: accessToken } = useLocalStorage('accessToken')
-  const { data: memberData, isFetching, refetch } = useGetMember()
+  const { refetch } = useGetMember()
   const { mutate: logout } = usePostLogout()
   const { setMember } = memberStore()
   const { setIsGlobalLoading } = globalLoaderStore()
@@ -120,24 +115,24 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
     requestGeolocation()
   }, [isMounted])
 
-  useEffect(() => {
-    if (!isMounted) return
+  // useEffect(() => {
+  //   if (!isMounted) return
 
-    // 카카오맵 스크립트 로드
-    const script = document.createElement('script')
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`
-    script.async = true
+  //   // 카카오맵 스크립트 로드
+  //   const script = document.createElement('script')
+  //   script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`
+  //   script.async = true
 
-    script.addEventListener('load', () => {
-      window.kakao.maps.load(() => {
-        setIsLoaded(true)
-      })
-    })
-    document.head.appendChild(script)
-    return () => {
-      document.head.removeChild(script)
-    }
-  }, [isMounted])
+  //   script.addEventListener('load', () => {
+  //     window.kakao.maps.load(() => {
+  //       setIsLoaded(true)
+  //     })
+  //   })
+  //   document.head.appendChild(script)
+  //   return () => {
+  //     document.head.removeChild(script)
+  //   }
+  // }, [isMounted])
 
   // useEffect(() => {
   //   if (!isLoaded || !coordinates) return

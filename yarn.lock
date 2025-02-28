@@ -5765,7 +5765,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"kakao.maps.d.ts@npm:^0.1.39":
+"kakao.maps.d.ts@npm:^0.1.39, kakao.maps.d.ts@npm:^0.1.40":
   version: 0.1.40
   resolution: "kakao.maps.d.ts@npm:0.1.40"
   checksum: 10c0/16eef0d9846311921ae3c5c020a8769ab8d1f894b2a6f1aef869a83648462982c2891bc8ea174665345290483bf73feb6ae264273cee38a40a1adbb17aa6862f
@@ -6406,6 +6406,7 @@ __metadata:
     eslint-plugin-react-hooks: "npm:^5.1.0"
     eslint-plugin-tailwindcss: "npm:^3.17.5"
     husky: "npm:^9.1.7"
+    kakao.maps.d.ts: "npm:^0.1.40"
     ky: "npm:^1.7.4"
     lucide-react: "npm:^0.469.0"
     motion: "npm:^11.15.0"
