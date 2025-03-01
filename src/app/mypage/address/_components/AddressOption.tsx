@@ -1,7 +1,8 @@
 'use client'
 
 import useDeleteAddress from '@/api/useDeleteAddress'
-import useGetAddress from '@/api/useGetAddress'
+import useGetAddress, { AddressResponseData } from '@/api/useGetAddress'
+import useGetAddressToGeolocation from '@/api/useGetAddressToGeolocation'
 import { AddressType } from '@/api/usePostAddress'
 import usePostDefaultAddress from '@/api/usePostDefaultAddress'
 import AddressSearchModal from '@/app/mypage/address/_components/AddressSearchModal'
@@ -19,7 +20,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import DaumPostcode from 'react-daum-postcode'
-import AddressDetail from '../detail/_components/AddressDetail'
+import AddressDetail, { AddressData } from '../detail/_components/AddressDetail'
 
 const AddressOption = () => {
   const [word, setWord] = useState('')
@@ -32,21 +33,53 @@ const AddressOption = () => {
   const { mutate: setDefaultAddress, isPending: isPendingSettingDefaultAddress } =
     usePostDefaultAddress()
   const { address } = useGetAddress()
+  const { mutate: addressToGeolocation } = useGetAddressToGeolocation()
 
   const { toast } = useToast()
   const router = useRouter()
 
   const queryClient = useQueryClient()
 
-  const handleComplete = () => {
-    setPopup(!popup)
-    hideModal()
-    // handleClickDetail(data.roadAddress)
+  const handleComplete = async (data: { address: string }) => {
+    addressToGeolocation(data.address, {
+      onSuccess: (data) => {
+        showModal({
+          content: (
+            <AddressDetailModal
+              userAddress={address}
+              addressData={{
+                type: undefined,
+                address: data.documents[0].jibunAddress,
+                roadAddr: data.documents[0].roadAddress,
+                detail: '',
+                coords: { lat: Number(data.documents[0].y), lng: Number(data.documents[0].x) },
+              }}
+            />
+          ),
+          useAnimation: true,
+          useDimmedClickClose: true,
+        })
+      },
+      onError: (error) => {
+        console.log({ error })
+        toast({
+          title: '주소 검색에 실패했습니다.',
+          description: '다시 시도해주세요.',
+          variant: 'destructive',
+          position: 'center',
+        })
+
+        hideModal()
+      },
+      onSettled: () => {
+        setPopup(false)
+      },
+    })
   }
 
   const handleClickDetail = (type?: AddressType) => {
     showModal({
-      content: <AddressDetailModal type={type} />,
+      content: <AddressDetailModal type={type} userAddress={address} />,
       useAnimation: true,
       useDimmedClickClose: true,
     })
@@ -132,14 +165,16 @@ const AddressOption = () => {
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
                   <div className="max-w-[calc(100dvw-40px-20px-30px-1rem)] truncate text-base font-medium">
-                    {address.defaultAddress.roadAddress || address.defaultAddress.jibunAddress}{' '}
+                    {address.defaultAddress.roadAddress || address.defaultAddress.jibunAddress}
+                    {', '}
                     {address.defaultAddress.detailAddress}
                   </div>
                   <Badge variant="essential">현재</Badge>
                 </div>
                 {address.defaultAddress.roadAddress && (
                   <div className="text-xs text-gray-500">
-                    [지번] {address?.defaultAddress.jibunAddress}{' '}
+                    [지번] {address?.defaultAddress.jibunAddress}
+                    {', '}
                     {address?.defaultAddress.detailAddress}
                   </div>
                 )}
@@ -167,7 +202,8 @@ const AddressOption = () => {
               </div>
               {address.house && (
                 <div className="text-xs text-gray-500">
-                  {address.house?.roadAddress || address.house?.jibunAddress}{' '}
+                  {address.house?.roadAddress || address.house?.jibunAddress}
+                  {', '}
                   {address.house?.detailAddress}
                 </div>
               )}
@@ -204,7 +240,8 @@ const AddressOption = () => {
               </div>
               {address.company && (
                 <div className="text-xs text-gray-500">
-                  {address.company?.roadAddress || address.company?.jibunAddress}{' '}
+                  {address.company?.roadAddress || address.company?.jibunAddress}
+                  {', '}
                   {address.company?.detailAddress}
                 </div>
               )}
@@ -239,12 +276,11 @@ const AddressOption = () => {
             >
               <Icon name="MapPin" size={20} className="mt-[2px]" />
               <div className="flex flex-1 flex-col gap-1">
-                <div className="text-base font-medium">
-                  {other.alias || '별명 보내주세요'}
-                  {/* {other.roadAddress || other.jibunAddress} {other.detailAddress} */}
-                </div>
+                <div className="text-base font-medium">{other.alias || '별명 보내주세요'}</div>
                 <div className="text-xs text-gray-500">
-                  {other.roadAddress || other.jibunAddress} {other.detailAddress}
+                  {other.roadAddress || other.jibunAddress}
+                  {', '}
+                  {other.detailAddress}
                 </div>
               </div>
               {address.defaultAddress?.id !== other.id && (
@@ -266,7 +302,15 @@ const AddressOption = () => {
     )
 }
 
-const AddressDetailModal = ({ type }: { type?: AddressType }) => {
+const AddressDetailModal = ({
+  type,
+  userAddress,
+  addressData,
+}: {
+  type?: AddressType
+  userAddress?: AddressResponseData
+  addressData?: AddressData
+}) => {
   const { hideModal } = modalStore()
 
   return (
@@ -278,7 +322,7 @@ const AddressDetailModal = ({ type }: { type?: AddressType }) => {
         <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
       </div>
       <div className="h-[calc(100dvh-64px)] overflow-y-auto">
-        <AddressDetail type={type} />
+        <AddressDetail type={type} userAddress={userAddress} defaultAddressData={addressData} />
       </div>
     </div>
   )

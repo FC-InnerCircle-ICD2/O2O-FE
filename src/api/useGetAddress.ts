@@ -1,4 +1,5 @@
 import { api } from '@/lib/api'
+import addressStore from '@/store/addressStore'
 import memberStore from '@/store/user'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
@@ -13,7 +14,7 @@ interface Address {
   alias?: string
 }
 
-interface AddressData {
+export interface AddressResponseData {
   defaultAddress?: Address
   house?: Address
   company?: Address
@@ -23,11 +24,15 @@ interface AddressData {
 const useGetAddress = () => {
   const qc = useQueryClient()
   const { member } = memberStore()
+  const { setAddress } = addressStore()
 
   const { data: address, isSuccess } = useQuery({
     queryKey: ['address'],
     queryFn: async () => {
-      return await api.get<AddressData>(`members/address`)
+      const response = await api.get<AddressResponseData>(`members/address`)
+      setAddress(response)
+
+      return response
     },
     enabled: !!member,
   })

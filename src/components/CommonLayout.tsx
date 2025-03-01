@@ -1,5 +1,7 @@
 'use client'
 
+import useGetAddress from '@/api/useGetAddress'
+import useGetGeolocationToAddress from '@/api/useGetGeolocationToAddress'
 import useGetMember from '@/api/useGetMember'
 import usePostLogout from '@/api/usePostLogout'
 import { getNavigationProps } from '@/constants/navigationProps'
@@ -20,12 +22,7 @@ interface CommonLayoutProps {
 
 const CommonLayout = ({ children }: CommonLayoutProps) => {
   const [isMounted, setIsMounted] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
-  const [coordinates, setCoordinatesState] = useState<{
-    latitude: number
-    longitude: number
-  } | null>(null)
-  const { setCoordinates, setAddress, setError, setIsLoading } = useGeoLocationStore()
+
   const pathname = usePathname()
 
   const HIDDEN_BOTTOM_NAV_PATHS = [
@@ -39,15 +36,18 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   ]
 
   const { storedValue: accessToken } = useLocalStorage('accessToken')
+
   const { refetch } = useGetMember()
   const { mutate: logout } = usePostLogout()
+  const { address } = useGetAddress()
+  const { mutate: getGeolocationToAddress } = useGetGeolocationToAddress()
+
   const { setMember } = memberStore()
-  const { setIsGlobalLoading } = globalLoaderStore()
+  const { setCoordinates, setAddress, setError, setIsLoading } = useGeoLocationStore()
+  const { isGlobalLoading, setIsGlobalLoading } = globalLoaderStore()
 
   useEffect(() => {
     if (accessToken) {
-      setIsGlobalLoading(true)
-
       refetch()
         .then((res) => {
           if (res.error) {
@@ -62,13 +62,13 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
         .catch((error) => {
           logout()
         })
-        .finally(() => {
-          setIsGlobalLoading(false)
-        })
     }
   }, [accessToken])
 
   useEffect(() => {
+    setIsLoading(true)
+    setIsGlobalLoading(true)
+
     // 메인 페이지 스크롤 위치 제거
     sessionStorage.removeItem('homeScrollPosition')
     setIsMounted(true)
@@ -96,9 +96,33 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
                 longitude: position.coords.longitude,
               }
 
-              setCoordinatesState(coords)
-              setCoordinates(coords)
-              setIsLoading(false)
+              getGeolocationToAddress(
+                {
+                  latitude: coords.latitude.toString(),
+                  longitude: coords.longitude.toString(),
+                },
+                {
+                  onSuccess: (data) => {
+                    const address = data.documents[0]
+
+                    setAddress({
+                      addressName: address.address.address_name,
+                      sido: address.address.region_1depth_name,
+                      sigungu: address.address.region_2depth_name,
+                      roadAddress: address.road_address?.address_name || '',
+                      jibunAddress: address.address.address_name,
+                    })
+                  },
+                  onError: (error) => {
+                    console.log(error)
+                  },
+                  onSettled: () => {
+                    setCoordinates(coords)
+                    setIsLoading(false)
+                    setIsGlobalLoading(false)
+                  },
+                }
+              )
             },
             (error) => {
               console.log('위치 정보 에러:', error)
@@ -109,66 +133,15 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
       } catch (error) {
         console.log('위치 정보 권한 확인 에러:', error)
         setError('위치 정보 권한을 확인하는데 실패했습니다.')
+        setIsGlobalLoading(false)
       }
     }
 
     requestGeolocation()
   }, [isMounted])
 
-  // useEffect(() => {
-  //   if (!isMounted) return
-
-  //   // 카카오맵 스크립트 로드
-  //   const script = document.createElement('script')
-  //   script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_APP_KEY}&libraries=services&autoload=false`
-  //   script.async = true
-
-  //   script.addEventListener('load', () => {
-  //     window.kakao.maps.load(() => {
-  //       setIsLoaded(true)
-  //     })
-  //   })
-  //   document.head.appendChild(script)
-  //   return () => {
-  //     document.head.removeChild(script)
-  //   }
-  // }, [isMounted])
-
-  // useEffect(() => {
-  //   if (!isLoaded || !coordinates) return
-
-  //   const geocoder = new window.kakao.maps.services.Geocoder()
-  //   geocoder.coord2Address(
-  //     coordinates.longitude,
-  //     coordinates.latitude,
-  //     (result: any, status: any) => {
-  //       if (status === window.kakao.maps.services.Status.OK) {
-  //         const roadAddr = result[0].road_address
-  //         const jibunAddr = result[0].address
-
-  //         const address = roadAddr
-  //           ? {
-  //               roadAddress: roadAddr.address_name,
-  //               jibunAddress: jibunAddr.address_name,
-  //               sido: roadAddr.region_1depth_name,
-  //               sigungu: roadAddr.region_2depth_name,
-  //               addressName: roadAddr.address_name,
-  //             }
-  //           : {
-  //               roadAddress: jibunAddr.address_name,
-  //               jibunAddress: jibunAddr.address_name,
-  //               sido: jibunAddr.region_1depth_name,
-  //               sigungu: jibunAddr.region_2depth_name,
-  //               addressName: jibunAddr.address_name,
-  //             }
-  //         setAddress(address)
-  //       }
-  //     }
-  //   )
-  // }, [isLoaded, coordinates])
-
   // 클라이언트 사이드 렌더링 전에는 로딩 상태 표시
-  if (!isMounted) return <Loading />
+  if (!isMounted || isGlobalLoading) return <Loading />
   //   if (error) return <Error message={error} />
   //   if (!address) return <Loading />
 

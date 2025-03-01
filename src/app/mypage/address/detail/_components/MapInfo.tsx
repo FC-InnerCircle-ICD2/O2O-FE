@@ -1,6 +1,8 @@
 'use client'
 
-import usePostAddress, { AddressType } from '@/api/usePostAddress'
+import { AddressResponseData } from '@/api/useGetAddress'
+import usePostAddress, { Address, AddressType } from '@/api/usePostAddress'
+import usePutAddress from '@/api/usePutAddress'
 import Icon from '@/components/Icon'
 import Input from '@/components/Input'
 import { Button } from '@/components/button'
@@ -14,9 +16,11 @@ import { AddressData } from './AddressDetail'
 const MapInfo = ({
   addressData,
   onAddressChange,
+  userAddress,
 }: {
   addressData: AddressData
   onAddressChange: (data: AddressData) => void
+  userAddress?: AddressResponseData
 }) => {
   const queryClient = useQueryClient()
   const { toast } = useToast()
@@ -25,16 +29,19 @@ const MapInfo = ({
 
   const [addressDetail, setAddressDetail] = useState('')
   const [alias, setAlias] = useState('')
-  const [flag, setFlag] = useState(true)
-
+  const [isAddressValid, setIsAddressValid] = useState<boolean>(false)
   const { mutate: registerAddress, isPending } = usePostAddress()
-
-  // const { showModal, hideModal, setAddressData } = modalStore()
-  // const [isClickedHome, setIsClickedHome] = useState(false)
-  // const [isClickedCompany, setIsClickedCompany] = useState(false)
-  // const [isClickedEtc, setIsClickedEtc] = useState(false)
+  const { mutate: updateAddress, isPending: isUpdatePending } = usePutAddress()
 
   const handleAddress = () => {
+    if (!addressData.roadAddr) {
+      toast({
+        description: '배달이 불가능한 주소입니다.',
+        position: 'center',
+      })
+      return
+    }
+
     if (!addressDetail) {
       toast({
         description: '상세주소를 입력해주세요.',
@@ -43,88 +50,86 @@ const MapInfo = ({
       return
     }
 
-    if (addressData.type === AddressType.OTHERS && !alias) {
-      toast({
-        description: '별명을 입력해주세요.',
-        position: 'center',
-      })
-      return
+    if (addressData.type === AddressType.OTHERS) {
+      if (!alias) {
+        toast({
+          description: '별명을 입력해주세요.',
+          position: 'center',
+        })
+        return
+      }
+
+      if (userAddress && userAddress.others && userAddress.others.length >= 5) {
+        toast({
+          description: '최대 5개의 주소만 등록할 수 있습니다.',
+          position: 'center',
+        })
+        return
+      }
     }
 
-    registerAddress(
-      {
-        memberAddressType: addressData.type,
-        roadAddress: addressData.roadAddr || addressData.address,
-        jibunAddress: addressData.address,
-        detailAddress: addressDetail,
-        alias: addressData.type === AddressType.OTHERS ? alias : undefined,
-        latitude: addressData.coords.lat,
-        longitude: addressData.coords.lng,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ['address'] })
-          hideModal()
-        },
-        onError: () => {
-          toast({
-            description: '주소 등록에 실패했습니다.',
-            position: 'center',
-          })
-        },
-      }
-    )
+    const _address: Address = {
+      memberAddressType: addressData.type,
+      roadAddress: addressData.roadAddr || addressData.address,
+      jibunAddress: addressData.address,
+      detailAddress: addressDetail,
+      alias: addressData.type === AddressType.OTHERS ? alias : undefined,
+      latitude: addressData.coords.lat,
+      longitude: addressData.coords.lng,
+    }
 
-    // let addressType = ''
-    // if (isClickedHome) {
-    //   addressType = 'HOME'
-    // } else if (isClickedCompany) {
-    //   addressType = 'COMPANY'
-    // } else if (isClickedEtc) {
-    //   addressType = 'OTHERS'
-    // }
-    // const addressData: Address = {
-    //   memberAddressType: signup ? 'HOME' : addressType,
-    //   roadAddress: roadAddr,
-    //   jibunAddress: address,
-    //   detailAddress: word,
-    //   alias: '대표주소',
-    //   latitude: lat,
-    //   longitude: lng,
-    // }
-    // if (signup) {
-    //   setAddressData(addressData)
-    //   hideModal()
-    // } else {
-    //   // showModal({
-    //   //   content: <AddressConfirmModal onAddress={addressData} isAddress={isAddress} />,
-    //   //   useAnimation: true,
-    //   //   useDimmedClickClose: true,
-    //   // })
-    //   addressApi(addressData)
-    //   // console.log('data', addressResponse)
-    //   toast({
-    //     description: '주소 등록이 완료되었습니다.',
-    //     position: 'center',
-    //   })
-    // }
+    const _options = {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['address'] })
+        hideModal()
+      },
+      onError: () => {
+        toast({
+          description: '주소 등록에 실패했습니다.',
+          position: 'center',
+        })
+      },
+    }
+
+    if (
+      userAddress &&
+      ((addressData.type === AddressType.HOME && userAddress.house) ||
+        (addressData.type === AddressType.COMPANY && userAddress.company))
+    ) {
+      updateAddress(
+        {
+          id:
+            addressData.type === AddressType.HOME ? userAddress.house!.id : userAddress.company!.id,
+          ..._address,
+        },
+        _options
+      )
+    } else {
+      registerAddress(_address, _options)
+    }
   }
 
   useEffect(() => {
     setAlias('')
-  }, [addressData])
+  }, [addressData.type])
+
+  useEffect(() => {
+    setIsAddressValid(
+      Boolean(addressData.roadAddr && addressData.address && addressDetail && addressData.type)
+    )
+  }, [addressData, addressDetail])
 
   return (
     <div className="flex flex-col gap-4 px-mobile_safe pb-10">
       <div className="flex flex-col">
-        {addressData.roadAddr ? (
-          <>
-            <div className="text-base font-medium">{addressData.roadAddr}</div>
-            <div className="text-sm text-gray-500">[지번] {addressData.address}</div>{' '}
-          </>
-        ) : (
-          <div className="text-base font-semibold">{addressData.address}</div>
-        )}
+        <div className="text-base font-medium">
+          {addressData.roadAddr || '배달이 불가능한 주소입니다.'}
+        </div>
+        <div
+          className={cn(addressData.roadAddr ? 'text-sm text-gray-500' : 'text-sm text-red-500')}
+        >
+          {addressData.roadAddr ? `[지번] ${addressData.address}` : '위치를 이동해주세요!'}
+        </div>
       </div>
       <Input
         placeholder="상세주소를 입력하세요 (건물명, 동/호수 등)"
@@ -182,8 +187,12 @@ const MapInfo = ({
         )}
       </div>
 
-      <Button disabled={isPending} onClick={handleAddress}>
-        {isPending ? (
+      <Button
+        className={cn(isAddressValid ? 'bg-primary' : 'bg-gray-500 hover:bg-gray-500')}
+        disabled={isPending || isUpdatePending}
+        onClick={handleAddress}
+      >
+        {isPending || isUpdatePending ? (
           <span className="loading loading-spinner loading-xs" />
         ) : (
           <span>등록하기</span>
@@ -193,22 +202,22 @@ const MapInfo = ({
   )
 }
 
-const AddressConfirmModal = ({ onAddress, isAddress }) => {
-  const { hideModal } = modalStore()
+// const AddressConfirmModal = ({ onAddress, isAddress }) => {
+//   const { hideModal } = modalStore()
 
-  return (
-    <div className="absolute left-1/2 top-1/2 w-4/5 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-7">
-      <div className="mb-4 text-center leading-tight">주소를 등록하시겠습니까?</div>
-      <div className="flex gap-2">
-        <Button variant="primaryFit" onClick={hideModal}>
-          아니요
-        </Button>
-        <Button onClick={onAddress} disabled={isAddress}>
-          {isAddress ? <span className="loading loading-spinner loading-xs" /> : <span>등록</span>}
-        </Button>
-      </div>
-    </div>
-  )
-}
+//   return (
+//     <div className="absolute left-1/2 top-1/2 w-4/5 -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-7">
+//       <div className="mb-4 text-center leading-tight">주소를 등록하시겠습니까?</div>
+//       <div className="flex gap-2">
+//         <Button variant="primaryFit" onClick={hideModal}>
+//           아니요
+//         </Button>
+//         <Button onClick={onAddress} disabled={isAddress}>
+//           {isAddress ? <span className="loading loading-spinner loading-xs" /> : <span>등록</span>}
+//         </Button>
+//       </div>
+//     </div>
+//   )
+// }
 
 export default MapInfo
