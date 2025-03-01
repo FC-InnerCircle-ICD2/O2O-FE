@@ -1,9 +1,8 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
-import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk'
 import useGeolocation from '@/app/mypage/address/detail/_components/useGeolocation'
-import { useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { Map, MapMarker, useKakaoLoader } from 'react-kakao-maps-sdk'
 
 declare global {
   interface Window {
@@ -11,26 +10,25 @@ declare global {
   }
 }
 
-const KakaoMap = ({ onAddressChange }) => {
+const KakaoMap = ({ onAddressChange, data }) => {
   const apiKey: string | undefined = process.env.NEXT_PUBLIC_KAKAO_APP_KEY
   const [position, setPosition] = useState<{ lat: number; lng: number }>()
   const [address, setAddress] = useState('')
   const [roadAddr, setRoadAddr] = useState('')
   const [lng, setLng] = useState(0)
   const [lat, setLat] = useState(0)
-  const { coordinates, currentAddr, error, isLoading } = useGeolocation()
-  const searchParams = useSearchParams()
+  const { coordinates, isLoading } = useGeolocation()
   const [isMapLoading] = useKakaoLoader({
-    appkey: apiKey,
+    appkey: apiKey!,
     libraries: ['services'],
   })
 
   useEffect(() => {
     if (isMapLoading || isLoading || !coordinates) return
 
-    if (searchParams.get('addr')?.toString() != null) {
+    if (data != '') {
       const geocoder = new window.kakao.maps.services.Geocoder()
-      geocoder.addressSearch(searchParams.get('addr')?.toString(), (result, status) => {
+      geocoder.addressSearch(data, (result, status) => {
         setLng(result[0].x)
         setLat(result[0].y)
         setAddress(result[0].address.address_name)
@@ -43,7 +41,6 @@ const KakaoMap = ({ onAddressChange }) => {
         )
       })
     } else {
-      // 기본 좌표로 주소 변환 후 작업
       const geocoder = new window.kakao.maps.services.Geocoder()
       geocoder.coord2Address(coordinates?.longitude, coordinates?.latitude, (result, status) => {
         const addr = result[0]
@@ -82,10 +79,10 @@ const KakaoMap = ({ onAddressChange }) => {
           geocoder.coord2Address(latlng.getLng(), latlng.getLat(), (result, status) => {
             const addr = result[0]
             setAddress(addr.address.address_name)
-            setRoadAddr(addr.road_address.address_name)
+            setRoadAddr(addr.road_address?.address_name || '')
             onAddressChange(
               addr.address.address_name,
-              addr.road_address.address_name,
+              addr.road_address?.address_name || '',
               latlng.getLng(),
               latlng.getLat()
             )

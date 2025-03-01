@@ -4,7 +4,6 @@ import useGetCarts from '@/api/useGetCarts'
 import useGetStoreDetail from '@/api/useGetStoreDetail'
 import useGetStoreMenuCategory from '@/api/useGetStoreMenuCategory'
 import MenuBottomSheet from '@/app/store/detail/[id]/_components/MenuBottomSheet'
-import Alert from '@/components/Alert'
 import CartButton from '@/components/CartButton'
 import Icon from '@/components/Icon'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
@@ -35,7 +34,6 @@ const STICKY_HEADER_HEIGHT = 50 // 메뉴 카테고리 헤더의 높이
 export const HEADER_HEIGHT = 50
 
 const StoreDetail = ({ storeId }: { storeId: string }) => {
-  console.log('storeDetail')
   const [pullHeight, setPullHeight] = useState(0)
   const [touchStart, setTouchStart] = useState(0)
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
@@ -207,19 +205,9 @@ const StoreDetail = ({ storeId }: { storeId: string }) => {
 
   useEffect(() => {
     if (isError) {
-      showModal({
-        content: (
-          <Alert
-            title="오류"
-            message="잘못된 접근입니다."
-            onClick={() => {
-              router.back()
-            }}
-          />
-        ),
-      })
+      router.push('/not-found')
     }
-  }, [isError])
+  }, [isError, router])
 
   return (
     <div

@@ -14,7 +14,7 @@ const useGetRecentStores = () => {
         searchParams: { storeIds: recentStoreIds ? recentStoreIds.join(',') : '' },
       })
     },
-    enabled: !!recentStoreIds && recentStoreIds.length > 0,
+    enabled: !!recentStoreIds,
     placeholderData: keepPreviousData,
   })
 }

@@ -55,7 +55,7 @@ const HomeList = () => {
 
   return (
     <PullToRefresh onRefresh={handleRefresh} scrollRef={scrollRef}>
-      <div className="flex h-full flex-col gap-4 py-4">
+      <div className="flex h-[calc(100dvh-40px-85px)] flex-col gap-4 overflow-auto pt-4">
         <CategorySlide isHide={isCategoryHide} />
         <HomeSearchFoodList
           data={data}

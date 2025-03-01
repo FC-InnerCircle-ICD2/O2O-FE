@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { Address } from 'react-daum-postcode'
 
 interface Modal {
   type: 'modal'
@@ -15,6 +16,8 @@ interface ModalState {
   ) => void
   hideModal: () => void
   allHideModal: () => void
+  addressData: Address | null
+  setAddressData: (data: Address) => void
 }
 
 export const modalStore = create<ModalState>((set) => ({
@@ -33,4 +36,5 @@ export const modalStore = create<ModalState>((set) => ({
       modals: state.modals.slice(0, -1),
     })),
   allHideModal: () => set({ modals: [] }),
+  setAddressData: (data: Address) => set({ addressData: data }),
 }))

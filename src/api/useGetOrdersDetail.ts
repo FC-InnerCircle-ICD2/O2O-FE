@@ -1,10 +1,12 @@
 import { api } from '@/lib/api'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
+export type ORDER_STATUS_CODE = 'S1' | 'S2' | 'S3' | 'S4' | 'S5' | 'S6' // S1: 주문대기, S2: 주문접수, S3: 주문수락, S4: 주문거절, S5: 주문완료, S6: 주문취소
+
 export interface OrdersDetail {
   orderId: string
   status: {
-    code: string
+    code: ORDER_STATUS_CODE
     desc: string
   }
   orderTime: string

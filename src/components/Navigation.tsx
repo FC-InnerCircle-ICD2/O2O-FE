@@ -1,6 +1,7 @@
 'use client'
 
 import { useGeoLocationStore } from '@/store/geoLocation'
+import memberStore from '@/store/user'
 import { useRouter } from 'next/navigation'
 import Icon from './Icon'
 
@@ -25,6 +26,7 @@ const Navigation = ({
 }: NavigationProps) => {
   const router = useRouter()
   const { address } = useGeoLocationStore()
+  const { member } = memberStore()
 
   return (
     <nav
@@ -50,8 +52,14 @@ const Navigation = ({
         {centerElement ? (
           centerElement
         ) : (
-          <h1 className="text-lg font-semibold">
-            {useAddress && address?.addressName ? address?.addressName : title}
+          <h1 className="max-w-[calc(min(480px,100dvw)-24px-24px-40px-16px)] truncate text-lg font-semibold">
+            {useAddress
+              ? member
+                ? member.roadAddress || member.jibunAddress + ' ' + member.detailAddress
+                : address?.addressName
+                  ? address?.addressName
+                  : title
+              : title}
           </h1>
         )}
       </div>

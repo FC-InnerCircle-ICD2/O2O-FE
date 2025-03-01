@@ -10,13 +10,13 @@
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
-  "prettier.requireConfig": true,
-  "prettier.useEditorConfig": false,
+  "prettier.requireConfig": false,
+  "prettier.useEditorConfig": true,
   "javascript.format.enable": false,
   "typescript.format.enable": false,
-  "editor.formatOnSaveTimeout": 1500,
+  "editor.formatOnSaveTimeout": 5000,
   "[typescript]": {
     "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -27,9 +27,9 @@
   },
   "[typescriptreact]": {
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "vscode.typescript-language-features"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "editor.formatOnSaveMode": "modifications",
+  "editor.formatOnSaveMode": "file",
   "tailwindCSS.validate": false,
   "files.watcherExclude": {
     "**/node_modules/**": true,
