@@ -51,7 +51,7 @@ const OrderItem = ({
         <div className="flex w-[calc(100%-1rem-100px)] flex-col gap-4 pl-4">
           <div className="flex flex-row justify-between">
             <Badge variant={variant[order.status.code as keyof typeof badgeVariants]}>
-              {order.status.desc}
+              {order.status.code === 'S5' ? '배달완료' : order.status.desc}
             </Badge>
             <div className="place-content-center text-xs text-gray-400">
               {new Date(order.orderTime).toLocaleString()}

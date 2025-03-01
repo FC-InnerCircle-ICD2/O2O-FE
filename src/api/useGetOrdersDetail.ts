@@ -1,7 +1,7 @@
 import { api } from '@/lib/api'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-export type OrderStatus = 'NEW' | 'ONGOING' | 'DONE' | 'REFUSE' | 'CANCELED'
+export type OrderStatus = 'NEW' | 'ONGOING' | 'DONE' | 'REFUSE' | 'CANCEL'
 export type ORDER_STATUS =
   | { code: 'S1'; desc: '주문대기' }
   | { code: 'S2'; desc: '주문접수' }
@@ -65,7 +65,7 @@ const useGetOrdersDetail = (orderId?: string) => {
   })
 
   const resetGetOrdersDetail = () => {
-    qc.removeQueries({ queryKey: ['orders'] })
+    qc.invalidateQueries({ queryKey: ['ordersDetail', orderId] })
   }
 
   return { ordersDetail, isSuccess, resetGetOrdersDetail }

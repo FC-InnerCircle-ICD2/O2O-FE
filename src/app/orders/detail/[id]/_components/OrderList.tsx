@@ -30,7 +30,9 @@ const OrderList = ({ ordersData }: OrderListProps) => {
     <div className="flex flex-col px-mobile_safe">
       <div className="flex flex-row items-center justify-between pb-6">
         <div className="text-xl font-bold">{ordersData.storeName}</div>
-        {ordersData.status.code === 'S2' && <Chip text="주문 취소" onClick={handleOrderCancel} />}
+        {(ordersData.status.code === 'S1' || ordersData.status.code === 'S2') && (
+          <Chip text="주문 취소" onClick={handleOrderCancel} />
+        )}
       </div>
       <div className="flex flex-col gap-5">
         <div className="text-lg font-bold">주문정보</div>

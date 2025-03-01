@@ -14,7 +14,7 @@ export const badgeVariants = cva(
           'bg-secondary/10 text-secondary font-medium border border-secondary/20 border-solid',
         waiting: 'bg-gray-100 text-gray-600 font-medium border border-gray-200 border-solid',
         received: 'bg-blue-100 text-blue-600 font-medium border border-blue-200 border-solid',
-        accepted: 'bg-green-100 text-green-600 font-medium border border-green-200 border-solid',
+        accepted: 'bg-indigo-100 text-indigo-600 font-medium border border-indigo-200 border-solid',
         rejected: 'bg-red-100 text-red-600 font-medium border border-red-200 border-solid',
         completed: 'bg-green-100 text-green-600 font-medium border border-green-200 border-solid',
         canceled: 'bg-gray-100 text-gray-500 font-medium border border-gray-200 border-solid',
