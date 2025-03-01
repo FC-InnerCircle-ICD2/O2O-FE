@@ -1,11 +1,27 @@
 'use client'
 
 import { Favorites } from '@/api/useGetFavorites'
+import FullpageLoader from '@/components/FullpageLoader'
+import LoginButtonSection from '@/components/shared/LoginButtonSection'
+import memberStore from '@/store/user'
 import { ROUTE_PATHS } from '@/utils/routes'
 import { useRouter } from 'next/navigation'
 import FavoritesListItem from './FavoritesListItem'
 
-const FavoritesStoreList = ({ favorites }: { favorites: Favorites[] }) => {
+const FavoritesStoreList = ({ favorites }: { favorites?: Favorites[] }) => {
+  const { member } = memberStore()
+
+  if (!member)
+    return (
+      <div className="px-mobile_safe pb-4 pt-[calc(20px+1rem)]">
+        <LoginButtonSection
+          text={`찜한 맛집을 확인하려면 로그인이 필요해요.\n 지금 가입하고 행복에 가까워지세요!`}
+        />
+      </div>
+    )
+
+  if (!favorites) return <FullpageLoader useNavigation useBottomNavigation />
+
   return (
     <div>
       <p className="flex items-center gap-2 bg-neutral-100 px-mobile_safe py-3 text-base font-bold text-black">
