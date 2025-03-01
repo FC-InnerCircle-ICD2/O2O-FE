@@ -102,6 +102,8 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
                 longitude: position.coords.longitude,
               }
 
+              console.log(process.env.NEXT_PUBLIC_KAKAO_API_KEY)
+
               if (!addressStoreAddress || !member) {
                 getGeolocationToAddress(
                   {
