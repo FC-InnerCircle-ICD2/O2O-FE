@@ -198,6 +198,14 @@ button {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+  * {
+    -webkit-text-decoration: none !important;
+    text-decoration: none !important;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -webkit-text-size-adjust: none;
+    -webkit-text-fill-color: currentColor;
+  }
 }
 @layer base {
   * {

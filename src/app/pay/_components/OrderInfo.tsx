@@ -264,9 +264,9 @@ const OrderInfo = () => {
           // customerMobilePhone: "01012341234",
           card: {
             useEscrow: false,
-            // flowMode: 'DIRECT',
-            flowMode: 'DEFAULT',
-            // cardCompany: 'TOSSBANK',
+            flowMode: 'DIRECT',
+            // flowMode: 'DEFAULT',
+            cardCompany: 'TOSSBANK',
             useCardPoint: false,
             useAppCardOnly: false,
           },
@@ -410,13 +410,10 @@ const OrderInfo = () => {
         </div>
       </div>
       <div className="flex flex-col gap-4 rounded-xl border border-solid border-gray-400 px-5 py-4">
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between" onClick={handleSelectOrderPay}>
           <div className="place-content-center text-base font-extrabold">결제수단</div>
           <div className="flex flex-row items-center gap-1">
-            <div
-              className="place-content-center text-sm font-semibold text-primary"
-              onClick={handleSelectOrderPay}
-            >
+            <div className="place-content-center text-sm font-semibold text-primary">
               {!paymentType ? (
                 '결제수단을 선택해주세요'
               ) : (
