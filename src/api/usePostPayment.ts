@@ -11,7 +11,7 @@ const usePostPayment = () => {
   return useMutation({
     mutationKey: ['payment'],
     mutationFn: async (data: Payment) => {
-      return await api.post<{}>(`payments/approve`, data)
+      return await api.post(`payments/approve`, data)
     },
   })
 }

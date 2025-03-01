@@ -1,9 +1,11 @@
 'use client'
 
+import usePostPayment from '@/api/usePostPayment'
 import Alert from '@/components/Alert'
+import Confirm from '@/components/Confirm'
 import Icon from '@/components/Icon'
+import { ApiErrorResponse } from '@/lib/api'
 import { modalStore } from '@/store/modal'
-import { successPaymentStore } from '@/store/successPayment'
 import { ROUTE_PATHS } from '@/utils/routes'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
@@ -16,12 +18,52 @@ const PaySuccess = () => {
 
   const { showModal } = modalStore()
   const router = useRouter()
-  const { setPayments } = successPaymentStore()
+  const { mutate: payment } = usePostPayment()
 
   useEffect(() => {
     if (orderId && paymentKey && amount) {
-      setPayments({ orderId, paymentKey, amount: Number(amount) })
-      router.replace(ROUTE_PATHS.PAY)
+      payment(
+        {
+          orderId: orderId,
+          paymentKey: paymentKey,
+          amount: Number(amount),
+        },
+        {
+          onSuccess: () => {
+            showModal({
+              content: (
+                <Confirm
+                  title="주문 완료"
+                  message={`주문이 완료되었습니다.\n주문을 확인하러 갈까요?`}
+                  cancelText="홈으로"
+                  onCancelClick={() => {
+                    router.replace(ROUTE_PATHS.HOME)
+                  }}
+                  confirmText="주문 상세"
+                  onConfirmClick={() => {
+                    router.replace(`${ROUTE_PATHS.ORDERS_DETAIL}/${orderId}`)
+                  }}
+                />
+              ),
+            })
+          },
+          onError: (error) => {
+            const errorData = error as unknown as ApiErrorResponse
+
+            showModal({
+              content: (
+                <Alert
+                  title="결제 실패"
+                  message={errorData.message || '결제 중 오류가 발생했습니다.'}
+                  onClick={() => {
+                    router.replace(ROUTE_PATHS.HOME)
+                  }}
+                />
+              ),
+            })
+          },
+        }
+      )
     } else {
       showModal({
         content: (

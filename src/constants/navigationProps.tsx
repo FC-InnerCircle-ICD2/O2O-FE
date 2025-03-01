@@ -8,7 +8,7 @@ import Link from 'next/link'
 const NAVIGATION_PROPS: Record<string, NavigationProps> = {
   [ROUTE_PATHS.HOME]: {
     hasBackButton: false,
-    useAddress: false,
+    useAddress: true,
     title: '홈',
     rightElement: (
       <Link href={ROUTE_PATHS.SEARCH}>

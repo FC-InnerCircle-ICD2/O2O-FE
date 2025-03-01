@@ -5,11 +5,9 @@ import useGetCarts from '@/api/useGetCarts'
 import useGetStoreDetail from '@/api/useGetStoreDetail'
 import usePatchCarts from '@/api/usePatchCarts'
 import usePostOrderPay, { OrderPay, OrderPayResponse, OrderPayType } from '@/api/usePostOrderPay'
-import usePostPayment from '@/api/usePostPayment'
 import MenuItem from '@/app/pay/_components/MenuItem'
 import Alert from '@/components/Alert'
 import { Button } from '@/components/button'
-import Confirm from '@/components/Confirm'
 import Icon from '@/components/Icon'
 import Separator from '@/components/Separator'
 import { Checkbox } from '@/components/shadcn/checkbox'
@@ -18,7 +16,6 @@ import useBottomSheet from '@/hooks/useBottomSheet'
 import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
 import { modalStore } from '@/store/modal'
-import { successPaymentStore } from '@/store/successPayment'
 import memberStore from '@/store/user'
 import { ROUTE_PATHS } from '@/utils/routes'
 import { pay200SDK } from '@pay200/sdk'
@@ -37,7 +34,6 @@ const OrderInfo = () => {
   const { mutate: updateCarts } = usePatchCarts()
   const { storeDetail } = useGetStoreDetail(carts?.storeId || null)
   const { mutate: orderPay, data: orderResponse } = usePostOrderPay()
-  const { mutate: payment } = usePostPayment()
 
   const [cartsState, setCartsState] = useState(carts)
   const [isExcludingSpoon, setIsExcludingSpoon] = useState(false)
@@ -46,7 +42,7 @@ const OrderInfo = () => {
 
   const { member } = memberStore()
   const { showModal } = modalStore()
-  const { payments, setPayments } = successPaymentStore()
+  // const { payments, setPayments } = successPaymentStore()
 
   const { BottomSheet, hide } = useBottomSheet()
   const { toast } = useToast()
@@ -291,52 +287,53 @@ const OrderInfo = () => {
     setCartsState(carts)
   }, [carts])
 
-  useEffect(() => {
-    // payments가 있으면 결제 승인 상태
-    if (payments) {
-      payment(
-        {
-          orderId: payments.orderId,
-          paymentKey: payments.paymentKey,
-          amount: payments.amount,
-        },
-        {
-          onSuccess: () => {
-            showModal({
-              content: (
-                <Confirm
-                  title="주문 완료"
-                  message={`주문이 완료되었습니다.\n주문을 확인하러 갈까요?`}
-                  cancelText="홈으로"
-                  onCancelClick={() => {
-                    router.replace(ROUTE_PATHS.HOME)
-                  }}
-                  confirmText="주문 상세"
-                  onConfirmClick={() => {
-                    router.replace(`${ROUTE_PATHS.ORDERS_DETAIL}/${payments.orderId}`)
-                  }}
-                />
-              ),
-            })
-          },
-          onError: () => {
-            showModal({
-              content: (
-                <Alert
-                  title="결제 실패"
-                  message="결제 중 오류가 발생했습니다."
-                  onClick={() => {}}
-                />
-              ),
-            })
-          },
-          onSettled: () => {
-            setPayments(null)
-          },
-        }
-      )
-    }
-  }, [payments])
+  // useEffect(() => {
+  //   // payments가 있으면 결제 승인 상태
+  //   if (payments) {
+  //     console.log('결제 요청')
+  //     payment(
+  //       {
+  //         orderId: payments.orderId,
+  //         paymentKey: payments.paymentKey,
+  //         amount: payments.amount,
+  //       },
+  //       {
+  //         onSuccess: () => {
+  //           showModal({
+  //             content: (
+  //               <Confirm
+  //                 title="주문 완료"
+  //                 message={`주문이 완료되었습니다.\n주문을 확인하러 갈까요?`}
+  //                 cancelText="홈으로"
+  //                 onCancelClick={() => {
+  //                   router.replace(ROUTE_PATHS.HOME)
+  //                 }}
+  //                 confirmText="주문 상세"
+  //                 onConfirmClick={() => {
+  //                   router.replace(`${ROUTE_PATHS.ORDERS_DETAIL}/${payments.orderId}`)
+  //                 }}
+  //               />
+  //             ),
+  //           })
+  //         },
+  //         onError: () => {
+  //           showModal({
+  //             content: (
+  //               <Alert
+  //                 title="결제 실패"
+  //                 message="결제 중 오류가 발생했습니다."
+  //                 onClick={() => {}}
+  //               />
+  //             ),
+  //           })
+  //         },
+  //         onSettled: () => {
+  //           setPayments(null)
+  //         },
+  //       }
+  //     )
+  //   }
+  // }, [payments])
 
   useEffect(() => {
     if (orderResponse) {

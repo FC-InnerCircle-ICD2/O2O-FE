@@ -18,6 +18,7 @@ const nextConfig: NextConfig = {
 
     return config
   },
+  reactStrictMode: false,
   output: 'standalone',
   devIndicators: {
     buildActivity: false,
