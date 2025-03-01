@@ -31,7 +31,7 @@ const Confirm = ({
   }
 
   return (
-    <div className="flex min-h-[150px] w-[70%] max-w-[440px] flex-col gap-6 rounded-xl bg-white p-5">
+    <div className="flex min-h-[150px] w-[70%] max-w-[440px] flex-col gap-4 rounded-xl bg-white p-5">
       <div className="flex flex-1 flex-col gap-2">
         <div className="text-center text-lg font-bold">{title}</div>
         <div className="text-center text-base" dangerouslySetInnerHTML={{ __html: message }} />

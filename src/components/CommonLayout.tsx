@@ -1,7 +1,5 @@
 'use client'
 
-import useGetAddress from '@/api/useGetAddress'
-import useGetGeolocationToAddress from '@/api/useGetGeolocationToAddress'
 import useGetMember from '@/api/useGetMember'
 import usePostLogout from '@/api/usePostLogout'
 import { getNavigationProps } from '@/constants/navigationProps'
@@ -39,17 +37,9 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
 
   const { refetch } = useGetMember()
   const { mutate: logout } = usePostLogout()
-  const { address } = useGetAddress()
-  const { mutate: getGeolocationToAddress } = useGetGeolocationToAddress()
 
-  const { member, setMember } = memberStore()
-  const {
-    setCoordinates,
-    setAddress,
-    address: addressStoreAddress,
-    setError,
-    setIsLoading,
-  } = useGeoLocationStore()
+  const { setMember } = memberStore()
+  const { setCoordinates, setError, setIsLoading } = useGeoLocationStore()
   const { isGlobalLoading, setIsGlobalLoading } = globalLoaderStore()
 
   useEffect(() => {
@@ -82,12 +72,13 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
 
   useEffect(() => {
     if (!isMounted) return
-
+    setIsGlobalLoading(false)
     const requestGeolocation = async () => {
       try {
         const permissionStatus = await navigator.permissions.query({ name: 'geolocation' })
 
         if (permissionStatus.state === 'denied') {
+          setIsGlobalLoading(false)
           setError(
             '위치 정보가 차단되어 있습니다.\n 브라우저 설정에서 위치 정보 접근을 허용해주세요.'
           )
@@ -102,41 +93,9 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
                 longitude: position.coords.longitude,
               }
 
-              console.log(process.env.NEXT_PUBLIC_KAKAO_API_KEY)
-
-              if (!addressStoreAddress || !member) {
-                getGeolocationToAddress(
-                  {
-                    latitude: coords.latitude.toString(),
-                    longitude: coords.longitude.toString(),
-                  },
-                  {
-                    onSuccess: (data) => {
-                      const address = data.documents[0]
-
-                      setAddress({
-                        addressName: address.address.address_name,
-                        sido: address.address.region_1depth_name,
-                        sigungu: address.address.region_2depth_name,
-                        roadAddress: address.road_address?.address_name || '',
-                        jibunAddress: address.address.address_name,
-                      })
-                    },
-                    onError: (error) => {
-                      console.log(error)
-                    },
-                    onSettled: () => {
-                      setCoordinates(coords)
-                      setIsLoading(false)
-                      setIsGlobalLoading(false)
-                    },
-                  }
-                )
-              } else {
-                setCoordinates(coords)
-                setIsLoading(false)
-                setIsGlobalLoading(false)
-              }
+              setCoordinates(coords)
+              setIsLoading(false)
+              setIsGlobalLoading(false)
             },
             (error) => {
               console.log('위치 정보 에러:', error)

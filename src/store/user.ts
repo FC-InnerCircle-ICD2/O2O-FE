@@ -13,6 +13,13 @@ const memberStore = create<UserStore>((set) => ({
     set({
       member: {
         ...member,
+        address: member.address || {
+          roadAddress: '',
+          jibunAddress: '',
+          detailAddress: '',
+          latitude: 0,
+          longitude: 0,
+        },
       },
     }),
   resetMember: () => set({ member: null }),

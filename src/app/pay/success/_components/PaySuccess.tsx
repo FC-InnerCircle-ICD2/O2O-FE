@@ -21,6 +21,14 @@ const PaySuccess = () => {
   const { mutate: payment } = usePostPayment()
 
   useEffect(() => {
+    // 브라우저 히스토리 조작
+    if (window.history && window.history.pushState) {
+      window.history.pushState(null, '', window.location.href)
+      window.onpopstate = () => {
+        router.replace(ROUTE_PATHS.HOME)
+      }
+    }
+
     if (orderId && paymentKey && amount) {
       payment(
         {
@@ -71,7 +79,7 @@ const PaySuccess = () => {
             title="결제 실패"
             message="결제 중 오류가 발생했습니다."
             onClick={() => {
-              router.push(ROUTE_PATHS.PAY)
+              router.replace(ROUTE_PATHS.PAY)
             }}
           />
         ),

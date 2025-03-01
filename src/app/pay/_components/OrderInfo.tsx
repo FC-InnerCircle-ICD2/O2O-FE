@@ -8,6 +8,7 @@ import usePostOrderPay, { OrderPay, OrderPayResponse, OrderPayType } from '@/api
 import MenuItem from '@/app/pay/_components/MenuItem'
 import Alert from '@/components/Alert'
 import { Button } from '@/components/button'
+import Confirm from '@/components/Confirm'
 import Icon from '@/components/Icon'
 import Separator from '@/components/Separator'
 import { Checkbox } from '@/components/shadcn/checkbox'
@@ -15,7 +16,6 @@ import { Label } from '@/components/shadcn/label'
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
-import addressStore from '@/store/addressStore'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
 import { ROUTE_PATHS } from '@/utils/routes'
@@ -41,7 +41,6 @@ const OrderInfo = () => {
 
   const { member } = memberStore()
   const { showModal } = modalStore()
-  const { address } = addressStore()
   // const { payments, setPayments } = successPaymentStore()
 
   const { BottomSheet, hide } = useBottomSheet()
@@ -49,13 +48,28 @@ const OrderInfo = () => {
 
   const handleEmptyCart = () => {
     if (!cartsState) return
-    const cartIds = cartsState.orderMenus.map((menu) => menu.cartId)
-    deleteCarts(
-      { cartIds },
-      {
-        onSuccess: () => setCartsState(undefined),
-      }
-    )
+
+    showModal({
+      content: (
+        <Confirm
+          title="장바구니 비우기"
+          message="담은 메뉴를 모두 삭제할까요?"
+          confirmText="비우기"
+          onConfirmClick={() => {
+            const cartIds = cartsState.orderMenus.map((menu) => menu.cartId)
+            deleteCarts(
+              { cartIds },
+              {
+                onSuccess: () => {
+                  resetCarts()
+                  setCartsState(undefined)
+                },
+              }
+            )
+          }}
+        />
+      ),
+    })
   }
   const handleIncreaseQuantity = (cartId: number) => {
     const updateCartsState = (newQuantity: number) => {
@@ -138,7 +152,7 @@ const OrderInfo = () => {
   }
 
   const handleOrderPay = async () => {
-    if (!cartsState || !member || !address) {
+    if (!cartsState || !member) {
       showModal({
         content: (
           <Alert
@@ -161,9 +175,9 @@ const OrderInfo = () => {
 
     const orderData: OrderPay = {
       storeId: cartsState.storeId,
-      roadAddress: address?.defaultAddress?.roadAddress || '',
-      jibunAddress: address?.defaultAddress?.jibunAddress || '',
-      detailAddress: address?.defaultAddress?.detailAddress || '',
+      roadAddress: member.address.roadAddress || '',
+      jibunAddress: member.address.jibunAddress || '',
+      detailAddress: member.address.detailAddress || '',
       excludingSpoonAndFork: isExcludingSpoon,
       orderType: 'DELIVERY',
       // paymentType,
@@ -228,6 +242,11 @@ const OrderInfo = () => {
       return
     }
 
+    // 결제 시작 전 현재 URL을 히스토리에 추가
+    if (window.history && window.history.pushState) {
+      window.history.pushState(null, '', window.location.href)
+    }
+
     if (paymentType === OrderPayType.PAY200) {
       // SDK 초기화
       const requestPayment = pay200SDK({
@@ -264,9 +283,9 @@ const OrderInfo = () => {
           // customerMobilePhone: "01012341234",
           card: {
             useEscrow: false,
-            flowMode: 'DIRECT',
-            // flowMode: 'DEFAULT',
-            cardCompany: 'TOSSBANK',
+            flowMode: 'DEFAULT',
+            // flowMode: 'DIRECT',
+            // cardCompany: 'TOSSBANK',
             useCardPoint: false,
             useAppCardOnly: false,
           },
@@ -316,7 +335,7 @@ const OrderInfo = () => {
   }
 
   return (
-    <div id="payment-method" className="my-5 flex flex-col gap-5">
+    <div id="payment-method" className="my-5 flex flex-col gap-5 pb-32">
       <div className="flex flex-row justify-between">
         <div className="flex flex-row gap-2">
           <Icon name="Bike" size={24} />
@@ -333,16 +352,14 @@ const OrderInfo = () => {
           <div className="flex flex-row gap-2">
             <Icon name="MapPin" size={24} />
             <div className="max-w-[calc(100dvw-24px-24px-54px-1rem-40px)] place-content-center truncate text-sm font-bold">
-              {`${address?.defaultAddress?.roadAddress} ${address?.defaultAddress?.detailAddress}`}
+              {`${member?.address.roadAddress} ${member?.address.detailAddress}`}
             </div>
             <div className="place-content-center text-xs">(으)로 배달</div>
           </div>
           <Icon name="ChevronRight" size={24} />
         </div>
         <div>
-          <div className="ml-7 text-xs text-gray-700">
-            [지번] {address?.defaultAddress?.jibunAddress}
-          </div>
+          <div className="ml-7 text-xs text-gray-700">[지번] {member?.address.jibunAddress}</div>
         </div>
       </div>
       <div className="rounded-xl border border-solid border-gray-400">
@@ -443,22 +460,28 @@ const OrderInfo = () => {
           {(totalMenuPrice + deliveryPrice).toLocaleString()}원
         </div>
       </div>
-      {isUnderMinOrder && (
-        <p className="pb-2 text-center text-sm font-bold text-red-600">
-          {(storeDetail.minimumOrderAmount - totalMenuPrice).toLocaleString()}원 더 담으면 배달
-          가능해요
+
+      {/* 배달비 무료 조건 추가 */}
+      <div className="fixed bottom-0 left-0 h-28 w-full rounded-t-2xl bg-white px-mobile_safe shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.1)]">
+        <p
+          className={cn(
+            'py-3 text-center text-sm font-semibold text-blue-600',
+            isUnderMinOrder && 'text-red-600'
+          )}
+        >
+          {isUnderMinOrder
+            ? `${(storeDetail.minimumOrderAmount - totalMenuPrice).toLocaleString()}원 더 담으면 배달 가능해요`
+            : '배달비 무료!'}
         </p>
-      )}
-      <Button
-        onClick={handleOrderPay}
-        className={cn(
-          'text-base font-semibold',
-          isUnderMinOrder && 'bg-gray-400 hover:bg-gray-400'
-        )}
-        disabled={isUnderMinOrder}
-      >
-        {(totalMenuPrice + deliveryPrice).toLocaleString()}원 배달 결제하기
-      </Button>
+        <Button
+          size={'s'}
+          onClick={handleOrderPay}
+          className={cn('text-base font-bold', isUnderMinOrder && 'bg-gray-400 hover:bg-gray-400')}
+          disabled={isUnderMinOrder}
+        >
+          {(totalMenuPrice + deliveryPrice).toLocaleString()}원 배달 결제하기
+        </Button>
+      </div>
     </div>
   )
 }

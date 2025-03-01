@@ -19,7 +19,7 @@ const PayFail = () => {
 
   useEffect(() => {
     if (timer <= 0) {
-      router.push(ROUTE_PATHS.PAY)
+      router.replace(ROUTE_PATHS.PAY)
     }
   }, [timer])
 

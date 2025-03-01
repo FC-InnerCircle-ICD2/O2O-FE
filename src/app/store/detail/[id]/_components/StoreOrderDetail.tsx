@@ -10,6 +10,7 @@ import Confirm from '@/components/Confirm'
 import Icon from '@/components/Icon'
 import { Skeleton } from '@/components/shadcn/skeleton'
 import LoginModal from '@/components/shared/LoginModal'
+import UpDownBtn from '@/components/UpDownBtn'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useThrottle } from '@/hooks/useThrottle'
 import { toast } from '@/hooks/useToast'
@@ -20,7 +21,6 @@ import { orderDetailStore } from '@/store/orderDetail'
 import { COLORS } from '@/styles/color'
 import { motion } from 'motion/react'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import MenuOption from './MenuOption'
@@ -43,6 +43,7 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
   const [isTextOverflow, setIsTextOverflow] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [price, setPrice] = useState(0)
+  const [quantity, setQuantity] = useState(1)
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
   const [selectedOptions, setSelectedOptions] = useState<Record<string, MenuGroupOption[]>>({})
   const [isValid, setIsValid] = useState(false)
@@ -51,8 +52,6 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
     orderDetail?.storeId ?? '',
     orderDetail?.menuId ?? ''
   )
-
-  const router = useRouter()
 
   const onChangeOption = (
     id: string,
@@ -120,7 +119,7 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
           storeId: orderDetail.storeId.toString(),
           orderMenu: {
             menuId: storeMenuOptions.menuId,
-            quantity: 1,
+            quantity,
             orderMenuOptionGroups: Object.entries(selectedOptions).map(([groupId, group]) => {
               return {
                 id: groupId,
@@ -388,15 +387,19 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
           delay: 0.2,
         }}
       >
-        <p className="py-4 text-center text-sm font-bold text-red-600">
+        <p className="py-3 text-center text-sm font-semibold text-red-600">
           {minimumOrderAmount.toLocaleString()}원부터 주문 가능해요
         </p>
-        <Button
-          className={cn('text-base font-semibold', !isValid && 'bg-gray-400 hover:bg-gray-400')}
-          onClick={handleAddToCart}
-        >
-          {price.toLocaleString()}원 담기
-        </Button>
+        <div className="flex items-center justify-between gap-2">
+          <UpDownBtn size="md" value={quantity} onChange={setQuantity} />
+          <Button
+            size={'s'}
+            className={cn('text-base font-bold', !isValid && 'bg-gray-400 hover:bg-gray-400')}
+            onClick={handleAddToCart}
+          >
+            {(price * quantity).toLocaleString()}원 담기
+          </Button>
+        </div>
       </motion.div>
     </div>,
     document.body

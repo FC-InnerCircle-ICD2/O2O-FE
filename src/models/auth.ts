@@ -38,4 +38,11 @@ export interface Member {
   id: number
   signname: string
   nickname: string
+  address: {
+    roadAddress: string
+    jibunAddress: string
+    detailAddress: string
+    latitude: number
+    longitude: number
+  }
 }

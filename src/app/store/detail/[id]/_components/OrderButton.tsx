@@ -30,20 +30,18 @@ export const OrderButton = ({ minimumOrderAmount }: { minimumOrderAmount: number
   }
 
   return (
-    <div className="sticky bottom-0 z-10 rounded-t-lg bg-white px-mobile_safe py-4 shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.1)]">
-      {isUnderMinOrder && (
-        <p className="pb-2 text-center text-sm font-bold text-red-600">
-          {(minimumOrderAmount - totalPrice).toLocaleString()}원 더 담으면 배달 가능해요
-        </p>
-      )}
-      <Button
-        onClick={handleButtonClick}
+    <div className="sticky bottom-0 z-10 h-28 rounded-t-lg bg-white px-mobile_safe shadow-[0_-4px_6px_-2px_rgba(0,0,0,0.1)]">
+      <p
         className={cn(
-          'text-base font-semibold',
-          isUnderMinOrder && 'bg-gray-400 hover:bg-gray-400'
+          'py-3 text-center text-sm font-semibold text-blue-600',
+          isUnderMinOrder && 'text-red-600'
         )}
-        disabled={isUnderMinOrder}
       >
+        {isUnderMinOrder
+          ? `${(minimumOrderAmount - totalPrice).toLocaleString()}원 더 담으면 배달 가능해요`
+          : '배달비 무료!'}
+      </p>
+      <Button size={'s'} onClick={handleButtonClick} className={cn('text-base font-bold')}>
         {totalPrice.toLocaleString()}원 주문하기
       </Button>
     </div>
