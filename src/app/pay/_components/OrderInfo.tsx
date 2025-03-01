@@ -15,18 +15,17 @@ import { Label } from '@/components/shadcn/label'
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
+import addressStore from '@/store/addressStore'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
 import { ROUTE_PATHS } from '@/utils/routes'
 import { pay200SDK } from '@pay200/sdk'
-import { useQueryClient } from '@tanstack/react-query'
 import { ANONYMOUS, loadTossPayments } from '@tosspayments/tosspayments-sdk'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import OrderPayBottomSheet from './OrderPayBottomSheet'
 
 const OrderInfo = () => {
-  const queryClient = useQueryClient()
   const router = useRouter()
 
   const { carts, resetCarts } = useGetCarts()
@@ -42,6 +41,7 @@ const OrderInfo = () => {
 
   const { member } = memberStore()
   const { showModal } = modalStore()
+  const { address } = addressStore()
   // const { payments, setPayments } = successPaymentStore()
 
   const { BottomSheet, hide } = useBottomSheet()
@@ -138,7 +138,7 @@ const OrderInfo = () => {
   }
 
   const handleOrderPay = async () => {
-    if (!cartsState || !member) {
+    if (!cartsState || !member || !address) {
       showModal({
         content: (
           <Alert
@@ -161,9 +161,9 @@ const OrderInfo = () => {
 
     const orderData: OrderPay = {
       storeId: cartsState.storeId,
-      roadAddress: member.roadAddress || '',
-      jibunAddress: member.jibunAddress || '',
-      detailAddress: member.detailAddress || '',
+      roadAddress: address?.defaultAddress?.roadAddress || '',
+      jibunAddress: address?.defaultAddress?.jibunAddress || '',
+      detailAddress: address?.defaultAddress?.detailAddress || '',
       excludingSpoonAndFork: isExcludingSpoon,
       orderType: 'DELIVERY',
       // paymentType,
@@ -287,62 +287,9 @@ const OrderInfo = () => {
     setCartsState(carts)
   }, [carts])
 
-  // useEffect(() => {
-  //   // payments가 있으면 결제 승인 상태
-  //   if (payments) {
-  //     console.log('결제 요청')
-  //     payment(
-  //       {
-  //         orderId: payments.orderId,
-  //         paymentKey: payments.paymentKey,
-  //         amount: payments.amount,
-  //       },
-  //       {
-  //         onSuccess: () => {
-  //           showModal({
-  //             content: (
-  //               <Confirm
-  //                 title="주문 완료"
-  //                 message={`주문이 완료되었습니다.\n주문을 확인하러 갈까요?`}
-  //                 cancelText="홈으로"
-  //                 onCancelClick={() => {
-  //                   router.replace(ROUTE_PATHS.HOME)
-  //                 }}
-  //                 confirmText="주문 상세"
-  //                 onConfirmClick={() => {
-  //                   router.replace(`${ROUTE_PATHS.ORDERS_DETAIL}/${payments.orderId}`)
-  //                 }}
-  //               />
-  //             ),
-  //           })
-  //         },
-  //         onError: () => {
-  //           showModal({
-  //             content: (
-  //               <Alert
-  //                 title="결제 실패"
-  //                 message="결제 중 오류가 발생했습니다."
-  //                 onClick={() => {}}
-  //               />
-  //             ),
-  //           })
-  //         },
-  //         onSettled: () => {
-  //           setPayments(null)
-  //         },
-  //       }
-  //     )
-  //   }
-  // }, [payments])
-
   useEffect(() => {
     if (orderResponse) {
       requestPayment(orderResponse)
-      // payment({
-      //   orderId: orderResponse.orderId,
-      //   paymentKey: '',
-      //   amount: orderResponse.totalPrice,
-      // })
     }
   }, [orderResponse])
 
@@ -381,16 +328,22 @@ const OrderInfo = () => {
         </div> */}
       </div>
       <Separator />
-      <div className="flex flex-row justify-between" onClick={handleSelectRiderRequest}>
-        <div className="flex flex-row gap-2">
-          <Icon name="MapPin" size={24} />
-          <div className="place-content-center text-sm font-bold">{member?.roadAddress}</div>
-          <div className="place-content-center text-xs">(으)로 배달</div>
+      <div className="flex flex-col gap-2">
+        <div className="flex flex-row justify-between" onClick={handleSelectRiderRequest}>
+          <div className="flex flex-row gap-2">
+            <Icon name="MapPin" size={24} />
+            <div className="max-w-[calc(100dvw-24px-24px-54px-1rem-40px)] place-content-center truncate text-sm font-bold">
+              {`${address?.defaultAddress?.roadAddress} ${address?.defaultAddress?.detailAddress}`}
+            </div>
+            <div className="place-content-center text-xs">(으)로 배달</div>
+          </div>
+          <Icon name="ChevronRight" size={24} />
         </div>
-        <Icon name="ChevronRight" size={24} />
-      </div>
-      <div>
-        <div className="ml-7 text-xs text-gray-700">{member?.jibunAddress}</div>
+        <div>
+          <div className="ml-7 text-xs text-gray-700">
+            [지번] {address?.defaultAddress?.jibunAddress}
+          </div>
+        </div>
       </div>
       <div className="rounded-xl border border-solid border-gray-400">
         <div className="flex flex-row justify-between border-b border-solid border-gray-300 px-5 py-4">

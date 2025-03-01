@@ -38,7 +38,7 @@ const OrderStatus: React.FC<OrderStatusProps> = ({ orderStatus }) => {
         setIsDisabledProgress(true)
         setValue(0)
         break
-      case 'CANCELED':
+      case 'CANCEL':
         setTitle('주문을 취소했습니다')
         setSubTitle('다음에 다시 이용해 주세요')
         setValue(0)

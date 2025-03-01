@@ -42,8 +42,14 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   const { address } = useGetAddress()
   const { mutate: getGeolocationToAddress } = useGetGeolocationToAddress()
 
-  const { setMember } = memberStore()
-  const { setCoordinates, setAddress, setError, setIsLoading } = useGeoLocationStore()
+  const { member, setMember } = memberStore()
+  const {
+    setCoordinates,
+    setAddress,
+    address: addressStoreAddress,
+    setError,
+    setIsLoading,
+  } = useGeoLocationStore()
   const { isGlobalLoading, setIsGlobalLoading } = globalLoaderStore()
 
   useEffect(() => {
@@ -96,33 +102,39 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
                 longitude: position.coords.longitude,
               }
 
-              getGeolocationToAddress(
-                {
-                  latitude: coords.latitude.toString(),
-                  longitude: coords.longitude.toString(),
-                },
-                {
-                  onSuccess: (data) => {
-                    const address = data.documents[0]
+              if (!addressStoreAddress || !member) {
+                getGeolocationToAddress(
+                  {
+                    latitude: coords.latitude.toString(),
+                    longitude: coords.longitude.toString(),
+                  },
+                  {
+                    onSuccess: (data) => {
+                      const address = data.documents[0]
 
-                    setAddress({
-                      addressName: address.address.address_name,
-                      sido: address.address.region_1depth_name,
-                      sigungu: address.address.region_2depth_name,
-                      roadAddress: address.road_address?.address_name || '',
-                      jibunAddress: address.address.address_name,
-                    })
-                  },
-                  onError: (error) => {
-                    console.log(error)
-                  },
-                  onSettled: () => {
-                    setCoordinates(coords)
-                    setIsLoading(false)
-                    setIsGlobalLoading(false)
-                  },
-                }
-              )
+                      setAddress({
+                        addressName: address.address.address_name,
+                        sido: address.address.region_1depth_name,
+                        sigungu: address.address.region_2depth_name,
+                        roadAddress: address.road_address?.address_name || '',
+                        jibunAddress: address.address.address_name,
+                      })
+                    },
+                    onError: (error) => {
+                      console.log(error)
+                    },
+                    onSettled: () => {
+                      setCoordinates(coords)
+                      setIsLoading(false)
+                      setIsGlobalLoading(false)
+                    },
+                  }
+                )
+              } else {
+                setCoordinates(coords)
+                setIsLoading(false)
+                setIsGlobalLoading(false)
+              }
             },
             (error) => {
               console.log('위치 정보 에러:', error)
