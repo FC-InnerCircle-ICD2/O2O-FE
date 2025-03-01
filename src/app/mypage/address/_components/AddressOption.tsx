@@ -3,6 +3,7 @@
 import useDeleteAddress from '@/api/useDeleteAddress'
 import useGetAddress, { AddressResponseData } from '@/api/useGetAddress'
 import useGetAddressToGeolocation from '@/api/useGetAddressToGeolocation'
+import useGetMember from '@/api/useGetMember'
 import { AddressType } from '@/api/usePostAddress'
 import usePostDefaultAddress from '@/api/usePostDefaultAddress'
 import AddressSearchModal from '@/app/mypage/address/_components/AddressSearchModal'
@@ -15,9 +16,7 @@ import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
-import { ROUTE_PATHS } from '@/utils/routes'
 import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import DaumPostcode from 'react-daum-postcode'
 import AddressDetail, { AddressData } from '../detail/_components/AddressDetail'
@@ -26,7 +25,7 @@ const AddressOption = () => {
   const [word, setWord] = useState('')
   const [popup, setPopup] = useState(false)
 
-  const { member } = memberStore()
+  const { member, setMember } = memberStore()
   const { showModal, hideModal } = modalStore()
 
   const { mutate: deleteAddress, isPending: isPendingDeleting } = useDeleteAddress()
@@ -34,9 +33,9 @@ const AddressOption = () => {
     usePostDefaultAddress()
   const { address } = useGetAddress()
   const { mutate: addressToGeolocation } = useGetAddressToGeolocation()
+  const { refetch: refetchMember } = useGetMember()
 
   const { toast } = useToast()
-  const router = useRouter()
 
   const queryClient = useQueryClient()
 
@@ -88,14 +87,23 @@ const AddressOption = () => {
   const handleClickSetDefaultAddress = (id: number | undefined) => {
     if (!id || isPendingSettingDefaultAddress) return
     if (id === address?.defaultAddress?.id) {
-      router.push(ROUTE_PATHS.HOME)
       return
     }
 
     setDefaultAddress(id, {
       onSuccess: () => {
-        router.push(ROUTE_PATHS.HOME)
+        refetchMember().then((res) => {
+          if (res.data) {
+            setMember(res.data)
+          }
+        })
+
         queryClient.invalidateQueries({ queryKey: ['address'] })
+
+        toast({
+          title: '기본 주소가 변경되었습니다.',
+          position: 'center',
+        })
       },
     })
   }

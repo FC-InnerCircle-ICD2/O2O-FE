@@ -1,14 +1,12 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import addressStore from '@/store/addressStore'
 import { useGeoLocationStore } from '@/store/geoLocation'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
 import { ROUTE_PATHS } from '@/utils/routes'
 import { useRouter } from 'next/navigation'
 import Icon from './Icon'
-import LoginModal from './shared/LoginModal'
 
 export interface NavigationProps {
   hasBackButton?: boolean
@@ -32,7 +30,6 @@ const Navigation = ({
   const router = useRouter()
   const { address } = useGeoLocationStore()
   const { member } = memberStore()
-  const { address: addressStoreAddress } = addressStore()
   const { showModal } = modalStore()
 
   return (
@@ -68,21 +65,13 @@ const Navigation = ({
               onClick={() => {
                 if (useAddress && member) {
                   router.push(ROUTE_PATHS.ADDRESS)
-                } else {
-                  showModal({
-                    content: <LoginModal />,
-                    useAnimation: true,
-                  })
                 }
               }}
             >
-              {useAddress
-                ? addressStoreAddress
-                  ? addressStoreAddress.defaultAddress?.roadAddress ||
-                    addressStoreAddress.defaultAddress?.jibunAddress +
-                      ' ' +
-                      addressStoreAddress.defaultAddress?.detailAddress
-                  : address?.roadAddress || address?.jibunAddress
+              {useAddress && member
+                ? `${member.address.roadAddress || member.address.jibunAddress} ${
+                    member.address.detailAddress
+                  }`
                 : title}
             </h1>
             {useAddress && member && <Icon name="ChevronDown" size={24} />}

@@ -13,6 +13,9 @@ import './globals.css'
 export const metadata: Metadata = {
   title: '개발의민족',
   description: '개발의민족',
+  icons: {
+    icon: '/favicon.png',
+  },
 }
 
 export const viewport = {
