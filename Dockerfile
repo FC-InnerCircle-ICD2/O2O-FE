@@ -18,7 +18,8 @@ RUN echo "NEXT_PUBLIC_API_MOCKING=${NEXT_PUBLIC_API_MOCKING}" > .env && \
     echo "NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}" >> .env && \
     echo "NEXT_PUBLIC_KAKAO_APP_KEY=${NEXT_PUBLIC_KAKAO_APP_KEY}" >> .env && \
     echo "NEXT_PUBLIC_PAY200_KEY=${NEXT_PUBLIC_PAY200_KEY}" >> .env && \
-    echo "NEXT_PUBLIC_TOSS_PAY_KEY=${NEXT_PUBLIC_TOSS_PAY_KEY}" >> .env
+    echo "NEXT_PUBLIC_TOSS_PAY_KEY=${NEXT_PUBLIC_TOSS_PAY_KEY}" >> .env && \
+    echo "NEXT_PUBLIC_KAKAO_API_KEY=${NEXT_PUBLIC_KAKAO_API_KEY}" >> .env
 
 # .env 파일 확인
 RUN echo "=== .env file contents ===" && cat .env
