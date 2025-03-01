@@ -1,6 +1,6 @@
 'use client'
 
-import { ORDER_STATUS_CODE } from '@/api/useGetOrdersDetail'
+import { ORDER_STATUS } from '@/api/useGetOrdersDetail'
 import CartButton from '@/components/CartButton'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
 import Separator from '@/components/Separator'
@@ -20,10 +20,7 @@ export interface OrdersList {
   storeId: string
   storeName: string
   orderId: string
-  status: {
-    code: ORDER_STATUS_CODE
-    desc: string
-  }
+  status: ORDER_STATUS
   orderTime: string
   orderSummary: string
   deliveryCompleteTime: string | null
