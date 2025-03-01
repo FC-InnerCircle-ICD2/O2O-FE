@@ -6,13 +6,15 @@ import Separator from '@/components/Separator'
 import { usePathname } from 'next/navigation'
 import useGetOrderStatus from '@/api/useGetOrderStatus'
 import OrderStatus from './_components/OrderStatus'
+import { useMemo } from 'react'
 
 const OrderDetailPage = () => {
   const path = usePathname()
-  const { ordersDetail, resetGetOrdersDetail, isSuccess } = useGetOrdersDetail(
-    path.split('/').pop()
-  )
-  const { status } = useGetOrderStatus(path.split('/').pop())
+  const orderId = useMemo(() => {
+    return path.split('/').pop()
+  }, [path])
+  const { ordersDetail, resetGetOrdersDetail, isSuccess } = useGetOrdersDetail(orderId)
+  const { status } = useGetOrderStatus(orderId)
 
   if (!ordersDetail) return <div>주문 상세 정보를 불러오는 중입니다.</div>
 

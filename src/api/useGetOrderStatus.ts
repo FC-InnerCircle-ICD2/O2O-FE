@@ -1,7 +1,6 @@
 import { api } from '@/lib/api'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-
-export type OrderStatus = 'NEW' | 'ONGOING' | 'DONE' | 'REFUSE' | 'CANCELED'
+import { OrderStatus } from './useGetOrdersDetail'
 
 const useGetOrderStatus = (orderId?: string) => {
   const { data: status, isSuccess } = useQuery({

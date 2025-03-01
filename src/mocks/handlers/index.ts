@@ -2,6 +2,7 @@ import BANNER_MOCK_DATA from '@/constants/banners'
 import STORE_MOCK_DATA from '@/constants/stores'
 import { delay, http, HttpResponse, passthrough } from 'msw'
 import { DUMMY_ORDER_LIST } from './orders'
+import { ORDER_STATUS, OrderStatus } from '@/api/useGetOrdersDetail'
 
 // API 엔드포인트 예시
 export const handlers = [
@@ -172,6 +173,25 @@ export const handlers = [
     return passthrough()
   }),
 
+  http.get('*/api/v1/orders', () => {
+    return HttpResponse.json({
+      status: 200,
+      message: 'OK',
+      data: {
+        totalCount: null,
+        nextCursor: null,
+        content: [
+          {
+            ...DUMMY_ORDER_LIST[0],
+            storeId: '1',
+            orderSummary: '새우 로제 파스타 외 2개',
+            imageThumbnail: null,
+          },
+        ],
+      },
+    })
+  }),
+
   http.get('*/api/v1/orders/:orderId', ({ request, params }) => {
     const orderId = decodeURIComponent(params.orderId as string)
 
@@ -186,23 +206,30 @@ export const handlers = [
   http.get('*/api/v1/orders/:orderId/status', ({ request, params }) => {
     const orderId = params.orderId as string
 
-    const getNextStatus = (currentStatus: string): string => {
-      switch (currentStatus) {
-        case '신규':
-          return '진행중'
-        case '진행중':
-          return '완료'
-        case '완료':
-        case '취소':
-          return currentStatus
+    const getNextStatus = (currentStatus: ORDER_STATUS): OrderStatus => {
+      switch (currentStatus.desc) {
+        case '주문대기': // S1
+          return 'NEW'
+        case '주문접수': // S2
+          return 'ONGOING'
+        case '주문수락': //S3
+          return 'DONE'
+        case '주문거절': // S4
+          return 'REFUSE'
+        case '주문완료': // S5
+          return 'DONE'
+        case '주문취소': // S6
+          return 'CANCELED'
         default:
-          return currentStatus
+          return 'DONE'
       }
     }
+    const currentOrder =
+      DUMMY_ORDER_LIST.filter((order) => order.orderId === orderId)[0] ?? DUMMY_ORDER_LIST[0]
     return HttpResponse.json({
       status: 200,
       message: 'success',
-      data: getNextStatus(orderId),
+      data: getNextStatus(currentOrder.status),
     })
   }),
   // Get Menu Options
