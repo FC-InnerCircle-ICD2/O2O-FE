@@ -1,6 +1,5 @@
 import js from '@eslint/js'
 import nextPlugin from '@next/eslint-plugin-next'
-import pluginPrettier from 'eslint-plugin-prettier'
 import tailwind from 'eslint-plugin-tailwindcss'
 import ts from 'typescript-eslint'
 
@@ -16,24 +15,11 @@ export default [
     plugins: {
       '@typescript-eslint': ts.plugin,
       tailwindcss: tailwind,
-      prettier: pluginPrettier,
       '@next/next': nextPlugin,
     },
     rules: {
       '@typescript-eslint/no-unused-vars': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
-      'prettier/prettier': [
-        'error',
-        {
-          tabWidth: 2,
-          useTabs: false,
-          singleQuote: true,
-          trailingComma: 'es5',
-          semi: false,
-          endOfLine: 'lf',
-          printWidth: 100,
-        },
-      ],
       indent: 'off',
       '@typescript-eslint/indent': 'off',
       'tailwindcss/no-custom-classname': 'off',

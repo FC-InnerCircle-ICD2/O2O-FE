@@ -4,9 +4,12 @@ import usePatchReview from '@/api/usePatchReview'
 import usePostReview from '@/api/usePostReview'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
+import Loading from '@/components/Loading'
 import { useToast } from '@/hooks/useToast'
+import { cn } from '@/lib/utils'
 import { modalStore } from '@/store/modal'
 import Image from 'next/image'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 interface ReviewEditorModalProps {
@@ -36,8 +39,8 @@ const ReviewEditorModal = ({
   prevData,
 }: ReviewEditorModalProps) => {
   const { hideModal } = modalStore()
-  const { mutate: postReview } = usePostReview()
-  const { mutate: patchReview } = usePatchReview()
+  const { mutate: postReview, isPending: isPosting } = usePostReview()
+  const { mutate: patchReview, isPending: isPatching } = usePatchReview()
   const { toast } = useToast()
 
   const { register, handleSubmit, watch, setValue } = useForm<ReviewFormData>({
@@ -48,7 +51,7 @@ const ReviewEditorModal = ({
       content: prevData?.clientReviewContent || '',
       deliveryQuality: prevData?.deliveryQuality || '',
       image: null,
-      imagePreview: prevData?.representativeImageUri || null,
+      imagePreview: prevData?.representativeImageUri + `?v=${Date.now()}` || null,
       isImageChanged: false,
     },
   })
@@ -58,7 +61,6 @@ const ReviewEditorModal = ({
   const quantityScore = watch('quantityScore')
   const content = watch('content')
   const deliveryQuality = watch('deliveryQuality')
-
   const imagePreview = watch('imagePreview')
 
   const isFormValid =
@@ -67,7 +69,18 @@ const ReviewEditorModal = ({
     quantityScore > 0 &&
     content.length >= 5 &&
     (deliveryQuality === 'GOOD' || deliveryQuality === 'BAD')
+  const [isContentValid, setIsContentValid] = useState(true)
 
+  const handleBlurContent = () => {
+    if (content.length < 5) {
+      setIsContentValid(false)
+    } else {
+      setIsContentValid(true)
+    }
+  }
+  const handleFocusContent = () => {
+    setIsContentValid(true)
+  }
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -144,97 +157,122 @@ const ReviewEditorModal = ({
           },
         }
       )
-      console.log('🚀  data.image:', data.image)
     }
   }
 
   return (
-    <div className="size-full bg-white p-mobile_safe">
-      <div className="relative mb-3 mt-6 flex items-center gap-3">
-        <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
-        <div className="font-bold">{storeName}</div>
-      </div>
-      <div className="mb-1 text-lg font-bold">이 가게를 추천하시겠어요?</div>
-      <div className="mb-4 text-sm">{orderSummary}</div>
+    <>
+      {(isPosting || isPatching) && <Loading />}
+      <div className="flex size-full flex-col bg-white p-mobile_safe">
+        <div className="mb-3 mt-6 flex items-center gap-3">
+          <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
+          <div className="font-bold">{storeName}</div>
+        </div>
 
-      <RatingInput
-        value={watch('totalScore')}
-        onChange={(value) => setValue('totalScore', value)}
-        size={40}
-      />
-      <div className="ml-1.5">
-        <RatingInput
-          label="맛"
-          value={watch('tasteScore')}
-          onChange={(value) => setValue('tasteScore', value)}
-        />
-        <RatingInput
-          label="양"
-          value={watch('quantityScore')}
-          onChange={(value) => setValue('quantityScore', value)}
-        />
-      </div>
-      <div className="mb-4">
-        <textarea
-          className="w-full rounded-lg border border-gray-300 p-2 leading-tight"
-          placeholder="최소 5자 이상 작성해야 등록이 가능해요."
-          {...register('content', {
-            required: true,
-            minLength: 5,
-          })}
-          maxLength={1000}
-          rows={4}
-        />
-        <div className="mt-0.5 text-right text-sm text-gray-400">{content.length}/1000</div>
-      </div>
-      <div className="mb-10">
-        <div className="mb-2 text-sm font-bold">사진 등록하기 (선택)</div>
-        <div className="flex gap-2">
-          {!imagePreview ? (
-            <label className="flex size-16 cursor-pointer items-center justify-center rounded-lg border border-solid border-gray-400 p-2">
-              <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
-              <Icon name="Camera" size={24} />
-            </label>
-          ) : (
-            <div className="relative size-16">
-              <Image
-                src={imagePreview}
-                alt="리뷰 이미지"
-                className="size-16 rounded-lg object-cover"
-                width={64}
-                height={64}
-              />
-              <button
-                onClick={handleImageDelete}
-                className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-gray-800 text-white"
-              >
-                <Icon name="X" size={16} />
-              </button>
+        <div className="grow overflow-y-auto">
+          <div className="mb-1 text-lg font-bold">이 가게를 추천하시겠어요?</div>
+          <div className="mb-4 text-sm">{orderSummary}</div>
+
+          <RatingInput
+            value={watch('totalScore')}
+            onChange={(value) => setValue('totalScore', value)}
+            size={40}
+          />
+          <div className="ml-1.5">
+            <RatingInput
+              label="맛"
+              value={watch('tasteScore')}
+              onChange={(value) => setValue('tasteScore', value)}
+            />
+            <RatingInput
+              label="양"
+              value={watch('quantityScore')}
+              onChange={(value) => setValue('quantityScore', value)}
+            />
+          </div>
+          <div className="mb-4">
+            <textarea
+              className="w-full rounded-lg border border-gray-300 p-2 leading-tight"
+              placeholder="최소 5자 이상 작성해야 등록이 가능해요."
+              {...register('content', {
+                required: true,
+                minLength: 5,
+              })}
+              maxLength={1000}
+              rows={4}
+              onBlur={handleBlurContent}
+              onFocus={handleFocusContent}
+            />
+            <div
+              className={cn(
+                'mt-0.5 flex items-center text-sm text-gray-400',
+                !isContentValid ? 'justify-between' : 'justify-end'
+              )}
+            >
+              {!isContentValid && (
+                <span className="ml-1 text-red-500">최소 5자 이상 작성해주세요.</span>
+              )}
+              <span>{content.length}/1000</span>
             </div>
-          )}
+          </div>
+          <div className="mb-10">
+            <div className="mb-2 text-sm font-bold">사진 등록하기 (선택)</div>
+            <div className="flex gap-2">
+              {!imagePreview ? (
+                <label className="flex size-16 cursor-pointer items-center justify-center rounded-lg border border-solid border-gray-400 p-2">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageUpload}
+                  />
+                  <Icon name="Camera" size={24} />
+                </label>
+              ) : (
+                <div className="relative size-16">
+                  <Image
+                    src={imagePreview}
+                    alt="리뷰 이미지"
+                    className="size-16 rounded-lg object-cover"
+                    width={64}
+                    height={64}
+                  />
+                  <button
+                    onClick={handleImageDelete}
+                    className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full bg-gray-800 text-white"
+                  >
+                    <Icon name="X" size={16} />
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="mb-7">
+            <div className="mb-2 text-lg font-bold">배달은 어떠셨어요?</div>
+            <div className="flex gap-2">
+              <div
+                className={`rounded-full border border-solid border-gray-400 p-2.5 ${watch('deliveryQuality') === 'GOOD' ? 'bg-primary text-white' : ''}`}
+                onClick={() => setValue('deliveryQuality', 'GOOD')}
+              >
+                좋아요
+              </div>
+              <div
+                className={`rounded-full border border-solid border-gray-400 p-2.5 ${watch('deliveryQuality') === 'BAD' ? 'bg-primary text-white' : ''}`}
+                onClick={() => setValue('deliveryQuality', 'BAD')}
+              >
+                아쉬워요
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-white pt-2">
+          <Button onClick={handleSubmit(onSubmit)} disabled={!isFormValid}>
+            리뷰 등록하기
+          </Button>
         </div>
       </div>
-      <div className="mb-7">
-        <div className="mb-2 text-lg font-bold">배달은 어떠셨어요?</div>
-        <div className="flex gap-2">
-          <div
-            className={`rounded-full border border-solid border-gray-400 p-2.5 ${watch('deliveryQuality') === 'GOOD' ? 'bg-primary text-white' : ''}`}
-            onClick={() => setValue('deliveryQuality', 'GOOD')}
-          >
-            좋아요
-          </div>
-          <div
-            className={`rounded-full border border-solid border-gray-400 p-2.5 ${watch('deliveryQuality') === 'BAD' ? 'bg-primary text-white' : ''}`}
-            onClick={() => setValue('deliveryQuality', 'BAD')}
-          >
-            아쉬워요
-          </div>
-        </div>
-      </div>
-      <Button onClick={handleSubmit(onSubmit)} disabled={!isFormValid}>
-        리뷰 등록하기
-      </Button>
-    </div>
+    </>
   )
 }
 

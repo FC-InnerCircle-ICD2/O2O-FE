@@ -1,55 +1,115 @@
 'use client'
 
-import Input from '@/components/Input'
-import { useState } from 'react'
-import Icon from '@/components/Icon'
-import Separator from '@/components/Separator'
-import { ROUTE_PATHS } from '@/utils/routes'
-import Link from 'next/link'
-import Badge from '@/components/Badge'
-import DaumPostcode from 'react-daum-postcode'
-import AddressSearchModal from '@/app/mypage/address/_components/AddressSearchModal'
-import { useRouter, useSearchParams } from 'next/navigation'
-import useGetAddress from '@/api/useGetAddress'
 import useDeleteAddress from '@/api/useDeleteAddress'
-import { modalStore } from '@/store/modal'
+import useGetAddress, { AddressResponseData } from '@/api/useGetAddress'
+import useGetAddressToGeolocation from '@/api/useGetAddressToGeolocation'
+import { AddressType } from '@/api/usePostAddress'
+import usePostDefaultAddress from '@/api/usePostDefaultAddress'
+import AddressSearchModal from '@/app/mypage/address/_components/AddressSearchModal'
+import Badge from '@/components/Badge'
+import Icon from '@/components/Icon'
+import Input from '@/components/Input'
+import Separator from '@/components/Separator'
+import LoginButtonSection from '@/components/shared/LoginButtonSection'
 import { useToast } from '@/hooks/useToast'
-import { Button } from '@/components/button'
-import { SignupData } from '@/models/auth'
-import Address from '@/app/mypage/address/page'
-import AddressDetail from '@/app/mypage/address/detail/page'
+import { cn } from '@/lib/utils'
+import { modalStore } from '@/store/modal'
+import memberStore from '@/store/user'
+import { ROUTE_PATHS } from '@/utils/routes'
+import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import DaumPostcode from 'react-daum-postcode'
+import AddressDetail, { AddressData } from '../detail/_components/AddressDetail'
 
-const AddressOption = ({ signup }) => {
+const AddressOption = () => {
   const [word, setWord] = useState('')
   const [popup, setPopup] = useState(false)
-  const router = useRouter()
-  const { address } = signup ? { address: null } : useGetAddress()
-  const { showModal, hideModal } = modalStore()
-  const { toast } = useToast()
-  const { mutate: deleteAddress, isPending: isDeleting } = useDeleteAddress()
 
-  const handleComplete = (data) => {
-    setPopup(!popup)
-    hideModal()
-    handleClickDetail(data.roadAddress, signup)
+  const { member } = memberStore()
+  const { showModal, hideModal } = modalStore()
+
+  const { mutate: deleteAddress, isPending: isPendingDeleting } = useDeleteAddress()
+  const { mutate: setDefaultAddress, isPending: isPendingSettingDefaultAddress } =
+    usePostDefaultAddress()
+  const { address } = useGetAddress()
+  const { mutate: addressToGeolocation } = useGetAddressToGeolocation()
+
+  const { toast } = useToast()
+  const router = useRouter()
+
+  const queryClient = useQueryClient()
+
+  const handleComplete = async (data: { address: string }) => {
+    addressToGeolocation(data.address, {
+      onSuccess: (data) => {
+        showModal({
+          content: (
+            <AddressDetailModal
+              userAddress={address}
+              addressData={{
+                type: undefined,
+                address: data.documents[0].jibunAddress,
+                roadAddr: data.documents[0].roadAddress,
+                detail: '',
+                coords: { lat: Number(data.documents[0].y), lng: Number(data.documents[0].x) },
+              }}
+            />
+          ),
+          useAnimation: true,
+          useDimmedClickClose: true,
+        })
+      },
+      onError: (error) => {
+        console.log({ error })
+        toast({
+          title: '주소 검색에 실패했습니다.',
+          description: '다시 시도해주세요.',
+          variant: 'destructive',
+          position: 'center',
+        })
+
+        hideModal()
+      },
+      onSettled: () => {
+        setPopup(false)
+      },
+    })
   }
 
-  const handleClickDetail = (address, signup) => {
+  const handleClickDetail = (type?: AddressType) => {
     showModal({
-      content: <AddressDetailModal address={address} signup={signup} />,
+      content: <AddressDetailModal type={type} userAddress={address} />,
       useAnimation: true,
       useDimmedClickClose: true,
     })
   }
 
-  const handleClickDeleteButton = (id) => {
+  const handleClickSetDefaultAddress = (id: number | undefined) => {
+    if (!id || isPendingSettingDefaultAddress) return
+    if (id === address?.defaultAddress?.id) {
+      router.push(ROUTE_PATHS.HOME)
+      return
+    }
+
+    setDefaultAddress(id, {
+      onSuccess: () => {
+        router.push(ROUTE_PATHS.HOME)
+        queryClient.invalidateQueries({ queryKey: ['address'] })
+      },
+    })
+  }
+
+  const handleClickDeleteButton = (id: number | undefined) => {
+    if (!id || isPendingDeleting) return
+
     deleteAddress(id, {
       onSuccess: () => {
         toast({
           title: '주소가 삭제되었습니다.',
           position: 'center',
         })
-        hideModal()
+        queryClient.invalidateQueries({ queryKey: ['address'] })
       },
       onError: () => {
         toast({
@@ -62,154 +122,208 @@ const AddressOption = ({ signup }) => {
     })
   }
 
-  // todo: input를 readonly 할 수는 없는지
-  return (
-    <div className="flex w-full flex-col gap-4 px-mobile_safe pt-5">
-      <div className="w-full bg-white">
-        <Input
-          placeholder="건물명, 도로명 또는 지번으로 검색"
-          value={word}
-          inputSize="sm"
-          onChange={(e) => setWord(e.target.value)}
-          onReset={() => setWord('')}
-          icon={<Icon name="Search" size={18} />}
-          offOutline
-          onClick={() => setPopup(true)}
-        />
-        <AddressSearchModal isOpen={popup} onClose={() => setPopup(false)}>
-          <DaumPostcode onComplete={handleComplete} />
-        </AddressSearchModal>
+  if (!member)
+    return (
+      <div className="px-mobile_safe pt-5">
+        <LoginButtonSection />
       </div>
-      <div className="flex flex-row justify-center gap-2">
-        <Icon name="LocateFixed" size={20} />
-        <div className="content-center" onClick={() => handleClickDetail}>
-          현재 위치로 주소 찾기
-        </div>
-      </div>
+    )
 
-      {signup ? (
-        <>
-          <Separator ignoreMobileSafe className="h-2" />
-        </>
-      ) : (
-        <>
-          {address?.defaultAddress ? (
-            <>
-              <Separator ignoreMobileSafe className="h-2" />
-              <div className="flex flex-row gap-2">
-                <Icon name="MapPin" size={20} />
-                <div className="flex flex-col gap-4">
-                  <div className="flex gap-2">
-                    <div className="content-center">{address?.defaultAddress.roadAddress}</div>
-                    <Badge variant="essential">현재</Badge>
+  if (!address) return <></>
+  else
+    return (
+      <div className="flex w-full flex-col gap-4 pb-20 pt-5">
+        <div className="w-full bg-white px-mobile_safe">
+          <Input
+            placeholder="건물명, 도로명 또는 지번으로 검색"
+            value={word}
+            inputSize="sm"
+            onChange={(e) => setWord(e.target.value)}
+            onReset={() => setWord('')}
+            icon={<Icon name="Search" size={18} />}
+            offOutline
+            onClick={() => setPopup(true)}
+            readOnly
+          />
+          <AddressSearchModal isOpen={popup} onClose={() => setPopup(false)}>
+            <DaumPostcode onComplete={handleComplete} />
+          </AddressSearchModal>
+        </div>
+        <div className="flex flex-row justify-center gap-2">
+          <Icon name="LocateFixed" size={20} />
+          <div className="content-center" onClick={() => handleClickDetail()}>
+            현재 위치로 주소 찾기
+          </div>
+        </div>
+
+        <Separator ignoreMobileSafe className="h-2" />
+
+        {address.defaultAddress && (
+          <>
+            <div className="flex flex-row gap-2 px-mobile_safe">
+              <Icon name="MapPin" size={20} className="mt-[2px]" />
+              <div className="flex flex-col gap-1">
+                <div className="flex items-center gap-2">
+                  <div className="max-w-[calc(100dvw-40px-20px-30px-1rem)] truncate text-base font-medium">
+                    {address.defaultAddress.roadAddress || address.defaultAddress.jibunAddress}
+                    {', '}
+                    {address.defaultAddress.detailAddress}
                   </div>
+                  <Badge variant="essential">현재</Badge>
+                </div>
+                {address.defaultAddress.roadAddress && (
                   <div className="text-xs text-gray-500">
                     [지번] {address?.defaultAddress.jibunAddress}
+                    {', '}
+                    {address?.defaultAddress.detailAddress}
                   </div>
-                </div>
+                )}
               </div>
-            </>
-          ) : (
-            <>
-              <Separator ignoreMobileSafe className="h-2" />
-              <button onClick={() => handleClickDetail}>
-                <div className="flex flex-row gap-2">
-                  <Icon name="MapPin" size={20} />
-                  <div className="content-center">{signup ? '대표주소 추가' : '주소 추가'}</div>
-                </div>
-              </button>
-            </>
-          )}
-          {address?.house ? (
-            <>
-              <Separator ignoreMobileSafe className="h-2" />
-              <Link href={ROUTE_PATHS.HOME}>
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-row justify-between">
-                    <div className="flex flex-row gap-2">
-                      <Icon name="Home" size={20} />
-                      <div className="content-center">집</div>
-                    </div>
-                    <button onClick={() => handleClickDeleteButton(address?.house.id)}>
-                      <Icon className="text-gray-500" name="X" size={14} />
-                    </button>
-                  </div>
+            </div>
+            <Separator ignoreMobileSafe className="h-2" />
+          </>
+        )}
 
-                  <div className="ml-7 text-xs text-gray-500">
-                    {address.house.roadAddress} {address.house.detailAddress}
-                  </div>
+        <div className="px-mobile_safe">
+          <div className="flex items-start justify-between gap-2">
+            <Icon name="Home" size={20} className="mt-[2px]" />
+            <div
+              className="flex flex-1 flex-col gap-1"
+              onClick={() => {
+                if (!address.house) {
+                  handleClickDetail(AddressType.HOME)
+                } else {
+                  handleClickSetDefaultAddress(address.house.id)
+                }
+              }}
+            >
+              <div className="content-center text-base font-medium">
+                {address.house ? '집' : '집 추가'}
+              </div>
+              {address.house && (
+                <div className="text-xs text-gray-500">
+                  {address.house?.roadAddress || address.house?.jibunAddress}
+                  {', '}
+                  {address.house?.detailAddress}
                 </div>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Separator ignoreMobileSafe className="h-2" />
-              <Link
-                href={{ pathname: ROUTE_PATHS.ADDRESS_DETAIL, query: { flag: true, type: 'HOME' } }}
-              >
-                <div className="flex flex-row gap-2">
-                  <Icon name="Home" size={20} />
-                  <div className="content-center">집 추가</div>
-                </div>
-              </Link>
-            </>
-          )}
-
-          {address?.company ? (
-            <>
-              <Separator ignoreMobileSafe className="h-2" />
-              <Link href={ROUTE_PATHS.HOME}>
-                <div className="flex flex-col gap-2">
-                  <div className="flex flex-row justify-between">
-                    <div className="flex flex-row gap-2">
-                      <Icon name="Briefcase" size={20} />
-                      <div className="content-center">회사</div>
-                    </div>
-                    <button onClick={() => handleClickDeleteButton(address?.company.id)}>
-                      <Icon className="text-gray-500" name="X" size={14} />
-                    </button>
-                  </div>
-
-                  <div className="ml-7 text-xs text-gray-500">
-                    {address.company.roadAddress} {address.company.detailAddress}
-                  </div>
-                </div>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Separator />
-              <Link
-                href={{
-                  pathname: ROUTE_PATHS.ADDRESS_DETAIL,
-                  query: { flag: true, type: 'COMPANY' },
+              )}
+            </div>
+            {address.house && address.defaultAddress?.id !== address.house.id && (
+              <button
+                className="flex size-[16px] items-center justify-center rounded-full bg-gray-100"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleClickDeleteButton(address.house?.id)
                 }}
               >
-                <div className="flex flex-row gap-2">
-                  <Icon name="Briefcase" size={20} />
-                  <div className="content-center">회사 추가</div>
+                <Icon className="text-gray-500" name="X" size={12} />
+              </button>
+            )}
+          </div>
+
+          <Separator className="my-4 h-px bg-gray-200" />
+
+          <div className="flex items-start justify-between gap-2">
+            <Icon name="Briefcase" size={20} className="mt-[2px]" />
+            <div
+              className="flex flex-1 flex-col gap-1"
+              onClick={() => {
+                if (!address.company) {
+                  handleClickDetail(AddressType.COMPANY)
+                } else {
+                  handleClickSetDefaultAddress(address.company.id)
+                }
+              }}
+            >
+              <div className="content-center text-base font-medium">
+                {address.company ? '회사' : '회사 추가'}
+              </div>
+              {address.company && (
+                <div className="text-xs text-gray-500">
+                  {address.company?.roadAddress || address.company?.jibunAddress}
+                  {', '}
+                  {address.company?.detailAddress}
                 </div>
-              </Link>
-            </>
-          )}
-        </>
-      )}
-    </div>
-  )
+              )}
+            </div>
+            {address.company && address.defaultAddress?.id !== address.company.id && (
+              <button
+                className="flex size-[16px] items-center justify-center rounded-full bg-gray-100"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  handleClickDeleteButton(address.company?.id)
+                }}
+              >
+                <Icon className="text-gray-500" name="X" size={12} />
+              </button>
+            )}
+          </div>
+        </div>
+
+        <Separator ignoreMobileSafe className="h-2" />
+
+        {address.others?.map((other, index) => (
+          <div key={other.id} className={'px-mobile_safe'}>
+            <div
+              className={cn(
+                'flex flex-row items-start justify-between gap-2',
+                index !== (address.others?.length ?? 0) - 1 &&
+                  'border-b border-solid border-gray-200 pb-4'
+              )}
+              onClick={() => {
+                handleClickSetDefaultAddress(other.id)
+              }}
+            >
+              <Icon name="MapPin" size={20} className="mt-[2px]" />
+              <div className="flex flex-1 flex-col gap-1">
+                <div className="text-base font-medium">{other.alias || '별명 보내주세요'}</div>
+                <div className="text-xs text-gray-500">
+                  {other.roadAddress || other.jibunAddress}
+                  {', '}
+                  {other.detailAddress}
+                </div>
+              </div>
+              {address.defaultAddress?.id !== other.id && (
+                <button
+                  className="flex size-[16px] items-center justify-center rounded-full bg-gray-100"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleClickDeleteButton(other.id)
+                  }}
+                >
+                  <Icon className="text-gray-500" name="X" size={12} />
+                </button>
+              )}
+            </div>
+          </div>
+        ))}
+        {(address.others?.length || 0) > 0 && <Separator ignoreMobileSafe className="h-2" />}
+      </div>
+    )
 }
 
-const AddressDetailModal = ({ address, signup }) => {
+const AddressDetailModal = ({
+  type,
+  userAddress,
+  addressData,
+}: {
+  type?: AddressType
+  userAddress?: AddressResponseData
+  addressData?: AddressData
+}) => {
   const { hideModal } = modalStore()
 
   return (
-    <div className="flex size-full flex-col bg-white">
+    <div className="w-full max-w-[min(480px,100dvw)] bg-white">
       <div className="relative flex justify-end p-mobile_safe">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold">
           주소 등록
         </div>
         <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
       </div>
-      <AddressDetail data={address} signup={signup} />
+      <div className="h-[calc(100dvh-64px)] overflow-y-auto">
+        <AddressDetail type={type} userAddress={userAddress} defaultAddressData={addressData} />
+      </div>
     </div>
   )
 }

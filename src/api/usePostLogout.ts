@@ -1,5 +1,6 @@
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { api } from '@/lib/api'
+import addressStore from '@/store/addressStore'
 import memberStore from '@/store/user'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
@@ -8,6 +9,7 @@ const usePostLogout = () => {
   const accessToken = useLocalStorage('accessToken')
   const refreshToken = useLocalStorage('refreshToken')
   const { resetMember } = memberStore()
+  const { resetAddress } = addressStore()
 
   return useMutation({
     mutationFn: async () =>
@@ -19,6 +21,7 @@ const usePostLogout = () => {
       accessToken.resetValue()
       refreshToken.resetValue()
       resetMember()
+      resetAddress()
       queryClient.removeQueries({ queryKey: ['member'] })
       queryClient.removeQueries({ queryKey: ['favorites'] })
       queryClient.removeQueries({ queryKey: ['carts'] })

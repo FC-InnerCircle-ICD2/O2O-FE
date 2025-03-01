@@ -38,8 +38,4 @@ export interface Member {
   id: number
   signname: string
   nickname: string
-  profileImage: string
-  roadAddress?: string
-  jibunAddress?: string
-  detailAddress?: string
 }

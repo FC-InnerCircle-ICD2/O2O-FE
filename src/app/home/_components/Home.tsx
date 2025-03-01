@@ -35,7 +35,7 @@ const Home = () => {
     <PullToRefresh onRefresh={handleRefresh} scrollRef={scrollRef}>
       <div
         ref={scrollRef}
-        className="flex h-[calc(100dvh-40px-85px)] flex-col gap-1 overflow-auto pb-4 pt-9"
+        className="flex h-[calc(100dvh-40px-85px)] flex-col gap-1 overflow-auto py-4"
       >
         <CategoryDrawer />
         <BannerSlide />

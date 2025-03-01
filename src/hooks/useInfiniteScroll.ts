@@ -1,7 +1,6 @@
 'use client'
 
 import { api } from '@/lib/api'
-import { isMockingMode, useMockReady } from '@/providers/MockProvider'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef } from 'react'
 
@@ -20,6 +19,7 @@ interface InfiniteScrollOptions<TFilter> {
   root?: Element | null
   rootMargin?: string
   location?: { lat: number; lng: number }
+  enabled?: boolean
 }
 
 export const useInfiniteScroll = <TData, TFilter = void>({
@@ -27,15 +27,16 @@ export const useInfiniteScroll = <TData, TFilter = void>({
   endpoint,
   filter,
   size = 10,
-  threshold = 0.1,
+  threshold = 0,
   root = null,
   rootMargin = '0px',
   location = { lat: 37.5177, lng: 127.0473 },
+  enabled = true,
 }: InfiniteScrollOptions<TFilter>) => {
   const observerRef = useRef<IntersectionObserver | null>(null)
   const targetRef = useRef<HTMLDivElement | null>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const isMockReady = useMockReady()
+  // const isMockReady = useMockReady()
 
   const {
     data,
@@ -77,7 +78,8 @@ export const useInfiniteScroll = <TData, TFilter = void>({
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? undefined,
     initialPageParam: 1,
-    enabled: isMockingMode ? isMockReady : true,
+    enabled: enabled,
+    // placeholderData: keepPreviousData,
   })
 
   const handleObserver = useCallback(

@@ -1,14 +1,17 @@
 import { api } from '@/lib/api'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-export type ORDER_STATUS_CODE = 'S1' | 'S2' | 'S3' | 'S4' | 'S5' | 'S6' // S1: 주문대기, S2: 주문접수, S3: 주문수락, S4: 주문거절, S5: 주문완료, S6: 주문취소
-
+export type OrderStatus = 'NEW' | 'ONGOING' | 'DONE' | 'REFUSE' | 'CANCEL'
+export type ORDER_STATUS =
+  | { code: 'S1'; desc: '주문대기' }
+  | { code: 'S2'; desc: '주문접수' }
+  | { code: 'S3'; desc: '주문수락' }
+  | { code: 'S4'; desc: '주문거절' }
+  | { code: 'S5'; desc: '주문완료' }
+  | { code: 'S6'; desc: '주문취소' }
 export interface OrdersDetail {
   orderId: string
-  status: {
-    code: ORDER_STATUS_CODE
-    desc: string
-  }
+  status: ORDER_STATUS
   orderTime: string
   storeName: string
   tel: string
@@ -62,7 +65,7 @@ const useGetOrdersDetail = (orderId?: string) => {
   })
 
   const resetGetOrdersDetail = () => {
-    qc.removeQueries({ queryKey: ['orders'] })
+    qc.invalidateQueries({ queryKey: ['ordersDetail', orderId] })
   }
 
   return { ordersDetail, isSuccess, resetGetOrdersDetail }
