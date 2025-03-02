@@ -9,7 +9,7 @@ const PayPage = () => {
   return (
     <>
       {member ? (
-        <div className="px-mobile_safe">
+        <div className="">
           <OrderInfo />
         </div>
       ) : (

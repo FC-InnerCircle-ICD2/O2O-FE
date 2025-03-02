@@ -25,7 +25,9 @@ const HomeList = () => {
     endpoint: 'stores/list-cursor',
     filter: { category, order },
     size: 10,
-    ...(location && { location: { lat: location.latitude, lng: location.longitude } }),
+    ...(member
+      ? { location: { lat: member.address.latitude, lng: member.address.longitude } }
+      : location && { location: { lat: location.latitude, lng: location.longitude } }),
   })
 
   const scrollRef = useRef<HTMLDivElement>(null)
