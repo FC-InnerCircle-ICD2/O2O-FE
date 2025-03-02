@@ -1,5 +1,4 @@
 import { OrdersDetail } from '@/api/useGetOrdersDetail'
-import usePatchOrderCancel from '@/api/usePatchOrderCancel'
 import Chip from '@/components/Chip'
 import Confirm from '@/components/Confirm'
 import Separator from '@/components/Separator'
@@ -8,10 +7,10 @@ import { v4 as uuidv4 } from 'uuid'
 
 interface OrderListProps {
   ordersData: OrdersDetail
+  patchOrderCancel: (orderId: string) => void
 }
 
-const OrderList = ({ ordersData }: OrderListProps) => {
-  const { mutate: patchOrderCancel } = usePatchOrderCancel()
+const OrderList = ({ ordersData, patchOrderCancel }: OrderListProps) => {
   const { showModal } = modalStore()
 
   const handleOrderCancel = () => {
@@ -20,7 +19,9 @@ const OrderList = ({ ordersData }: OrderListProps) => {
         <Confirm
           title="주문 취소"
           message="주문을 취소하시겠습니까?"
-          onConfirmClick={() => patchOrderCancel(ordersData.orderId)}
+          onConfirmClick={() => {
+            patchOrderCancel(ordersData.orderId)
+          }}
         />
       ),
     })

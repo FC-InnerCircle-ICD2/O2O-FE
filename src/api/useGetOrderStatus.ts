@@ -3,7 +3,11 @@ import { useQuery } from '@tanstack/react-query'
 import { OrderStatus } from './useGetOrdersDetail'
 
 const useGetOrderStatus = (orderId?: string) => {
-  const { data: status, isSuccess } = useQuery({
+  const {
+    data: status,
+    isSuccess,
+    refetch,
+  } = useQuery({
     queryKey: ['orderStatus', orderId],
     queryFn: async () => {
       return await api.get<{ status: OrderStatus }>(`orders/${orderId}/status`)
@@ -14,7 +18,7 @@ const useGetOrderStatus = (orderId?: string) => {
     },
   })
 
-  return { status, isSuccess }
+  return { status, isSuccess, refetch }
 }
 
 export default useGetOrderStatus
