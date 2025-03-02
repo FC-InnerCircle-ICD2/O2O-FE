@@ -22,7 +22,7 @@ const OrderPayBottomSheet = ({
     onSelectPaymentType(type)
   }
   return (
-    <div className="px-mobile_safe pb-16">
+    <div className="px-mobile_safe">
       <div className="flex flex-col gap-3">
         <PayButton
           type={OrderPayType.PAY200}
@@ -36,7 +36,7 @@ const OrderPayBottomSheet = ({
         />
       </div>
 
-      <Separator className="my-8 h-px w-full" />
+      <Separator className="my-6 h-px w-full" />
 
       <div className="flex flex-col gap-3 rounded-lg bg-gray-100 p-4">
         <div className="flex flex-col">
@@ -44,7 +44,9 @@ const OrderPayBottomSheet = ({
           <p className="pb-1 text-xs text-gray-500">
             • 실제로 결제가 이루어지지 않는 테스트 페이지입니다.
           </p>
-          <p className="text-xs text-gray-500">• Pay200로 결제 시 할인 혜택을 받을 수 있습니다.</p>
+          <p className="text-xs text-gray-500">
+            • PAY200으로 결제 시 할인 혜택을 받을 수 있습니다.
+          </p>
         </div>
       </div>
     </div>

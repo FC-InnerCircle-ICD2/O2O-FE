@@ -1,5 +1,6 @@
 'use client'
 
+import useGetGeolocationToAddress from '@/api/useGetGeolocationToAddress'
 import useGetMember from '@/api/useGetMember'
 import usePostLogout from '@/api/usePostLogout'
 import { getNavigationProps } from '@/constants/navigationProps'
@@ -20,6 +21,7 @@ interface CommonLayoutProps {
 
 const CommonLayout = ({ children }: CommonLayoutProps) => {
   const [isMounted, setIsMounted] = useState(false)
+  const { mutate: getGeolocationToAddress } = useGetGeolocationToAddress()
 
   const pathname = usePathname()
 
@@ -39,7 +41,7 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
   const { mutate: logout } = usePostLogout()
 
   const { setMember } = memberStore()
-  const { setCoordinates, setError, setIsLoading } = useGeoLocationStore()
+  const { setCoordinates, setError, setIsLoading, setAddress } = useGeoLocationStore()
   const { isGlobalLoading, setIsGlobalLoading } = globalLoaderStore()
 
   useEffect(() => {
@@ -92,6 +94,26 @@ const CommonLayout = ({ children }: CommonLayoutProps) => {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
               }
+
+              getGeolocationToAddress(
+                {
+                  latitude: position.coords.latitude.toString(),
+                  longitude: position.coords.longitude.toString(),
+                },
+                {
+                  onSuccess: (data) => {
+                    setAddress({
+                      roadAddress: data.documents[0].road_address
+                        ? data.documents[0].road_address.address_name
+                        : '',
+                      jibunAddress: data.documents[0].address.address_name,
+                    })
+                  },
+                  onError: () => {
+                    setError('위치 정보를 가져오는데 실패했습니다.')
+                  },
+                }
+              )
 
               setCoordinates(coords)
               setIsLoading(false)

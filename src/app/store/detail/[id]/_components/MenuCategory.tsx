@@ -14,7 +14,7 @@ const MenuCategory = ({ category, index, isActive, onClick }: MenuCategoryProps)
   return (
     <motion.span
       className={cn(
-        'flex min-w-fit cursor-pointer items-center rounded-full px-2.5 py-1 text-sm tracking-wide transition-colors duration-200',
+        'flex min-w-fit cursor-pointer items-center rounded-full px-2.5 py-1 text-base tracking-wide transition-colors duration-200',
         isActive && 'bg-black font-semibold text-white'
       )}
       onClick={onClick}

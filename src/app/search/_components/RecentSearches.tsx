@@ -34,8 +34,8 @@ const RecentSearches = () => {
   return (
     <div className="px-mobile_safe py-3">
       <div className="flex items-center justify-between">
-        <span className="text-lg font-bold">최근 검색어</span>
-        <span className="text-xs text-gray-400" onClick={handleRemoveAllSearch}>
+        <span className="text-xl font-bold">최근 검색어</span>
+        <span className="text-sm text-gray-400" onClick={handleRemoveAllSearch}>
           전체삭제
         </span>
       </div>
@@ -44,6 +44,7 @@ const RecentSearches = () => {
           {recentSearches.length > 0 ? (
             recentSearches.map((item, index) => (
               <Chip
+                className="text-sm"
                 key={`recent-${index}`}
                 text={item}
                 rightIcon={

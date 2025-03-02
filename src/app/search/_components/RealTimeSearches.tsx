@@ -1,10 +1,15 @@
 'use client'
 
 import useGetStoreTrend from '@/api/useGetStoreTrend'
+import usePostSearch from '@/api/usePostSearch'
 import Icon from '@/components/Icon'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { RealTimeSearch } from '@/models/realTimeSearches'
+import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { COLORS } from '@/styles/color'
+import { ROUTE_PATHS } from '@/utils/routes'
 import { AnimatePresence, motion } from 'motion/react'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 // Swiper 스타일 import
@@ -30,9 +35,21 @@ const RealTimeSearchItem = ({
   order: number
   realTimeSearch: RealTimeSearch
 }) => {
+  const { setValue, storedValue } = useLocalStorage<string[]>('recentSearches', [])
+  const { setKeyword } = useFoodSearchFilterStore()
+  const { mutate: postSearch } = usePostSearch()
+  const router = useRouter()
+
   // 현재 표시할 검색어만 상태로 관리
   const [currentSearch, setCurrentSearch] = useState<RealTimeSearch>(realTimeSearch)
   const [timestamp, setTimestamp] = useState(Date.now())
+
+  const handleSearch = (word: string) => {
+    postSearch(word)
+    setKeyword(word)
+    setValue([word, ...(storedValue || [])])
+    router.push(ROUTE_PATHS.SEARCH_RESULT)
+  }
 
   useEffect(() => {
     setCurrentSearch(realTimeSearch)
@@ -40,7 +57,10 @@ const RealTimeSearchItem = ({
   }, [realTimeSearch])
 
   return (
-    <div className="flex h-[16px] grow gap-3 overflow-hidden">
+    <div
+      className="flex h-[16px] grow gap-3 overflow-hidden"
+      onClick={() => handleSearch(currentSearch.keyword)}
+    >
       <span className="min-w-[10px]">{order}</span>
       <div className="flex grow flex-col justify-between">
         <AnimatePresence mode="wait">
@@ -104,7 +124,7 @@ const RealTimeSearches = () => {
 
           return newArray
         })
-        await new Promise((resolve) => setTimeout(resolve, 1500))
+        await new Promise((resolve) => setTimeout(resolve, 1000))
       }
       setIsUpdating(false)
     }
@@ -133,9 +153,9 @@ const RealTimeSearches = () => {
   if (!realTimeSearches || realTimeSearches.length === 0) return null
 
   return (
-    <div className="flex flex-col gap-[28px] px-mobile_safe">
+    <div className="flex flex-col gap-5 px-mobile_safe">
       <div className="flex items-center justify-between">
-        <span className="text-lg font-bold">실시간 급상승 검색어</span>
+        <span className="text-xl font-bold">실시간 급상승 검색어</span>
         <span className="text-xs font-normal text-gray-400">내 주소 지역, {currentTime} 기준</span>
       </div>
       <div className="flex gap-6">

@@ -1,6 +1,5 @@
-import { BottomSheet } from '@/store/bottomSheet'
-import { bottomSheetStore } from '@/store/bottomSheet'
-import React, { useCallback } from 'react'
+import { BottomSheet, bottomSheetStore } from '@/store/bottomSheet'
+import { useCallback } from 'react'
 
 const useBottomSheet = () => {
   const { bottomSheet, showBottomSheet, hideBottomSheet } = bottomSheetStore()
