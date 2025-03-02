@@ -1,6 +1,7 @@
 'use client'
 
 import { AddressResponseData } from '@/api/useGetAddress'
+import useGetMember from '@/api/useGetMember'
 import usePostAddress, { Address, AddressType } from '@/api/usePostAddress'
 import usePutAddress from '@/api/usePutAddress'
 import Icon from '@/components/Icon'
@@ -32,6 +33,7 @@ const MapInfo = ({
   const [isAddressValid, setIsAddressValid] = useState<boolean>(false)
   const { mutate: registerAddress, isPending } = usePostAddress()
   const { mutate: updateAddress, isPending: isUpdatePending } = usePutAddress()
+  const { refetch: refetchMember } = useGetMember()
 
   const handleAddress = () => {
     if (!addressData.roadAddr) {
@@ -80,6 +82,7 @@ const MapInfo = ({
 
     const _options = {
       onSuccess: () => {
+        refetchMember()
         queryClient.invalidateQueries({ queryKey: ['address'] })
         hideModal()
       },

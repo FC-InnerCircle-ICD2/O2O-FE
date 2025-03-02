@@ -24,7 +24,7 @@ const Home = () => {
     endpoint: 'stores/list-cursor',
     filter: { category: undefined },
     size: 10,
-    ...(location && { location: { lat: location.latitude, lng: location.longitude } }),
+    ...(member ? {location: {lat: member.address.latitude, lng: member.address.longitude}} : location && { location: { lat: location.latitude, lng: location.longitude } }),
   })
 
   const handleRefresh = async (): Promise<void> => {

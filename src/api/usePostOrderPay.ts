@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 export enum OrderPayType {
   TOSS = 'TOSS_PAY',
-  PAY200 = 'PAY200',
+  PAY200 = 'PAY_200',
 }
 
 export interface OrderPay {
