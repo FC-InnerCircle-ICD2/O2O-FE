@@ -9,6 +9,7 @@ import { Store } from '@/models/store'
 import { useGeoLocationStore } from '@/store/geoLocation'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import suggestionStore from '@/store/suggestion'
+import memberStore from '@/store/user'
 import { useRef } from 'react'
 import SearchFoodList from './SearchFoodList'
 
@@ -17,6 +18,7 @@ const SearchResult = () => {
   const { coordinates: location } = useGeoLocationStore()
   const { keyword, order } = useFoodSearchFilterStore()
   const { suggestion, suggestionWord, isFocus } = suggestionStore()
+  const { member } = memberStore()
   const { data, isFetching, targetRef, refetch } = useInfiniteScroll<
     Store,
     { keyword: string | undefined; order: OrderType }
@@ -25,7 +27,9 @@ const SearchResult = () => {
     endpoint: 'stores/list-cursor',
     filter: { keyword, order },
     size: 10,
-    ...(location && { location: { lat: location.latitude, lng: location.longitude } }),
+    ...(member
+      ? { location: { lat: member.address.latitude, lng: member.address.longitude } }
+      : location && { location: { lat: location.latitude, lng: location.longitude } }),
   })
   const { mutate: postSearch } = usePostSearch()
 

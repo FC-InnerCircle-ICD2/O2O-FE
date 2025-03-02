@@ -16,6 +16,14 @@ export const metadata: Metadata = {
   icons: {
     icon: '/favicon.png',
   },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  other: {
+    'format-detection': 'telephone=no, address=no, email=no',
+  },
 }
 
 export const viewport = {
