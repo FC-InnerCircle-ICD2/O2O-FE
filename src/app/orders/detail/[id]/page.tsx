@@ -2,6 +2,7 @@
 
 import useGetOrdersDetail from '@/api/useGetOrdersDetail'
 import useGetOrderStatus from '@/api/useGetOrderStatus'
+import usePatchOrderCancel from '@/api/usePatchOrderCancel'
 import OrderList from '@/app/orders/detail/[id]/_components/OrderList'
 import FullpageLoader from '@/components/FullpageLoader'
 import Separator from '@/components/Separator'
@@ -17,7 +18,8 @@ const OrderDetailPage = () => {
     return path.split('/').pop()
   }, [path])
   const { ordersDetail, resetGetOrdersDetail } = useGetOrdersDetail(orderId)
-  const { status } = useGetOrderStatus(orderId)
+  const { status, refetch: refetchOrderStatus } = useGetOrderStatus(orderId)
+  const { mutate: patchOrderCancel } = usePatchOrderCancel(refetchOrderStatus)
 
   useEffect(() => {
     if (!status) return
@@ -36,7 +38,11 @@ const OrderDetailPage = () => {
         {status && <OrderStatus orderStatus={status.status} />}
         <Separator ignoreMobileSafe className="h-[8px]" />
       </div>
-      <div className="pb-5">{ordersDetail && <OrderList ordersData={ordersDetail} />}</div>
+      <div className="pb-5">
+        {ordersDetail && (
+          <OrderList ordersData={ordersDetail} patchOrderCancel={patchOrderCancel} />
+        )}
+      </div>
     </div>
   )
 }
