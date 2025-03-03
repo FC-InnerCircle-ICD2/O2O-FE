@@ -64,10 +64,7 @@ export const useInfiniteScroll = <TData, TFilter = void>({
           )),
       }
 
-      // const API = isMockingMode ? mockApi : api
-      const API = api
-
-      const res = await API.get<PaginatedResponse<TData>>(endpoint, {
+      const res = await api.get<PaginatedResponse<TData>>(endpoint, {
         headers: {
           'X-User-Lat': location?.lat.toString() ?? '',
           'X-User-Lng': location?.lng.toString() ?? '',

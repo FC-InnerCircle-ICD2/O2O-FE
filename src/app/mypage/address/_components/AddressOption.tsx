@@ -172,7 +172,7 @@ const AddressOption = () => {
               <Icon name="MapPin" size={20} className="mt-[2px]" />
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
-                  <div className="max-w-[calc(100dvw-40px-20px-30px-1rem)] truncate text-base font-medium">
+                  <div className="max-w-[calc(100dvw-40px-20px-34px-1rem)] truncate text-base font-medium">
                     {address.defaultAddress.roadAddress || address.defaultAddress.jibunAddress}
                     {', '}
                     {address.defaultAddress.detailAddress}
