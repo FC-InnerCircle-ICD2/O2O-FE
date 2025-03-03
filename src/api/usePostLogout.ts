@@ -22,6 +22,7 @@ const usePostLogout = () => {
       queryClient.removeQueries({ queryKey: ['member'] })
       queryClient.removeQueries({ queryKey: ['favorites'] })
       queryClient.removeQueries({ queryKey: ['carts'] })
+      queryClient.removeQueries({ queryKey: ['address'] })
     },
     retry: 0,
   })

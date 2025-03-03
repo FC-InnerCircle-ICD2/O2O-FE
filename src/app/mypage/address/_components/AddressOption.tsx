@@ -14,13 +14,13 @@ import Separator from '@/components/Separator'
 import LoginButtonSection from '@/components/shared/LoginButtonSection'
 import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
+import { SignupData } from '@/models/auth'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
 import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import DaumPostcode from 'react-daum-postcode'
 import AddressDetail, { AddressData } from '../detail/_components/AddressDetail'
-import { SignupData } from '@/models/auth'
 
 const AddressOption = () => {
   const [word, setWord] = useState('')
@@ -326,10 +326,6 @@ export const AddressDetailModal = ({
 
   const handleClose = () => {
     hideModal()
-    if (onSaveInSignup) {
-      // 회원가입 시 주소 검색 모달 추가로 닫기
-      hideModal()
-    }
   }
 
   return (

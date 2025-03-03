@@ -9,11 +9,11 @@ import Input from '@/components/Input'
 import { Button } from '@/components/button'
 import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
+import { SignupData } from '@/models/auth'
 import { modalStore } from '@/store/modal'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { AddressData } from './AddressDetail'
-import { SignupData } from '@/models/auth'
 
 const MapInfo = ({
   addressData,

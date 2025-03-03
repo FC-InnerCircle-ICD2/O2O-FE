@@ -1,5 +1,6 @@
-import useGetAddress from '@/api/useGetAddress'
 import useGetAddressToGeolocation from '@/api/useGetAddressToGeolocation'
+import useGetGeolocationToAddress from '@/api/useGetGeolocationToAddress'
+import { Address } from '@/api/usePostAddress'
 import usePostSignup from '@/api/usePostSignup'
 import { AddressDetailModal } from '@/app/mypage/address/_components/AddressOption'
 import { Button } from '@/components/button'
@@ -9,9 +10,10 @@ import { useToast } from '@/hooks/useToast'
 import { ApiErrorResponse } from '@/lib/api'
 import { formatPhoneNumber, unformatPhoneNumber } from '@/lib/format'
 import { SignupData } from '@/models/auth'
+import { useGeoLocationStore } from '@/store/geoLocation'
 import { modalStore } from '@/store/modal'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import DaumPostcode from 'react-daum-postcode'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -75,7 +77,8 @@ const signupFormSchema = z.object({
 
 const SignupForm = () => {
   const { showModal, hideModal } = modalStore()
-  const { mutate: signup } = usePostSignup()
+  const { coordinates } = useGeoLocationStore()
+
   const { toast } = useToast()
   const {
     register,
@@ -116,6 +119,13 @@ const SignupForm = () => {
     'signname' | 'password' | 'nickname' | 'username' | 'phone' | null
   >(null)
   const [isClickedAddressButton, setIsClickedAddressButton] = useState(false)
+  const [currentAddress, setCurrentAddress] = useState<Address | null>(null)
+
+  const { mutate: addressToGeolocation } = useGetAddressToGeolocation()
+  const { mutate: geolocationToAddress, data: geolocationToAddressData } =
+    useGetGeolocationToAddress()
+
+  const { mutate: signup } = usePostSignup()
 
   const onSubmit = handleSubmit((formData) => {
     const processedFormData = {
@@ -168,18 +178,87 @@ const SignupForm = () => {
       shouldValidate: true, // 주소 입력 시 유효성 검사 실행
     })
     hideModal() // 주소 찾기 디테일 모달 닫기
-    hideModal() // 주소 찾기 모달 닫기
+  }
+
+  const handleComplete = (address: { jibunAddress: string; roadAddress: string }) => {
+    addressToGeolocation(address.jibunAddress, {
+      onSuccess: (data) => {
+        const doc = data.documents[0]
+
+        showAddressDetailModal({
+          memberAddressType: undefined,
+          jibunAddress: address.jibunAddress,
+          roadAddress: address.roadAddress,
+          detailAddress: '',
+          alias: '',
+          latitude: Number(doc.y),
+          longitude: Number(doc.x),
+        })
+      },
+      onError: (error) => {
+        toast({
+          title: '주소 검색에 실패했습니다.',
+          description: '다시 시도해주세요.',
+          variant: 'destructive',
+          position: 'center',
+        })
+      },
+    })
   }
 
   const handleAddressClick = () => {
     showModal({
-      content: <AddressModal onSaveInSignup={handleChangeAddress} />,
+      content: <AddressModal handleComplete={handleComplete} />,
       useAnimation: true,
     })
     if (!isClickedAddressButton) {
       setIsClickedAddressButton(true)
     }
   }
+
+  const showAddressDetailModal = (address: Address) => {
+    showModal({
+      content: (
+        <AddressDetailModal
+          userAddress={undefined}
+          addressData={{
+            type: undefined,
+            address: address.jibunAddress,
+            roadAddr: address.roadAddress,
+            detail: address.detailAddress,
+            coords: { lat: address.latitude, lng: address.longitude },
+          }}
+          onSaveInSignup={handleChangeAddress}
+        />
+      ),
+      useAnimation: true,
+    })
+  }
+
+  useEffect(() => {
+    if (coordinates) {
+      geolocationToAddress({
+        longitude: coordinates.longitude.toString(),
+        latitude: coordinates.latitude.toString(),
+      })
+    }
+  }, [coordinates])
+
+  useEffect(() => {
+    if (geolocationToAddressData) {
+      const doc = geolocationToAddressData.documents[0]
+
+      setCurrentAddress({
+        memberAddressType: undefined,
+        jibunAddress: doc.address.address_name,
+        roadAddress: doc.road_address?.address_name || '',
+        detailAddress: '',
+        alias: '',
+        latitude: coordinates?.latitude || 0,
+        longitude: coordinates?.longitude || 0,
+      })
+    }
+  }, [geolocationToAddressData])
 
   return (
     <form
@@ -189,7 +268,7 @@ const SignupForm = () => {
         height: 'calc(100vh - 94px)',
       }}
     >
-      <div className="grow overflow-y-auto">
+      <div className="grow overflow-y-auto pb-10">
         <div className="mb-3">
           <Input
             value={signnameValue}
@@ -292,25 +371,39 @@ const SignupForm = () => {
           >
             주소
           </label>
-          <div id="address">
-            <Button
-              className="flex w-full truncate text-wrap"
-              variant="grayFit"
-              size="m"
-              type="button"
+          <div className="flex flex-col gap-3">
+            <Input
+              placeholder="건물명, 도로명 또는 지번으로 검색"
+              value={
+                addressValue?.roadAddress
+                  ? `${addressValue?.roadAddress}, ${addressValue?.detailAddress}`
+                  : ''
+              }
+              inputSize="sm"
+              onChange={(e) => setValue('address.roadAddress', e.target.value)}
+              onReset={() => setValue('address.roadAddress', '')}
+              icon={<Icon name="Search" size={18} />}
+              offOutline
               onClick={handleAddressClick}
+              readOnly
+            />
+            <div
+              className="flex flex-row justify-center gap-2"
+              onClick={() => {
+                if (currentAddress) {
+                  showAddressDetailModal(currentAddress)
+                } else {
+                  toast({
+                    description: '현재 위치를 찾을 수 없습니다.',
+                    variant: 'destructive',
+                    position: 'center',
+                  })
+                }
+              }}
             >
-              {addressValue?.roadAddress ? (
-                <span className="line-clamp-2 text-left text-sm font-medium">
-                  {addressValue?.roadAddress + ' ' + addressValue?.detailAddress}
-                </span>
-              ) : (
-                '주소 찾기'
-              )}
-            </Button>
-            {!addressValue?.roadAddress && isClickedAddressButton && (
-              <div className="mt-1.5 text-left text-xs text-red-500">주소를 입력해주세요.</div>
-            )}
+              <Icon name="LocateFixed" size={20} />
+              <div className="content-center">현재 위치로 주소 찾기</div>
+            </div>
           </div>
         </div>
       </div>
@@ -324,45 +417,11 @@ const SignupForm = () => {
 }
 
 const AddressModal = ({
-  onSaveInSignup,
+  handleComplete,
 }: {
-  onSaveInSignup: (addressData: SignupData['address']) => void
+  handleComplete: (data: { jibunAddress: string; roadAddress: string }) => void
 }) => {
-  const { showModal, hideModal } = modalStore()
-  const { mutate: addressToGeolocation } = useGetAddressToGeolocation()
-  const { address } = useGetAddress()
-  const { toast } = useToast()
-
-  const handleComplete = async (data: { address: string }) => {
-    addressToGeolocation(data.address, {
-      onSuccess: (data) => {
-        showModal({
-          content: (
-            <AddressDetailModal
-              userAddress={address}
-              addressData={{
-                type: undefined,
-                address: data.documents[0].jibunAddress,
-                roadAddr: data.documents[0].roadAddress,
-                detail: '',
-                coords: { lat: Number(data.documents[0].y), lng: Number(data.documents[0].x) },
-              }}
-              onSaveInSignup={onSaveInSignup}
-            />
-          ),
-        })
-      },
-      onError: (error) => {
-        console.log({ error })
-        toast({
-          title: '주소 검색에 실패했습니다.',
-          description: '다시 시도해주세요.',
-          variant: 'destructive',
-          position: 'center',
-        })
-      },
-    })
-  }
+  const { hideModal } = modalStore()
 
   const handleClose = () => {
     hideModal()
@@ -370,11 +429,17 @@ const AddressModal = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-      <div className="rounded bg-white p-4 shadow-lg">
+      <div className="w-[calc(100dvw-40px)] rounded bg-white p-4 shadow-lg">
         <div className="mb-2 flex justify-end">
           <Icon name="X" size={24} onClick={handleClose} className="stroke-2" />
         </div>
-        <DaumPostcode onComplete={handleComplete} autoClose={false} />
+        <DaumPostcode
+          onComplete={(data) => {
+            hideModal()
+            handleComplete(data)
+          }}
+          autoClose={true}
+        />
       </div>
     </div>
   )
