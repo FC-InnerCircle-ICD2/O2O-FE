@@ -299,7 +299,7 @@ const SignupForm = () => {
               onClick={handleAddressClick}
             >
               {addressValue?.roadAddress ? (
-                <span className="overflow-hidden text-ellipsis">
+                <span className="line-clamp-2 text-left text-sm font-medium">
                   {addressValue?.roadAddress + ' ' + addressValue?.detailAddress}
                 </span>
               ) : (
