@@ -164,7 +164,9 @@ const SignupForm = () => {
   }
 
   const handleChangeAddress = (addressData: SignupData['address']) => {
-    setValue('address', addressData)
+    setValue('address', addressData, {
+      shouldValidate: true, // 주소 입력 시 유효성 검사 실행
+    })
     hideModal() // 주소 찾기 디테일 모달 닫기
     hideModal() // 주소 찾기 모달 닫기
   }
