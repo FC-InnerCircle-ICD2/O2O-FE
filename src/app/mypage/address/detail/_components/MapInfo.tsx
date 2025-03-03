@@ -9,6 +9,7 @@ import Input from '@/components/Input'
 import { Button } from '@/components/button'
 import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
+import { SignupData } from '@/models/auth'
 import { modalStore } from '@/store/modal'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
@@ -18,10 +19,12 @@ const MapInfo = ({
   addressData,
   onAddressChange,
   userAddress,
+  onSaveInSignup,
 }: {
   addressData: AddressData
   onAddressChange: (data: AddressData) => void
   userAddress?: AddressResponseData
+  onSaveInSignup?: (addressData: SignupData['address']) => void
 }) => {
   const queryClient = useQueryClient()
   const { toast } = useToast()
@@ -68,6 +71,19 @@ const MapInfo = ({
         })
         return
       }
+    }
+
+    if (onSaveInSignup) {
+      onSaveInSignup({
+        memberAddressType: addressData.type as AddressType,
+        roadAddress: addressData.roadAddr || addressData.address,
+        jibunAddress: addressData.address,
+        detailAddress: addressDetail,
+        alias: addressData.type === AddressType.OTHERS ? alias : '',
+        latitude: addressData.coords.lat,
+        longitude: addressData.coords.lng,
+      })
+      return
     }
 
     const _address: Address = {
