@@ -10,14 +10,24 @@ import WritableReview from '@/app/reviews/_components/WritableReview'
 import WritableReviewSkeleton from '@/app/reviews/_components/WritableReviewSkeleton'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
 import { motion } from 'motion/react'
-import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useRef, useState } from 'react'
 
 export type ReviewTabType = '작성가능' | '작성완료'
 
 const Review = () => {
-  const [tab, setTab] = useState<ReviewTabType>('작성가능')
+  const searchParams = useSearchParams()
+  const [tab, setTab] = useState<ReviewTabType>(
+    searchParams.get('tab')
+      ? searchParams.get('tab') === '1'
+        ? '작성가능'
+        : '작성완료'
+      : '작성가능'
+  )
+  const router = useRouter()
 
   const { data: writableReviews, isLoading } = useGetWritableReviews()
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   const {
     data: completedReviews,
@@ -32,10 +42,11 @@ const Review = () => {
 
   const handleChangeTab = (tab: ReviewTabType) => {
     setTab(tab)
+    router.push(`/reviews?tab=${tab === '작성가능' ? '1' : '2'}`)
   }
 
   return (
-    <section>
+    <section className="pt-4">
       <div className="px-mobile_safe">
         <ReviewTab
           tab={tab}
@@ -44,23 +55,24 @@ const Review = () => {
           completedReviewsCount={completedReviewsCount ?? 0}
         />
       </div>
-      <div className="relative mt-2">
+      <div
+        ref={scrollRef}
+        className="relative mt-2 h-[calc(100dvh-40px-85px-56px-1rem-0.75rem-0.5rem)] w-dvw overflow-hidden"
+      >
         <motion.div
           initial={{ x: 0 }}
           animate={{
-            x: tab === '작성가능' ? 0 : '-110%',
+            x: tab === '작성가능' ? 0 : -window.innerWidth,
           }}
-          transition={{ duration: 0.3 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           className="absolute w-full overflow-y-auto overflow-x-hidden"
-          style={{
-            height: 'calc(100vh - 190px)',
-          }}
+          style={{ height: '100%' }}
         >
           {isLoading ? (
             Array.from({ length: 5 }).map((_, i) => (
               <WritableReviewSkeleton key={i} offSeparator={i === 4} />
             ))
-          ) : writableReviews ? (
+          ) : writableReviews && writableReviews.length > 0 ? (
             writableReviews.map((review, index) => (
               <WritableReview
                 key={review.orderId}
@@ -74,15 +86,13 @@ const Review = () => {
         </motion.div>
 
         <motion.div
-          initial={{ x: '110%' }}
+          initial={{ x: window.innerWidth }}
           animate={{
-            x: tab === '작성가능' ? '110%' : 0,
+            x: tab === '작성가능' ? window.innerWidth : 0,
           }}
-          transition={{ duration: 0.3 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           className="absolute w-full overflow-y-auto overflow-x-hidden"
-          style={{
-            height: 'calc(100vh - 190px)',
-          }}
+          style={{ height: '100%' }}
         >
           {completedReviews?.map((review, index) => (
             <CompletedReview

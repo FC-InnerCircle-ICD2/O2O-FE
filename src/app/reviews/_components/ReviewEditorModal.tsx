@@ -8,7 +8,10 @@ import Loading from '@/components/Loading'
 import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
 import { modalStore } from '@/store/modal'
+import { ROUTE_PATHS } from '@/utils/routes'
+import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
@@ -51,7 +54,7 @@ const ReviewEditorModal = ({
       content: prevData?.clientReviewContent || '',
       deliveryQuality: prevData?.deliveryQuality || '',
       image: null,
-      imagePreview: prevData?.representativeImageUri + `?v=${Date.now()}` || null,
+      imagePreview: prevData?.representativeImageUri,
       isImageChanged: false,
     },
   })
@@ -70,6 +73,9 @@ const ReviewEditorModal = ({
     content.length >= 5 &&
     (deliveryQuality === 'GOOD' || deliveryQuality === 'BAD')
   const [isContentValid, setIsContentValid] = useState(true)
+
+  const router = useRouter()
+  const queryClient = useQueryClient()
 
   const handleBlurContent = () => {
     if (content.length < 5) {
@@ -110,7 +116,10 @@ const ReviewEditorModal = ({
         },
         {
           onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['completed-reviews'] })
             hideModal()
+            router.push(`${ROUTE_PATHS.REVIEW}?tab=2`)
+
             toast({
               title: '리뷰가 등록되었어요.',
               position: 'center',
@@ -141,6 +150,7 @@ const ReviewEditorModal = ({
         },
         {
           onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['completed-reviews'] })
             hideModal()
             toast({
               title: '리뷰가 수정되었어요.',
