@@ -41,6 +41,8 @@ const AddressOption = () => {
   const queryClient = useQueryClient()
 
   const handleComplete = async (data: { address: string }) => {
+    setPopup(false)
+
     addressToGeolocation(data.address, {
       onSuccess: (data) => {
         showModal({

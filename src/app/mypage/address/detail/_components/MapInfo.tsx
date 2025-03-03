@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
 import { SignupData } from '@/models/auth'
 import { modalStore } from '@/store/modal'
+import memberStore from '@/store/user'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { AddressData } from './AddressDetail'
@@ -30,6 +31,7 @@ const MapInfo = ({
   const { toast } = useToast()
 
   const { hideModal } = modalStore()
+  const { setMember } = memberStore()
 
   const [addressDetail, setAddressDetail] = useState('')
   const [alias, setAlias] = useState('')
@@ -98,7 +100,11 @@ const MapInfo = ({
 
     const _options = {
       onSuccess: () => {
-        refetchMember()
+        refetchMember().then((res) => {
+          if (res.data) {
+            setMember(res.data)
+          }
+        })
         queryClient.invalidateQueries({ queryKey: ['address'] })
         hideModal()
       },
