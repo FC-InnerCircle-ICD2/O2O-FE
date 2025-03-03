@@ -292,26 +292,26 @@ const SignupForm = () => {
           >
             주소
           </label>
-          <Button
-            id="address"
-            className="w-full"
-            variant="grayFit"
-            size="m"
-            type="button"
-            onClick={handleAddressClick}
-          >
-            주소 찾기
-          </Button>
-
-          {addressValue?.roadAddress ? (
-            <div className="mt-2 text-left text-lg font-semibold">
-              {addressValue?.roadAddress + ' ' + addressValue?.detailAddress}
-            </div>
-          ) : (
-            isClickedAddressButton && (
+          <div id="address">
+            <Button
+              className="flex w-full truncate text-wrap"
+              variant="grayFit"
+              size="m"
+              type="button"
+              onClick={handleAddressClick}
+            >
+              {addressValue?.roadAddress ? (
+                <span className="overflow-hidden text-ellipsis">
+                  {addressValue?.roadAddress + ' ' + addressValue?.detailAddress}
+                </span>
+              ) : (
+                '주소 찾기'
+              )}
+            </Button>
+            {!addressValue?.roadAddress && isClickedAddressButton && (
               <div className="mt-1.5 text-left text-xs text-red-500">주소를 입력해주세요.</div>
-            )
-          )}
+            )}
+          </div>
         </div>
       </div>
       <div className="bg-white py-2">
