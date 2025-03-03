@@ -16,6 +16,7 @@ import { Checkbox } from '@/components/shadcn/checkbox'
 import { Label } from '@/components/shadcn/label'
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { useToast } from '@/hooks/useToast'
+import { ApiErrorResponse } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
@@ -31,7 +32,7 @@ const OrderInfo = () => {
   const router = useRouter()
 
   const { member } = memberStore()
-  const { showModal } = modalStore()
+  const { showModal, hideModal } = modalStore()
 
   const { carts, resetCarts } = useGetCarts()
   const { mutate: deleteCarts } = useDeleteCart()
@@ -213,7 +214,29 @@ const OrderInfo = () => {
       }),
     }
 
-    orderPay(orderData)
+    orderPay(orderData, {
+      onError: (error) => {
+        const errorMessage: ApiErrorResponse = error as unknown as ApiErrorResponse
+
+        if (errorMessage.status === 412) {
+          showModal({
+            content: (
+              <Alert
+                title="주문 오류"
+                message="배달이 불가능한 주소입니다."
+                onClick={() => hideModal()}
+              />
+            ),
+          })
+        } else {
+          showModal({
+            content: (
+              <Alert title="주문 오류" message="주문에 실패했습니다." onClick={() => hideModal()} />
+            ),
+          })
+        }
+      },
+    })
   }
 
   const totalMenuPrice = useMemo(() => {

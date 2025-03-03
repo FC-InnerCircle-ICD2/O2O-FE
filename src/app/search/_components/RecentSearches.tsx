@@ -1,5 +1,6 @@
 'use client'
 
+import usePostSearch from '@/api/usePostSearch'
 import Chip from '@/components/Chip'
 import Icon from '@/components/Icon'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
@@ -15,6 +16,8 @@ const RecentSearches = () => {
   const router = useRouter()
   const { setKeyword } = useFoodSearchFilterStore()
 
+  const { mutate: postSearch } = usePostSearch()
+
   const handleRemoveSearch = (item: string) => {
     if (recentSearches === undefined) return
 
@@ -27,6 +30,7 @@ const RecentSearches = () => {
   }
 
   const handleSearch = (word: string) => {
+    postSearch(word)
     setKeyword(word)
     router.push(ROUTE_PATHS.SEARCH_RESULT)
   }
