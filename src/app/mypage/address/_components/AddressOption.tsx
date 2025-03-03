@@ -14,6 +14,7 @@ import Separator from '@/components/Separator'
 import LoginButtonSection from '@/components/shared/LoginButtonSection'
 import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
+import { SignupData } from '@/models/auth'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
 import { useQueryClient } from '@tanstack/react-query'
@@ -40,6 +41,8 @@ const AddressOption = () => {
   const queryClient = useQueryClient()
 
   const handleComplete = async (data: { address: string }) => {
+    setPopup(false)
+
     addressToGeolocation(data.address, {
       onSuccess: (data) => {
         showModal({
@@ -310,16 +313,22 @@ const AddressOption = () => {
     )
 }
 
-const AddressDetailModal = ({
+export const AddressDetailModal = ({
   type,
   userAddress,
   addressData,
+  onSaveInSignup,
 }: {
   type?: AddressType
   userAddress?: AddressResponseData
   addressData?: AddressData
+  onSaveInSignup?: (addressData: SignupData['address']) => void
 }) => {
   const { hideModal } = modalStore()
+
+  const handleClose = () => {
+    hideModal()
+  }
 
   return (
     <div className="w-full max-w-[min(480px,100dvw)] bg-white">
@@ -327,10 +336,15 @@ const AddressDetailModal = ({
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold">
           주소 등록
         </div>
-        <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
+        <Icon name="X" size={24} onClick={handleClose} className="stroke-2" />
       </div>
       <div className="h-[calc(100dvh-64px)] overflow-y-auto">
-        <AddressDetail type={type} userAddress={userAddress} defaultAddressData={addressData} />
+        <AddressDetail
+          type={type}
+          userAddress={userAddress}
+          defaultAddressData={addressData}
+          onSaveInSignup={onSaveInSignup}
+        />
       </div>
     </div>
   )

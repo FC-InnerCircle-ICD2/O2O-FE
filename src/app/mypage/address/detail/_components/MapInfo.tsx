@@ -9,7 +9,9 @@ import Input from '@/components/Input'
 import { Button } from '@/components/button'
 import { useToast } from '@/hooks/useToast'
 import { cn } from '@/lib/utils'
+import { SignupData } from '@/models/auth'
 import { modalStore } from '@/store/modal'
+import memberStore from '@/store/user'
 import { useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { AddressData } from './AddressDetail'
@@ -18,15 +20,18 @@ const MapInfo = ({
   addressData,
   onAddressChange,
   userAddress,
+  onSaveInSignup,
 }: {
   addressData: AddressData
   onAddressChange: (data: AddressData) => void
   userAddress?: AddressResponseData
+  onSaveInSignup?: (addressData: SignupData['address']) => void
 }) => {
   const queryClient = useQueryClient()
   const { toast } = useToast()
 
   const { hideModal } = modalStore()
+  const { setMember } = memberStore()
 
   const [addressDetail, setAddressDetail] = useState('')
   const [alias, setAlias] = useState('')
@@ -70,6 +75,19 @@ const MapInfo = ({
       }
     }
 
+    if (onSaveInSignup) {
+      onSaveInSignup({
+        memberAddressType: addressData.type as AddressType,
+        roadAddress: addressData.roadAddr || addressData.address,
+        jibunAddress: addressData.address,
+        detailAddress: addressDetail,
+        alias: addressData.type === AddressType.OTHERS ? alias : '',
+        latitude: addressData.coords.lat,
+        longitude: addressData.coords.lng,
+      })
+      return
+    }
+
     const _address: Address = {
       memberAddressType: addressData.type,
       roadAddress: addressData.roadAddr || addressData.address,
@@ -82,7 +100,11 @@ const MapInfo = ({
 
     const _options = {
       onSuccess: () => {
-        refetchMember()
+        refetchMember().then((res) => {
+          if (res.data) {
+            setMember(res.data)
+          }
+        })
         queryClient.invalidateQueries({ queryKey: ['address'] })
         hideModal()
       },

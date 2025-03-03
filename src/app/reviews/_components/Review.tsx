@@ -27,7 +27,7 @@ const Review = () => {
   } = useInfiniteScroll<CompletedReviewType>({
     queryKey: 'completed-reviews',
     endpoint: 'reviews',
-    size: 2,
+    size: 10,
   })
 
   const handleChangeTab = (tab: ReviewTabType) => {
@@ -69,7 +69,7 @@ const Review = () => {
               />
             ))
           ) : (
-                <NoWritableReview />
+            <NoWritableReview />
           )}
         </motion.div>
 
