@@ -376,7 +376,7 @@ const AddressModal = ({
         <div className="mb-2 flex justify-end">
           <Icon name="X" size={24} onClick={handleClose} className="stroke-2" />
         </div>
-        <DaumPostcode onComplete={handleComplete} />
+        <DaumPostcode onComplete={handleComplete} autoClose={false} />
       </div>
     </div>
   )
