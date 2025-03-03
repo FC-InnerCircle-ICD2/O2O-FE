@@ -97,9 +97,11 @@ const MenuOption = ({
                 htmlFor={`${id}-${index}`}
                 className={`flex w-full items-center justify-between ${option.soldOut ? 'text-gray-400 line-through' : ''}`}
               >
-                <span className="text-base font-light">{option.name}</span>
+                <span className="text-base">{option.name}</span>
                 {option.price > 0 && (
-                  <span className={cn('text-sm text-gray-700', option.soldOut && 'text-gray-400')}>
+                  <span
+                    className={cn('text-base text-gray-700', option.soldOut && 'text-gray-400')}
+                  >
                     +{option.price.toLocaleString()}원
                   </span>
                 )}

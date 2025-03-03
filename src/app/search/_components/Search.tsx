@@ -24,12 +24,12 @@ const Search = () => {
   }
 
   return (
-    <div className="relative flex flex-col gap-2">
+    <div className="relative flex flex-col gap-3 pt-2">
       {suggestionWord && suggestion.length > 0 && (
         <div className="absolute left-0 top-0 z-20 h-[calc(100dvh-40px-0.75rem)] w-full overflow-y-auto bg-white px-mobile_safe py-4">
           <ul className="">
             {suggestion.map((item) => (
-              <li key={item} className="pb-4" onClick={() => handleSearch(item)}>
+              <li key={item} className="pb-3 text-lg" onClick={() => handleSearch(item)}>
                 {item.split(new RegExp(`(${suggestionWord})`, 'gi')).map((part, index) =>
                   part.toLowerCase() === suggestionWord?.toLowerCase() ? (
                     <span key={index} className="font-bold">

@@ -71,7 +71,7 @@ const HomeSearchFoodList = ({
 
   return (
     <div ref={scrollRef} className="flex flex-col overflow-y-auto px-mobile_safe">
-      <p ref={topRef} className="pb-2 text-lg font-bold">
+      <p ref={topRef} className="pb-2 text-xl font-bold">
         개발의 민족 등록 맛집
       </p>
       <FoodOrderFilter />

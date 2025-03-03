@@ -11,6 +11,10 @@ export interface OrderPay {
   roadAddress: string // 주문시점의 도로명주소
   jibunAddress: string // 주문시점의 지번주소
   detailAddress: string // 주문시점의 상세주소
+  coords: {
+    lat: number
+    lng: number
+  }
   excludingSpoonAndFork: boolean // 스푼과 포크 제외 여부
   orderType: 'DELIVERY' | 'PACKING' // 주문타입
   paymentType: OrderPayType // 결제타입
@@ -34,7 +38,12 @@ const usePostOrderPay = () => {
   return useMutation({
     mutationKey: ['orderPay'],
     mutationFn: async (data: OrderPay) => {
-      return await api.post<OrderPayResponse>(`orders`, data)
+      return await api.post<OrderPayResponse>(`orders`, data, {
+        headers: {
+          'X-User-Lat': data.coords.lat.toString() ?? '',
+          'X-User-Lng': data.coords.lng.toString() ?? '',
+        },
+      })
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['writable-reviews'] })

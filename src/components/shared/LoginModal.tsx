@@ -24,7 +24,7 @@ const LoginModal = () => {
         <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
       </div>
       <div className="text-center">
-        <div className="mb-6 font-bmjua text-4xl font-bold">개발의 민족</div>
+        <div className="mb-6 font-bmjua text-5xl font-bold">개발의 민족</div>
         <div className="mb-8 text-gray-500">로그인하고 다양한 혜택을 받아보세요!</div>
       </div>
       <LoginForm />
@@ -94,7 +94,11 @@ const LoginForm = () => {
           size="m"
           disabled={isButtonDisabled}
         >
-          {isPending ? <span className="loading loading-dots loading-sm"></span> : '로그인'}
+          {isPending ? (
+            <Icon className="animate-spin text-white" name="Loader" size={24} />
+          ) : (
+            '로그인'
+          )}
         </Button>
       </form>
     </>

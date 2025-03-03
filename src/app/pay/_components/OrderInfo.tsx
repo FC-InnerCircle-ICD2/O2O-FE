@@ -1,6 +1,7 @@
 'use client'
 
 import useDeleteCart from '@/api/useDeleteCarts'
+import useGetAddress, { Address } from '@/api/useGetAddress'
 import useGetCarts from '@/api/useGetCarts'
 import useGetStoreDetail from '@/api/useGetStoreDetail'
 import usePatchCarts from '@/api/usePatchCarts'
@@ -15,6 +16,7 @@ import { Checkbox } from '@/components/shadcn/checkbox'
 import { Label } from '@/components/shadcn/label'
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { useToast } from '@/hooks/useToast'
+import { ApiErrorResponse } from '@/lib/api'
 import { cn } from '@/lib/utils'
 import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
@@ -23,25 +25,40 @@ import { pay200SDK } from '@pay200/sdk'
 import { ANONYMOUS, loadTossPayments } from '@tosspayments/tosspayments-sdk'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
+import DeliveryAddressBottomSheet from './DeliveryAddressBottomSheet'
 import OrderPayBottomSheet from './OrderPayBottomSheet'
 
 const OrderInfo = () => {
   const router = useRouter()
+
+  const { member } = memberStore()
+  const { showModal, hideModal } = modalStore()
 
   const { carts, resetCarts } = useGetCarts()
   const { mutate: deleteCarts } = useDeleteCart()
   const { mutate: updateCarts } = usePatchCarts()
   const { storeDetail } = useGetStoreDetail(carts?.storeId || null)
   const { mutate: orderPay, data: orderResponse } = usePostOrderPay()
+  const { address } = useGetAddress()
 
   const [cartsState, setCartsState] = useState(carts)
   const [isExcludingSpoon, setIsExcludingSpoon] = useState(false)
   const [paymentType, setPaymentType] = useState<OrderPayType | null>(null)
   const [deliveryPrice] = useState(0)
-
-  const { member } = memberStore()
-  const { showModal } = modalStore()
-  // const { payments, setPayments } = successPaymentStore()
+  const [deliveryAddress, setDeliveryAddress] = useState<
+    | Pick<Address, 'roadAddress' | 'jibunAddress' | 'detailAddress' | 'latitude' | 'longitude'>
+    | undefined
+  >(
+    member
+      ? {
+          roadAddress: member.address.roadAddress,
+          jibunAddress: member.address.jibunAddress,
+          detailAddress: member.address.detailAddress,
+          latitude: member.address.latitude,
+          longitude: member.address.longitude,
+        }
+      : undefined
+  )
 
   const { BottomSheet, hide } = useBottomSheet()
   const { toast } = useToast()
@@ -175,9 +192,13 @@ const OrderInfo = () => {
 
     const orderData: OrderPay = {
       storeId: cartsState.storeId,
-      roadAddress: member.address.roadAddress || '',
-      jibunAddress: member.address.jibunAddress || '',
-      detailAddress: member.address.detailAddress || '',
+      roadAddress: deliveryAddress?.roadAddress || '',
+      jibunAddress: deliveryAddress?.jibunAddress || '',
+      detailAddress: deliveryAddress?.detailAddress || '',
+      coords: {
+        lat: deliveryAddress?.latitude || 0,
+        lng: deliveryAddress?.longitude || 0,
+      },
       excludingSpoonAndFork: isExcludingSpoon,
       orderType: 'DELIVERY',
       paymentType,
@@ -193,7 +214,29 @@ const OrderInfo = () => {
       }),
     }
 
-    orderPay(orderData)
+    orderPay(orderData, {
+      onError: (error) => {
+        const errorMessage: ApiErrorResponse = error as unknown as ApiErrorResponse
+
+        if (errorMessage.status === 412) {
+          showModal({
+            content: (
+              <Alert
+                title="주문 오류"
+                message="배달이 불가능한 주소입니다."
+                onClick={() => hideModal()}
+              />
+            ),
+          })
+        } else {
+          showModal({
+            content: (
+              <Alert title="주문 오류" message="주문에 실패했습니다." onClick={() => hideModal()} />
+            ),
+          })
+        }
+      },
+    })
   }
 
   const totalMenuPrice = useMemo(() => {
@@ -226,9 +269,17 @@ const OrderInfo = () => {
   }
 
   const handleSelectRiderRequest = () => {
-    toast({
-      description: '준비중입니다.',
-      position: 'center',
+    if (!address || !deliveryAddress) return
+
+    BottomSheet({
+      title: '배달지 선택',
+      content: (
+        <DeliveryAddressBottomSheet
+          address={address}
+          currentAddress={deliveryAddress}
+          onSelectAddress={setDeliveryAddress}
+        />
+      ),
     })
   }
 
@@ -352,14 +403,14 @@ const OrderInfo = () => {
             <div className="flex flex-row gap-2">
               <Icon name="MapPin" size={24} />
               <div className="max-w-[calc(100dvw-24px-24px-54px-1rem-40px)] place-content-center truncate text-sm font-bold">
-                {`${member?.address.roadAddress} ${member?.address.detailAddress}`}
+                {`${deliveryAddress?.roadAddress} ${deliveryAddress?.detailAddress}`}
               </div>
               <div className="place-content-center text-xs">(으)로 배달</div>
             </div>
             <Icon name="ChevronRight" size={24} />
           </div>
           <div>
-            <div className="ml-7 text-xs text-gray-700">[지번] {member?.address.jibunAddress}</div>
+            <div className="ml-7 text-xs text-gray-700">[지번] {deliveryAddress?.jibunAddress}</div>
           </div>
         </div>
         <div className="rounded-xl border border-solid border-gray-400">

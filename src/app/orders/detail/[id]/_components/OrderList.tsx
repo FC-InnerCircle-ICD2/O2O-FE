@@ -2,6 +2,7 @@ import { OrdersDetail } from '@/api/useGetOrdersDetail'
 import Chip from '@/components/Chip'
 import Confirm from '@/components/Confirm'
 import Separator from '@/components/Separator'
+import { formatPhoneNumber } from '@/lib/format'
 import { modalStore } from '@/store/modal'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -30,14 +31,14 @@ const OrderList = ({ ordersData, patchOrderCancel }: OrderListProps) => {
   return (
     <div className="flex flex-col px-mobile_safe">
       <div className="flex flex-row items-center justify-between pb-6">
-        <div className="text-xl font-bold">{ordersData.storeName}</div>
+        <div className="text-2xl font-bold">{ordersData.storeName}</div>
         {(ordersData.status.code === 'S1' || ordersData.status.code === 'S2') && (
           <Chip text="주문 취소" onClick={handleOrderCancel} />
         )}
       </div>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-4">
         <div className="text-lg font-bold">주문정보</div>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-2">
           <div className="flex flex-row justify-between gap-8">
             <div className="min-w-[50px] text-sm text-gray-500">주문번호</div>
             <div className="truncate text-sm text-gray-500">{ordersData.orderId}</div>
@@ -51,7 +52,7 @@ const OrderList = ({ ordersData, patchOrderCancel }: OrderListProps) => {
         </div>
       </div>
       <Separator className="my-5" />
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-4">
         <div className="text-lg font-bold">주문내역</div>
         {ordersData.orderMenus.map((menu) => (
           <div key={uuidv4()}>
@@ -75,7 +76,7 @@ const OrderList = ({ ordersData, patchOrderCancel }: OrderListProps) => {
 
       <Separator className="my-5" />
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-4">
         <div className="flex flex-row items-center justify-between">
           <div className="text-base">상품금액</div>
           <div className="text-base">{`${ordersData.orderPrice.toLocaleString()}원`}</div>
@@ -84,7 +85,7 @@ const OrderList = ({ ordersData, patchOrderCancel }: OrderListProps) => {
 
       <Separator className="my-5" />
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-4">
         <div className="flex flex-row justify-between">
           <div className="text-base">배달요금</div>
           <div className="text-base">{`${ordersData.deliveryPrice.toLocaleString()}원`}</div>
@@ -93,7 +94,7 @@ const OrderList = ({ ordersData, patchOrderCancel }: OrderListProps) => {
 
       <Separator className="my-5" />
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-4">
         <div className="flex flex-row justify-between">
           <div className="text-base">총 결제 금액</div>
           <div className="text-base">{`${ordersData.paymentPrice.toLocaleString()}원`}</div>
@@ -107,10 +108,10 @@ const OrderList = ({ ordersData, patchOrderCancel }: OrderListProps) => {
       <Separator className="my-5" />
 
       <div className="pb-5 text-lg font-bold">주문자 정보</div>
-      <div className="flex flex-col gap-3 pb-16">
+      <div className="flex flex-col gap-2 pb-16">
         <div className="flex flex-row justify-between">
           <div className="max-w-48 text-sm text-gray-500">연락처</div>
-          <div className="text-sm text-gray-500">{ordersData.tel}</div>
+          <div className="text-sm text-gray-500">{formatPhoneNumber(ordersData.tel)}</div>
         </div>
         <div className="flex flex-row justify-between">
           <div className="text-sm text-gray-500">주소</div>
