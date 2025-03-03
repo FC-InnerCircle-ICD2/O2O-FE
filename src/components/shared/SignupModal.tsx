@@ -59,6 +59,7 @@ const signupFormSchema = z.object({
     .regex(/^[a-zA-Z가-힣]+$/, '이름은 영문, 한글만 가능합니다.'),
   phone: z
     .string()
+    .min(1, '전화번호를 입력해주세요.')
     .min(10, '전화번호는 8자 이상이어야 합니다.')
     .max(13, '전화번호는 11자 이내여야 합니다.'),
   address: z.object({
@@ -74,7 +75,6 @@ const signupFormSchema = z.object({
 
 const SignupForm = () => {
   const { showModal, hideModal } = modalStore()
-  const phoneInputRef = useRef<HTMLInputElement>(null)
   const { mutate: signup } = usePostSignup()
   const { toast } = useToast()
   const {
@@ -167,7 +167,6 @@ const SignupForm = () => {
     setValue('address', addressData)
     hideModal() // 주소 찾기 디테일 모달 닫기
     hideModal() // 주소 찾기 모달 닫기
-    phoneInputRef.current?.focus() // 전화번호 입력 필드로 포커스 이동하여 가입하기 버튼 활성화
   }
 
   const handleAddressClick = () => {
@@ -279,7 +278,6 @@ const SignupForm = () => {
               setFocusedField('phone')
               trigger('signname')
             }}
-            ref={phoneInputRef}
           />
           {errors.phone && focusedField !== 'phone' && (
             <div className="mt-1.5 text-left text-xs text-red-500">{errors.phone.message}</div>
