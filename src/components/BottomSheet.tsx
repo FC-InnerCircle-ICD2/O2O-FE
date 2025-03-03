@@ -14,14 +14,14 @@ const BottomSheet = () => {
 
   return (
     <Drawer open={bottomSheet.isOpen} onOpenChange={hideBottomSheet}>
-      <DrawerContent className="max-h-3/5 min-h-fit rounded-t-2xl">
+      <DrawerContent className="max-h-3/5 min-h-fit rounded-t-3xl">
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
             <DrawerTitle className={`py-1 text-xl font-bold ${bottomSheet.title ? '' : 'sr-only'}`}>
               {bottomSheet.title}
             </DrawerTitle>
           </DrawerHeader>
-          <div>
+          <div className={'border-b border-solid border-gray-200 pb-10'}>
             <DrawerDescription asChild>
               <span className="sr-only">바텀 시트 컨텐츠입니다</span>
             </DrawerDescription>

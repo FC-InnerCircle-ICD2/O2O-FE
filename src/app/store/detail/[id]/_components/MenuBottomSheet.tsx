@@ -19,7 +19,7 @@ const MenuBottomSheet = ({
   const { hide } = useBottomSheet()
 
   return (
-    <div className="flex flex-wrap gap-x-2 gap-y-3 px-mobile_safe pb-16">
+    <div className="flex flex-wrap gap-x-2 gap-y-3 px-mobile_safe">
       {menuList.map((menu, index) => (
         <MenuCategory
           key={menu}

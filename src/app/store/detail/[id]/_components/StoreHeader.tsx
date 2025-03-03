@@ -176,7 +176,12 @@ const StoreHeader = ({
           )}
         </AnimatePresence>
       </div>
-      <div className="mt-3 flex items-center gap-2">
+      <div
+        className={cn(
+          'mt-3 flex items-center gap-2 transition-all duration-200',
+          isHeaderOpaque && 'gap-3'
+        )}
+      >
         <button
           className={cn(
             'flex size-8 items-center justify-center rounded-full bg-white transition-all duration-200',

@@ -12,10 +12,10 @@ const FoodOrderFilter = () => {
   const { BottomSheet } = useBottomSheet()
 
   return (
-    <div className="sticky top-0 z-10 bg-white pb-2">
+    <div className="sticky top-0 z-10 bg-white pb-3">
       <Chip
         text={order}
-        rightIcon={<Icon name="ChevronDown" size={14} strokeWidth={3} color={COLORS.gray400} />}
+        rightIcon={<Icon name="ChevronDown" size={16} strokeWidth={3} color={COLORS.gray400} />}
         onClick={() => BottomSheet({ title: '정렬', content: <FoodOrderListInBottomSheet /> })}
       />
     </div>

@@ -37,16 +37,16 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
   const { mutate: addToCart } = usePostCarts()
   const { mutate: deleteCart } = useDeleteCart()
   const containerRef = useRef<HTMLDivElement>(null)
-  const descriptionRef = useRef<HTMLParagraphElement>(null)
   const priceRef = useRef<number>(0)
+  const textContentRef = useRef<HTMLParagraphElement>(null)
 
-  const [isTextOverflow, setIsTextOverflow] = useState(false)
   const [isExpanded, setIsExpanded] = useState(false)
   const [price, setPrice] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [isHeaderOpaque, setIsHeaderOpaque] = useState(false)
   const [selectedOptions, setSelectedOptions] = useState<Record<string, MenuGroupOption[]>>({})
   const [isValid, setIsValid] = useState(false)
+  const [hasMoreContent, setHasMoreContent] = useState(false)
 
   const { storeMenuOptions, isSuccess } = useGetStoreMenuOptions(
     orderDetail?.storeId ?? '',
@@ -210,18 +210,20 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
   }, [])
 
   useEffect(() => {
-    const checkTextOverflow = () => {
-      const element = descriptionRef.current
+    if (!textContentRef.current) return
+
+    const resizeObserver = new ResizeObserver(() => {
+      const element = textContentRef.current
       if (!element) return
 
-      setIsTextOverflow(element.scrollHeight > element.clientHeight)
-    }
+      // 실제 스크롤 높이와 클라이언트 높이를 비교
+      setHasMoreContent(element.scrollHeight > element.clientHeight)
+    })
 
-    checkTextOverflow()
-    window.addEventListener('resize', checkTextOverflow)
+    resizeObserver.observe(textContentRef.current)
 
     return () => {
-      window.removeEventListener('resize', checkTextOverflow)
+      resizeObserver.disconnect()
     }
   }, [storeMenuOptions])
 
@@ -313,31 +315,27 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
                 {storeMenuOptions.price.toLocaleString()}원
               </p>
             )}
-            <div
-              ref={descriptionRef}
-              className={cn(
-                'relative mb-2 text-sm leading-[1.2] text-zinc-400',
-                !isExpanded && 'line-clamp-2'
-              )}
-            >
+
+            <div className="relative mb-2">
               {!storeMenuOptions ? (
                 <Skeleton className="h-[16px] w-full" />
               ) : (
-                <p>{storeMenuOptions.desc}</p>
-              )}
-              {isTextOverflow && !isExpanded && (
-                <div className="absolute bottom-0 right-0 flex items-center gap-[2px] bg-gradient-to-r from-transparent from-0% via-white to-white to-50% pl-8 text-sm font-medium">
-                  <button className="text-gray-500" onClick={() => setIsExpanded(!isExpanded)}>
-                    더보기
-                  </button>
-                  <Icon
-                    name="ChevronDown"
-                    size={16}
-                    color={COLORS.gray500}
-                    strokeWidth={2.8}
-                    className={cn(isExpanded && 'rotate-180')}
-                  />
-                </div>
+                <>
+                  <p
+                    ref={textContentRef}
+                    className={cn('text-sm text-zinc-400', !isExpanded && 'line-clamp-2')}
+                  >
+                    {storeMenuOptions.desc}
+                  </p>
+                  {hasMoreContent && !isExpanded && (
+                    <div className="absolute bottom-px right-0 flex items-center gap-[2px] bg-gradient-to-r from-transparent from-0% via-white to-white to-50% pl-8 text-sm font-medium">
+                      <button className="text-gray-500" onClick={() => setIsExpanded(true)}>
+                        더보기
+                      </button>
+                      <Icon name="ChevronDown" size={14} color={COLORS.gray500} strokeWidth={2.8} />
+                    </div>
+                  )}
+                </>
               )}
             </div>
             {/* <div className="flex items-center gap-1">
@@ -365,8 +363,8 @@ const StoreOrderDetail = ({ minimumOrderAmount }: { minimumOrderAmount: number }
           </div>
 
           <div className="flex items-center justify-between px-mobile_safe py-4">
-            <span className="text-base font-semibold">총 주문금액</span>
-            <span className="text-lg font-semibold">{price.toLocaleString()}원</span>
+            <span className="text-lg font-semibold">총 주문금액</span>
+            <span className="text-xl font-semibold">{price.toLocaleString()}원</span>
           </div>
         </div>
       </motion.div>

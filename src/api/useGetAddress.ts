@@ -2,7 +2,7 @@ import { api } from '@/lib/api'
 import memberStore from '@/store/user'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
-interface Address {
+export interface Address {
   id: number
   isDefault: boolean
   roadAddress: string

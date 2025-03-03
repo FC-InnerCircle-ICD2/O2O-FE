@@ -9,7 +9,7 @@ const useGetStoreTrend = () => {
       const res = await api.get<{ trendKeywords: RealTimeSearch[] }>('stores/trend')
       return res.trendKeywords
     },
-    refetchInterval: 10000,
+    refetchInterval: 8000,
   })
 
   return { realTimeSearches }

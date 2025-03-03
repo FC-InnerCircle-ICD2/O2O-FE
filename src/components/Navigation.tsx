@@ -2,7 +2,6 @@
 
 import { cn } from '@/lib/utils'
 import { useGeoLocationStore } from '@/store/geoLocation'
-import { modalStore } from '@/store/modal'
 import memberStore from '@/store/user'
 import { ROUTE_PATHS } from '@/utils/routes'
 import { useRouter } from 'next/navigation'
@@ -30,7 +29,6 @@ const Navigation = ({
   const router = useRouter()
   const { address } = useGeoLocationStore()
   const { member } = memberStore()
-  const { showModal } = modalStore()
 
   return (
     <nav
@@ -68,10 +66,14 @@ const Navigation = ({
                 }
               }}
             >
-              {useAddress && member
-                ? `${member.address.roadAddress || member.address.jibunAddress} ${
-                    member.address.detailAddress
-                  }`
+              {useAddress
+                ? member
+                  ? `${member.address.roadAddress || member.address.jibunAddress} ${
+                      member.address.detailAddress
+                    }`
+                  : address
+                    ? `${address.roadAddress || address.jibunAddress}`
+                    : title
                 : title}
             </h1>
             {useAddress && member && <Icon name="ChevronDown" size={24} />}

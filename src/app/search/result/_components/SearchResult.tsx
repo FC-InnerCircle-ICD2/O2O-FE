@@ -10,7 +10,9 @@ import { useGeoLocationStore } from '@/store/geoLocation'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import suggestionStore from '@/store/suggestion'
 import memberStore from '@/store/user'
-import { useRef } from 'react'
+import { ROUTE_PATHS } from '@/utils/routes'
+import { useRouter } from 'next/navigation'
+import { useEffect, useRef } from 'react'
 import SearchFoodList from './SearchFoodList'
 
 const SearchResult = () => {
@@ -30,8 +32,10 @@ const SearchResult = () => {
     ...(member
       ? { location: { lat: member.address.latitude, lng: member.address.longitude } }
       : location && { location: { lat: location.latitude, lng: location.longitude } }),
+    enabled: !!keyword,
   })
   const { mutate: postSearch } = usePostSearch()
+  const router = useRouter()
 
   const handleRefresh = async (): Promise<void> => {
     await refetch()
@@ -42,6 +46,12 @@ const SearchResult = () => {
     useFoodSearchFilterStore.getState().setKeyword(word)
     refetch()
   }
+
+  useEffect(() => {
+    if (!keyword) {
+      router.push(ROUTE_PATHS.SEARCH)
+    }
+  }, [keyword])
 
   return (
     <PullToRefresh onRefresh={handleRefresh} scrollRef={scrollRef}>

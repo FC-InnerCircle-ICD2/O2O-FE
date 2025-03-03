@@ -59,7 +59,7 @@ const StoreDetailMenuItem = ({
           </Badge>
         ) : null}
 
-        <div className="pb-1 text-base">
+        <div className="pb-1 text-lg">
           <p
             className={cn('font-bold', menu.soldout ? 'text-gray-400 line-through' : 'text-black')}
           >
@@ -67,7 +67,7 @@ const StoreDetailMenuItem = ({
           </p>
           <p
             className={cn(
-              'font-semibold',
+              'text-base font-semibold',
               menu.soldout ? 'text-gray-400 line-through' : 'text-black'
             )}
           >

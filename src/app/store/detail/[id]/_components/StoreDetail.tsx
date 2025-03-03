@@ -289,7 +289,7 @@ const StoreDetail = ({ storeId }: { storeId: string }) => {
         </div>
 
         {/* 메뉴 카테고리 */}
-        <div className="sticky top-detail_header z-20 flex items-center justify-between border-b border-solid border-gray-200 bg-white py-2 shadow-sm">
+        <div className="sticky top-[53px] z-20 flex items-center justify-between border-b border-solid border-gray-200 bg-white py-2 shadow-sm">
           <div
             ref={menuContainerRef}
             className="flex flex-1 items-center gap-2 overflow-x-auto px-mobile_safe"
@@ -332,7 +332,7 @@ const StoreDetail = ({ storeId }: { storeId: string }) => {
                   data-category={category.categoryId}
                 >
                   <p
-                    className="pb-2 pt-1 text-lg font-bold"
+                    className="pb-2 pt-1 text-xl font-bold"
                     ref={(el) => {
                       if (index === 0) {
                         topRef.current = el
@@ -355,7 +355,7 @@ const StoreDetail = ({ storeId }: { storeId: string }) => {
 
         {/* 경고 문구 */}
         <div className="px-mobile_safe pb-40">
-          <p className="text-[10px] text-gray-500">
+          <p className="text-xs text-gray-500">
             메뉴 이미지는 이미지컷이며 실제 배달되는 음식과 다를 수 있습니다.
           </p>
         </div>

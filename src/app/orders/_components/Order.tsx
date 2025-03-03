@@ -100,7 +100,7 @@ const Order = () => {
         </div>
       ) : (
         <>
-          <div className="flex h-full flex-col gap-4 overflow-hidden pt-5">
+          <div className="flex h-full flex-col gap-7 overflow-hidden pt-5">
             <div className="px-mobile_safe">
               <OrderSearch onSearch={handelSearch} />
             </div>
