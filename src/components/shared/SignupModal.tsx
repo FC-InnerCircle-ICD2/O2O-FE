@@ -350,8 +350,6 @@ const AddressModal = ({
               onSaveInSignup={onSaveInSignup}
             />
           ),
-          useAnimation: true,
-          useDimmedClickClose: true,
         })
       },
       onError: (error) => {
