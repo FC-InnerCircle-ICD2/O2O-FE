@@ -20,6 +20,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import DaumPostcode from 'react-daum-postcode'
 import AddressDetail, { AddressData } from '../detail/_components/AddressDetail'
+import { SignupData } from '@/models/auth'
 
 const AddressOption = () => {
   const [word, setWord] = useState('')
@@ -310,16 +311,26 @@ const AddressOption = () => {
     )
 }
 
-const AddressDetailModal = ({
+export const AddressDetailModal = ({
   type,
   userAddress,
   addressData,
+  onSaveInSignup,
 }: {
   type?: AddressType
   userAddress?: AddressResponseData
   addressData?: AddressData
+  onSaveInSignup?: (addressData: SignupData['address']) => void
 }) => {
   const { hideModal } = modalStore()
+
+  const handleClose = () => {
+    hideModal()
+    if (onSaveInSignup) {
+      // 회원가입 시 주소 검색 모달 추가로 닫기
+      hideModal()
+    }
+  }
 
   return (
     <div className="w-full max-w-[min(480px,100dvw)] bg-white">
@@ -327,10 +338,15 @@ const AddressDetailModal = ({
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold">
           주소 등록
         </div>
-        <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
+        <Icon name="X" size={24} onClick={handleClose} className="stroke-2" />
       </div>
       <div className="h-[calc(100dvh-64px)] overflow-y-auto">
-        <AddressDetail type={type} userAddress={userAddress} defaultAddressData={addressData} />
+        <AddressDetail
+          type={type}
+          userAddress={userAddress}
+          defaultAddressData={addressData}
+          onSaveInSignup={onSaveInSignup}
+        />
       </div>
     </div>
   )

@@ -1,16 +1,20 @@
+import useGetAddress from '@/api/useGetAddress'
+import useGetAddressToGeolocation from '@/api/useGetAddressToGeolocation'
 import usePostSignup from '@/api/usePostSignup'
+import { AddressDetailModal } from '@/app/mypage/address/_components/AddressOption'
 import { Button } from '@/components/button'
 import Icon from '@/components/Icon'
 import Input from '@/components/Input'
 import { useToast } from '@/hooks/useToast'
 import { ApiErrorResponse } from '@/lib/api'
 import { formatPhoneNumber, unformatPhoneNumber } from '@/lib/format'
+import { SignupData } from '@/models/auth'
 import { modalStore } from '@/store/modal'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
+import DaumPostcode from 'react-daum-postcode'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import Address from '@/app/mypage/address/page'
 
 const SignupModal = () => {
   const { hideModal } = modalStore()
@@ -69,8 +73,8 @@ const signupFormSchema = z.object({
 })
 
 const SignupForm = () => {
-  const { showModal, hideModal, addressData } = modalStore()
-
+  const { showModal, hideModal } = modalStore()
+  const phoneInputRef = useRef<HTMLInputElement>(null)
   const { mutate: signup } = usePostSignup()
   const { toast } = useToast()
   const {
@@ -159,9 +163,16 @@ const SignupForm = () => {
     })
   }
 
+  const handleChangeAddress = (addressData: SignupData['address']) => {
+    setValue('address', addressData)
+    hideModal() // 주소 찾기 디테일 모달 닫기
+    hideModal() // 주소 찾기 모달 닫기
+    phoneInputRef.current?.focus() // 전화번호 입력 필드로 포커스 이동하여 가입하기 버튼 활성화
+  }
+
   const handleAddressClick = () => {
     showModal({
-      content: <AddressModal />,
+      content: <AddressModal onSaveInSignup={handleChangeAddress} />,
       useAnimation: true,
     })
     if (!isClickedAddressButton) {
@@ -268,6 +279,7 @@ const SignupForm = () => {
               setFocusedField('phone')
               trigger('signname')
             }}
+            ref={phoneInputRef}
           />
           {errors.phone && focusedField !== 'phone' && (
             <div className="mt-1.5 text-left text-xs text-red-500">{errors.phone.message}</div>
@@ -291,8 +303,10 @@ const SignupForm = () => {
             주소 찾기
           </Button>
 
-          {addressData?.roadAddress ? (
-            <div className="mt-2 text-left text-lg font-semibold">{addressData?.roadAddress}</div>
+          {addressValue?.roadAddress ? (
+            <div className="mt-2 text-left text-lg font-semibold">
+              {addressValue?.roadAddress + ' ' + addressValue?.detailAddress}
+            </div>
           ) : (
             isClickedAddressButton && (
               <div className="mt-1.5 text-left text-xs text-red-500">주소를 입력해주세요.</div>
@@ -301,12 +315,7 @@ const SignupForm = () => {
         </div>
       </div>
       <div className="bg-white py-2">
-        <Button
-          className="disabled:bg-slate-400"
-          type="submit"
-          size="m"
-          disabled={!isValid && !addressData?.roadAddress}
-        >
+        <Button className="disabled:bg-slate-400" type="submit" size="m" disabled={!isValid}>
           가입하기
         </Button>
       </div>
@@ -314,18 +323,61 @@ const SignupForm = () => {
   )
 }
 
-const AddressModal = () => {
-  const { hideModal } = modalStore()
+const AddressModal = ({
+  onSaveInSignup,
+}: {
+  onSaveInSignup: (addressData: SignupData['address']) => void
+}) => {
+  const { showModal, hideModal } = modalStore()
+  const { mutate: addressToGeolocation } = useGetAddressToGeolocation()
+  const { address } = useGetAddress()
+  const { toast } = useToast()
+
+  const handleComplete = async (data: { address: string }) => {
+    addressToGeolocation(data.address, {
+      onSuccess: (data) => {
+        showModal({
+          content: (
+            <AddressDetailModal
+              userAddress={address}
+              addressData={{
+                type: undefined,
+                address: data.documents[0].jibunAddress,
+                roadAddr: data.documents[0].roadAddress,
+                detail: '',
+                coords: { lat: Number(data.documents[0].y), lng: Number(data.documents[0].x) },
+              }}
+              onSaveInSignup={onSaveInSignup}
+            />
+          ),
+          useAnimation: true,
+          useDimmedClickClose: true,
+        })
+      },
+      onError: (error) => {
+        console.log({ error })
+        toast({
+          title: '주소 검색에 실패했습니다.',
+          description: '다시 시도해주세요.',
+          variant: 'destructive',
+          position: 'center',
+        })
+      },
+    })
+  }
+
+  const handleClose = () => {
+    hideModal()
+  }
 
   return (
-    <div className="flex size-full flex-col bg-white">
-      <div className="relative flex justify-end p-mobile_safe">
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold">
-          대표주소 등록
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+      <div className="rounded bg-white p-4 shadow-lg">
+        <div className="mb-2 flex justify-end">
+          <Icon name="X" size={24} onClick={handleClose} className="stroke-2" />
         </div>
-        <Icon name="X" size={24} onClick={hideModal} className="stroke-2" />
+        <DaumPostcode onComplete={handleComplete} />
       </div>
-      <Address singup={true} />
     </div>
   )
 }

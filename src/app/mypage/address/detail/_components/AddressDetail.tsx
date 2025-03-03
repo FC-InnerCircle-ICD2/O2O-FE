@@ -7,6 +7,7 @@ import { useGeoLocationStore } from '@/store/geoLocation'
 import { useState } from 'react'
 import { useKakaoLoader } from 'react-kakao-maps-sdk'
 import MapInfo from './MapInfo'
+import { SignupData } from '@/models/auth'
 
 export interface AddressData {
   type: AddressType | undefined
@@ -24,10 +25,12 @@ const AddressDetail = ({
   type = AddressType.HOME,
   userAddress,
   defaultAddressData,
+  onSaveInSignup,
 }: {
   type?: AddressType
   userAddress?: AddressResponseData
   defaultAddressData?: AddressData
+  onSaveInSignup?: (addressData: SignupData['address']) => void
 }) => {
   const [loading] = useKakaoLoader({
     appkey: process.env.NEXT_PUBLIC_KAKAO_APP_KEY!,
@@ -66,6 +69,7 @@ const AddressDetail = ({
         addressData={addressData}
         onAddressChange={handleAddressChange}
         userAddress={userAddress}
+        onSaveInSignup={onSaveInSignup}
       />
     </div>
   )
