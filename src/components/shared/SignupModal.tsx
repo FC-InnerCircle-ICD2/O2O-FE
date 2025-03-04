@@ -22,7 +22,7 @@ const SignupModal = () => {
   const { hideModal } = modalStore()
 
   return (
-    <div className="size-full bg-white p-mobile_safe">
+    <div className="flex h-dvh w-full flex-col bg-white p-mobile_safe">
       <div className="relative my-6 flex justify-end">
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-lg font-bold">
           회원가입
@@ -261,8 +261,8 @@ const SignupForm = () => {
   }, [geolocationToAddressData])
 
   return (
-    <form onSubmit={onSubmit}>
-      <div className="h-[77vh] grow overflow-y-auto pb-10">
+    <form onSubmit={onSubmit} className="grid grow grid-rows-[1fr_56px] overflow-y-auto">
+      <div className="overflow-y-auto pb-5">
         <div className="mb-3">
           <Input
             value={signnameValue}
@@ -401,7 +401,7 @@ const SignupForm = () => {
           </div>
         </div>
       </div>
-      <div className="fixed inset-x-0 bottom-0 bg-white px-mobile_safe py-2">
+      <div className="sticky bottom-0 bg-white py-2">
         <Button className="disabled:bg-slate-400" type="submit" size="m" disabled={!isValid}>
           가입하기
         </Button>
