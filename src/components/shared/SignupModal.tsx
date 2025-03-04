@@ -261,14 +261,8 @@ const SignupForm = () => {
   }, [geolocationToAddressData])
 
   return (
-    <form
-      onSubmit={onSubmit}
-      className="flex flex-col"
-      style={{
-        height: 'calc(100vh - 94px)',
-      }}
-    >
-      <div className="grow overflow-y-auto pb-10">
+    <form onSubmit={onSubmit}>
+      <div className="h-[77vh] grow overflow-y-auto pb-10">
         <div className="mb-3">
           <Input
             value={signnameValue}
@@ -407,7 +401,7 @@ const SignupForm = () => {
           </div>
         </div>
       </div>
-      <div className="bg-white py-2">
+      <div className="fixed inset-x-0 bottom-0 bg-white px-mobile_safe py-2">
         <Button className="disabled:bg-slate-400" type="submit" size="m" disabled={!isValid}>
           가입하기
         </Button>
