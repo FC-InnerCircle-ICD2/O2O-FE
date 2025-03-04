@@ -39,9 +39,6 @@ const NAVIGATION_PROPS: Record<string, NavigationProps> = {
   [ROUTE_PATHS.ORDERS]: {
     title: '주문내역',
   },
-  [ROUTE_PATHS.ORDERS_DETAIL]: {
-    title: '주문상세',
-  },
   [ROUTE_PATHS.FAVORITES]: {
     title: '찜',
   },

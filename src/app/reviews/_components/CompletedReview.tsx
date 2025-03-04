@@ -96,23 +96,23 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
       <div className="flex justify-between">
         <div className="flex items-center gap-2.5">
           {menuImageErrors[review.reviewId] || !review.menuImage ? (
-            <div className="mt-1 flex size-[72px] items-center justify-center rounded-sm bg-primary/15 text-xl font-extrabold text-primary">
+            <div className="mt-1 flex size-[80px] items-center justify-center rounded-sm bg-primary/15 text-xl font-extrabold text-primary">
               {review.storeName.slice(0, 3)}
             </div>
           ) : (
             <Image
               src={review.menuImage}
               alt="pending-review "
-              width={72}
-              height={72}
-              className="mt-1 size-[72px] rounded-sm"
+              width={80}
+              height={80}
+              className="mt-1 size-[80px] rounded-sm"
               onError={() => {
                 setMenuImageErrors((prev) => ({ ...prev, [review.reviewId]: true }))
               }}
             />
           )}
           <div className="flex flex-col gap-1">
-            <div>{review.menuName}</div>
+            <div className="text-base font-medium">{review.menuName}</div>
             <TotalRating score={review.totalScore} />
             <div className="flex gap-2.5">
               <div className="flex gap-1 text-xs font-extrabold">
@@ -154,7 +154,7 @@ const CompletedReview = ({ review, offSeparator }: CompletedReviewProps) => {
         )}
       </div>
       {/* 리뷰 내용 */}
-      <div className="whitespace-pre-line">{review.clientReviewContent}</div>
+      <div className="whitespace-pre-line text-base">{review.clientReviewContent}</div>
       {/* 리뷰 수정 기간 */}
       {isEditable && (
         <>
