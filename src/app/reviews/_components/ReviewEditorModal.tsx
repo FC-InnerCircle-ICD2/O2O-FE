@@ -87,23 +87,12 @@ const ReviewEditorModal = ({
   const handleFocusContent = () => {
     setIsContentValid(true)
   }
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-
-    try {
-      setValue('image', file)
-      setValue('imagePreview', URL.createObjectURL(file))
-      setValue('isImageChanged', true)
-    } catch (error) {
-      console.error('이미지 업로드 중 오류 발생:', error)
-      toast({
-        title: '이미지 업로드에 실패했어요.',
-        description: '다시 시도해주세요.',
-        variant: 'destructive',
-        position: 'center',
-      })
-    }
+    setValue('image', file)
+    setValue('imagePreview', URL.createObjectURL(file))
+    setValue('isImageChanged', true)
   }
 
   const handleImageDelete = () => {
@@ -244,7 +233,6 @@ const ReviewEditorModal = ({
                   <input
                     type="file"
                     accept="image/*"
-                    capture="environment"
                     className="hidden"
                     onChange={handleImageUpload}
                   />
