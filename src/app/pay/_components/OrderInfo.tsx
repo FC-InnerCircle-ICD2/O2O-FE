@@ -468,14 +468,14 @@ const OrderInfo = () => {
               일회용 수저, 포크는 빼주세요
             </Label>
           </div>
-          <Separator />
+          {/* <Separator />
           <div className="flex flex-row justify-between">
             <div className="place-content-center text-base font-extrabold">라이더 요청사항</div>
             <div className="flex flex-row gap-1" onClick={handleSelectRiderRequest}>
               <div className="place-content-center text-sm">요청사항 없음</div>
               <Icon name="ChevronRight" size={24} />
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="flex flex-col gap-4 rounded-xl border border-solid border-gray-400 px-5 py-4">
           <div className="flex flex-row justify-between" onClick={handleSelectOrderPay}>
