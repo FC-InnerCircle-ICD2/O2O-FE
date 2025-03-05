@@ -105,13 +105,13 @@ const ReviewEditorModal = ({
 
       console.log('압축 전 파일 크기:', file.size / 1024 / 1024, 'MB')
       console.log('압축 후 파일 크기:', compressedFile.size / 1024 / 1024, 'MB')
+
+      setValue('image', compressedFile)
+      setValue('imagePreview', URL.createObjectURL(compressedFile))
+      setValue('isImageChanged', true)
     } catch (error) {
       console.error('이미지 압축 중 오류 발생:', error)
     }
-
-    setValue('image', file)
-    setValue('imagePreview', URL.createObjectURL(file))
-    setValue('isImageChanged', true)
   }
 
   const handleImageDelete = () => {
