@@ -62,6 +62,7 @@ const SearchInput = () => {
       placeholder="무엇을 배달, 포장할까요?"
       inputSize="sm"
       value={word}
+      onClick={() => setIsFocus(true)}
       onFocus={() => setIsFocus(true)}
       onBlur={() => {
         setTimeout(() => {
@@ -74,6 +75,8 @@ const SearchInput = () => {
         if (e.key === 'Enter') {
           setKeyword(word)
           setValue([word, ...(storedValue || [])])
+          resetStoreSuggestion()
+          setIsFocus(false)
           router.push(ROUTE_PATHS.SEARCH_RESULT)
         }
       }}

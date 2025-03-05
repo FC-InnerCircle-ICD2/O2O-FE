@@ -5,7 +5,6 @@ import CategoryItem from '@/components/shared/CategoryItem'
 import CATEGORY_LIST from '@/constants/category'
 import { cn } from '@/lib/utils'
 import { Category } from '@/models/category'
-import { OrderType } from '@/models/orderType'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { ROUTE_PATHS } from '@/utils/routes'
 import { useRouter } from 'next/navigation'
@@ -45,7 +44,7 @@ const CategoryDrawer = () => {
 
   useEffect(() => {
     setCategory('')
-    setOrder(OrderType.RANKING)
+    setOrder(0)
   }, [])
 
   return (
