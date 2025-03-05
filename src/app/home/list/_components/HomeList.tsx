@@ -2,8 +2,8 @@
 
 import CartButton from '@/components/CartButton'
 import PullToRefresh from '@/components/PullToRefresh'
+import { ORDER_TYPE } from '@/constants/orderType'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
-import { OrderType } from '@/models/orderType'
 import { Store } from '@/models/store'
 import { useGeoLocationStore } from '@/store/geoLocation'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
@@ -19,11 +19,11 @@ const HomeList = () => {
   const { member } = memberStore()
   const { data, isFetching, targetRef, refetch, hasNextPage } = useInfiniteScroll<
     Store,
-    { category: string; order: OrderType }
+    { category: string; orderType: string }
   >({
     queryKey: 'stores',
     endpoint: 'stores/list-cursor',
-    filter: { category, order },
+    filter: { category, orderType: ORDER_TYPE[order].value },
     size: 10,
     ...(member
       ? { location: { lat: member.address.latitude, lng: member.address.longitude } }

@@ -3,8 +3,8 @@
 import usePostSearch from '@/api/usePostSearch'
 import PullToRefresh from '@/components/PullToRefresh'
 import FoodOrderFilter from '@/components/shared/FoodOrderFilter'
+import { ORDER_TYPE } from '@/constants/orderType'
 import { useInfiniteScroll } from '@/hooks/useInfiniteScroll'
-import { OrderType } from '@/models/orderType'
 import { Store } from '@/models/store'
 import { useGeoLocationStore } from '@/store/geoLocation'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
@@ -23,11 +23,11 @@ const SearchResult = () => {
   const { member } = memberStore()
   const { data, isFetching, targetRef, refetch } = useInfiniteScroll<
     Store,
-    { keyword: string | undefined; order: OrderType }
+    { keyword: string | undefined; orderType: string }
   >({
     queryKey: 'stores',
     endpoint: 'stores/list-cursor',
-    filter: { keyword, order },
+    filter: { keyword, orderType: ORDER_TYPE[order].value },
     size: 10,
     ...(member
       ? { location: { lat: member.address.latitude, lng: member.address.longitude } }
@@ -60,7 +60,7 @@ const SearchResult = () => {
           <div className="absolute left-0 top-0 z-20 h-[calc(100dvh-40px-0.75rem)] w-full overflow-y-auto bg-white px-mobile_safe py-4">
             <ul className="">
               {suggestion.map((item) => (
-                <li key={item} className="pb-4" onClick={() => handleSearch(item)}>
+                <li key={item} className="pb-3 text-lg" onClick={() => handleSearch(item)}>
                   {item.split(new RegExp(`(${suggestionWord})`, 'gi')).map((part, index) =>
                     part.toLowerCase() === suggestionWord?.toLowerCase() ? (
                       <span key={index} className="font-bold">

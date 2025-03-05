@@ -1,7 +1,7 @@
 'use client'
 
+import { ORDER_TYPE } from '@/constants/orderType'
 import useBottomSheet from '@/hooks/useBottomSheet'
-import { OrderType } from '@/models/orderType'
 import { useFoodSearchFilterStore } from '@/store/homeSearchFilter'
 import { COLORS } from '@/styles/color'
 import Icon from '../Icon'
@@ -10,19 +10,25 @@ const FoodOrderListInBottomSheet = () => {
   const { order, setOrder } = useFoodSearchFilterStore()
   const { hide } = useBottomSheet()
 
-  const handleOrder = (order: OrderType) => {
-    setOrder(order)
+  const handleOrder = (index: number) => {
+    setOrder(index)
     hide()
   }
 
   return (
     <div className="px-mobile_safe">
       <ul>
-        {Object.values(OrderType).map((item) => (
-          <li key={item} className="py-2 text-lg text-gray-600" onClick={() => handleOrder(item)}>
+        {ORDER_TYPE.map((item, index) => (
+          <li
+            key={item.name}
+            className="py-2 text-lg text-gray-600"
+            onClick={() => handleOrder(index)}
+          >
             <div className="flex items-center gap-4">
-              <span className={`${order === item ? 'font-semibold' : 'font-normal'}`}>{item}</span>
-              {order === item && (
+              <span className={`${order === index ? 'font-semibold' : 'font-normal'}`}>
+                {item.name}
+              </span>
+              {order === index && (
                 <Icon name="Check" size={18} strokeWidth={3} color={COLORS.gray600} />
               )}
             </div>
