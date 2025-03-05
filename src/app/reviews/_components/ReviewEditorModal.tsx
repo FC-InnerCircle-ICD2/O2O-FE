@@ -103,11 +103,14 @@ const ReviewEditorModal = ({
       // 이미지 압축
       const compressedFile = await imageCompression(file, options)
 
-      console.log('압축 전 파일 크기:', file.size / 1024 / 1024, 'MB')
-      console.log('압축 후 파일 크기:', compressedFile.size / 1024 / 1024, 'MB')
+      // 압축된 파일을 File 객체로 변환
+      const convertedFile = new File([compressedFile], file.name, {
+        type: file.type,
+        lastModified: Date.now(),
+      })
 
-      setValue('image', compressedFile)
-      setValue('imagePreview', URL.createObjectURL(compressedFile))
+      setValue('image', convertedFile)
+      setValue('imagePreview', URL.createObjectURL(convertedFile))
       setValue('isImageChanged', true)
     } catch (error) {
       console.error('이미지 압축 중 오류 발생:', error)
