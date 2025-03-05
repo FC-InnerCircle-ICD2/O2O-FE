@@ -14,7 +14,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-
+import imageCompression from 'browser-image-compression'
 interface ReviewEditorModalProps {
   storeId: WritableReviewType['storeId']
   storeName: WritableReviewType['storeName']
@@ -54,7 +54,9 @@ const ReviewEditorModal = ({
       content: prevData?.clientReviewContent || '',
       deliveryQuality: prevData?.deliveryQuality || '',
       image: null,
-      imagePreview: prevData?.representativeImageUri,
+      imagePreview: prevData?.representativeImageUri
+        ? prevData.representativeImageUri + `?v=${Date.now()}`
+        : null,
       isImageChanged: false,
     },
   })
@@ -87,12 +89,32 @@ const ReviewEditorModal = ({
   const handleFocusContent = () => {
     setIsContentValid(true)
   }
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    setValue('image', file)
-    setValue('imagePreview', URL.createObjectURL(file))
-    setValue('isImageChanged', true)
+    // 압축 옵션 설정
+    const options = {
+      maxSizeMB: 10, // 최대 파일 크기 (MB 단위)
+      maxWidthOrHeight: 1024, // 최대 가로/세로 크기 (px 단위)
+      useWebWorker: true, // 웹 워커 사용으로 성능 향상
+    }
+
+    try {
+      // 이미지 압축
+      const compressedFile = await imageCompression(file, options)
+
+      // 압축된 파일을 File 객체로 변환
+      const convertedFile = new File([compressedFile], file.name, {
+        type: file.type,
+        lastModified: Date.now(),
+      })
+
+      setValue('image', convertedFile)
+      setValue('imagePreview', URL.createObjectURL(convertedFile))
+      setValue('isImageChanged', true)
+    } catch (error) {
+      console.error('이미지 압축 중 오류 발생:', error)
+    }
   }
 
   const handleImageDelete = () => {
