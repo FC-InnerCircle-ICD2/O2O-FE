@@ -14,7 +14,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-
+import imageCompression from 'browser-image-compression'
 interface ReviewEditorModalProps {
   storeId: WritableReviewType['storeId']
   storeName: WritableReviewType['storeName']
@@ -87,9 +87,26 @@ const ReviewEditorModal = ({
   const handleFocusContent = () => {
     setIsContentValid(true)
   }
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
+    // 압축 옵션 설정
+    const options = {
+      maxSizeMB: 1, // 최대 파일 크기 (MB 단위)
+      maxWidthOrHeight: 1024, // 최대 가로/세로 크기 (px 단위)
+      useWebWorker: true, // 웹 워커 사용으로 성능 향상
+    }
+
+    try {
+      // 이미지 압축
+      const compressedFile = await imageCompression(file, options)
+
+      console.log('압축 전 파일 크기:', file.size / 1024 / 1024, 'MB')
+      console.log('압축 후 파일 크기:', compressedFile.size / 1024 / 1024, 'MB')
+    } catch (error) {
+      console.error('이미지 압축 중 오류 발생:', error)
+    }
+
     setValue('image', file)
     setValue('imagePreview', URL.createObjectURL(file))
     setValue('isImageChanged', true)
