@@ -54,7 +54,9 @@ const ReviewEditorModal = ({
       content: prevData?.clientReviewContent || '',
       deliveryQuality: prevData?.deliveryQuality || '',
       image: null,
-      imagePreview: prevData?.representativeImageUri + `?v=${Date.now()}` || null,
+      imagePreview: prevData?.representativeImageUri
+        ? prevData.representativeImageUri + `?v=${Date.now()}`
+        : null,
       isImageChanged: false,
     },
   })
@@ -92,7 +94,7 @@ const ReviewEditorModal = ({
     if (!file) return
     // 압축 옵션 설정
     const options = {
-      maxSizeMB: 1, // 최대 파일 크기 (MB 단위)
+      maxSizeMB: 0.02, // 최대 파일 크기 (MB 단위)
       maxWidthOrHeight: 1024, // 최대 가로/세로 크기 (px 단위)
       useWebWorker: true, // 웹 워커 사용으로 성능 향상
     }
