@@ -12,7 +12,6 @@ import { Skeleton } from '@/components/shadcn/skeleton'
 import useBottomSheet from '@/hooks/useBottomSheet'
 import { useScrollToTop } from '@/hooks/useScrollToTop'
 import { useThrottle } from '@/hooks/useThrottle'
-import { useToast } from '@/hooks/useToast'
 import { formatDistance } from '@/lib/format'
 import { modalStore } from '@/store/modal'
 import { orderDetailStore } from '@/store/orderDetail'
@@ -57,7 +56,6 @@ const StoreDetail = ({ storeId }: { storeId: string }) => {
 
   const { orderDetail } = orderDetailStore()
   const { BottomSheet } = useBottomSheet()
-  const { toast } = useToast()
   const { topRef, scrollToTop, showScrollButton } = useScrollToTop<HTMLDivElement>({
     callBack: () => {
       containerRef.current?.scrollTo({
