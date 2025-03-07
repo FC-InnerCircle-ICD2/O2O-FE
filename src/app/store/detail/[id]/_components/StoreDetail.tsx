@@ -244,37 +244,20 @@ const StoreDetail = ({ storeId }: { storeId: string }) => {
           )}
           <div className="flex items-center gap-2">
             {!storeDetail ? (
-              <Skeleton className="h-[26px] w-[123px] rounded-full py-1 pl-2 pr-1" />
+              <Skeleton className="h-[26px] w-[123px] rounded-full px-[10px] py-1" />
             ) : (
-              <div
-                className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs"
-                onClick={() => {
-                  toast({
-                    description: '준비중입니다.',
-                    position: 'center',
-                  })
-                }}
-              >
+              <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 px-[10px] py-1 text-xs">
                 <Icon name="Star" size={12} color={COLORS.primary} fill={COLORS.primary} />
                 <div>
                   <span className="mr-1 font-semibold">리뷰 {storeDetail.rating}</span>
                   <span className="text-gray-600">({storeDetail.reviewCount})</span>
                 </div>
-                <Icon name="ChevronRight" size={16} />
               </div>
             )}
             {!storeDetail ? (
-              <Skeleton className="h-[26px] w-[123px] rounded-full py-1 pl-2 pr-1" />
+              <Skeleton className="h-[26px] w-[123px] rounded-full px-[10px] py-1" />
             ) : (
-              <div
-                className="flex items-center gap-1 rounded-full border border-solid border-gray-300 py-1 pl-2 pr-1 text-xs"
-                onClick={() => {
-                  toast({
-                    description: '준비중입니다.',
-                    position: 'center',
-                  })
-                }}
-              >
+              <div className="flex items-center gap-1 rounded-full border border-solid border-gray-300 px-[10px] py-1 text-xs">
                 <Icon name="Store" size={12} />
                 <div className="flex">
                   <span className="mr-1 font-bold">가게</span>
@@ -282,7 +265,6 @@ const StoreDetail = ({ storeId }: { storeId: string }) => {
                     ({formatDistance(storeDetail.deliveryDistance)})
                   </span>
                 </div>
-                <Icon name="ChevronRight" size={16} />
               </div>
             )}
           </div>
